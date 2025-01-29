@@ -11,18 +11,38 @@ export default function Demo() {
     <View 
     style={{
       flex: 1,
-      paddingTop: 80,
+      justifyContent: 'center',
       alignItems: 'center',
       backgroundColor: '#FFFDF9',
       }}>
-        
-      <ViroARSceneNavigator initialScene={{ scene: MyARSceneWrapper }} />
+
+      <Text
+      style={{
+        fontSize: 24,
+        padding: 20,
+      }}
+      >Cooper</Text>
+
+      <View
+      style={{  
+        width: '80%',
+        height: 400,
+        backgroundColor: '#FFFDF9',
+        }}>
+        <ViroARSceneNavigator 
+        initialScene={{ scene: MyARSceneWrapper }} 
+        viroAppProps={{ videoQuality: 'high' }}
+        worldAlignment="Gravity"
+        />
+      </View>
 
       <Pressable
         style={({ 
-          padding: 8,
+          margin: 20,
+          padding: 16,
           backgroundColor: '#183A36',
-          borderRadius: 7
+          borderRadius: 7,
+          
          })}
         onPress={() => {
           console.log('Wandelen knop ingedrukt!');
@@ -31,6 +51,7 @@ export default function Demo() {
         <Text
         style={{          
           color: '#97B8A5',
+          fontSize: 20,
         }}
         >Wandelen</Text>
       </Pressable>
