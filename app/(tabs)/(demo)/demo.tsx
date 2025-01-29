@@ -1,5 +1,11 @@
 import { View, Text, Pressable } from 'react-native';
 
+import React from "react";
+import { ViroARSceneNavigator } from "@viro-community/react-viro";
+import MyARScene from "../../ardog";
+
+const MyARSceneWrapper = () => <MyARScene />;
+
 export default function Demo() {
   return (
     <View 
@@ -9,9 +15,8 @@ export default function Demo() {
       alignItems: 'center',
       backgroundColor: '#FFFDF9',
       }}>
-      <Text>Cooper</Text>
-
-{/* viro box */}
+        
+      <ViroARSceneNavigator initialScene={{ scene: MyARSceneWrapper }} />
 
       <Pressable
         style={({ 
