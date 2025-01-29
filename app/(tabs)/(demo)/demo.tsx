@@ -1,4 +1,5 @@
 import { View, Text, Pressable } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 import React from "react";
 import { ViroARSceneNavigator } from "@viro-community/react-viro";
@@ -8,7 +9,7 @@ const MyARSceneWrapper = () => <MyARScene />;
 
 export default function Demo() {
   return (
-    <View 
+    <SafeAreaView 
     style={{
       flex: 1,
       justifyContent: 'center',
@@ -55,6 +56,6 @@ export default function Demo() {
         }}
         >Wandelen</Text>
       </Pressable>
-    </View>
+    </SafeAreaView>
   );
 }
