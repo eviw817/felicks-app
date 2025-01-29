@@ -16,7 +16,7 @@ export default function HomeScreen() {
           backgroundColor: '#97B8A5',
           borderRadius: 7,
         }}
-        href="/demo">Go to demo</Link>
+        href="/demo">Ga naar demo</Link>
       </View>
   );
 }
