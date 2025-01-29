@@ -1,15 +1,24 @@
-import { Stack } from 'expo-router';
+import { Stack } from "expo-router";
 
-export default function RootLayout() {
+export default function TabLayout() {
   return (
-    <Stack
-      screenOptions={
-        {
-          headerShown: false // Hide the header
-        }
-      }>
-      <Stack.Screen name="index" /> // Show index.tsx
-      <Stack.Screen name="demo" /> // Show demo.tsx
+    <Stack screenOptions={{ headerTintColor: "blue" }}>
+      {/* Home Tab */}
+      <Stack.Screen
+        name="(home)" // Verwijst naar de map app/(tabs)/(home)
+        options={{
+          title: "Home",
+          headerShown: false,
+        }}
+      />
+      {/* Demo Tab */}
+      <Stack.Screen
+        name="(demo)" // Verwijst naar de map app/(tabs)/(demo)
+        options={{
+          title: "Demo",
+          headerShown: false,
+        }}
+      />
     </Stack>
   );
 }
