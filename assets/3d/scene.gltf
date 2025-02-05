@@ -35348,10 +35348,10 @@
   ],
   "images": [
     {
-      "uri": "textures/default4.019_baseColor.png"
+      "source": "./textures/default4.019_baseColor.png"
     },
     {
-      "uri": "textures/default4.019_normal.png"
+      "source": "./textures/default4.019_normal.png"
     }
   ],
   "materials": [
