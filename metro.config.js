@@ -1,9 +1,24 @@
-const { getDefaultConfig } = require('expo/metro-config');
-const { withNativeWind } = require('nativewind/metro');
+const { getDefaultConfig } = require("expo/metro-config");
+const { withNativeWind } = require("nativewind/metro");
 
-const config = getDefaultConfig(__dirname);
-  
-module.exports = withNativeWind(config, { input: './global.css' });
-config.resolver.assetExts.push('glb');
+const defaultConfig = getDefaultConfig(__dirname);
 
-module.exports = config;
+module.exports = withNativeWind(
+  {
+    ...defaultConfig,
+    resolver: {
+      ...defaultConfig.resolver,
+      assetExts: [
+        ...defaultConfig.resolver.assetExts,
+        "obj",
+        "mtl",
+        "vrx",
+        "gltf",
+        "glb",
+        "bin",
+        "arobject",
+      ],
+    },
+  },
+  { input: "./global.css" }
+);
