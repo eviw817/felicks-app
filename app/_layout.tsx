@@ -6,11 +6,16 @@ import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
 import { useEffect } from 'react';
 import 'react-native-reanimated';
+import { THREE } from 'expo-three';
 
 import { useColorScheme } from '@/hooks/useColorScheme';
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
+
+// Defines the Global THREE instance
+// @ts-ignore
+global.THREE = global.THREE || THREE;
 
 export default function RootLayout() {
   const colorScheme = useColorScheme();
