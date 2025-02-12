@@ -1,9 +1,21 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { useRouter } from 'expo-router'; 
+import { useFonts } from 'expo-font';
 import { Ionicons } from '@expo/vector-icons';
 
+
 function AdoptionProfileScreen() {
+const [fontsLoaded] = useFonts({
+  'nunitoBold': require('../assets/fonts/nunito/Nunito-Bold.ttf'),
+  'nunitoRegular': require('../assets/fonts/nunito/Nunito-Regular.ttf'),
+});
+
+if (!fontsLoaded) {
+  return null;
+}
+
+
   const router = useRouter(); 
 
   return (
@@ -56,12 +68,12 @@ const styles = StyleSheet.create({
 
   title: {
     fontSize: 20,
-    fontWeight: 'bold',
+    // fontWeight: 'bold',
     color: '#183A36',
     marginBottom: 50,
     textAlign: 'center',
     alignSelf: 'center',
-    fontFamily:'../assets/fonts/SpaceMono-Regular.ttf',
+    fontFamily: 'nunitoBold',
   },
 
   textContainer: {
@@ -72,6 +84,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#183A36',
     marginBottom: 15,
+    fontFamily: 'nunitoRegular',
   },
 
   button: {
@@ -94,6 +107,7 @@ const styles = StyleSheet.create({
     textTransform: 'uppercase',
     textAlign: 'center',
     width: '100%',
+    fontFamily: 'nunitoBold',
   },
 });
 
