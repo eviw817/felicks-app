@@ -133,7 +133,7 @@ const RegisterScreen = () => {
       />
 
       <TouchableOpacity style={styles.button}>
-        <Text style={styles.buttonText}>REGISTREREN</Text>
+        <Text style={styles.buttonText}>REGISTREER</Text>
       </TouchableOpacity>
 
       {/* Inloggen link */}
@@ -170,6 +170,10 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     width: '100%',
     marginBottom: 25,
+    borderColor: '#97B8A5', 
+    borderWidth: 2, 
+    borderRadius: 20, 
+    paddingLeft: 15,
   },
   picker: {
     width: '30%',
