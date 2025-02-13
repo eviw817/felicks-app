@@ -88,6 +88,7 @@ const styles = StyleSheet.create({
     marginBottom: 25,
     fontSize: 16,
     color: "#183A36",
+    paddingLeft: 15,
   },
   focusedInput: {
     borderBottomColor: '#183A36', 

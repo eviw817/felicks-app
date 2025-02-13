@@ -36,9 +36,9 @@ const RegisterScreen = () => {
           styles.input, 
           firstnameFocus || isFirstnameFilled ? styles.focusedInput : styles.unfocusedInput
         ]}
-        placeholder="E-mail" 
+        placeholder="Voornaam" 
         placeholderTextColor="rgba(151, 184, 165, 0.5)"
-        keyboardType="email-address"
+        keyboardType="default"
         onFocus={() => setFirstnameFocus(true)} 
         onBlur={() => setFirstnameFocus(false)} 
         onChangeText={setFirstname}
@@ -52,9 +52,9 @@ const RegisterScreen = () => {
           styles.input, 
           lastnameFocus || isLastnameFilled ? styles.focusedInput : styles.unfocusedInput
         ]}
-        placeholder="E-mail" 
+        placeholder="Achternaam" 
         placeholderTextColor="rgba(151, 184, 165, 0.5)"
-        keyboardType="email-address"
+        keyboardType="default"
         onFocus={() => setlastnameFocus(true)} 
         onBlur={() => setlastnameFocus(false)} 
         onChangeText={setLastname}
@@ -210,6 +210,7 @@ const styles = StyleSheet.create({
     marginBottom: 25,
     fontSize: 16,
     color: "#183A36",
+    paddingLeft: 15,
   },
   focusedInput: {
     borderBottomColor: '#183A36', 
