@@ -14,7 +14,7 @@ function LoginRegisterScreen() {
   };
 
   return (
-    <View style={styles.container} className="bg-baby-powder">
+    <View style={styles.container}>
       <Image 
         source={require("../assets/images/logo_felicks.png")}
         style={styles.logo}
@@ -39,6 +39,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     padding: 20,
+    backgroundColor: '#FFFDF9',
   },
   logo: {
     width: 280, 
@@ -64,7 +65,7 @@ const styles = StyleSheet.create({
     paddingVertical: 15,
     borderRadius: 20, 
     marginBottom: 20,
-    width: '95%',
+    width: '97%',
     alignItems: 'center',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
