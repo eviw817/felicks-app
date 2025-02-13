@@ -1,7 +1,18 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useRouter } from "expo-router"; 
 import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
 
 function LoginRegisterScreen() {
+  const router = useRouter();
+
+  const handleLoginPress = () => {
+    router.push("/login/login");
+  };
+
+  const handleRegisterPress = () => {
+    router.push("/register/register");
+  };
+
   return (
     <View style={styles.container} className="bg-baby-powder">
       <Image 
@@ -12,10 +23,10 @@ function LoginRegisterScreen() {
       <Text style={styles.subtitle}>
         Ontdek of een hond bij jouw levensstijl past. Felicks helpt je met het maken van een weloverwogen keuze!
       </Text>
-      <TouchableOpacity style={styles.button} >
+      <TouchableOpacity style={styles.button} onPress={handleLoginPress}>
         <Text style={styles.buttonText}>INLOGGEN</Text>
       </TouchableOpacity>
-      <TouchableOpacity style={styles.button}>
+      <TouchableOpacity style={styles.button} onPress={handleRegisterPress}>
         <Text style={styles.buttonText}>REGISTREREN</Text>
       </TouchableOpacity>
     </View>
