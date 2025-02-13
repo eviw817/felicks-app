@@ -2,20 +2,17 @@ import React, { useState } from "react";
 import { View, Text, StyleSheet, TouchableOpacity, TextInput } from "react-native";
 import { useRouter } from "expo-router";  
 
-const LoginScreen = () => {
+const ForgetPasswordScreen = () => {
   const router = useRouter();
   const [emailFocus, setEmailFocus] = useState(false);
-  const [passwordFocus, setPasswordFocus] = useState(false);
   const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
 
   // Functie om te controleren of er tekst is ingevoerd
   const isEmailFilled = email.trim() !== '';
-  const isPasswordFilled = password.trim() !== '';
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Inloggen</Text>
+      <Text style={styles.title}>Wachtwoord vergeten</Text>
 
       {/* E-mail input */}
       <Text style={styles.label}>E-mail</Text>
@@ -32,41 +29,11 @@ const LoginScreen = () => {
         onChangeText={setEmail}
         value={email}
       />
-
-      {/* Wachtwoord input */}
-      <Text style={styles.label}>Wachtwoord</Text>
-      <TextInput
-        style={[
-          styles.input, 
-          passwordFocus || isPasswordFilled ? styles.focusedInput : styles.unfocusedInput
-        ]}
-        placeholder="Wachtwoord" 
-        placeholderTextColor="rgba(151, 184, 165, 0.5)"
-        secureTextEntry 
-        onFocus={() => setPasswordFocus(true)} 
-        onBlur={() => setPasswordFocus(false)} 
-        onChangeText={setPassword}
-        value={password}
-      />
-
-      {/* Wachtwoord vergeten */}
-      <View style={styles.forgotPasswordContainer}>
-        <TouchableOpacity onPress={() => router.push("/login/forget_password")}>
-          <Text style={styles.forgotPassword} >Wachtwoord vergeten?</Text>
-        </TouchableOpacity>
-      </View>
-
+  
       <TouchableOpacity style={styles.button}>
-        <Text style={styles.buttonText}>INLOGGEN</Text>
+        <Text style={styles.buttonText}>VERZEND</Text>
       </TouchableOpacity>
 
-      {/* Registreren link */}
-      <Text style={styles.registerText}>
-        Nog geen account?{" "}
-        <Text style={styles.registerLink} onPress={() => router.push("/register/register")}>
-          Registreer hier
-        </Text>
-      </Text>
     </View>
   );
 };
@@ -99,6 +66,7 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
+    marginTop: 20,
   },
   buttonText: {
     color: '#183A36',
@@ -127,25 +95,7 @@ const styles = StyleSheet.create({
   unfocusedInput: {
     borderBottomColor: "#97B8A5", 
   },
-  forgotPassword: {
-    alignSelf: "flex-end",
-    textAlign: "right",
-    color: "#183A36",
-    fontSize: 14,
-    marginBottom: 5,
-  },
-  forgotPasswordContainer: {
-    width: "100%", 
-    alignItems: 'flex-end', 
-    marginBottom: 30,
-  },
-  registerText: {
-    fontSize: 14,
-    color: "#183A36",
-  },
-  registerLink: {
-    fontWeight: "bold",
-  },
+  
 });
 
-export default LoginScreen;
+export default ForgetPasswordScreen;
