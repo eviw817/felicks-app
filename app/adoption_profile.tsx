@@ -11,11 +11,6 @@ const [fontsLoaded] = useFonts({
   'nunitoRegular': require('../assets/fonts/nunito/Nunito-Regular.ttf'),
 });
 
-if (!fontsLoaded) {
-  return null;
-}
-
-
   const router = useRouter(); 
 
   return (
@@ -40,9 +35,10 @@ if (!fontsLoaded) {
       </View>
 
       {/* buttons */}
-      <TouchableOpacity style={styles.button} >
+      <TouchableOpacity style={styles.button} onPress={() => router.push('/living_situation_1')}>
         <Text style={styles.buttonText}>adoptieprofiel opzetten</Text>
-      </TouchableOpacity>
+        </TouchableOpacity>
+
       <TouchableOpacity style={styles.button}>
         <Text style={styles.buttonText}>overslaan</Text>
       </TouchableOpacity>
