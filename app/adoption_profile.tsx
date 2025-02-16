@@ -70,6 +70,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     alignSelf: 'center',
     fontFamily: 'nunitoBold',
+    width: '100%',
   },
 
   textContainer: {
