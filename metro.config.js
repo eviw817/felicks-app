@@ -17,6 +17,12 @@ module.exports = withNativeWind(
         "glb",
         "bin",
         "arobject",
+        "db",
+        "mp3",
+        "ttf",
+        "obj",
+        "png",
+        "jpg"
       ],
     },
   },

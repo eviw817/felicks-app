@@ -19,6 +19,14 @@ export default function TabLayout() {
           headerShown: false,
         }}
       />
+      {/* Dog-settings Tab */}
+      <Stack.Screen
+        name="(dog-settings)" // Verwijst naar de map app/(tabs)/(demo)
+        options={{
+          title: "Dog settings",
+          headerShown: false,
+        }}
+      />
     </Stack> //voor een navigatie te maken moet alles Tabs zijn, dus ook Tabs.Scree
   );
 }
