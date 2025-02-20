@@ -12,7 +12,13 @@ export default function SettingsStart() {
       alignItems: 'center',
       backgroundColor: '#FFFDF9',
       }}>
-        <View>
+        <View
+        style={{
+            top: 1,
+            flex: 1,
+            marginTop: 40,
+            justifyContent: 'flex-start',
+            }}>
             <Text
             style={{
                 fontFamily: 'Nunito',
@@ -33,13 +39,15 @@ export default function SettingsStart() {
 
             Een huisdier nemen is een grote stap en het is belangrijk om te weten of je er klaar voor bent. Ga je mee op avontuur met onze virtuele hond en ontdek het zelf? 🎉
             Maak je klaar voor een leerzame en leuke ervaring! 🌟</Text>
-            <Link 
+            <View 
             style={{
                 padding: 12,
+                margin: 20,
                 paddingHorizontal: 20,
                 backgroundColor: '#97B8A5',
-                borderRadius: 15}}
-            href="">DOORGAAN</Link>
+                borderRadius: 15,
+            }}
+            >DOORGAAN</View>
         </View>
       </SafeAreaView>
 )};
