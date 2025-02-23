@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { useRouter } from 'expo-router';
-import { Ionicons } from '@expo/vector-icons';
 import { Picker } from '@react-native-picker/picker';
+import { Ionicons } from '@expo/vector-icons';
 
-// ✅ RadioButton component
 type RadioButtonProps = {
   label: string;
   value: string;
@@ -19,12 +18,10 @@ const RadioButton: React.FC<RadioButtonProps> = ({ label, value, selected, onSel
   </TouchableOpacity>
 );
 
-function DailyRoutineScreen() {
+function DailyRoutineScreen_2() {
   const router = useRouter();
-
-  const [workHours, setWorkHours] = useState<string | null>(null);
-  const [workFromHome, setWorkFromHome] = useState<string | null>(null);
-  const [petTime, setPetTime] = useState<string | null>(null);
+  const [timeWithDog, setTimeWithDog] = useState<string | null>(null);
+  const [weekendRoutine, setWeekendRoutine] = useState<string | null>(null);
 
   return (
     <View style={styles.container}>
@@ -41,47 +38,40 @@ function DailyRoutineScreen() {
         <View style={styles.progressFill} />
       </View>
 
-      {/* Formulier */}
+      {/* Tijdsbesteding aan hond */}
       <View style={styles.formContainer}>
-        {/* Werkuren */}
-        <Text style={styles.sectionTitle}>Hoeveel uur per dag werkt u gemiddeld?</Text>
+        <Text style={styles.sectionTitle}>Hoeveel tijd wil je dagelijks besteden aan je hond?</Text>
         <View style={styles.pickerContainer}>
           <Picker
-            selectedValue={workHours}
-            onValueChange={(itemValue) => setWorkHours(itemValue)}
+            selectedValue={timeWithDog}
+            onValueChange={(itemValue) => setTimeWithDog(itemValue)}
             style={styles.picker}
           >
             <Picker.Item label="Selecteer een optie" value={null} />
-            <Picker.Item label="Ik werk niet" value="ik werk niet" />
-            <Picker.Item label="1-4 uur" value="1-4 uur" />
-            <Picker.Item label="5-6 uur" value="5-6-8 uur" />
-            <Picker.Item label="7-8 uur" value="7-8 uur" />
-            <Picker.Item label="Meer dan 8 uur" value="8+ uur" />
+            <Picker.Item label="0-30 min" value="0-30 min" />
+            <Picker.Item label="30-60 min" value="30-60 min" />
+            <Picker.Item label="1-1,5 uur" value="1-1,5 uur" />
+            <Picker.Item label="1,5-2 uur" value="1,5-2 uur" />
+            <Picker.Item label="Meer dan 2 uur" value="2+" />
           </Picker>
         </View>
 
-        {/* Werkt u vanuit huis? */}
-        <Text style={styles.sectionTitle}>Werkt u vanuit huis?</Text>
-        <RadioButton label="Voltijd" value="voltijd" selected={workFromHome} onSelect={setWorkFromHome} />
-        <RadioButton label="Halftijds" value="halftijds" selected={workFromHome} onSelect={setWorkFromHome} />
-        <RadioButton label="Niet" value="niet" selected={workFromHome} onSelect={setWorkFromHome} />
-
-        {/* Tijd voor huisdier */}
-        <Text style={styles.sectionTitle}>Hoeveel tijd per dag kunt u besteden aan een huisdier?</Text>
-        <RadioButton label="Minder dan 1 uur" value="minder1" selected={petTime} onSelect={setPetTime} />
-        <RadioButton label="1 - 3 uur" value="1-3" selected={petTime} onSelect={setPetTime} />
-        <RadioButton label="3+ uur" value="3+" selected={petTime} onSelect={setPetTime} />
+        {/* Weekendroutine vraag */}
+        <Text style={styles.sectionTitle}>Wat is uw weekendroutine?</Text>
+        <RadioButton label="Ik ben vaak buiten actief" value="buiten-actief" selected={weekendRoutine} onSelect={setWeekendRoutine} />
+        <RadioButton label="Ik blijf meestal thuis" value="thuis" selected={weekendRoutine} onSelect={setWeekendRoutine} />
+        <RadioButton label="Ik werk in het weekend" value="werk-in-weekend" selected={weekendRoutine} onSelect={setWeekendRoutine} />
+        <RadioButton label="Mijn weekend wisselt steeds" value="wisselt" selected={weekendRoutine} onSelect={setWeekendRoutine} />
       </View>
 
       {/* Volgende knop */}
       <TouchableOpacity style={styles.button} onPress={() => router.push('/')}>
-        <Text style={styles.buttonText}>VOLGENDE</Text>
+        <Text style={styles.buttonText}>Volgende</Text>
       </TouchableOpacity>
     </View>
   );
 }
 
-// ✅ Stijlen
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -116,7 +106,7 @@ const styles = StyleSheet.create({
   },
 
   progressFill: {
-    width: '70%', // Pas aan naar de juiste waarde
+    width: '55.55%', 
     height: '100%',
     backgroundColor: '#97B8A5',
     borderRadius: 3,
@@ -180,7 +170,6 @@ const styles = StyleSheet.create({
     width: '100%',
     alignItems: 'center',
     justifyContent: 'center',
-    marginTop: 20,
   },
 
   buttonText: {
@@ -193,4 +182,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default DailyRoutineScreen;
+export default DailyRoutineScreen_2;
