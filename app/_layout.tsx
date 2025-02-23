@@ -8,6 +8,7 @@ export default function RootLayout() {
       <Stack.Screen name="living_situation_1" options={{ title: "Woonsituatie" }} />
       <Stack.Screen name="living_situation_2" options={{ title: "Woonsituatie" }} />
       <Stack.Screen name="living_situation_3" options={{ title: "Woonsituatie" }} />
+      <Stack.Screen name="daily_routine" options={{ title: "Dagelijkse routine" }} />
     </Stack>
   );
 }

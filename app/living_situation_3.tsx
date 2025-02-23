@@ -76,7 +76,7 @@ function LivingSituationScreen3() {
       </View>
 
       {/* Volgende knop */}
-      <TouchableOpacity style={styles.button} onPress={() => router.push('/')}>
+      <TouchableOpacity style={styles.button} onPress={() => router.push('/daily_routine')}>
         <Text style={styles.buttonText}>VOLGENDE</Text>
       </TouchableOpacity>
     </View>
