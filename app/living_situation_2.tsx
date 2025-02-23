@@ -83,7 +83,7 @@ const updateBirthDate = (index: number, event: any, selectedDate?: Date | undefi
       {/* Vragenformulier */}
       <View style={styles.formContainer}>
         {/* Woon situatie vraag */}
-        <Text style={styles.sectionTitle}>Hoe ziet uw woonsituatie er uit?</Text>
+        <Text style={styles.sectionTitle}>Hoe ziet je woonsituatie er uit?</Text>
         <RadioButton label="Ik woon alleen" value="alleen" selected={livingSituation} onSelect={setLivingSituation} />
         <RadioButton label="Ik woon samen met mijn partner" value="partner" selected={livingSituation} onSelect={setLivingSituation} />
         <RadioButton label="Ik woon samen met mijn gezin/kinderen" value="gezin" selected={livingSituation} onSelect={setLivingSituation} />
@@ -97,7 +97,7 @@ const updateBirthDate = (index: number, event: any, selectedDate?: Date | undefi
         {/* Kinderen leeftijden sectie als 'Ja' is geselecteerd */}
         {childrenInHouse === 'ja' && (
           <>
-            <Text style={styles.sectionTitle}>Zo ja, vul de geboortedatum in</Text>
+            <Text style={styles.sectionTitle}>Vul de geboortedatum in</Text>
 
             {/* Geboortedata invoeren */}
             <View style={styles.ageInputContainer}>

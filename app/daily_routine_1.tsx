@@ -43,7 +43,7 @@ function DailyRoutineScreen_1() {
       {/* Formulier */}
       <View style={styles.formContainer}>
         {/* Werkuren */}
-        <Text style={styles.sectionTitle}>Hoeveel uur per dag werkt u gemiddeld?</Text>
+        <Text style={styles.sectionTitle}>Hoeveel uur per dag werk je gemiddeld?</Text>
         <View style={styles.pickerContainer}>
           <Picker
             selectedValue={workHours}
@@ -59,14 +59,14 @@ function DailyRoutineScreen_1() {
           </Picker>
         </View>
 
-        {/* Werkt u vanuit huis? */}
-        <Text style={styles.sectionTitle}>Werkt u vanuit huis?</Text>
+        {/* Werk je vanuit huis? */}
+        <Text style={styles.sectionTitle}>Werk je vanuit huis?</Text>
         <RadioButton label="Voltijd" value="voltijd" selected={workFromHome} onSelect={setWorkFromHome} />
         <RadioButton label="Halftijds" value="halftijds" selected={workFromHome} onSelect={setWorkFromHome} />
         <RadioButton label="Niet" value="niet" selected={workFromHome} onSelect={setWorkFromHome} />
 
         {/* Tijd voor huisdier */}
-        <Text style={styles.sectionTitle}>Hoeveel tijd per dag kunt u besteden aan een huisdier?</Text>
+        <Text style={styles.sectionTitle}>Hoeveel tijd per dag kan je besteden aan een huisdier?</Text>
         <RadioButton label="Minder dan 1 uur" value="minder1" selected={petTime} onSelect={setPetTime} />
         <RadioButton label="1 - 3 uur" value="1-3" selected={petTime} onSelect={setPetTime} />
         <RadioButton label="3+ uur" value="3+" selected={petTime} onSelect={setPetTime} />

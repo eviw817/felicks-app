@@ -58,7 +58,7 @@ function LivingSituationScreen1() {
         <RadioButton label="Andere" value="andere" selected={woningType} onSelect={setWoningType} />
 
         {/* Tuin of terras */}
-        <Text style={styles.sectionTitle}>Heeft u een tuin/terras?</Text>
+        <Text style={styles.sectionTitle}>Heb je een tuin/terras?</Text>
         <RadioButton label="Ja, omheind" value="ja_omheind" selected={tuin} onSelect={setTuin} />
         <RadioButton label="Ja, niet omheind" value="ja_niet_omheind" selected={tuin} onSelect={setTuin} />
         <RadioButton label="Neen" value="neen" selected={tuin} onSelect={setTuin} />

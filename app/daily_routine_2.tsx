@@ -57,7 +57,7 @@ function DailyRoutineScreen_2() {
         </View>
 
         {/* Weekendroutine vraag */}
-        <Text style={styles.sectionTitle}>Wat is uw weekendroutine?</Text>
+        <Text style={styles.sectionTitle}>Wat is je weekendroutine?</Text>
         <RadioButton label="Ik ben vaak buiten actief" value="buiten-actief" selected={weekendRoutine} onSelect={setWeekendRoutine} />
         <RadioButton label="Ik blijf meestal thuis" value="thuis" selected={weekendRoutine} onSelect={setWeekendRoutine} />
         <RadioButton label="Ik werk in het weekend" value="werk-in-weekend" selected={weekendRoutine} onSelect={setWeekendRoutine} />

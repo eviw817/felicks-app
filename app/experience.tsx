@@ -64,15 +64,15 @@ function PetExperienceScreen() {
 
       {/* Ervaring met huisdieren */}
       <View style={styles.formContainer}>
-        <Text style={styles.sectionTitle}>Heeft u eerder voor huisdieren gezorgd?</Text>
+        <Text style={styles.sectionTitle}>Heb je eerder voor huisdieren gezorgd?</Text>
         <RadioButton label="Ik heb geen ervaring" value="geen" selected={experience} onSelect={setExperience} />
         <RadioButton label="Ik heb een hond gehad" value="hond" selected={experience} onSelect={setExperience} />
-        <RadioButton label="Ik heb verschillende huisdieren gehad" value="meerdere" selected={experience} onSelect={setExperience} />
+        <RadioButton label="Ik heb voor een ander huisdier gezorgd" value="meerdere" selected={experience} onSelect={setExperience} />
 
         {/* Alleen tonen als 'Ik heb verschillende huisdieren gehad' is geselecteerd */}
         {experience === 'meerdere' && (
           <>
-            <Text style={styles.sectionTitle}>Wat voor dier(en) heeft u gehad?</Text>
+            <Text style={styles.sectionTitle}>Voor welk dier heb je gezorgd</Text>
             <Checkbox label="Kat" value="kat" selectedValues={petsOwned} onSelect={togglePetSelection} />
             <Checkbox label="Reptielen" value="reptielen" selectedValues={petsOwned} onSelect={togglePetSelection} />
             <Checkbox label="Vogels" value="vogels" selectedValues={petsOwned} onSelect={togglePetSelection} />
