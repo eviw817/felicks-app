@@ -125,7 +125,7 @@ const styles = StyleSheet.create({
   },
 
   progressFill: {
-    width: '80%', // Pas aan naar juiste waarde
+    width: '66.66%', // Pas aan naar juiste waarde
     height: '100%',
     backgroundColor: '#97B8A5',
     borderRadius: 3,
