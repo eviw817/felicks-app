@@ -7,7 +7,7 @@ export default function Index() {
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      router.replace("/"); //hier link naar volgende pagina
+      router.replace("/bewustzijn-index"); // Dit navigeert correct naar de juiste pagina
     }, 3000);
 
     return () => clearTimeout(timer);
