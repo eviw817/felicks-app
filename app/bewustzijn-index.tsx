@@ -1,8 +1,6 @@
 import React from "react";
-import { View, Text, TouchableOpacity, StyleSheet, ScrollView } from "react-native";
+import { View, Text, TouchableOpacity, StyleSheet, ScrollView, Image } from "react-native";
 import { useFonts } from 'expo-font';
-
-
 
 export default function BewustzijnScreen() {
   const [fontsLoaded] = useFonts({
@@ -14,6 +12,15 @@ export default function BewustzijnScreen() {
   if (!fontsLoaded) {
     return <View />; // Wacht tot de fonts geladen zijn
   }
+
+  // Array met items en bijbehorende afbeeldingen
+  const topics = [
+    { title: "VOEDING", image: require("../assets/images/voeding.png") },
+    { title: "VEILIGHEID", image: require("../assets/images/veiligheid.png") },
+    { title: "TRAINING", image: require("../assets/images/training.png") },
+    { title: "VERZORGING", image: require("../assets/images/verzorging.png") },
+    { title: "ACTIVITEIT", image: require("../assets/images/activiteit.png") },
+  ];
 
   return (
     <View style={styles.container}>
@@ -27,9 +34,12 @@ export default function BewustzijnScreen() {
       <Text style={styles.learnMore}>Leer meer bij over:</Text>
 
       <ScrollView contentContainerStyle={styles.buttonContainer}>
-        {["VOEDING", "VEILIGHEID", "TRAINING", "VERZORGING", "ACTIVITEIT"].map((item, index) => (
+        {topics.map((item, index) => (
           <TouchableOpacity key={index} style={styles.infoButton}>
-            <Text style={styles.infoButtonText}>{item}</Text>
+            <View style={styles.infoContent}>
+              <Image source={item.image} style={styles.infoImage} />
+              <Text style={styles.infoButtonText}>{item.title}</Text>
+            </View>
           </TouchableOpacity>
         ))}
       </ScrollView>
@@ -42,7 +52,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#FFFDF9",
     padding: 16,
-    gap:25,
+    gap: 25,
     color: "#183A36",
   },
 
@@ -79,8 +89,7 @@ const styles = StyleSheet.create({
 
   buttonContainer: {
     width: "100%",
-    gap:2,
-    
+    gap: 2,
   },
 
   infoButton: {
@@ -88,8 +97,19 @@ const styles = StyleSheet.create({
     paddingVertical: 15,
     borderRadius: 15,
     marginVertical: 5,
-    textAlign: "left",
     width: "100%",
+    paddingHorizontal: 10,
+  },
+
+  infoContent: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+
+  infoImage: {
+    width: 25, // Pas aan naar gewenste grootte
+    height: 25, 
+    marginRight: 10, // Ruimte tussen afbeelding en tekst
   },
 
   infoButtonText: {
