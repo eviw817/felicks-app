@@ -10,10 +10,10 @@ export default function BewustzijnScreen() {
   });
 
   if (!fontsLoaded) {
-    return <View />; // Wacht tot de fonts geladen zijn
+    return <View />; 
   }
 
-  // Array met items en bijbehorende afbeeldingen
+  
   const topics = [
     { title: "VOEDING", image: require("../assets/images/voeding.png") },
     { title: "VEILIGHEID", image: require("../assets/images/veiligheid.png") },
@@ -83,6 +83,7 @@ const styles = StyleSheet.create({
   },
 
   learnMore: {
+    marginBottom: -13,
     fontSize: 18,
     fontFamily: 'Nunito-SemiBold',
   },
@@ -107,9 +108,10 @@ const styles = StyleSheet.create({
   },
 
   infoImage: {
-    width: 25, // Pas aan naar gewenste grootte
+    width: 25, 
     height: 25, 
-    marginRight: 10, // Ruimte tussen afbeelding en tekst
+    marginRight: 16, 
+    marginLeft: 12,
   },
 
   infoButtonText: {
