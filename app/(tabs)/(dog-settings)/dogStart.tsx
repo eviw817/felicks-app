@@ -2,7 +2,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { View, Text } from 'react-native';
 import { Link } from 'expo-router';
 
-export default function SettingsStart() {
+export default function DogStart() {
 
     return(
     <SafeAreaView 
@@ -35,19 +35,27 @@ export default function SettingsStart() {
                 fontSize: 16,
                 padding: 20,
             }}
-            >Wil je ontdekken hoe het is om een trouwe viervoeter in huis te hebben? Stel je eigen virtuele hond samen en ervaar wat het betekent om voor een huisdier te zorgen.
-
-            Een huisdier nemen is een grote stap en het is belangrijk om te weten of je er klaar voor bent. Ga je mee op avontuur met onze virtuele hond en ontdek het zelf? 🎉
+            >Wil je ontdekken hoe het is om een trouwe viervoeter in huis te hebben? Stel je eigen virtuele hond samen en ervaar wat het betekent om voor een huisdier te zorgen.</Text>
+            <Text
+            style={{
+                fontFamily: 'Nunito',
+                fontWeight: 'normal',
+                fontSize: 16,
+                padding: 20,
+            }}
+            >Een huisdier nemen is een grote stap en het is belangrijk om te weten of je er klaar voor bent. Ga je mee op avontuur met onze virtuele hond en ontdek het zelf? 🎉
             Maak je klaar voor een leerzame en leuke ervaring! 🌟</Text>
-            <View 
+            <Link 
             style={{
                 padding: 12,
                 margin: 20,
                 paddingHorizontal: 20,
                 backgroundColor: '#97B8A5',
+                fontWeight: 'bold',
                 borderRadius: 15,
+                textAlign: 'center',
             }}
-            >DOORGAAN</View>
+            href="/dogBreed">DOORGAAN</Link>
         </View>
       </SafeAreaView>
 )};

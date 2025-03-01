@@ -15,7 +15,7 @@ export default function HomeScreen() {
           paddingHorizontal: 20,
           backgroundColor: '#97B8A5',
           borderRadius: 7 }}
-      href="/settingsStart">Ga naar Dog settings</Link>
+      href="/dogStart">Ga naar Dog settings</Link>
     </SafeAreaView>
     
   );

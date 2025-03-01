@@ -13,7 +13,8 @@ export default function DemoLayout() {
           fontWeight: 'bold',
         },
       }}>
-      <Stack.Screen name="settingsStart" options={{ title: "Start Dog Settings" }} />
+      <Stack.Screen name="dogStart" options={{ title: "Start Dog Settings" }} />
+      <Stack.Screen name="dogBreed" options={{ title: "Choose Dog Breed" }} />
     </Stack>
   );
 }
