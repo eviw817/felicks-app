@@ -1,10 +1,9 @@
-import { useState } from 'react';
+import React from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { View, Text, TouchableOpacity } from 'react-native';
+import { View, Text, TouchableOpacity, TextInput  } from 'react-native';
 import { useRouter } from 'expo-router'; 
 import AntDesign from '@expo/vector-icons/AntDesign';
 import { Link } from 'expo-router';
-import { Picker } from '@react-native-picker/picker';
 
 type RadioButtonProps = {
     label: string;
@@ -40,11 +39,11 @@ const RadioButton: React.FC<RadioButtonProps> = ({ label, value, selected, onSel
     </TouchableOpacity>
 );
 
-export default function DogBreed() {
+export default function DogName() {
 
     const router = useRouter();
 
-    const [dogBreed, setdogBreed] = useState<string | null>(null);
+    const [text, onChangeText] = React.useState('');
 
     return(
     <SafeAreaView 
@@ -86,19 +85,44 @@ export default function DogBreed() {
                 fontSize: 16,
                 padding: 20,
             }}
-            >Je gaf aan tijdens het invullen van het formulier dat je graag een labrador wilt.</Text>
+            >Gefeliciteerd! Je gezin is net een pootje groter geworden!</Text>
+            <Text
+            style={{
+                fontFamily: 'Nunito',
+                fontWeight: 'normal',
+                fontSize: 16,
+                padding: 20,
+                paddingTop: 16,
+            }}
+            >Je hebt een labrador gekozen. Nu is het tijd om jouw nieuwe maatje een naam te geven.</Text>
             <Text
             style={{
                 fontFamily: 'Nunito',
                 fontWeight: 'bold',
-                fontSize: 18,
+                fontSize: 16,
                 padding: 20,
                 paddingTop: 16,
+                paddingBottom: 0,
             }}
-            >Wil je nog steeds voor een labrador gaan als virtuele hond?</Text>
-            <RadioButton label="Ja" value="ja" selected={dogBreed} onSelect={setdogBreed} />
-            <RadioButton label="Nee" value="nee" selected={dogBreed} onSelect={setdogBreed} />
-            <Link 
+            >Naam</Text>
+            <View style={{
+                margin: 20,
+                marginTop: 8,
+                backgroundColor:'#D9D9D9',
+                borderRadius: 10, }}>
+            <TextInput
+            style={{
+                height: 20,
+                margin: 12,
+                borderRadius: 10, 
+              }}
+            placeholderTextColor= "#879593"
+            onChangeText={onChangeText}
+            value={text}
+            placeholder="Geef je viervoeter een naam"
+            />
+            </View>
+            <Text 
             style={{
                 padding: 12,
                 margin: 20,
@@ -108,7 +132,7 @@ export default function DogBreed() {
                 borderRadius: 15,
                 textAlign: 'center',
             }}
-            href="/dogName">DOORGAAN</Link>
+            >DOORGAAN</Text>
         </View>
       </SafeAreaView>
 )};

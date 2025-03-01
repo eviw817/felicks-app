@@ -15,6 +15,7 @@ export default function DemoLayout() {
       }}>
       <Stack.Screen name="dogStart" options={{ title: "Start Dog Settings" }} />
       <Stack.Screen name="dogBreed" options={{ title: "Choose Dog Breed" }} />
+      <Stack.Screen name="dogName" options={{ title: "Choose Dog Name" }} />
     </Stack>
   );
 }
