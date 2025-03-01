@@ -336,7 +336,7 @@ export default function DogStart() {
             borderRadius: 15,
             textAlign: "center",
           }}
-          href="/dogBreed"
+          href="/dogFeaturesInfo"
         >
           OPSLAAN
         </Link>
