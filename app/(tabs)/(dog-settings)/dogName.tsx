@@ -122,7 +122,7 @@ export default function DogName() {
             placeholder="Geef je viervoeter een naam"
             />
             </View>
-            <Text 
+            <Link 
             style={{
                 padding: 12,
                 margin: 20,
@@ -132,7 +132,7 @@ export default function DogName() {
                 borderRadius: 15,
                 textAlign: 'center',
             }}
-            >DOORGAAN</Text>
+            href="/(tabs)/(dog-information)/dogInformation1">DOORGAAN</Link>
         </View>
       </SafeAreaView>
 )};

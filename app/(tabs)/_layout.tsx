@@ -27,6 +27,14 @@ export default function TabLayout() {
           headerShown: false,
         }}
       />
+      {/* Dog-information Tab */}
+      <Stack.Screen
+        name="(dog-information)" // Verwijst naar de map app/(tabs)/(demo)
+        options={{
+          title: "Dog information",
+          headerShown: false,
+        }}
+      />
     </Stack> //voor een navigatie te maken moet alles Tabs zijn, dus ook Tabs.Scree
   );
 }
