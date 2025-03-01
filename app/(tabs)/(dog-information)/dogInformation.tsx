@@ -86,7 +86,7 @@ export default function DogStart() {
                 borderRadius: 15,
                 textAlign: 'center',
             }}
-            href="/dogBreed">DOORGAAN</Link>
+            href="/dogNotifications">DOORGAAN</Link>
         </View>
       </SafeAreaView>
 )};

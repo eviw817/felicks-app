@@ -132,7 +132,7 @@ export default function DogName() {
                 borderRadius: 15,
                 textAlign: 'center',
             }}
-            href="/(tabs)/(dog-information)/dogInformation1">DOORGAAN</Link>
+            href="/(tabs)/(dog-information)/dogInformation">DOORGAAN</Link>
         </View>
       </SafeAreaView>
 )};
