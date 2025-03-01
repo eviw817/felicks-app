@@ -44,8 +44,8 @@ export default function DogStart() {
         <Text
           style={{
             fontFamily: "Nunito",
-            fontWeight: "semibold",
-            fontSize: 18,
+            fontWeight: "bold",
+            fontSize: 20,
             padding: 20,
             textAlign: "center",
           }}
