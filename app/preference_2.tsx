@@ -2,15 +2,17 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
+import { Picker } from '@react-native-picker/picker';
 
-// RadioButton component
-type RadioButtonProps = {
+// Typing for RadioButton Props
+interface RadioButtonProps {
   label: string;
   value: string;
   selected: string | null;
   onSelect: (value: string) => void;
-};
+}
 
+// RadioButton component
 const RadioButton: React.FC<RadioButtonProps> = ({ label, value, selected, onSelect }) => (
   <TouchableOpacity style={styles.radioContainer} onPress={() => onSelect(value)}>
     <View style={[styles.radioCircle, selected === value && styles.radioSelected]} />
@@ -18,34 +20,11 @@ const RadioButton: React.FC<RadioButtonProps> = ({ label, value, selected, onSel
   </TouchableOpacity>
 );
 
-// Checkbox component
-type CheckboxProps = {
-  label: string;
-  value: string;
-  selectedValues: string[];
-  onSelect: (value: string) => void;
-};
-
-const Checkbox: React.FC<CheckboxProps> = ({ label, value, selectedValues, onSelect }) => (
-  <TouchableOpacity style={styles.radioContainer} onPress={() => onSelect(value)}>
-    <View style={[styles.radioCircle, selectedValues.includes(value) && styles.radioSelected]} />
-    <Text style={styles.radioLabel}>{label}</Text>
-  </TouchableOpacity>
-);
-
-function experience() {
+function Preference2() {
   const router = useRouter();
-  const [experience, setExperience] = useState<string | null>(null);
-  const [petsOwned, setPetsOwned] = useState<string[]>([]);
-
-  // Functie om huisdieropties te selecteren of te deselecteren
-  const togglePetSelection = (value: string) => {
-    if (petsOwned.includes(value)) {
-      setPetsOwned(petsOwned.filter((item) => item !== value));
-    } else {
-      setPetsOwned([...petsOwned, value]);
-    }
-  };
+  const [selectedSize, setSelectedSize] = useState<string | null>(null);
+  const [selectedActivity, setSelectedActivity] = useState<string | null>(null);
+  const [selectedBreed, setSelectedBreed] = useState<string | null>(null);
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
@@ -55,36 +34,51 @@ function experience() {
       </TouchableOpacity>
 
       {/* Titel */}
-      <Text style={styles.title}>Ervaring met huisdieren</Text>
+      <Text style={styles.title}>Geef je voorkeuren op voor je ideale hond</Text>
 
       {/* Voortgangsbalk */}
       <View style={styles.progressBar}>
         <View style={styles.progressFill} />
       </View>
 
-      {/* Ervaring met huisdieren */}
+      {/* Grootte van het dier */}
       <View style={styles.formContainer}>
-        <Text style={styles.sectionTitle}>Heb je eerder voor huisdieren gezorgd?</Text>
-        <RadioButton label="Ik heb geen ervaring" value="geen" selected={experience} onSelect={setExperience} />
-        <RadioButton label="Ik heb een hond gehad" value="hond" selected={experience} onSelect={setExperience} />
-        <RadioButton label="Ik heb voor een ander huisdier gezorgd" value="meerdere" selected={experience} onSelect={setExperience} />
+        <Text style={styles.sectionTitle}>Grootte van het dier</Text>
+        <RadioButton label="Klein (<10kg)" value="klein" selected={selectedSize} onSelect={setSelectedSize} />
+        <RadioButton label="Middelgroot (10-25kg)" value="middelgroot" selected={selectedSize} onSelect={setSelectedSize} />
+        <RadioButton label="Groot (>25kg)" value="groot" selected={selectedSize} onSelect={setSelectedSize} />
+        <RadioButton label="Geen voorkeur" value="geen_voorkeur" selected={selectedSize} onSelect={setSelectedSize} />
+      </View>
 
-        {/* Alleen tonen als 'Ik heb verschillende huisdieren gehad' is geselecteerd */}
-        {experience === 'meerdere' && (
-          <>
-            <Text style={styles.sectionTitle}>Voor welk dier heb je gezorgd</Text>
-            <Checkbox label="Kat" value="kat" selectedValues={petsOwned} onSelect={togglePetSelection} />
-            <Checkbox label="Reptielen" value="reptielen" selectedValues={petsOwned} onSelect={togglePetSelection} />
-            <Checkbox label="Vogels" value="vogels" selectedValues={petsOwned} onSelect={togglePetSelection} />
-            <Checkbox label="Knaagdieren" value="knaagdieren" selectedValues={petsOwned} onSelect={togglePetSelection} />
-            <Checkbox label="Vissen" value="vissen" selectedValues={petsOwned} onSelect={togglePetSelection} />
-            <Checkbox label="Kippen" value="kippen" selectedValues={petsOwned} onSelect={togglePetSelection} />
-          </>
-        )}
+      {/* Activiteitsniveau */}
+      <View style={styles.formContainer}>
+        <Text style={styles.sectionTitle}>Activiteitsniveau</Text>
+        <RadioButton label="Laag" value="laag" selected={selectedActivity} onSelect={setSelectedActivity} />
+        <RadioButton label="Gemiddeld" value="gemiddeld" selected={selectedActivity} onSelect={setSelectedActivity} />
+        <RadioButton label="Hoog" value="hoog" selected={selectedActivity} onSelect={setSelectedActivity} />
+      </View>
+
+      {/* Specifieke rasvoorkeuren */}
+      <View style={styles.formContainer}>
+        <Text style={styles.sectionTitle}>Specifieke rasvoorkeuren?</Text>
+        <View style={styles.pickerContainer}>
+          <Picker
+            selectedValue={selectedBreed}
+            onValueChange={(itemValue) => setSelectedBreed(itemValue)}
+            style={styles.picker}
+          >
+            <Picker.Item label="Selecteer een optie" value={null} />
+            <Picker.Item label="Labrador" value="labrador" />
+            <Picker.Item label="Golden Retriever" value="golden_retriever" />
+            <Picker.Item label="Bulldog" value="bulldog" />
+            <Picker.Item label="Duitse Herder" value="duitse_herder" />
+            <Picker.Item label="Geen voorkeur" value="geen_voorkeur" />
+          </Picker>
+        </View>
       </View>
 
       {/* Volgende knop */}
-      <TouchableOpacity style={styles.button} onPress={() => router.push('/preference_1')}>
+      <TouchableOpacity style={styles.button} onPress={() => router.push('/')}> 
         <Text style={styles.buttonText}>Volgende</Text>
       </TouchableOpacity>
     </ScrollView>
@@ -93,7 +87,7 @@ function experience() {
 
 const styles = StyleSheet.create({
   container: {
-    flexGrow: 1,
+    flex: 1,
     justifyContent: 'flex-start',
     alignItems: 'center',
     padding: 20,
@@ -114,6 +108,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     textAlign: 'center',
     fontFamily: 'nunitoBold',
+    marginLeft: 20,
   },
 
   progressBar: {
@@ -125,7 +120,7 @@ const styles = StyleSheet.create({
   },
 
   progressFill: {
-    width: '66.66%',
+    width: '44.44%',
     height: '100%',
     backgroundColor: '#97B8A5',
     borderRadius: 3,
@@ -142,6 +137,19 @@ const styles = StyleSheet.create({
     color: '#183A36',
     marginBottom: 10,
     fontFamily: 'nunitoBold',
+  },
+
+  pickerContainer: {
+    backgroundColor: '#FFF',
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: '#97B8A5',
+    marginBottom: 10,
+  },
+
+  picker: {
+    height: 50,
+    width: '100%',
   },
 
   radioContainer: {
@@ -176,6 +184,7 @@ const styles = StyleSheet.create({
     width: '100%',
     alignItems: 'center',
     justifyContent: 'center',
+    marginTop: 20,
   },
 
   buttonText: {
@@ -187,5 +196,4 @@ const styles = StyleSheet.create({
     fontFamily: 'nunitoBold',
   },
 });
-
-export default experience;
+export default Preference2;

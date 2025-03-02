@@ -33,17 +33,17 @@ const Checkbox: React.FC<CheckboxProps> = ({ label, value, selectedValues, onSel
   </TouchableOpacity>
 );
 
-function experience() {
+function Preference1() {
   const router = useRouter();
-  const [experience, setExperience] = useState<string | null>(null);
-  const [petsOwned, setPetsOwned] = useState<string[]>([]);
+  const [selectedAge, setSelectedAge] = useState<string | null>(null);
+  const [preferences, setPreferences] = useState<string[]>([]);
 
-  // Functie om huisdieropties te selecteren of te deselecteren
-  const togglePetSelection = (value: string) => {
-    if (petsOwned.includes(value)) {
-      setPetsOwned(petsOwned.filter((item) => item !== value));
+  // Functie om checkbox-opties te selecteren of te deselecteren
+  const togglePreference = (value: string) => {
+    if (preferences.includes(value)) {
+      setPreferences(preferences.filter((item) => item !== value));
     } else {
-      setPetsOwned([...petsOwned, value]);
+      setPreferences([...preferences, value]);
     }
   };
 
@@ -55,36 +55,39 @@ function experience() {
       </TouchableOpacity>
 
       {/* Titel */}
-      <Text style={styles.title}>Ervaring met huisdieren</Text>
+      <Text style={styles.title}>Geef je voorkeuren op voor je ideale hond</Text>
 
       {/* Voortgangsbalk */}
       <View style={styles.progressBar}>
         <View style={styles.progressFill} />
       </View>
 
-      {/* Ervaring met huisdieren */}
+      {/* Leeftijd */}
       <View style={styles.formContainer}>
-        <Text style={styles.sectionTitle}>Heb je eerder voor huisdieren gezorgd?</Text>
-        <RadioButton label="Ik heb geen ervaring" value="geen" selected={experience} onSelect={setExperience} />
-        <RadioButton label="Ik heb een hond gehad" value="hond" selected={experience} onSelect={setExperience} />
-        <RadioButton label="Ik heb voor een ander huisdier gezorgd" value="meerdere" selected={experience} onSelect={setExperience} />
+        <Text style={styles.sectionTitle}>Leeftijd</Text>
+        <RadioButton label="Pup" value="pup" selected={selectedAge} onSelect={setSelectedAge} />
+        <RadioButton label="Jong volwassen" value="jong_volwassen" selected={selectedAge} onSelect={setSelectedAge} />
+        <RadioButton label="Senior" value="senior" selected={selectedAge} onSelect={setSelectedAge} />
+        <RadioButton label="Volwassen" value="volwassen" selected={selectedAge} onSelect={setSelectedAge} />
+        <RadioButton label="Geen voorkeur" value="geen_voorkeur" selected={selectedAge} onSelect={setSelectedAge} />
+      </View>
 
-        {/* Alleen tonen als 'Ik heb verschillende huisdieren gehad' is geselecteerd */}
-        {experience === 'meerdere' && (
-          <>
-            <Text style={styles.sectionTitle}>Voor welk dier heb je gezorgd</Text>
-            <Checkbox label="Kat" value="kat" selectedValues={petsOwned} onSelect={togglePetSelection} />
-            <Checkbox label="Reptielen" value="reptielen" selectedValues={petsOwned} onSelect={togglePetSelection} />
-            <Checkbox label="Vogels" value="vogels" selectedValues={petsOwned} onSelect={togglePetSelection} />
-            <Checkbox label="Knaagdieren" value="knaagdieren" selectedValues={petsOwned} onSelect={togglePetSelection} />
-            <Checkbox label="Vissen" value="vissen" selectedValues={petsOwned} onSelect={togglePetSelection} />
-            <Checkbox label="Kippen" value="kippen" selectedValues={petsOwned} onSelect={togglePetSelection} />
-          </>
-        )}
+      {/* Eigenschappen */}
+      <View style={styles.formContainer}>
+        <Text style={styles.sectionTitle}>Wat zoek je in jouw ideale hond?</Text>
+        <Checkbox label="Kan om met kinderen" value="kindvriendelijk" selectedValues={preferences} onSelect={togglePreference} />
+        <Checkbox label="Zindelijk" value="zindelijk" selectedValues={preferences} onSelect={togglePreference} />
+        <Checkbox label="Kan vervoerd worden in de auto" value="auto_vervoer" selectedValues={preferences} onSelect={togglePreference} />
+        <Checkbox label="Kan met andere honden" value="sociaal_honden" selectedValues={preferences} onSelect={togglePreference} />
+        <Checkbox label="Kan met andere katten" value="sociaal_katten" selectedValues={preferences} onSelect={togglePreference} />
+        <Checkbox label="Ervaring met andere diersoorten (bijv. kippen, konijnen, ...)" value="ervaring_diersoorten" selectedValues={preferences} onSelect={togglePreference} />
+        <Checkbox label="Kan alleen thuis blijven" value="alleen_thuis" selectedValues={preferences} onSelect={togglePreference} />
+        <Checkbox label="Basis commando’s gekend" value="commando_gekend" selectedValues={preferences} onSelect={togglePreference} />
+        <Checkbox label="Hypoallergeen" value="hypoallergeen" selectedValues={preferences} onSelect={togglePreference} />
       </View>
 
       {/* Volgende knop */}
-      <TouchableOpacity style={styles.button} onPress={() => router.push('/preference_1')}>
+      <TouchableOpacity style={styles.button} onPress={() => router.push('/preference_2')}>
         <Text style={styles.buttonText}>Volgende</Text>
       </TouchableOpacity>
     </ScrollView>
@@ -114,6 +117,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     textAlign: 'center',
     fontFamily: 'nunitoBold',
+    marginLeft: 20,
   },
 
   progressBar: {
@@ -188,4 +192,5 @@ const styles = StyleSheet.create({
   },
 });
 
-export default experience;
+
+export default Preference1;
