@@ -41,43 +41,43 @@ export default function Auth({ session }: { session: Session }) {
   const isEmailFilled = email.trim() !== '';
   const isPasswordFilled = password.trim() !== '';
 
-  // useEffect(() => {
-  //   if (session) {
-  //     console.log("User session:", session);
-  //     getProfile(); // Haal profiel op als gebruiker is ingelogd
-  //   } else {
-  //     console.log("Geen sessie beschikbaar.");
-  //   }
-  // }, [session]);
+  useEffect(() => {
+    if (session) {
+      console.log("User session:", session);
+      getProfile(); // Haal profiel op als gebruiker is ingelogd
+    } else {
+      console.log("Geen sessie beschikbaar.");
+    }
+  }, [session]);
   
 
-  // async function getProfile() {
-  //   try {
-  //     setLoading(true)
-  //     if (!session?.user) throw new Error('No user on the session!')
+  async function getProfile() {
+    try {
+      setLoading(true)
+      if (!session?.user) throw new Error('No user on the session!')
 
-  //     const { data, error, status } = await supabase
-  //       .from('profiles')
-  //       .select(`firstname, lastname, birthdate`)
-  //       .eq('id', session?.user.id)
-  //       .single()
-  //     if (error && status !== 406) {
-  //       throw error
-  //     }
+      const { data, error, status } = await supabase
+        .from('profiles')
+        .select(`firstname, lastname, birthdate`)
+        .eq('id', session?.user.id)
+        .single()
+      if (error && status !== 406) {
+        throw error
+      }
 
-  //     if (data) {
-  //       setFirstname(data.firstname)
-  //       setLastname(data.lastname)
-  //       setBirthdate(data.birthdate) 
-  //     }
-  //   } catch (error) {
-  //     if (error instanceof Error) {
-  //       Alert.alert(error.message)
-  //     }
-  //   } finally {
-  //     setLoading(false)
-  //   }
-  // }
+      if (data) {
+        setFirstname(data.firstname)
+        setLastname(data.lastname)
+        setBirthdate(data.birthdate) 
+      }
+    } catch (error) {
+      if (error instanceof Error) {
+        Alert.alert(error.message)
+      }
+    } finally {
+      setLoading(false)
+    }
+  }
 
   // async function signInWithEmail() {
   //   setLoading(true)
