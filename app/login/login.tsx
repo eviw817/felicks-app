@@ -1,6 +1,7 @@
 import React, { useState } from "react";
-import { View, Text, StyleSheet, TouchableOpacity, TextInput } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity, TextInput, Alert } from "react-native";
 import { useRouter } from "expo-router";  
+import { supabase } from "../../lib/supabase";
 
 const LoginScreen = () => {
   const router = useRouter();
@@ -8,10 +9,29 @@ const LoginScreen = () => {
   const [passwordFocus, setPasswordFocus] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState(false);
 
   // Functie om te controleren of er tekst is ingevoerd
   const isEmailFilled = email.trim() !== '';
   const isPasswordFilled = password.trim() !== '';
+
+  async function signInWithEmail() {
+    setLoading(true);
+    
+    const { error } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    });
+
+    if (error) {
+      Alert.alert("Login mislukt", error.message);
+      setLoading(false);
+      return;
+    }
+
+    router.push("../startpage/startpage"); 
+    setLoading(false);
+  }
 
   return (
     <View style={styles.container}>
@@ -56,7 +76,7 @@ const LoginScreen = () => {
         </TouchableOpacity>
       </View>
 
-      <TouchableOpacity style={styles.button}>
+      <TouchableOpacity style={styles.button} onPress={async () => await signInWithEmail()}>
         <Text style={styles.buttonText}>INLOGGEN</Text>
       </TouchableOpacity>
 
