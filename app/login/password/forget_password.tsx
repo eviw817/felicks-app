@@ -1,14 +1,35 @@
 import React, { useState } from "react";
-import { View, Text, StyleSheet, TouchableOpacity, TextInput } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity, TextInput, Alert } from "react-native";
 import { useRouter } from "expo-router";  
+import { supabase } from "../../../lib/supabase";
 
 const ForgetPasswordScreen = () => {
   const router = useRouter();
   const [emailFocus, setEmailFocus] = useState(false);
   const [email, setEmail] = useState('');
+  const [loading, setLoading] = useState(false);
 
   // Functie om te controleren of er tekst is ingevoerd
   const isEmailFilled = email.trim() !== '';
+
+  const handleResetPassword = async () => {
+    if (!email) {
+      Alert.alert("Fout", "Voer een geldig e-mailadres in.");
+      return;
+    }
+
+    setLoading(true);
+
+    const { error } = await supabase.auth.resetPasswordForEmail(email);
+
+    if (error) {
+      Alert.alert("Fout", "Deze e-mail is niet geregistreerd.");
+    } else {
+      router.push("/login/password/notification_email");
+    }
+
+    setLoading(false);
+  };
 
   return (
     <View style={styles.container}>
@@ -30,7 +51,7 @@ const ForgetPasswordScreen = () => {
         value={email}
       />
   
-      <TouchableOpacity style={styles.button} onPress={() => router.push("/login/password/notification_email")}>
+      <TouchableOpacity style={styles.button} onPress={async () => await handleResetPassword()}>
         <Text style={styles.buttonText}>VERZEND</Text>
       </TouchableOpacity>
 

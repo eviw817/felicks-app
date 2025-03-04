@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, StyleSheet, TouchableOpacity, TextInput } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity, TextInput, Alert } from "react-native";
 import { useRouter } from "expo-router";  
+import { supabase } from "../../../lib/supabase";
 
 
-const LoginScreen = () => {
+const NewPasswordScreen = () => {
   const router = useRouter();
+  const [loading, setLoading] = useState(false);
   const [nieuwpasswordFocus, setNieuwPasswordFocus] = useState(false);
   const [herhaalpasswordFocus, setHerhaalPasswordFocus] = useState(false);
 
@@ -13,6 +15,37 @@ const LoginScreen = () => {
 
   const isNieuwPasswordFilled = nieuwpassword.trim() !== '';
   const isHerhaalPasswordFilled = herhaalpassword.trim() !== '';
+
+  useEffect(() => {
+    const checkSession = async () => {
+      const { data, error } = await supabase.auth.getSession();
+      if (!data.session || error) {
+        Alert.alert("Fout", "Geen geldige reset-link. Open de link in je e-mail.");
+        router.replace("/login/login"); // Terug naar login als er geen sessie is
+      }
+    };
+    checkSession();
+  }, []);
+
+  // const handleResetPassword = async () => {
+  //   if (nieuwpassword !== herhaalpassword) {
+  //     Alert.alert("Fout", "De wachtwoorden komen niet overeen.");
+  //     return;
+  //   }
+
+  //   setLoading(true);
+
+  //   const { error } = await supabase.auth.updateUser({ nieuwpassword });
+
+  //   if (error) {
+  //     Alert.alert("Fout", "Het wachtwoord kon niet worden gewijzigd.");
+  //   } else {
+  //     Alert.alert("Succes", "Je wachtwoord is succesvol gewijzigd.");
+  //     router.push("/login/login"); // Terug naar login na reset
+  //   }
+
+  //   setLoading(false);
+  // };
 
   return (
     <View style={styles.container}>
@@ -49,7 +82,7 @@ const LoginScreen = () => {
         value={herhaalpassword}
       />
 
-      <TouchableOpacity style={styles.button} onPress={() => router.push("/login/login")}>
+      <TouchableOpacity style={styles.button} >
         <Text style={styles.buttonText}>OPSLAAN</Text>
       </TouchableOpacity>
     </View>
@@ -134,4 +167,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default LoginScreen;
+export default NewPasswordScreen;
