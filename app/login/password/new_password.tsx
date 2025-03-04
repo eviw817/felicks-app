@@ -1,0 +1,137 @@
+import React, { useEffect, useState } from "react";
+import { View, Text, StyleSheet, TouchableOpacity, TextInput } from "react-native";
+import { useRouter } from "expo-router";  
+
+
+const LoginScreen = () => {
+  const router = useRouter();
+  const [nieuwpasswordFocus, setNieuwPasswordFocus] = useState(false);
+  const [herhaalpasswordFocus, setHerhaalPasswordFocus] = useState(false);
+
+  const [nieuwpassword, setNieuwPassword] = useState('');
+  const [herhaalpassword, setHerhaalPassword] = useState('');
+
+  const isNieuwPasswordFilled = nieuwpassword.trim() !== '';
+  const isHerhaalPasswordFilled = herhaalpassword.trim() !== '';
+
+  return (
+    <View style={styles.container}>
+      <Text style={styles.title}>Reset wachtwoord</Text>
+  
+      {/* Wachtwoord input */}
+      <Text style={styles.label}>Nieuw wachtwoord</Text>
+      <TextInput
+        style={[
+          styles.input, 
+          nieuwpasswordFocus || isNieuwPasswordFilled ? styles.focusedInput : styles.unfocusedInput
+        ]}
+        placeholder="Nieuw wachtwoord" 
+        placeholderTextColor="rgba(151, 184, 165, 0.5)"
+        secureTextEntry 
+        onFocus={() => setHerhaalPasswordFocus(true)} 
+        onBlur={() => setHerhaalPasswordFocus(false)} 
+        onChangeText={setNieuwPassword}
+        value={nieuwpassword}
+      />
+
+<Text style={styles.label}>Herhaal nieuw wachtwoord</Text>
+      <TextInput
+        style={[
+          styles.input, 
+          herhaalpasswordFocus || isHerhaalPasswordFilled ? styles.focusedInput : styles.unfocusedInput
+        ]}
+        placeholder="Herhaal nieuw wachtwoord" 
+        placeholderTextColor="rgba(151, 184, 165, 0.5)"
+        secureTextEntry 
+        onFocus={() => setNieuwPasswordFocus(true)} 
+        onBlur={() => setNieuwPasswordFocus(false)} 
+        onChangeText={setHerhaalPassword}
+        value={herhaalpassword}
+      />
+
+      <TouchableOpacity style={styles.button} >
+        <Text style={styles.buttonText}>OPSLAAN</Text>
+      </TouchableOpacity>
+    </View>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    paddingTop: 100,
+    alignItems: 'center',
+    padding: 20,
+    backgroundColor: '#FFFDF9',
+  },
+  title: {
+    fontSize: 23,
+    fontWeight: "bold",
+    color: '#183A36',
+    marginBottom: 60,
+  },
+  text: {
+    fontSize: 20,
+    fontWeight: "bold",
+  },
+  button: {
+    backgroundColor: '#97B8A5',
+    paddingVertical: 15,
+    borderRadius: 20, 
+    marginBottom: 20,
+    width: '97%',
+    alignItems: 'center',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+  },
+  buttonText: {
+    color: '#183A36',
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  label: {
+    alignSelf: "flex-start",
+    fontSize: 16,
+    fontWeight: "600",
+    color: "#183A36",
+    marginBottom: 5,
+  },
+  input: {
+    width: "100%",
+    height: 45,
+    borderBottomWidth: 1,
+    borderBottomColor: "#97B8A5", 
+    marginBottom: 25,
+    fontSize: 16,
+    color: "#183A36",
+    paddingLeft: 15,
+  },
+  focusedInput: {
+    borderBottomColor: '#183A36', 
+  },
+  unfocusedInput: {
+    borderBottomColor: "#97B8A5", 
+  },
+  forgotPassword: {
+    alignSelf: "flex-end",
+    textAlign: "right",
+    color: "#183A36",
+    fontSize: 14,
+    marginBottom: 5,
+  },
+  forgotPasswordContainer: {
+    width: "100%", 
+    alignItems: 'flex-end', 
+    marginBottom: 30,
+  },
+  registerText: {
+    fontSize: 14,
+    color: "#183A36",
+  },
+  registerLink: {
+    fontWeight: "bold",
+  },
+});
+
+export default LoginScreen;

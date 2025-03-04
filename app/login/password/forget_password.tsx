@@ -30,7 +30,7 @@ const ForgetPasswordScreen = () => {
         value={email}
       />
   
-      <TouchableOpacity style={styles.button}>
+      <TouchableOpacity style={styles.button} onPress={() => router.push("/login/password/notification_email")}>
         <Text style={styles.buttonText}>VERZEND</Text>
       </TouchableOpacity>
 
