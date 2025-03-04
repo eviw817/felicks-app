@@ -49,7 +49,7 @@ const LoginScreen = () => {
         value={herhaalpassword}
       />
 
-      <TouchableOpacity style={styles.button} >
+      <TouchableOpacity style={styles.button} onPress={() => router.push("/login/login")}>
         <Text style={styles.buttonText}>OPSLAAN</Text>
       </TouchableOpacity>
     </View>
