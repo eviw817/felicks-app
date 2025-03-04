@@ -5,13 +5,13 @@ import { useRouter } from "expo-router";
 const NotficationEmailScreen = () => {
     const router = useRouter();
   
-    useEffect(() => {
-      const timer = setTimeout(() => {
-        router.replace("/login/password/new_password"); 
-      }, 3000);
+    // useEffect(() => {
+    //   const timer = setTimeout(() => {
+    //     router.replace("/login/password/new_password"); 
+    //   }, 3000);
   
-      return () => clearTimeout(timer);
-    }, []);
+    //   return () => clearTimeout(timer);
+    // }, []);
   
   return (
     <View style={styles.container}>

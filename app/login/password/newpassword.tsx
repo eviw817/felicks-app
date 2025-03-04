@@ -27,32 +27,31 @@ const NewPasswordScreen = () => {
     checkSession();
   }, []);
 
-  // const handleResetPassword = async () => {
-  //   if (nieuwpassword !== herhaalpassword) {
-  //     Alert.alert("Fout", "De wachtwoorden komen niet overeen.");
-  //     return;
-  //   }
+  const handleResetPassword = async () => {
+    if (nieuwpassword !== herhaalpassword) {
+      Alert.alert("Fout", "De wachtwoorden komen niet overeen.");
+      return;
+    }
 
-  //   setLoading(true);
+    setLoading(true);
 
-  //   const { error } = await supabase.auth.updateUser({ nieuwpassword });
+    const { error } = await supabase.auth.updateUser({ password: nieuwpassword });
 
-  //   if (error) {
-  //     Alert.alert("Fout", "Het wachtwoord kon niet worden gewijzigd.");
-  //   } else {
-  //     Alert.alert("Succes", "Je wachtwoord is succesvol gewijzigd.");
-  //     router.push("/login/login"); // Terug naar login na reset
-  //   }
+    if (error) {
+      Alert.alert("Fout", "Het wachtwoord kon niet worden gewijzigd.");
+    } else {
+      Alert.alert("Succes", "Je wachtwoord is succesvol gewijzigd.");
+      router.push("/login/login"); // Terug naar login na reset
+    }
 
-  //   setLoading(false);
-  // };
+    setLoading(false);
+  };
 
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Reset wachtwoord</Text>
-  
-      {/* Wachtwoord input */}
-      <Text style={styles.label}>Nieuw wachtwoord</Text>
+
+    <Text style={styles.label}>Nieuw wachtwoord</Text>
       <TextInput
         style={[
           styles.input, 
@@ -61,13 +60,14 @@ const NewPasswordScreen = () => {
         placeholder="Nieuw wachtwoord" 
         placeholderTextColor="rgba(151, 184, 165, 0.5)"
         secureTextEntry 
-        onFocus={() => setHerhaalPasswordFocus(true)} 
-        onBlur={() => setHerhaalPasswordFocus(false)} 
+        onFocus={() => setNieuwPasswordFocus(true)} 
+        onBlur={() => setNieuwPasswordFocus(false)} 
         onChangeText={setNieuwPassword}
         value={nieuwpassword}
       />
 
-<Text style={styles.label}>Herhaal nieuw wachtwoord</Text>
+      {/* herhaal wachtwoord input */}
+      <Text style={styles.label}>Herhaal nieuw wachtwoord</Text>
       <TextInput
         style={[
           styles.input, 
@@ -76,13 +76,13 @@ const NewPasswordScreen = () => {
         placeholder="Herhaal nieuw wachtwoord" 
         placeholderTextColor="rgba(151, 184, 165, 0.5)"
         secureTextEntry 
-        onFocus={() => setNieuwPasswordFocus(true)} 
-        onBlur={() => setNieuwPasswordFocus(false)} 
+        onFocus={() => setHerhaalPasswordFocus(true)} 
+        onBlur={() => setHerhaalPasswordFocus(false)} 
         onChangeText={setHerhaalPassword}
         value={herhaalpassword}
       />
 
-      <TouchableOpacity style={styles.button} >
+      <TouchableOpacity style={styles.button} onPress={async () => await handleResetPassword()}>
         <Text style={styles.buttonText}>OPSLAAN</Text>
       </TouchableOpacity>
     </View>

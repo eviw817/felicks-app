@@ -20,7 +20,11 @@ const ForgetPasswordScreen = () => {
 
     setLoading(true);
 
-    const { error } = await supabase.auth.resetPasswordForEmail(email);
+    // const { error } = await supabase.auth.resetPasswordForEmail(email);
+
+    const { error } = await supabase.auth.resetPasswordForEmail(email, {
+      redirectTo: 'com.anonymous.felicksapp://login/password/newpassword'
+    });
 
     if (error) {
       Alert.alert("Fout", "Deze e-mail is niet geregistreerd.");
