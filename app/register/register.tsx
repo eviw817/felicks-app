@@ -5,7 +5,7 @@ import Auth from '../../components/Auth';
 import { Session } from '@supabase/supabase-js'
 import { useRouter } from "expo-router"; 
 import { Picker } from '@react-native-picker/picker'; 
-import {  AppStateStatus } from 'react-native';
+import { AppStateStatus } from 'react-native';
 
 
 // Tells Supabase Auth to continuously refresh the session automatically if

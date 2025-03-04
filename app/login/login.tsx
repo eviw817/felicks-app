@@ -1,7 +1,10 @@
-import React, { useState } from "react";
-import { View, Text, StyleSheet, TouchableOpacity, TextInput, Alert } from "react-native";
+import React, { useEffect, useState } from "react";
+import { View, Text, StyleSheet, TouchableOpacity, TextInput, Alert, AppState } from "react-native";
 import { useRouter } from "expo-router";  
 import { supabase } from "../../lib/supabase";
+import { Picker } from '@react-native-picker/picker'; 
+import { AppStateStatus } from 'react-native';
+import { Session } from '@supabase/supabase-js'
 
 const LoginScreen = () => {
   const router = useRouter();
@@ -10,10 +13,48 @@ const LoginScreen = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
+  const [session, setSession] = useState<Session | null>(null);
 
   // Functie om te controleren of er tekst is ingevoerd
   const isEmailFilled = email.trim() !== '';
   const isPasswordFilled = password.trim() !== '';
+
+  useEffect(() => {
+    const fetchSession = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      setSession(session);
+
+      if (session) {
+        supabase.auth.startAutoRefresh();
+      } else {
+        supabase.auth.stopAutoRefresh();
+      }
+    };
+
+    fetchSession();
+
+    // Luister naar veranderingen in de authenticatie status
+    const { data: authListener } = supabase.auth.onAuthStateChange((_event, session) => {
+      setSession(session);
+      if (session) {
+        supabase.auth.startAutoRefresh();
+      } else {
+        supabase.auth.stopAutoRefresh();
+      }
+    });
+
+    // AppState listener voor wanneer de app actief wordt
+    const subscription = AppState.addEventListener("change", (state: AppStateStatus) => {
+      if (state === "active") {
+        fetchSession();
+      }
+    });
+
+    return () => {
+      subscription.remove(); // Zorgt voor een correcte cleanup
+      authListener?.subscription?.unsubscribe(); // Voorkomt mogelijke fouten
+    };
+  }, []);
 
   async function signInWithEmail() {
     setLoading(true);
