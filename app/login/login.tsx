@@ -65,7 +65,15 @@ const LoginScreen = () => {
     });
 
     if (error) {
-      Alert.alert("Login mislukt", error.message);
+      // Check if the error is related to email or password
+      if (error.message.includes('email')) {
+        Alert.alert("E-mail incorrect", "Het ingevoerde e-mail is onjuist. Controleer je e-mail en probeer het opnieuw.");
+      } else if (error.message.includes('password')) {
+        Alert.alert("Wachtwoord incorrect", "Het ingevoerde wachtwoord is onjuist. Controleer je wachtwoord en probeer het opnieuw.");
+      } else {
+        // Algemeen foutbericht voor andere fouten
+        Alert.alert("Login mislukt", "Controleer je e-mail en/of wachtwoord en probeer het opnieuw.");
+      }
       setLoading(false);
       return;
     }

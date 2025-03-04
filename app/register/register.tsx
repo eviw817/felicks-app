@@ -118,13 +118,13 @@ export default function Registeren() {
       })
       if (error) {
         // console.log("Error signing up:", error);
-        Alert.alert("Error", error.message);
+        Alert.alert("Fout", "Er is een fout opgetreden bij het registreren. Probeer het opnieuw.");
         setLoading(false);
         return;
       }
   
       if (!session) {
-        Alert.alert('Please check your inbox for email verification!')
+        Alert.alert('Check uw email voor verificatie')
         setLoading(false);
         return;
       } else {
@@ -134,10 +134,7 @@ export default function Registeren() {
           .select('id')
           .eq('id', session.user.id)
           .single()
-    
-        // if (profileError && profileError.code !== 'PGRST301') {
-        //   Alert.alert('Error checking profile', profileError.message)
-        // }
+  
     
         if (data) {
           // If profile already exists, update it
@@ -147,7 +144,7 @@ export default function Registeren() {
             .eq('id', session.user.id)
     
           if (updateError) {
-            Alert.alert('Error updating profile', updateError.message)
+            Alert.alert('Er is een probleem bij het updaten van uw profiel.')
             setLoading(false);
             return;
           }
@@ -165,7 +162,7 @@ export default function Registeren() {
             ])
     
           if (insertError) {
-            Alert.alert('Error saving profile', insertError.message)
+            Alert.alert('Er is een probleem bij het opslagen van uw profiel. Probeer het opnieuw')
             setLoading(false);
             return;
           }
