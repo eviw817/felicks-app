@@ -1,8 +1,9 @@
 import React from "react";
 import { View, Text, Image, TouchableOpacity, StyleSheet } from "react-native";
-// import Icon from "react-native-vector-icons/Ionicons";
+import { useRouter } from "expo-router";
 
 const ProfileScreen = () => {
+       const router = useRouter();
     return (
       <View style={styles.container}>
          <View style={styles.header}>
@@ -22,7 +23,7 @@ const ProfileScreen = () => {
       </View>
       
       {/* De bewerk-knop onder de tekst */}
-      <TouchableOpacity style={styles.editButton}>
+      <TouchableOpacity style={styles.editButton}  onPress={() => router.push("/profile/profileEdit/profileEdit")}>
         <Text style={styles.editButtonText}>BEWERKEN</Text>
       </TouchableOpacity>
     </View>
