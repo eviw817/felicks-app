@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { View, Text, StyleSheet, TouchableOpacity, TextInput, Alert } from "react-native";
 import { useRouter } from "expo-router";  
 import { supabase } from "../../../lib/supabase";
-
+import * as Linking from 'expo-linking';
 
 const NewPasswordScreen = () => {
   const router = useRouter();
@@ -26,6 +26,24 @@ const NewPasswordScreen = () => {
     };
     checkSession();
   }, []);
+
+  // useEffect(() => {
+  //   const handleDeepLink = (event: { url: string }) => {
+  //     let url = event.url;
+  //     console.log("Deep link ontvangen:", url);
+      
+  //     if (url.includes("login/password/newpassword")) {
+  //       router.replace("/login/password/newpassword");
+  //     }
+  //   };
+
+  //   // Luisteren naar deep links
+  //   const subscription = Linking.addEventListener("url", handleDeepLink);
+
+  //   return () => {
+  //     subscription.remove();
+  //   };
+  // }, []);
 
   const handleResetPassword = async () => {
     if (nieuwpassword !== herhaalpassword) {

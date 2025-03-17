@@ -1,17 +1,40 @@
 import React, { useEffect } from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, Alert } from "react-native";
 import { useRouter } from "expo-router";  
+import * as Linking from 'expo-linking';
 
 const NotficationEmailScreen = () => {
     const router = useRouter();
   
-    // useEffect(() => {
-    //   const timer = setTimeout(() => {
-    //     router.replace("/login/password/new_password"); 
-    //   }, 3000);
+    useEffect(() => {
+      const handleDeepLink = (event: { url: string }) => {
+        let url = event.url;
+        console.log("Deep link ontvangen:", url);
   
-    //   return () => clearTimeout(timer);
-    // }, []);
+        // Controleer of de deep link de juiste pagina bevat
+        if (url.includes("login/password/newpassword")) {
+          // Hier gaan we de queryparameter 'access_token' extraheren
+          const parsedUrl = new URL(url);
+          const token = parsedUrl.searchParams.get('access_token');  // Haal de access_token uit de URL
+  
+          console.log("Token ontvangen:", token);
+          
+          // Als de token aanwezig is, stuur de gebruiker naar de juiste pagina
+          if (token) {
+            router.replace(`/login/password/newpassword?access_token=${token}`);
+          } else {
+            Alert.alert("Fout", "Geen geldig token in de deep link.");
+          }
+        }
+      };
+  
+      // Luisteren naar inkomende deep links
+      const subscription = Linking.addEventListener("url", handleDeepLink);
+  
+      return () => {
+        subscription.remove(); // Verwijder de listener wanneer de component wordt verwijderd
+      };
+    }, []);
   
   return (
     <View style={styles.container}>
