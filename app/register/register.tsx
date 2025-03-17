@@ -109,8 +109,20 @@ export default function Registeren() {
   }, [session]); 
 
    async function signUpWithEmail() {
-      setLoading(true)
-    
+      setLoading(true);
+      const birthDate = new Date(`${year}-${month}-${day}`);
+      let age = new Date().getFullYear() - birthDate.getFullYear();  // Gebruik let i.p.v. const
+      const monthDifference = new Date().getMonth() - birthDate.getMonth();
+      if (monthDifference < 0 || (monthDifference === 0 && new Date().getDate() < birthDate.getDate())) {
+        age--;
+      }
+      
+      if (age < 18) {
+        Alert.alert("Je moet minimaal 18 jaar oud zijn om je te registreren.");
+        setLoading(false);
+        return;
+      }
+      
       // Sign up user with email and password
       const { data: { session }, error } = await supabase.auth.signUp({
         email: email,
