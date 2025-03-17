@@ -1,8 +1,11 @@
 import React from "react";
 import { View, Text, TouchableOpacity, StyleSheet, ScrollView, Image } from "react-native";
 import { useFonts } from 'expo-font';
+import { useRouter } from "expo-router"; // Import useRouter
 
 export default function BewustzijnScreen() {
+  const router = useRouter(); // Gebruik de router om te navigeren
+
   const [fontsLoaded] = useFonts({
     "Nunito-Regular": require("../assets/fonts/nunito/Nunito-Regular.ttf"),
     "Nunito-SemiBold": require("../assets/fonts/nunito/Nunito-SemiBold.ttf"),
@@ -10,10 +13,9 @@ export default function BewustzijnScreen() {
   });
 
   if (!fontsLoaded) {
-    return <View />; 
+    return <View />;
   }
 
-  
   const topics = [
     { title: "VOEDING", image: require("../assets/images/voeding.png") },
     { title: "VEILIGHEID", image: require("../assets/images/veiligheid.png") },
@@ -27,7 +29,8 @@ export default function BewustzijnScreen() {
       <Text style={styles.title}>Bewustzijn</Text>
       <Text style={styles.subtitle}>Doe de quiz van de week</Text>
 
-      <TouchableOpacity style={styles.quizButton}>
+      {/* Update: Navigeren naar quiz-index.tsx */}
+      <TouchableOpacity style={styles.quizButton} onPress={() => router.push("/quiz_index")}>
         <Text style={styles.quizButtonText}>QUIZ VAN DE WEEK</Text>
       </TouchableOpacity>
 

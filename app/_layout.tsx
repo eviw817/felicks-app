@@ -5,6 +5,7 @@ export default function RootLayout() {
     <Stack>
       <Stack.Screen name="index" options={{ headerShown: false }} />
       <Stack.Screen name="bewustzijn-index" options={{ headerShown: false }} />
+      <Stack.Screen name="quiz_index" options={{ headerShown: false }} />
     </Stack>
   );
 }
