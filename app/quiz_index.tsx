@@ -8,8 +8,12 @@ export default function QuizIndex() {
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
-       <FontAwesome name="arrow-left" size={20} color="#183A36" />
+      <TouchableOpacity 
+        onPress={() => router.replace("/bewustzijn-index")} 
+        style={styles.backButton}
+        hitSlop={{ top: 20, bottom: 20, left: 20, right: 20 }} // //aangepast zodat het klikbare gebied rond pijl groter is 
+      >
+        <FontAwesome name="arrow-left" size={24} color="#183A36" />
       </TouchableOpacity>
 
       <Text style={styles.title}>Bewustzijn quiz</Text>
@@ -20,7 +24,7 @@ export default function QuizIndex() {
 
       <Text style={styles.description}>
         Deze pagina is bedoeld om elke week een quiz te doen om jouw kennis te testen.{"\n"}
-        Zodat je kan zien hoe goed jij vororbereid bent op een viervoeter.{"\n\n"}
+        Zodat je kan zien hoe goed jij voorbereid bent op een viervoeter.{"\n\n"}
         Bij een fout antwoord krijg je altijd de juiste oplossing.{"\n\n"}
         Ga ervoor en verbreed je kennis!
       </Text>
@@ -41,15 +45,14 @@ const styles = StyleSheet.create({
     textAlign: "left",
   },
 
-  backButton: {
+  backButton: { //aangepast zodat het klikbare gebied rond pijl groter is 
     position: "absolute",
-    top: 95,
+    top: 83, 
     left: 20,
-  },
-
-  backText: {
-    fontSize: 16,
-    
+    zIndex: 10, 
+    padding: 10, 
+    backgroundColor: "#FFFDF9", 
+    borderRadius: 20,
   },
 
   title: {
@@ -69,7 +72,6 @@ const styles = StyleSheet.create({
   description: {
     fontSize: 16,
     fontFamily: 'Nunito-Regular',
-    
     marginBottom: 20,
   },
 
@@ -85,6 +87,5 @@ const styles = StyleSheet.create({
   continueText: {
     fontFamily: 'Nunito-Bold',
     fontSize: 14,
-    
   },
 });
