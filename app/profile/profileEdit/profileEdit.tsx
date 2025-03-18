@@ -1,5 +1,6 @@
 import React from "react";
-import { View, Text, Image, TouchableOpacity, StyleSheet, TextInput } from "react-native";
+import { SafeAreaView } from 'react-native';
+import { View, Text, Image, TouchableOpacity, StyleSheet, TextInput, Modal } from "react-native";
 import { useRouter } from "expo-router";
 import { useState, useEffect } from 'react'
 import { Picker } from '@react-native-picker/picker';
@@ -17,6 +18,7 @@ const ProfileEditScreen = () => {
     const [password, setPassword] = useState('');
     const [birthdate, setBirthdate] = useState('');
     const [loading, setLoading] = useState(false)
+    const [modalVisible, setModalVisible] = useState(false);
   
      // Geboortedatum state
      const [day, setDay] = useState('01');
@@ -29,22 +31,23 @@ const ProfileEditScreen = () => {
     const isEmailFilled = email.trim() !== '';
     const isPasswordFilled = password.trim() !== '';
     return (
-      <View style={styles.container}>
+      <SafeAreaView  style={styles.container} >
          <View style={styles.header}>
-        <Text style={styles.title}>Profiel bewerken</Text>
-        <Image source={require("../../../assets/images/settingicon.png")} style={styles.settingsIcon} />
+          <Text style={styles.title}>Profiel bewerken</Text>
+          <Image source={require("../../../assets/images/settingicon.png")} style={styles.settingsIcon} />
         </View>
   
         {/* Profielsectie */}
      <View style={styles.profileSection}>
       <View style={styles.profileInfoContainer}>
         <Image source={{ uri: "https://via.placeholder.com/100" }} style={styles.profileImage} />
-      </View>
+
       
       {/* De bewerk-knop onder de tekst */}
       <TouchableOpacity style={styles.editButton}>
         <Text style={styles.editButtonText}>VOEG FOTO TOE</Text>
       </TouchableOpacity>
+      </View>
     </View>
 
    {/* Voornaam input */}
@@ -149,13 +152,44 @@ const ProfileEditScreen = () => {
       onBlur={() => setPasswordFocus(false)} 
       onChangeText={setPassword}
       value={password}
+      onPress={() => setModalVisible(true)} 
     />
+    {/* Popup (modal) */}
+    <Modal transparent={true} visible={modalVisible} animationType="fade">
+        <View style={styles.modalBackground}>
+          <View style={styles.modalContainer}>
+            <Text style={styles.modalText}>
+              Ben je zeker dat je je wachtwoord wilt veranderen?
+            </Text>
+
+            {/* Knoppen in de popup */}
+            <View style={styles.buttonContainer}>
+              <TouchableOpacity 
+                style={styles.buttons} 
+                onPress={() => {
+                  setModalVisible(false);
+                  router.push("/profile/profileEdit/password/forget_password");
+                }}
+              >
+                <Text style={styles.buttonText}>Ja</Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity 
+                style={styles.buttons} 
+                onPress={() => setModalVisible(false)}
+              >
+                <Text style={styles.buttonText}>Neen</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </Modal>
 
     <TouchableOpacity style={styles.button} onPress={() => router.push("/profile/profile")}>
       <Text style={styles.buttonText}>OPSLAAN</Text>
     </TouchableOpacity>
 
-      </View>
+  </SafeAreaView>
     );
   };
 
@@ -173,7 +207,7 @@ const ProfileEditScreen = () => {
         fontSize: 23,
         fontWeight: "bold",
         color: '#183A36',
-        marginBottom: 60,
+        marginBottom: 20,
         textAlign: "center",
     },
     header: {
@@ -192,8 +226,12 @@ const ProfileEditScreen = () => {
         top: 5,
     },
     profileSection: { 
-        alignItems: "center", 
-        marginBottom: 30 
+      flexDirection: "row",
+      alignItems: "center",
+      justifyContent: "center", 
+      width: "50%",
+      position: "relative", 
+      marginBottom: 30 
     },
     profileInfoContainer: {
         flexDirection: 'row', 
@@ -210,12 +248,12 @@ const ProfileEditScreen = () => {
     profileInfo: {
         flexDirection: 'column', 
     },
-        profileName: {
+    profileName: {
         fontSize: 24,
         fontWeight: 'bold',
         color: '#183A36',
     },
-        textprofileEmail: {
+    textprofileEmail: {
         fontSize: 15,
         color: 'gray',  
         marginTop: 5,    
@@ -227,9 +265,9 @@ const ProfileEditScreen = () => {
     },
     editButton: { 
         backgroundColor: "#8AB89D",
-        marginTop: 25,
-        paddingVertical: 10, 
-        paddingHorizontal: 90, 
+        marginTop: 5,
+        paddingVertical: 8, 
+        paddingHorizontal: 30, 
         borderRadius: 15 
     },
     editButtonText: { 
@@ -265,7 +303,7 @@ const ProfileEditScreen = () => {
       buttonText: {
         color: '#183A36',
         fontSize: 16,
-        fontWeight: 'bold',
+        fontWeight: "bold", 
       },
       label: {
         alignSelf: "flex-start",
@@ -289,6 +327,45 @@ const ProfileEditScreen = () => {
       },
       unfocusedInput: {
         borderBottomColor: "#97B8A5", 
+      },
+
+      modalBackground: {
+        flex: 1,
+        backgroundColor: "rgba(0,0,0,0.3)", 
+        justifyContent: "center",
+        alignItems: "center",
+        paddingTop: 0,
+        padding: 20,
+      },
+      modalContainer: {
+        backgroundColor: '#FFFDF9',
+        padding: 40,
+        borderRadius: 15,
+        width: "100%",
+        alignItems: "center",
+        shadowColor: "#000",
+        shadowOpacity: 0.2,
+        shadowRadius: 4,
+        elevation: 5,
+      },
+      modalText: {
+        fontSize: 16,
+        textAlign: "left",
+        marginBottom: 20,
+        color: '#183A36',
+      },
+      buttonContainer: {
+        flexDirection: "row",
+        justifyContent: "space-between",
+        width: "100%",
+      },
+      buttons: {
+        flex: 1,
+        backgroundColor: "#88A68C", 
+        padding: 15,
+        marginHorizontal: 5,
+        borderRadius: 15,
+        alignItems: "center",
       },
   });
 

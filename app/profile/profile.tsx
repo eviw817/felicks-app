@@ -68,7 +68,7 @@ const ProfileScreen = () => {
         fontSize: 23,
         fontWeight: "bold",
         color: '#183A36',
-        marginBottom: 60,
+        marginBottom: 30,
         textAlign: "center",
     },
     header: {
