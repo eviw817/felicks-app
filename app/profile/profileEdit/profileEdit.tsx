@@ -6,10 +6,11 @@ import { useState, useEffect } from 'react'
 import { Picker } from '@react-native-picker/picker';
 import { supabase } from "../../../lib/supabase";
 import { Session } from "@supabase/supabase-js";
+import * as ImagePicker from 'expo-image-picker';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 import { faGear } from '@fortawesome/free-solid-svg-icons';
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
-
+import Avatar from "../../../components/Avatar";
 
 const ProfileEditScreen = () => {
     const router = useRouter();
@@ -27,7 +28,9 @@ const ProfileEditScreen = () => {
     const [isPasswordVisible, setIsPasswordVisible] = useState(false);
     const [isEditingPassword, setIsEditingPassword] = useState(false);
     const [session, setSession] = useState<Session | null>(null);
-  
+    const [avatarUrl, setAvatarUrl] = useState<string | null>(null)
+    const [uploading, setUploading] = useState(false)
+
      // Geboortedatum state
      const [day, setDay] = useState('01');
      const [month, setMonth] = useState('01');
@@ -69,15 +72,13 @@ const ProfileEditScreen = () => {
             setMonth(monthValue);
             setDay(dayValue);
           }}
-
-
         }
       };
     
       fetchProfile();
     }, []);
 
-    const updateProfile = async () => {
+    const updateProfile = async (additionalFields: { [key: string]: any } = {}) => {
       setLoading(true);
     
       const { error: emailError } = await supabase.auth.updateUser({
@@ -105,7 +106,7 @@ const ProfileEditScreen = () => {
     
       const { error: profileError } = await supabase
         .from("profiles")
-        .update(updatedFields)
+        .update({ ...updatedFields, ...additionalFields })
         .eq("id", session?.user.id);
     
       if (profileError) {
@@ -118,6 +119,29 @@ const ProfileEditScreen = () => {
       router.push("/profile/profile");
       setLoading(false);
     };
+
+    useEffect(() => {
+      async function fetchAvatar() {
+        const { data, error } = await supabase
+          .from("profiles")
+          .select("avatar_url")
+          .eq("id", session?.user.id)
+          .single();
+    
+        if (error) {
+          console.error("Error fetching avatar:", error.message);
+        } else {
+          console.log("Fetched Avatar URL:", data?.avatar_url); // ✅ Debugging
+          setAvatarUrl(data?.avatar_url);
+        }
+      }
+    
+      if (session?.user.id) {
+        fetchAvatar();
+      }
+    }, [session]);
+    
+    
     
     return (
       <SafeAreaView  style={styles.container} >
@@ -130,17 +154,19 @@ const ProfileEditScreen = () => {
         </View>
   
         {/* Profielsectie */}
-     <View style={styles.profileSection}>
-      <View style={styles.profileInfoContainer}>
-        <Image source={{ uri: "https://via.placeholder.com/100" }} style={styles.profileImage} />
-
-      
-      {/* De bewerk-knop onder de tekst */}
-      <TouchableOpacity style={styles.editButton}>
-        <Text style={styles.editButtonText}>VOEG FOTO TOE</Text>
-      </TouchableOpacity>
+        <View style={styles.profileSection}>
+        <View style={styles.profileInfoContainer}>
+          <Avatar
+            size={100}
+            url={avatarUrl}
+            onUpload={(url: string) => {
+              setAvatarUrl(url)
+              updateProfile({ avatar_url: url })
+            }}
+          />
+        </View>
       </View>
-    </View>
+  
 
    {/* Voornaam input */}
    <Text style={styles.label}>Voornaam</Text>
@@ -334,8 +360,8 @@ const ProfileEditScreen = () => {
         marginBottom: 10, 
     },
     profileImage: {
-        width: 80, 
-        height: 80,
+        width: 100, 
+        height: 100,
         borderRadius: 40, 
         backgroundColor: "#ddd",
         marginRight: 60,
@@ -358,18 +384,7 @@ const ProfileEditScreen = () => {
         color: '#183A36',
         marginBottom: 10, 
     },
-    editButton: { 
-        backgroundColor: "#8AB89D",
-        marginTop: 5,
-        paddingVertical: 8, 
-        paddingHorizontal: 30, 
-        borderRadius: 15 
-    },
-    editButtonText: { 
-        color: '#183A36',
-        fontWeight: "bold", 
-        fontSize: 14,
-    },
+   
     datePickerContainer: {
         flexDirection: 'row',
         justifyContent: 'space-between',
@@ -462,6 +477,7 @@ const ProfileEditScreen = () => {
         borderRadius: 15,
         alignItems: "center",
       },
+      
   });
 
   export default ProfileEditScreen;

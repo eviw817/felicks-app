@@ -25,7 +25,7 @@
     "@gluestack-ui/nativewind-utils": "^1.0.26",
     "@gluestack-ui/overlay": "^0.1.16",
     "@gluestack-ui/toast": "^1.0.8",
-    "@react-native-async-storage/async-storage": "1.23.1",
+    "@react-native-async-storage/async-storage": "^1.23.1",
     "@react-native-community/datetimepicker": "^8.3.0",
     "@react-native-picker/picker": "^2.11.0",
     "@react-navigation/bottom-tabs": "^7.2.0",
@@ -34,6 +34,7 @@
     "@supabase/supabase-js": "^2.49.1",
     "aes-js": "^3.1.2",
     "babel-plugin-module-resolver": "^5.0.2",
+    "base64-arraybuffer": "^1.0.2",
     "date-fns": "^4.1.0",
     "expo": "~52.0.27",
     "expo-blur": "~14.0.2",
@@ -41,6 +42,7 @@
     "expo-dev-client": "~5.0.10",
     "expo-font": "~13.0.3",
     "expo-haptics": "~14.0.1",
+    "expo-image-picker": "~16.0.6",
     "expo-linking": "~7.0.4",
     "expo-router": "~4.0.17",
     "expo-secure-store": "^14.0.1",
@@ -56,6 +58,7 @@
     "react-native-css-interop": "^0.1.22",
     "react-native-gesture-handler": "~2.20.2",
     "react-native-get-random-values": "^1.11.0",
+    "react-native-loading-spinner-overlay": "^3.0.1",
     "react-native-modal-datetime-picker": "^18.0.0",
     "react-native-reanimated": "~3.16.1",
     "react-native-safe-area-context": "^5.1.0",
@@ -65,7 +68,8 @@
     "react-native-vector-icons": "^10.2.0",
     "react-native-web": "~0.19.13",
     "react-native-webview": "13.12.5",
-    "tailwindcss": "^3.4.17"
+    "tailwindcss": "^3.4.17",
+    "expo-file-system": "~18.0.11"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",
