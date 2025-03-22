@@ -6,6 +6,9 @@ import { useState, useEffect } from 'react'
 import { Picker } from '@react-native-picker/picker';
 import { supabase } from "../../../lib/supabase";
 import { Session } from "@supabase/supabase-js";
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
+import { faGear } from '@fortawesome/free-solid-svg-icons';
+import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 
 
 const ProfileEditScreen = () => {
@@ -119,8 +122,11 @@ const ProfileEditScreen = () => {
     return (
       <SafeAreaView  style={styles.container} >
          <View style={styles.header}>
+         <TouchableOpacity onPress={() => router.push("/profile/profile")} style={styles.backButton}>
+         <FontAwesomeIcon icon={faArrowLeft} size={30} color={'#183A36'} style={styles.backButton} />
+        </TouchableOpacity>
           <Text style={styles.title}>Profiel bewerken</Text>
-          <Image source={require("../../../assets/images/settingicon.png")} style={styles.settingsIcon} />
+          <FontAwesomeIcon icon={faGear} size={28} color={'#183A36'} style={styles.settingicon} />
         </View>
   
         {/* Profielsectie */}
@@ -296,6 +302,11 @@ const ProfileEditScreen = () => {
         marginBottom: 20,
         textAlign: "center",
     },
+    backButton: {
+      position: "absolute",
+      left: 5,
+      top:7,
+    },
     header: {
         flexDirection: "row",
         alignItems: "center",
@@ -304,12 +315,10 @@ const ProfileEditScreen = () => {
         position: "relative", 
         paddingVertical: 10,
       },
-    settingsIcon: {
-        width:30,
-        height: 31,
-        position: "absolute",
-        right: 20, 
-        top: 5,
+    settingicon: {
+      position: "absolute",
+      right: 15, 
+      top: 12,
     },
     profileSection: { 
       flexDirection: "row",

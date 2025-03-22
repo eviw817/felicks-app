@@ -4,6 +4,8 @@ import { useRouter } from "expo-router";
 import { useState, useEffect } from 'react'
 import { supabase } from "../../lib/supabase";
 import { Session } from "@supabase/supabase-js";
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
+import { faGear } from '@fortawesome/free-solid-svg-icons';
 
 
 const ProfileScreen = () => {
@@ -46,7 +48,7 @@ const ProfileScreen = () => {
       <View style={styles.container}>
          <View style={styles.header}>
         <Text style={styles.title}>Profiel</Text>
-        <Image source={require("../../assets/images/settingicon.png")} style={styles.settingsIcon} />
+       <FontAwesomeIcon icon={faGear} size={28} color={'#183A36'} style={styles.settingsicon} />
         </View>
   
         {/* Profielsectie */}
@@ -117,12 +119,10 @@ const ProfileScreen = () => {
         position: "relative", 
         paddingVertical: 10,
       },
-    settingsIcon: {
-        width:30,
-        height: 31,
-        position: "absolute",
-        right: 20, 
-        top: 5,
+    settingsicon: {
+      position: "absolute",
+      right: 15, 
+      top: 12,
     },
     profileSection: { 
         alignItems: "center", 
@@ -143,7 +143,7 @@ const ProfileScreen = () => {
     profileInfo: {
         flexDirection: 'column', 
     },
-        profileName: {
+    profileName: {
         fontSize: 24,
         fontWeight: 'bold',
         color: '#183A36',
