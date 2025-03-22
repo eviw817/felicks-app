@@ -1,9 +1,47 @@
 import React from "react";
-import { View, Text, Image, TouchableOpacity, StyleSheet } from "react-native";
+import { View, Text, Image, TouchableOpacity, StyleSheet, Alert } from "react-native";
 import { useRouter } from "expo-router";
+import { useState, useEffect } from 'react'
+import { supabase } from "../../lib/supabase";
+import { Session } from "@supabase/supabase-js";
+
 
 const ProfileScreen = () => {
-       const router = useRouter();
+      const router = useRouter();
+      const [firstname, setFirstname] = useState('');
+      const [lastname, setLastname] = useState('');
+      const [email, setEmail] = useState<string>('');
+      const [session, setSession] = useState<Session | null>(null);
+
+      const fetchUser = async () => {
+        const { data: { session } } = await supabase.auth.getSession();
+        setSession(session);
+    
+        if (session) {
+          const { data, error } = await supabase
+            .from("profiles")
+            .select()
+            .eq("id", session.user.id)
+            .single();
+    
+          if (error) {
+            Alert.alert("Fout", "Er is een probleem bij het ophalen van je profielgegevens.");
+            return;
+          }
+    
+          if (data) {
+            setFirstname(data.firstname || "");
+            setLastname(data.lastname || "");
+            setEmail(session.user.email || '');
+          }
+        }
+      };
+    
+      useEffect(() => {
+        fetchUser(); 
+      }, [session]); 
+
+
     return (
       <View style={styles.container}>
          <View style={styles.header}>
@@ -16,9 +54,9 @@ const ProfileScreen = () => {
       <View style={styles.profileInfoContainer}>
         <Image source={{ uri: "https://via.placeholder.com/100" }} style={styles.profileImage} />
         <View style={styles.profileInfo}>
-          <Text style={styles.profileName}>John Doe</Text>
-          <Text style={styles.textprofileEmail}>Email</Text>
-          <Text style={styles.profileEmail}>John@Doe.com</Text>
+            <Text style={styles.profileName}>{`${firstname} ${lastname}`}</Text>
+            <Text style={styles.textprofileEmail}>E-mail</Text>
+            <Text style={styles.profileEmail}>{email}</Text>
         </View>
       </View>
       

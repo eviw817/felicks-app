@@ -1,9 +1,11 @@
 import React from "react";
 import { SafeAreaView } from 'react-native';
-import { View, Text, Image, TouchableOpacity, StyleSheet, TextInput, Modal } from "react-native";
+import { View, Text, Image, TouchableOpacity, StyleSheet, TextInput, Modal, Alert } from "react-native";
 import { useRouter } from "expo-router";
 import { useState, useEffect } from 'react'
 import { Picker } from '@react-native-picker/picker';
+import { supabase } from "../../../lib/supabase";
+import { Session } from "@supabase/supabase-js";
 
 
 const ProfileEditScreen = () => {
@@ -14,11 +16,14 @@ const ProfileEditScreen = () => {
     const [passwordFocus, setPasswordFocus] = useState(false);
     const [firstname, setFirstname] = useState('');
     const [lastname, setLastname] = useState('');
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
+    const [email, setEmail] = useState<string>('');
     const [birthdate, setBirthdate] = useState('');
     const [loading, setLoading] = useState(false)
     const [modalVisible, setModalVisible] = useState(false);
+    const [password, setPassword] = useState('');
+    const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+    const [isEditingPassword, setIsEditingPassword] = useState(false);
+    const [session, setSession] = useState<Session | null>(null);
   
      // Geboortedatum state
      const [day, setDay] = useState('01');
@@ -30,6 +35,87 @@ const ProfileEditScreen = () => {
     const isLastnameFilled = lastname.trim() !== '';
     const isEmailFilled = email.trim() !== '';
     const isPasswordFilled = password.trim() !== '';
+
+    useEffect(() => {
+      const fetchProfile = async () => {
+
+        const { data: { session } } = await supabase.auth.getSession();
+        setSession(session);
+
+        if(session){
+        const { data, error } = await supabase
+          .from("profiles")
+          .select()
+          .eq("id", session.user.id)
+          .single(); 
+    
+          if (error) {
+            Alert.alert("Fout", "Er is een probleem bij het ophalen van je profielgegevens.");
+            return;
+          }
+    
+        if (data) {
+          setFirstname(data.firstname || ""); 
+          setLastname(data.lastname || "");
+          setEmail(session.user.email || '');
+          setBirthdate(data.birthdate || "");
+
+          if (data.birthdate) {
+            const [yearValue, monthValue, dayValue] = data.birthdate.split("-");
+            setYear(yearValue);
+            setMonth(monthValue);
+            setDay(dayValue);
+          }}
+
+
+        }
+      };
+    
+      fetchProfile();
+    }, []);
+
+    const updateProfile = async () => {
+      setLoading(true);
+    
+      const { error: emailError } = await supabase.auth.updateUser({
+        email: email,  
+      });
+    
+      if (emailError) {
+        console.error("Fout bij het bijwerken van de email:", emailError.message);
+        Alert.alert("Fout", "Er is een probleem bij het bijwerken van je e-mailadres.");
+        setLoading(false);
+        return;
+      }
+
+      const updatedFields: { [key: string]: any } = {};
+    
+      if (firstname !== "") updatedFields.firstname = firstname;
+      if (lastname !== "") updatedFields.lastname = lastname;
+      if (birthdate !== "") updatedFields.birthdate = `${year}-${month}-${day}`;
+    
+      if (Object.keys(updatedFields).length === 0) {
+        Alert.alert("Geen wijzigingen", "Je hebt geen gegevens gewijzigd.");
+        setLoading(false);
+        return;
+      }
+    
+      const { error: profileError } = await supabase
+        .from("profiles")
+        .update(updatedFields)
+        .eq("id", session?.user.id);
+    
+      if (profileError) {
+        Alert.alert("Fout", "Er is een probleem bij het bijwerken van je profiel.");
+        setLoading(false);
+        return;
+      }
+    
+      Alert.alert("Succes", "Je profiel is bijgewerkt!");
+      router.push("/profile/profile");
+      setLoading(false);
+    };
+    
     return (
       <SafeAreaView  style={styles.container} >
          <View style={styles.header}>
@@ -147,11 +233,11 @@ const ProfileEditScreen = () => {
       ]}
       placeholder="Wachtwoord" 
       placeholderTextColor="rgba(151, 184, 165, 0.5)"
-      secureTextEntry 
-      onFocus={() => setPasswordFocus(true)} 
-      onBlur={() => setPasswordFocus(false)} 
+      secureTextEntry={!isPasswordVisible}
+      onFocus={() => setIsEditingPassword(true)}
+      onBlur={() => setIsEditingPassword(false)}
       onChangeText={setPassword}
-      value={password}
+      value={isPasswordVisible ? password : "******"} 
       onPress={() => setModalVisible(true)} 
     />
     {/* Popup (modal) */}
@@ -185,7 +271,7 @@ const ProfileEditScreen = () => {
         </View>
       </Modal>
 
-    <TouchableOpacity style={styles.button} onPress={() => router.push("/profile/profile")}>
+    <TouchableOpacity style={styles.button} onPress={updateProfile}>
       <Text style={styles.buttonText}>OPSLAAN</Text>
     </TouchableOpacity>
 
