@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { View, Text, StyleSheet, TouchableOpacity, TextInput, Alert } from "react-native";
 import { useRouter } from "expo-router";  
-// import { supabase } from "../../../lib/supabase";
+import { supabase } from "../../../../lib/supabase";
 
 const ForgetPasswordScreen = () => {
   const router = useRouter();
@@ -12,28 +12,28 @@ const ForgetPasswordScreen = () => {
   // Functie om te controleren of er tekst is ingevoerd
   const isEmailFilled = email.trim() !== '';
 
-//   const handleResetPassword = async () => {
-//     if (!email) {
-//       Alert.alert("Fout", "Voer een geldig e-mailadres in.");
-//       return;
-//     }
+  const handleResetPassword = async () => {
+    if (!email) {
+      Alert.alert("Fout", "Voer een geldig e-mailadres in.");
+      return;
+    }
 
-//     setLoading(true);
+    setLoading(true);
 
-//     // const { error } = await supabase.auth.resetPasswordForEmail(email);
+    // const { error } = await supabase.auth.resetPasswordForEmail(email);
 
-//     const { error } = await supabase.auth.resetPasswordForEmail(email, {
-//       redirectTo: 'com.anonymous.felicksapp://login/password/newpassword'
-//     });
+    const { error } = await supabase.auth.resetPasswordForEmail(email, {
+      redirectTo: 'com.anonymous.felicksapp://profile/profileEdit/password/newpassword'
+    });
 
-//     if (error) {
-//       Alert.alert("Fout", "Deze e-mail is niet geregistreerd.");
-//     } else {
-//       router.push("/login/password/notification_email");
-//     }
+    if (error) {
+      Alert.alert("Fout", "Deze e-mail is niet geregistreerd.");
+    } else {
+      router.push("/profile/profileEdit/password/notification_email");
+    }
 
-//     setLoading(false);
-//   };
+    setLoading(false);
+  };
 
   return (
     <View style={styles.container}>
@@ -55,7 +55,7 @@ const ForgetPasswordScreen = () => {
         value={email}
       />
   
-      <TouchableOpacity style={styles.button} >{/* onPress={async () => await handleResetPassword()}*/}
+      <TouchableOpacity style={styles.button} onPress={async () => await handleResetPassword()}>
         <Text style={styles.buttonText}>VERZEND</Text>
       </TouchableOpacity>
 

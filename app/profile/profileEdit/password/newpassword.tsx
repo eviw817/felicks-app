@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, StyleSheet, TouchableOpacity, TextInput, Alert } from "react-native";
 import { useRouter } from "expo-router";  
-// import { supabase } from "../../../lib/supabase";
+import { supabase } from "../../../../lib/supabase";
 import * as Linking from 'expo-linking';
 
 const NewPasswordScreen = () => {
@@ -16,54 +16,54 @@ const NewPasswordScreen = () => {
   const isNieuwPasswordFilled = nieuwpassword.trim() !== '';
   const isHerhaalPasswordFilled = herhaalpassword.trim() !== '';
 
-//   useEffect(() => {
-//     const checkSession = async () => {
-//       const { data, error } = await supabase.auth.getSession();
-//       if (!data.session || error) {
-//         Alert.alert("Fout", "Geen geldige reset-link. Open de link in je e-mail.");
-//         router.replace("/login/login"); // Terug naar login als er geen sessie is
-//       }
-//     };
-//     checkSession();
-//   }, []);
+  useEffect(() => {
+    const checkSession = async () => {
+      const { data, error } = await supabase.auth.getSession();
+      if (!data.session || error) {
+        Alert.alert("Fout", "Geen geldige reset-link. Open de link in je e-mail.");
+        router.replace("/profile/profileEdit/profileEdit"); // Terug naar login als er geen sessie is
+      }
+    };
+    checkSession();
+  }, []);
 
-  // useEffect(() => {
-  //   const handleDeepLink = (event: { url: string }) => {
-  //     let url = event.url;
-  //     console.log("Deep link ontvangen:", url);
+  useEffect(() => {
+    const handleDeepLink = (event: { url: string }) => {
+      let url = event.url;
+      console.log("Deep link ontvangen:", url);
       
-  //     if (url.includes("login/password/newpassword")) {
-  //       router.replace("/login/password/newpassword");
-  //     }
-  //   };
+      if (url.includes("/profile/profileEdit/password/newpassword")) {
+        router.replace("/profile/profileEdit/password/newpassword");
+      }
+    };
 
-  //   // Luisteren naar deep links
-  //   const subscription = Linking.addEventListener("url", handleDeepLink);
+    // Luisteren naar deep links
+    const subscription = Linking.addEventListener("url", handleDeepLink);
 
-  //   return () => {
-  //     subscription.remove();
-  //   };
-  // }, []);
+    return () => {
+      subscription.remove();
+    };
+  }, []);
 
-//   const handleResetPassword = async () => {
-//     if (nieuwpassword !== herhaalpassword) {
-//       Alert.alert("Fout", "De wachtwoorden komen niet overeen.");
-//       return;
-//     }
+  const handleResetPassword = async () => {
+    if (nieuwpassword !== herhaalpassword) {
+      Alert.alert("Fout", "De wachtwoorden komen niet overeen.");
+      return;
+    }
 
-//     setLoading(true);
+    setLoading(true);
 
-//     const { error } = await supabase.auth.updateUser({ password: nieuwpassword });
+    const { error } = await supabase.auth.updateUser({ password: nieuwpassword });
 
-//     if (error) {
-//       Alert.alert("Fout", "Het wachtwoord kon niet worden gewijzigd.");
-//     } else {
-//       Alert.alert("Succes", "Je wachtwoord is succesvol gewijzigd.");
-//       router.push("/login/login"); // Terug naar login na reset
-//     }
+    if (error) {
+      Alert.alert("Fout", "Het wachtwoord kon niet worden gewijzigd.");
+    } else {
+      Alert.alert("Succes", "Je wachtwoord is succesvol gewijzigd.");
+      router.push("/profile/profile"); // Terug naar login na reset
+    }
 
-//     setLoading(false);
-//   };
+    setLoading(false);
+  };
 
   return (
     <View style={styles.container}>
