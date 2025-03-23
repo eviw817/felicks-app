@@ -15,8 +15,9 @@ export default function RootLayout() {
       <Stack.Screen name="preference_2" options={{ title: "Voorkeur" }} />
       <Stack.Screen name="motivation" options={{ title: "Motivatie" }} />
       <Stack.Screen name="adoption_profile_loading" options={{ title: "Adoptieprofiel" }} />
+      <Stack.Screen name="suitable_dogs" options={{ title: "Geschikte honden" }} />
+      <Stack.Screen name="dog_info" options={{ title: "Hondeninformatie" }} />
 
-    
 
     
     </Stack>
