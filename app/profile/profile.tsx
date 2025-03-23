@@ -36,7 +36,6 @@ const ProfileScreen = () => {
             }
 
             try {
-                // 🚀 Haal gebruikersgegevens in één API-call op
                 const { data, error } = await supabase
                     .from("profiles")
                     .select("firstname, lastname, avatar_url")
@@ -56,7 +55,7 @@ const ProfileScreen = () => {
             } catch (error) {
                 console.error("Fout bij ophalen gegevens:", error);
             } finally {
-                setLoading(false); // Stop loading
+                setLoading(false); 
             }
         };
 

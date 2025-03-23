@@ -39,53 +39,123 @@ export default function Avatar({ url, size = 150, onUpload, showUploadButton = t
     }
   }
 
+  // async function uploadAvatar() {
+  //   try {
+  //     setUploading(true)
+
+  //     const result = await ImagePicker.launchImageLibraryAsync({
+  //       mediaTypes: ['images'], // Restrict to only images
+  //       allowsMultipleSelection: false, // Can only select one image
+  //       allowsEditing: true, // Allows the user to crop / rotate their photo before uploading it
+  //       quality: 1,
+  //       exif: false, // We don't want nor need that data.
+  //     })
+
+  //     if (result.canceled || !result.assets || result.assets.length === 0) {
+  //       console.log('User cancelled image picker.')
+  //       return
+  //     }
+
+  //     const image = result.assets[0]
+  //     console.log('Got image', image)
+
+  //     if (!image.uri) {
+  //       throw new Error('No image uri!') // Realistically, this should never happen, but just in case...
+  //     }
+
+  //     const arraybuffer = await fetch(image.uri).then((res) => res.arrayBuffer())
+
+  //     const fileExt = image.uri?.split('.').pop()?.toLowerCase() ?? 'jpeg'
+  //     const path = `${Date.now()}.${fileExt}`
+  //     const { data, error: uploadError } = await supabase.storage
+  //       .from('avatars')
+  //       .upload(path, arraybuffer, {
+  //         contentType: image.mimeType ?? 'image/jpeg',
+  //       })
+
+  //     if (uploadError) {
+  //       throw uploadError
+  //     }
+
+  //     onUpload(data.path)
+  //   } catch (error) {
+  //     if (error instanceof Error) {
+  //       Alert.alert(error.message)
+  //     } else {
+  //       throw error
+  //     }
+  //   } finally {
+  //     setUploading(false)
+  //   }
+  // }
   async function uploadAvatar() {
     try {
-      setUploading(true)
+      setUploading(true);
 
-      const result = await ImagePicker.launchImageLibraryAsync({
-        mediaTypes: ['images'], // Restrict to only images
-        allowsMultipleSelection: false, // Can only select one image
-        allowsEditing: true, // Allows the user to crop / rotate their photo before uploading it
-        quality: 1,
-        exif: false, // We don't want nor need that data.
-      })
+      // Vraag de gebruiker of ze de camera of galerij willen gebruiken
+      Alert.alert(
+        'Kies een foto',
+        'Selecteer of maak een foto.',
+        [
+          { text: 'Camera', onPress: async () => await selectImage('camera') },
+          { text: 'Galerij', onPress: async () => await selectImage('gallery') },
+          { text: 'Annuleren', onPress: () => {} },
+        ]
+      );
 
-      if (result.canceled || !result.assets || result.assets.length === 0) {
-        console.log('User cancelled image picker.')
-        return
-      }
+      // Functie om de afbeelding te selecteren afhankelijk van de keuze
+      const selectImage = async (source: 'camera' | 'gallery') => {
+        let result;
+        if (source === 'camera') {
+          result = await ImagePicker.launchCameraAsync({
+            mediaTypes: ['images'], 
+            allowsEditing: true,
+            quality: 1,
+          });
+        } else {
+          result = await ImagePicker.launchImageLibraryAsync({
+            mediaTypes: ['images'], 
+            allowsEditing: true,
+            quality: 1,
+          });
+        }
 
-      const image = result.assets[0]
-      console.log('Got image', image)
+        if (result.canceled || !result.assets || result.assets.length === 0) {
+          console.log('User cancelled image picker.');
+          return;
+        }
 
-      if (!image.uri) {
-        throw new Error('No image uri!') // Realistically, this should never happen, but just in case...
-      }
+        const image = result.assets[0];
+        console.log('Got image', image);
 
-      const arraybuffer = await fetch(image.uri).then((res) => res.arrayBuffer())
+        if (!image.uri) {
+          throw new Error('No image uri!');
+        }
 
-      const fileExt = image.uri?.split('.').pop()?.toLowerCase() ?? 'jpeg'
-      const path = `${Date.now()}.${fileExt}`
-      const { data, error: uploadError } = await supabase.storage
-        .from('avatars')
-        .upload(path, arraybuffer, {
-          contentType: image.mimeType ?? 'image/jpeg',
-        })
+        const arraybuffer = await fetch(image.uri).then((res) => res.arrayBuffer());
 
-      if (uploadError) {
-        throw uploadError
-      }
+        const fileExt = image.uri.split('.').pop()?.toLowerCase() ?? 'jpeg';
+        const path = `${Date.now()}.${fileExt}`;
+        const { data, error: uploadError } = await supabase.storage
+          .from('avatars')
+          .upload(path, arraybuffer, {
+            contentType: image.mimeType ?? 'image/jpeg',
+          });
 
-      onUpload(data.path)
+        if (uploadError) {
+          throw uploadError;
+        }
+
+        onUpload(data.path);
+      };
     } catch (error) {
       if (error instanceof Error) {
-        Alert.alert(error.message)
+        Alert.alert(error.message);
       } else {
-        throw error
+        throw error;
       }
     } finally {
-      setUploading(false)
+      setUploading(false);
     }
   }
 
