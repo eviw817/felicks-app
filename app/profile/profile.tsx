@@ -1,12 +1,11 @@
-import React from "react";
-import { View, Text, Image, TouchableOpacity, StyleSheet, Alert } from "react-native";
+import React, { useState, useEffect } from "react";
+import { View, Text, TouchableOpacity, StyleSheet, Alert } from "react-native";
 import { useRouter } from "expo-router";
-import { useState, useEffect } from 'react'
 import { supabase } from "../../lib/supabase";
 import { Session } from "@supabase/supabase-js";
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 import { faGear } from '@fortawesome/free-solid-svg-icons';
-
+import Avatar from "../../components/Avatar";
 
 const ProfileScreen = () => {
       const router = useRouter();
@@ -14,35 +13,55 @@ const ProfileScreen = () => {
       const [lastname, setLastname] = useState('');
       const [email, setEmail] = useState<string>('');
       const [session, setSession] = useState<Session | null>(null);
+      const [avatarUrl, setAvatarUrl] = useState<string | null>(null)
+      const [userId, setUserId] = useState<string | null>(null);
+      const [loading, setLoading] = useState(true);
 
-      const fetchUser = async () => {
-        const { data: { session } } = await supabase.auth.getSession();
-        setSession(session);
-    
-        if (session) {
-          const { data, error } = await supabase
-            .from("profiles")
-            .select()
-            .eq("id", session.user.id)
-            .single();
-    
-          if (error) {
-            Alert.alert("Fout", "Er is een probleem bij het ophalen van je profielgegevens.");
-            return;
-          }
-    
-          if (data) {
-            setFirstname(data.firstname || "");
-            setLastname(data.lastname || "");
-            setEmail(session.user.email || '');
-          }
-        }
-      };
-    
       useEffect(() => {
-        fetchUser(); 
-      }, [session]); 
+        const fetchUserData = async () => {
+            setLoading(true); // Start loading
+            const { data: { session }, error: sessionError } = await supabase.auth.getSession();
 
+            if (sessionError) {
+                Alert.alert("Fout", "Kan sessie niet ophalen.");
+                setLoading(false);
+                return;
+            }
+
+            setSession(session);
+
+            if (!session || !session.user?.id) {
+                setLoading(false);
+                return;
+            }
+
+            try {
+                // 🚀 Haal gebruikersgegevens in één API-call op
+                const { data, error } = await supabase
+                    .from("profiles")
+                    .select("firstname, lastname, avatar_url")
+                    .eq("id", session.user.id)
+                    .single();
+
+                if (error) {
+                    Alert.alert("Fout", "Er is een probleem bij het ophalen van je profielgegevens.");
+                    setLoading(false);
+                    return;
+                }
+
+                setFirstname(data.firstname || "");
+                setLastname(data.lastname || "");
+                setEmail(session.user.email || '');
+                setAvatarUrl(data.avatar_url || null);
+            } catch (error) {
+                console.error("Fout bij ophalen gegevens:", error);
+            } finally {
+                setLoading(false); // Stop loading
+            }
+        };
+
+        fetchUserData();
+    }, []);
 
     return (
       <View style={styles.container}>
@@ -53,14 +72,16 @@ const ProfileScreen = () => {
   
         {/* Profielsectie */}
      <View style={styles.profileSection}>
-      <View style={styles.profileInfoContainer}>
-        <Image source={{ uri: "https://via.placeholder.com/100" }} style={styles.profileImage} />
-        <View style={styles.profileInfo}>
-            <Text style={styles.profileName}>{`${firstname} ${lastname}`}</Text>
-            <Text style={styles.textprofileEmail}>E-mail</Text>
-            <Text style={styles.profileEmail}>{email}</Text>
-        </View>
+     <View style={styles.profileInfoContainer}>
+    <Avatar size={100} url={avatarUrl} onUpload={(url) => setAvatarUrl(url)} showUploadButton={false} />
+
+      <View style={styles.profileInfo}>
+        <Text style={styles.profileName}>{`${firstname} ${lastname}`}</Text>
+        <Text style={styles.textprofileEmail}>E-mail</Text>
+        <Text style={styles.profileEmail}>{email}</Text>
       </View>
+    </View>
+
       
       {/* De bewerk-knop onder de tekst */}
       <TouchableOpacity style={styles.editButton}  onPress={() => router.push("/profile/profileEdit/profileEdit")}>

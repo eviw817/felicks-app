@@ -7,9 +7,10 @@ interface Props {
   size: number
   url: string | null
   onUpload: (filePath: string) => void
+  showUploadButton?: boolean
 }
 
-export default function Avatar({ url, size = 150, onUpload }: Props) {
+export default function Avatar({ url, size = 150, onUpload, showUploadButton = true  }: Props) {
   const [uploading, setUploading] = useState(false)
   const [avatarUrl, setAvatarUrl] = useState<string | null>(null)
   const avatarSize = { height: size, width: size }
@@ -100,15 +101,11 @@ export default function Avatar({ url, size = 150, onUpload }: Props) {
       <View style={[avatarSize, styles.avatar, styles.noImage]} />
     )}
 
-    <TouchableOpacity
-      style={styles.editButton}
-      onPress={uploadAvatar}
-      disabled={uploading}
-    >
-      <Text style={styles.editButtonText}>
-        {uploading ? 'Aan het laden ...' : 'VOEG FOTO TOE'}
-      </Text>
-    </TouchableOpacity>
+    {showUploadButton && (
+        <TouchableOpacity style={styles.editButton} onPress={uploadAvatar} disabled={uploading}>
+          <Text style={styles.editButtonText}>{uploading ? 'Aan het laden ...' : 'VOEG FOTO TOE'}</Text>
+        </TouchableOpacity>
+      )}
   </View>
   )
   
