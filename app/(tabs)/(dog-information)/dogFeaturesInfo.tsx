@@ -13,7 +13,7 @@ import { useRouter } from "expo-router";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import { Link } from "expo-router";
 
-export default function DogStart() {
+export default function DogFeature() {
   const router = useRouter();
 
   return (
@@ -311,7 +311,7 @@ export default function DogStart() {
             borderRadius: 15,
             textAlign: "center",
           }}
-          href="/dogBreed"
+          href="/arLoader"
         >
           MAAK KENNIS MET JE NIEUWE VRIENDJE
         </Link>

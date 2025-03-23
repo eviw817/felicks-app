@@ -1,6 +1,6 @@
 import React from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { View, Text, TouchableOpacity } from 'react-native';
+import { View, Text, TouchableOpacity, Image } from 'react-native';
 import { useRouter } from 'expo-router'; 
 import AntDesign from '@expo/vector-icons/AntDesign';
 import { Link } from 'expo-router';
@@ -40,7 +40,17 @@ export default function DogInformation() {
                 padding: 20,
                 textAlign: 'center',
             }}
-            >Tijd om voor Cooper te zorgen!</Text>
+            >Welkom Cooper</Text>
+            <Image
+                source={require('../../../assets/images/ARDog.png')}
+                style={{
+                    width: 240,
+                    height: 240,
+                    alignSelf: 'center',
+                    marginTop: 20,
+                    marginBottom: 20,
+                }}
+            />
             <Text
             style={{
                 fontFamily: 'Nunito',
@@ -48,34 +58,15 @@ export default function DogInformation() {
                 fontSize: 16,
                 padding: 20,
             }}
-            >Cooper kan niet wachten om jouw nieuwe virtuele beste vriend te worden! Ben je er klaar voor om samen een avontuur te beginnen?</Text>
-            <Text
-            style={{
-                fontFamily: 'Nunito',
-                fontWeight: 'bold',
-                fontSize: 16,
-                paddingTop: 20,
-                paddingLeft: 20,
-            }}
-            >Hoe werkt het?</Text>
+            >Dit is jouw nieuwe hondje, Cooper. Vanaf nu ben jij verantwoordelijk voor zijn verzorging en welzijn. Zorg goed voor hem en leer stap voor stap hoe je de beste hondenvriend wordt.</Text>
             <Text
             style={{
                 fontFamily: 'Nunito',
                 fontWeight: 'normal',
                 fontSize: 16,
                 padding: 20,
-                paddingTop: 8,
             }}
-            >Via de camera op je telefoon komt Cooper tot leven in AR (Augmented Reality). Dat betekent dat je hem overal mee naartoe kunt nemen en met hem kunt spelen alsof hij écht bij je is. Hoe leuk is dat? 🎉</Text>
-            <Text
-            style={{
-                fontFamily: 'Nunito',
-                fontWeight: 'normal',
-                fontSize: 16,
-                padding: 20,
-                paddingTop: 8,
-            }}
-            >Maar Cooper is meer dan alleen een virtuele hond. Hij is hier om jou te laten ervaren wat er allemaal komt kijken bij het verzorgen van een huisdier. Honden kunnen niet zomaar op "pauze" worden gezet. Ze hebben liefde, tijd en aandacht nodig. Spelen is belangrijk, maar er is nog zoveel meer te ontdekken!</Text>
+            >Ben je er klaar voor? Laten we beginnen!</Text>
             <Link 
             style={{
                 padding: 12,

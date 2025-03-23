@@ -35,6 +35,14 @@ export default function TabLayout() {
           headerShown: false,
         }}
       />
+      {/* Dog-information Tab */}
+     <Stack.Screen
+      name="(dog-ar-starter)" // Verwijst naar de map app/(tabs)/(demo)
+      options={{
+        title: "Dog AR Starter",
+        headerShown: false,
+      }}
+    />
     </Stack> //voor een navigatie te maken moet alles Tabs zijn, dus ook Tabs.Scree
   );
 }

@@ -13,7 +13,7 @@ import { useRouter } from "expo-router";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import { Link } from "expo-router";
 
-export default function DogStart() {
+export default function DogNotifications() {
   const router = useRouter();
 
   // For Sound toggle
