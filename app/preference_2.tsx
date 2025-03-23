@@ -78,7 +78,7 @@ function Preference2() {
       </View>
 
       {/* Volgende knop */}
-      <TouchableOpacity style={styles.button} onPress={() => router.push('/')}> 
+      <TouchableOpacity style={styles.button} onPress={() => router.push('/motivation')}> 
         <Text style={styles.buttonText}>Volgende</Text>
       </TouchableOpacity>
     </ScrollView>
@@ -120,7 +120,7 @@ const styles = StyleSheet.create({
   },
 
   progressFill: {
-    width: '44.44%',
+    width: '88.88%',
     height: '100%',
     backgroundColor: '#97B8A5',
     borderRadius: 3,
