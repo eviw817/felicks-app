@@ -14,6 +14,11 @@ export default function RootLayout() {
       <Stack.Screen name="preference_1" options={{ title: "Voorkeur" }} />
       <Stack.Screen name="preference_2" options={{ title: "Voorkeur" }} />
       <Stack.Screen name="motivation" options={{ title: "Motivatie" }} />
+      <Stack.Screen name="adoption_profile_loading" options={{ title: "Adoptieprofiel" }} />
+
+    
+
+    
     </Stack>
   );
 }
