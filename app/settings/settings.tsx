@@ -28,7 +28,7 @@ const SettingsScreen = () => {
                     <FontAwesomeIcon icon={faChevronRight} size={25} color="#183A36" />
                 </TouchableOpacity>
 
-                <TouchableOpacity style={styles.menuItem}>
+                <TouchableOpacity style={styles.menuItem} onPress={() => router.push("/settings/notification/notification")}>
                     <View style={styles.leftSection}>
                         <FontAwesomeIcon icon={faBell} size={30} color="#183A36" />
                         <Text style={styles.menuText}>Meldingen</Text>
