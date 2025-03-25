@@ -1,129 +1,74 @@
-// import { View, StyleSheet, TouchableOpacity, ScrollView, Text } from 'react-native';
-// import React, { useEffect, useState } from 'react';
-// import { Ionicons } from '@expo/vector-icons';
-// import * as ImagePicker from 'expo-image-picker';
-// import * as FileSystem from 'expo-file-system';
-// import { supabase } from '../../../../lib/supabase';
-// import { FileObject } from '@supabase/storage-js';
-// import ImageItem from '../../../../components/Avatar'; // Zorg ervoor dat dit correct wordt geïmporteerd
+// import { useRouter, useLocalSearchParams } from "expo-router";
+// import { useState } from 'react';
+// import { View, Text, Image, TouchableOpacity, Alert } from 'react-native';
+// import { supabase } from '../../../../lib/supabase'; // Zorg ervoor dat je de Supabase-import hebt
 
-// const List = () => {
-//   const [user, setUser] = useState<any>(null);
-//   const [files, setFiles] = useState<FileObject[]>([]);
-//   const [session, setSession] = useState<any | null>(null);
+// const ProfilePhoto = () => {
+//   const router = useRouter();
+//   const { imageUri } = useLocalSearchParams(); // Verkrijg de afbeelding URI uit de query
+//   const [uploading, setUploading] = useState(false);
 
-//   const fetchSession = async () => {
-//     const { data: { session } } = await supabase.auth.getSession();
-//     console.log('Fetched session:', session);
-//     setSession(session);
-
-//     if (session) {
-//       setUser(session.user);
-//     }
-//   };
-
-//   useEffect(() => {
-//     fetchSession();
-//   }, []);
-
-//   useEffect(() => {
-//     if (!user) return;
-
-//     console.log('User loaded:', user);
-
-//     loadImages();
-//   }, [user]);
-
-//   const loadImages = async () => {
-//     if (!user) return;
-
-//     console.log('Loading images for user:', user.id);
-
-//     const { data, error } = await supabase.storage.from('avatars').list(user!.id);
-
-//     if (error) {
-//       console.log('Error loading images:', error.message);
+//   // Functie om de afbeelding te uploaden
+//   const uploadImage = async () => {
+//     if (!imageUri) {
+//       Alert.alert('Geen afbeelding gekozen', 'Er is geen afbeelding gekozen om te uploaden');
 //       return;
 //     }
 
-//     console.log('Loaded images:', data);
-//     if (data) {
-//       setFiles(data);
+//     try {
+//       setUploading(true);
+
+//       // Zet de afbeelding om naar een arraybuffer voor uploaden
+//       const arraybuffer = await fetch(imageUri as string).then((res) => res.arrayBuffer());
+
+//       const fileExt = (imageUri as string).split('.').pop()?.toLowerCase() ?? 'jpeg';
+//       const path = `${Date.now()}.${fileExt}`;
+
+//       const { data, error: uploadError } = await supabase.storage
+//         .from('avatars') // Zorg ervoor dat de bucketnaam correct is
+//         .upload(path, arraybuffer, {
+//           contentType: 'image/jpeg', // Of gebruik de juiste mime type
+//         });
+
+//       if (uploadError) {
+//         throw uploadError;
+//       }
+
+//       // Als de upload succesvol is, stuur de gebruiker naar profileEdit
+//       router.push('/profile/profileEdit/profileEdit');
+//     } catch (error) {
+//       console.error('Error uploading image:', error);
+//       Alert.alert('Upload mislukt', 'Er is iets mis gegaan met het uploaden van je foto.');
+//     } finally {
+//       setUploading(false);
 //     }
 //   };
 
-//   const onSelectImage = async () => {
-//     const options: ImagePicker.ImagePickerOptions = {
-//       mediaTypes: ImagePicker.MediaTypeOptions.Images,  // Correcte waarde
-//       allowsEditing: true,
-//     };
-
-//     const result = await ImagePicker.launchImageLibraryAsync(options);
-
-//     if (!result.canceled) {
-//       const img = result.assets[0];
-//       const base64 = await FileSystem.readAsStringAsync(img.uri, { encoding: 'base64' });
-//       const filePath = `${user!.id}/${new Date().getTime()}.${img.type === 'image' ? 'png' : 'mp4'}`;
-//       const contentType = img.type === 'image' ? 'image/png' : 'video/mp4';
-//       await supabase.storage.from('avatars').upload(filePath, base64, { contentType });
-//       loadImages();
-//     }
+//   const confirmImage = () => {
+//     uploadImage(); // Hier wordt de uploadImage functie aangeroepen alleen als de gebruiker bevestigt
 //   };
 
-//   const onRemoveImage = async (item: FileObject, listIndex: number) => {
-//     const { error } = await supabase.storage.from('avatars').remove([`${user!.id}/${item.name}`]);
-//     if (error) {
-//       console.log('Error removing image:', error.message);
-//       return;
-//     }
-//     const newFiles = [...files];
-//     newFiles.splice(listIndex, 1);
-//     setFiles(newFiles);
+//   const cancelSelection = () => {
+//     // Alleen als je annuleert, ga naar profiel bewerken zonder uploaden
+//     router.push('/profile/profileEdit/profileEdit');
 //   };
 
 //   return (
-//     <View style={styles.container}>
-//       <ScrollView>
-//         {files.length === 0 ? (
-//           <Text style={{ color: 'white' }}>Geen afbeeldingen beschikbaar</Text>
-//         ) : (
-//           files.map((item, index) => (
-//             <ImageItem
-//               key={item.id}
-//               item={item}
-//               userId={user!.id}
-//               onRemoveImage={() => onRemoveImage(item, index)}
-//             />
-//           ))
-//         )}
-//       </ScrollView>
+//     <View style={{ alignItems: 'center', marginTop: 50 }}>
+//       <Text>Bevestig je foto</Text>
+//       {imageUri && <Image source={{ uri: imageUri as string }} style={{ width: 200, height: 200 }} />}
+      
+//       {/* Confirm button */}
+//       <TouchableOpacity onPress={confirmImage} style={{ marginTop: 20, backgroundColor: 'green', padding: 10 }} disabled={uploading}>
+//         <Text style={{ color: 'white' }}>{uploading ? 'Bezig met uploaden...' : 'Bevestig'}</Text>
+//       </TouchableOpacity>
 
-//       {/* FAB to add images */}
-//       <TouchableOpacity onPress={onSelectImage} style={styles.fab}>
-//         <Ionicons name="camera-outline" size={30} color={'#fff'} />
+//       {/* Cancel button */}
+//       <TouchableOpacity onPress={cancelSelection} style={{ marginTop: 10, backgroundColor: 'red', padding: 10 }}>
+//         <Text style={{ color: 'white' }}>Annuleren</Text>
 //       </TouchableOpacity>
 //     </View>
 //   );
 // };
 
-// const styles = StyleSheet.create({
-//   container: {
-//     flex: 1,
-//     padding: 20,
-//     backgroundColor: '#151515',
-//   },
-//   fab: {
-//     borderWidth: 1,
-//     alignItems: 'center',
-//     justifyContent: 'center',
-//     width: 70,
-//     position: 'absolute',
-//     bottom: 40,
-//     right: 30,
-//     height: 70,
-//     backgroundColor: '#2b825b',
-//     borderRadius: 100,
-//   },
-// });
-
-// export default List;
+// export default ProfilePhoto;
