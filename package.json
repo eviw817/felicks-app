@@ -16,6 +16,9 @@
   },
   "dependencies": {
     "@expo/vector-icons": "^14.0.2",
+    "@fortawesome/fontawesome-svg-core": "^6.7.2",
+    "@fortawesome/free-solid-svg-icons": "^6.7.2",
+    "@fortawesome/react-native-fontawesome": "^0.3.2",
     "@gluestack-ui/icon": "^0.1.25",
     "@gluestack-ui/nativewind-utils": "^1.0.26",
     "@gluestack-ui/overlay": "^0.1.16",
