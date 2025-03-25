@@ -48,11 +48,11 @@ const SettingsScreen = () => {
 
             {/* Afmelden & Account verwijderen */}
             <View style={styles.logoutSection}>
-                <TouchableOpacity>
-                <Text style={styles.logoutText}>Afmelden</Text>
+                <TouchableOpacity onPress={() => router.push("/settings/afmelden/afmelden")}>
+                    <Text style={styles.logoutText}>Afmelden</Text>
                 </TouchableOpacity>
-                <TouchableOpacity>
-                <Text style={styles.deleteText}>Account verwijderen</Text>
+                <TouchableOpacity  onPress={() => router.push("/settings/account/account")}>
+                    <Text style={styles.deleteText}>Account verwijderen</Text>
                 </TouchableOpacity>
             </View>
       </View>

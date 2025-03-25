@@ -18,7 +18,7 @@ const NotificatiesScreen = () => {
             {/* Header */}
             <View style={styles.header}>
                 <TouchableOpacity onPress={() => router.push("/settings/settings")}>
-                    <FontAwesomeIcon icon={faArrowLeft} size={25} color="#183A36" />
+                    <FontAwesomeIcon icon={faArrowLeft} size={30} color="#183A36" />
                 </TouchableOpacity>
                 <Text style={styles.title}>Meldingen en toestemmingen</Text>
             </View>
@@ -77,7 +77,7 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: "#FFFDF9",
         padding: 20,
-        paddingTop: 60,
+        paddingTop: 100,
     },
     header: {
         flexDirection: "row",
