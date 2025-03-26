@@ -22,7 +22,8 @@ module.exports = withNativeWind(
         "ttf",
         "obj",
         "png",
-        "jpg"
+        "jpg",
+        "fbx"
       ],
     },
   },

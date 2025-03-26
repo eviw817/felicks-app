@@ -107,7 +107,7 @@ export default function DogInformation() {
                  fontFamily: "Nunito",
                  fontWeight: "normal",
                  fontSize: 16,
-                 paddingRight: 8,
+                 paddingRight: 20,
                }}
              >
                Ze hebben minstens 30-60 minuten lichaamsbeweging per dag nodig om hun energie kwijt te kunnen.
@@ -134,7 +134,7 @@ export default function DogInformation() {
                  fontFamily: "Nunito",
                  fontWeight: "normal",
                  fontSize: 16,
-                 paddingRight: 8,
+                 paddingRight: 12,
                }}
              >
                Labradors zijn nieuwsgierig en kunnen vuilnis doorzoeken of oneetbare dingen opeten.
@@ -160,7 +160,7 @@ export default function DogInformation() {
                 borderRadius: 15,
                 textAlign: 'center',
             }}
-            href="/dogNotifications">DOORGAAN</Link>
+            href="/demo">DOORGAAN</Link>
         </View>
       </SafeAreaView>
 )};

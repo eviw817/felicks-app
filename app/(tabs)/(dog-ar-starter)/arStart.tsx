@@ -77,7 +77,7 @@ export default function DogInformation() {
                 borderRadius: 15,
                 textAlign: 'center',
             }}
-            href="/dogNotifications">DOORGAAN</Link>
+            href="/arInformation">DOORGAAN</Link>
         </View>
       </SafeAreaView>
 )};
