@@ -36,7 +36,7 @@ const SettingsScreen = () => {
                     <FontAwesomeIcon icon={faChevronRight} size={25} color="#183A36" />
                 </TouchableOpacity>
 
-                <TouchableOpacity style={styles.menuItem}>
+                <TouchableOpacity style={styles.menuItem} onPress={() => router.push("/settings/pet/pet")}>
                     <View style={styles.leftSection}>
                         <FontAwesomeIcon icon={faPaw} size={30} color="#183A36" />
                         <Text style={styles.menuText}>Pas je huisdier aan</Text>
