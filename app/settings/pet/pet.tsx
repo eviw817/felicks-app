@@ -47,7 +47,7 @@ const EditPetScreen = () => {
         <Picker.Item label="Beagle" value="Beagle" />
       </Picker>
       </View>
-      <TouchableOpacity style={styles.saveButton}>
+      <TouchableOpacity style={styles.saveButton} onPress={() => router.push("/settings/settings")}>
         <Text style={styles.saveButtonText}>OPSLAAN</Text>
       </TouchableOpacity>
       <TouchableOpacity>
