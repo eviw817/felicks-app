@@ -1,11 +1,22 @@
 import React from "react";
-import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
+import { View, Text, TouchableOpacity, StyleSheet, Alert } from "react-native";
 import { useRouter } from "expo-router";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
+import { supabase } from "../../../lib/supabase";
 
 const AfmeldenScreen = () => {
     const router = useRouter();
+    const handleLogout = async () => {
+        try {
+            await supabase.auth.signOut();
+
+            router.push("/");
+
+        } catch (error) {
+            Alert.alert("Fout", "Er is een fout opgetreden bij het afmelden.");
+        }
+    };
 
     return (
         <View style={styles.container}>
@@ -25,7 +36,7 @@ const AfmeldenScreen = () => {
             <TouchableOpacity style={styles.button} onPress={() => router.push("/settings/settings")}>
                 <Text style={styles.buttonText}>NEE</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.button} onPress={() => console.log("Afmelden...")}>
+            <TouchableOpacity style={styles.button} onPress={handleLogout}>
                 <Text style={styles.buttonText}>JA</Text>
             </TouchableOpacity>
         </View>
