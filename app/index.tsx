@@ -1,224 +1,221 @@
-import React, { useState, useEffect } from "react";
-import { View, Text, TouchableOpacity, StyleSheet, Alert } from "react-native";
-import { useRouter } from "expo-router";
-// import { supabase } from "../../lib/supabase";
-// import { Session } from "@supabase/supabase-js";
-import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
-import { faGear } from '@fortawesome/free-solid-svg-icons';
+import React, { useEffect, useState } from "react";
+import { View, Text, StyleSheet, TouchableOpacity, TextInput, Alert, AppState } from "react-native";
+import { useRouter } from "expo-router";  
+import { supabase } from "../lib/supabase";
+import { Picker } from '@react-native-picker/picker'; 
+import { AppStateStatus } from 'react-native';
+import { Session } from '@supabase/supabase-js'
 
+const LoginScreen = () => {
+  const router = useRouter();
+  const [emailFocus, setEmailFocus] = useState(false);
+  const [passwordFocus, setPasswordFocus] = useState(false);
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [session, setSession] = useState<Session | null>(null);
 
-const ProfileScreen = () => {
-      const router = useRouter();
-      const [firstname, setFirstname] = useState('');
-      const [lastname, setLastname] = useState('');
-      const [email, setEmail] = useState<string>('');
-      // const [session, setSession] = useState<Session | null>(null);
-      const [avatarUrl, setAvatarUrl] = useState<string | null>(null)
-      const [userId, setUserId] = useState<string | null>(null);
-      const [loading, setLoading] = useState(true);
+  // Functie om te controleren of er tekst is ingevoerd
+  const isEmailFilled = email.trim() !== '';
+  const isPasswordFilled = password.trim() !== '';
 
-    //   useEffect(() => {
-    //     const fetchUserData = async () => {
-    //         setLoading(true); // Start loading
-    //         const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+  useEffect(() => {
+    const fetchSession = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      setSession(session);
 
-    //         if (sessionError) {
-    //             Alert.alert("Fout", "Kan sessie niet ophalen.");
-    //             setLoading(false);
-    //             return;
-    //         }
+      if (session) {
+        supabase.auth.startAutoRefresh();
+      } else {
+        supabase.auth.stopAutoRefresh();
+      }
+    };
 
-    //         setSession(session);
+    fetchSession();
 
-    //         if (!session || !session.user?.id) {
-    //             setLoading(false);
-    //             return;
-    //         }
+    // Luister naar veranderingen in de authenticatie status
+    const { data: authListener } = supabase.auth.onAuthStateChange((_event, session) => {
+      setSession(session);
+      if (session) {
+        supabase.auth.startAutoRefresh();
+      } else {
+        supabase.auth.stopAutoRefresh();
+      }
+    });
 
-    //         try {
-    //             const { data, error } = await supabase
-    //                 .from("profiles")
-    //                 .select("firstname, lastname, avatar_url")
-    //                 .eq("id", session.user.id)
-    //                 .single();
+    // AppState listener voor wanneer de app actief wordt
+    const subscription = AppState.addEventListener("change", (state: AppStateStatus) => {
+      if (state === "active") {
+        fetchSession();
+      }
+    });
 
-    //             if (error) {
-    //                 Alert.alert("Fout", "Er is een probleem bij het ophalen van je profielgegevens.");
-    //                 setLoading(false);
-    //                 return;
-    //             }
+    return () => {
+      subscription.remove(); // Zorgt voor een correcte cleanup
+      authListener?.subscription?.unsubscribe(); // Voorkomt mogelijke fouten
+    };
+  }, []);
 
-    //             setFirstname(data.firstname || "");
-    //             setLastname(data.lastname || "");
-    //             setEmail(session.user.email || '');
-    //             setAvatarUrl(data.avatar_url || null);
-    //         } catch (error) {
-    //             console.error("Fout bij ophalen gegevens:", error);
-    //         } finally {
-    //             setLoading(false); 
-    //         }
-    //     };
+  async function signInWithEmail() {
+    setLoading(true);
+    
+    const { error } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    });
 
-    //     fetchUserData();
-    // }, []);
+    if (error) {
+      // Check if the error is related to email or password
+      if (error.message.includes('email')) {
+        Alert.alert("E-mail incorrect", "Het ingevoerde e-mail is onjuist. Controleer je e-mail en probeer het opnieuw.");
+      } else if (error.message.includes('password')) {
+        Alert.alert("Wachtwoord incorrect", "Het ingevoerde wachtwoord is onjuist. Controleer je wachtwoord en probeer het opnieuw.");
+      } else {
+        // Algemeen foutbericht voor andere fouten
+        Alert.alert("Login mislukt", "Controleer je e-mail en/of wachtwoord en probeer het opnieuw.");
+      }
+      setLoading(false);
+      return;
+    }
 
-    return (
-      <View style={styles.container}>
-         <View style={styles.header}>
-        <Text style={styles.title}>Profiel</Text>
-        <TouchableOpacity onPress={() => router.push("/settings/settings")} style={styles.settingsicon}>
-            <FontAwesomeIcon 
-              icon={faGear} 
-              size={50} 
-              color="#183A36" 
-              style={styles.settingsicon} 
-            />
+    router.push("/settings/settings"); 
+    setLoading(false);
+  }
+
+  return (
+    <View style={styles.container}>
+      <Text style={styles.title}>Inloggen</Text>
+
+      {/* E-mail input */}
+      <Text style={styles.label}>E-mail</Text>
+      <TextInput
+        style={[
+          styles.input, 
+          emailFocus || isEmailFilled ? styles.focusedInput : styles.unfocusedInput
+        ]}
+        placeholder="E-mail" 
+        placeholderTextColor="rgba(151, 184, 165, 0.5)"
+        keyboardType="email-address"
+        onFocus={() => setEmailFocus(true)} 
+        onBlur={() => setEmailFocus(false)} 
+        onChangeText={setEmail}
+        value={email}
+      />
+
+      {/* Wachtwoord input */}
+      <Text style={styles.label}>Wachtwoord</Text>
+      <TextInput
+        style={[
+          styles.input, 
+          passwordFocus || isPasswordFilled ? styles.focusedInput : styles.unfocusedInput
+        ]}
+        placeholder="Wachtwoord" 
+        placeholderTextColor="rgba(151, 184, 165, 0.5)"
+        secureTextEntry 
+        onFocus={() => setPasswordFocus(true)} 
+        onBlur={() => setPasswordFocus(false)} 
+        onChangeText={setPassword}
+        value={password}
+      />
+
+      {/* Wachtwoord vergeten */}
+      {/* <View style={styles.forgotPasswordContainer}>
+        <TouchableOpacity onPress={() => router.push("/login/password/forget_password")}>
+          <Text style={styles.forgotPassword} >Wachtwoord vergeten?</Text>
         </TouchableOpacity>
-        </View>
-  
-        {/* Profielsectie */}
-     <View style={styles.profileSection}>
-     <View style={styles.profileInfoContainer}>
-    {/* <Avatar size={100} url={avatarUrl} onUpload={(url) => setAvatarUrl(url)} showUploadButton={false} /> */}
+      </View> */}
 
-      <View style={styles.profileInfo}>
-        <Text style={styles.profileName}>{`${firstname} ${lastname}`}</Text>
-        <Text style={styles.textprofileEmail}>E-mail</Text>
-        <Text style={styles.profileEmail}>{email}</Text>
-      </View>
-    </View>
-
-      
-      {/* De bewerk-knop onder de tekst */}
-      <TouchableOpacity style={styles.editButton} onPress={() => router.push("/settings/settings")}>
-        <Text style={styles.editButtonText}>BEWERKEN</Text>
+      <TouchableOpacity style={styles.button} onPress={async () => await signInWithEmail()}>
+        <Text style={styles.buttonText}>INLOGGEN</Text>
       </TouchableOpacity>
-    </View>
-  
-        {/* Info Secties */}
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Jouw favoriete hond(en)</Text>
-          <Text style={styles.sectionText}>
-            Als je een hond liket dan kan je deze hier terugvinden.
-          </Text>
-        </View>
-  
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Formulier in behandeling</Text>
-          <Text style={styles.sectionText}>
-            Wanneer u een aanvraag doet, wordt je formulier doorgestuurd naar het asiel, je kan de
-            status hiervan bij je profiel vinden.
-          </Text>
-        </View>
-  
-        <View style={styles.section}>
-          <Text style={styles.sectionSubtile}>Deze honden passen bij jou profiel:</Text>
-          <Text style={styles.sectionText}>
-            Om te bepalen welke hond(en) het beste bij jou passen, vragen we je om eerst de
-            vragenlijst in te vullen. Zo kunnen we een perfecte match voor je vinden!
-          </Text>
-        </View>
-      </View>
-    );
-  };
 
-  const styles = StyleSheet.create({
-    container: { 
-        flex: 1,
-        paddingTop: 100,
-        alignItems: 'center',
-        padding: 20,
-        backgroundColor: '#FFFDF9',
-        fontFamily: 'Nunito'
-    },
-    title: {
-        fontSize: 23,
-        fontWeight: "bold",
-        color: '#183A36',
-        marginBottom: 30,
-        textAlign: "center",
-    },
-    header: {
-        flexDirection: "row",
-        alignItems: "center",
-        justifyContent: "center", 
-        width: "100%",
-        position: "relative", 
-        paddingVertical: 10,
-      },
-    settingsicon: {
-      position: "absolute",
-      right: 15, 
-      top: 12,
-    },
-    profileSection: { 
-        alignItems: "center", 
-        marginBottom: 30 
-    },
-    profileInfoContainer: {
-        flexDirection: 'row', 
-        alignItems: 'center', 
-        marginBottom: 10, 
-    },
-    profileImage: {
-        width: 80, 
-        height: 80,
-        borderRadius: 40, 
-        backgroundColor: "#ddd",
-        marginRight: 60,
-    },
-    profileInfo: {
-        flexDirection: 'column', 
-    },
-    profileName: {
-        fontSize: 24,
-        fontWeight: 'bold',
-        color: '#183A36',
-    },
-        textprofileEmail: {
-        fontSize: 15,
-        color: 'gray',  
-        marginTop: 5,    
-    },
-    profileEmail: { 
-        fontSize: 15, 
-        color: '#183A36',
-        marginBottom: 10, 
-    },
-    editButton: { 
-        backgroundColor: "#8AB89D",
-        marginTop: 25,
-        paddingVertical: 10, 
-        paddingHorizontal: 90, 
-        borderRadius: 15 
-    },
-    editButtonText: { 
-        color: '#183A36',
-        fontWeight: "bold", 
-        fontSize: 14,
-    },
-    section: { 
-        marginBottom: 20, 
-        alignSelf: 'stretch',  
-        alignItems: 'flex-start', 
-        paddingHorizontal: 10, 
-    },
-    sectionTitle: { 
-        fontSize: 24, 
-        color: '#183A36',
-        fontWeight: "semibold", 
-        marginBottom: 5 
-    },
-    sectionSubtile:{
-        fontSize: 18, 
-        color: '#183A36',
-        fontWeight: "semibold", 
-        marginBottom: 5 
-    },
-    sectionText: { 
-        fontSize: 15,
-        color: '#183A36',
-    },
-  });
-  
-  export default ProfileScreen;
+      {/* Registreren link */}
+      <Text style={styles.registerText}>
+        Nog geen account?{" "}
+        <Text style={styles.registerLink} onPress={() => router.push("/settings/settings")}>
+          Registreer hier
+        </Text>
+      </Text>
+    </View>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    paddingTop: 100,
+    alignItems: 'center',
+    padding: 20,
+    backgroundColor: '#FFFDF9',
+  },
+  title: {
+    fontSize: 23,
+    fontWeight: "bold",
+    color: '#183A36',
+    marginBottom: 60,
+  },
+  text: {
+    fontSize: 20,
+    fontWeight: "bold",
+  },
+  button: {
+    backgroundColor: '#97B8A5',
+    paddingVertical: 15,
+    borderRadius: 20, 
+    marginBottom: 20,
+    width: '97%',
+    alignItems: 'center',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+  },
+  buttonText: {
+    color: '#183A36',
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  label: {
+    alignSelf: "flex-start",
+    fontSize: 16,
+    fontWeight: "600",
+    color: "#183A36",
+    marginBottom: 5,
+  },
+  input: {
+    width: "100%",
+    height: 45,
+    borderBottomWidth: 1,
+    borderBottomColor: "#97B8A5", 
+    marginBottom: 25,
+    fontSize: 16,
+    color: "#183A36",
+    paddingLeft: 15,
+  },
+  focusedInput: {
+    borderBottomColor: '#183A36', 
+  },
+  unfocusedInput: {
+    borderBottomColor: "#97B8A5", 
+  },
+  forgotPassword: {
+    alignSelf: "flex-end",
+    textAlign: "right",
+    color: "#183A36",
+    fontSize: 14,
+    marginBottom: 5,
+  },
+  forgotPasswordContainer: {
+    width: "100%", 
+    alignItems: 'flex-end', 
+    marginBottom: 30,
+  },
+  registerText: {
+    fontSize: 14,
+    color: "#183A36",
+  },
+  registerLink: {
+    fontWeight: "bold",
+  },
+});
+
+export default LoginScreen;

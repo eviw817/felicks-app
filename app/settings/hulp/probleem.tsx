@@ -1,53 +1,94 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { View, Text, TouchableOpacity, StyleSheet, TextInput, Alert } from "react-native";
 import { useRouter } from "expo-router";
-// import { supabase } from "../../lib/supabase";
-// import { Session } from "@supabase/supabase-js";
-import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
-import { faArrowLeft} from "@fortawesome/free-solid-svg-icons";
-
+import { supabase } from "../../../lib/supabase";
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
+import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 
 const ProbleemScreen = () => {
-      const router = useRouter();
-    //   const [probleem, setProbleem] = useState("");
-    //   const [inputHeight, setInputHeight] = useState(100);
-
-    //   const handleSubmit = () => {
-    //       if (probleem.trim() === "") {
-    //           Alert.alert("Fout", "Voer een probleem in voordat je het verstuurt.");
-    //           return;
-    //       }
-    //       router.push("/settings/hulp/sendprobleem");
-    //       setProbleem(""); 
-    //       setInputHeight(100);
-    //   };
+  const router = useRouter();
+  const [probleem, setProbleem] = useState("");  
+  const [loading, setLoading] = useState(false);  
+  const handleSubmit = async () => {
+    
+    // Controleer of de invoer leeg is
+    if (!probleem || probleem.trim() === "") {
+      Alert.alert("Fout", "Voer een probleem in voordat je het verstuurt.");
+      return;
+    }
   
-    return (
-        <View style={styles.container} >
-            <View style={styles.header}>
-                <TouchableOpacity onPress={() => router.push("/settings/hulp/hulp")}style={styles.backButton}>
-                    <FontAwesomeIcon icon={faArrowLeft} size={30} color={'#183A36'} style={styles.backButton} />
-                </TouchableOpacity>
-                <Text style={styles.title}>Probleem rapporteren</Text>
-            </View>
-
-            <TextInput
-                style={styles.input}
-                placeholder="Typ hier uw probleem..."
-                placeholderTextColor="#aaa"
-                // value={probleem}
-                // onChangeText={setProbleem}
-                multiline={true}
-            />
-
-          <TouchableOpacity style={styles.submitButton} onPress={() => router.push("/settings/hulp/sendprobleem")} >   {/* onPress={handleSubmit} */}
-                <Text style={styles.submitText}>VERSTUUR</Text>
-            </TouchableOpacity>
-          
-      </View>
-    );
-   
+    setLoading(true);
+  
+    const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+  
+    if (sessionError) {
+      Alert.alert("Fout", "Kan sessie niet ophalen.");
+      setLoading(false);
+      return;
+    }
+  
+    if (!session || !session.user?.email) {
+      Alert.alert("Fout", "Er is geen gebruiker ingelogd.");
+      setLoading(false);
+      return;
+    }
+  
+    const email = session.user.email;
+  
+    try {
+        const { data, error } = await supabase
+          .from('problemQuestions')
+          .insert([
+            {
+              question: probleem,
+              email: email,
+              status: 'open',
+            }
+          ]);
+      
+        if (error) {
+          console.log("Supabase error:", error); 
+          throw error;
+        }
+      
+        setProbleem("");
+        router.push("/settings/hulp/sendprobleem");
+      } catch (error) {
+        console.log("Error message:", error);  
+        Alert.alert("Fout", "Er is een fout opgetreden bij het verzenden van het probleem.");
+      } finally {
+        setLoading(false);
+      }
   };
+  
+  return (
+    <View style={styles.container}>
+      <View style={styles.header}>
+        <TouchableOpacity onPress={() => router.push("/settings/hulp/hulp")} style={styles.backButton}>
+          <FontAwesomeIcon icon={faArrowLeft} size={30} color={'#183A36'} style={styles.backButton} />
+        </TouchableOpacity>
+        <Text style={styles.title}>Probleem rapporteren</Text>
+      </View>
+
+      <TextInput
+        style={styles.input}
+        placeholder="Typ hier uw probleem..."
+        placeholderTextColor="#aaa"
+        value={probleem}  
+        onChangeText={setProbleem}  
+        multiline={true}
+      />
+
+      <TouchableOpacity
+        style={styles.submitButton}
+        onPress={handleSubmit}
+        disabled={loading}
+      >
+        <Text style={styles.submitText}>{loading ? 'VERZENDEN...' : 'VERSTUUR'}</Text>
+      </TouchableOpacity>
+    </View>
+  );
+};
 
   const styles = StyleSheet.create({
      container: { 
