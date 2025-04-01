@@ -8,8 +8,8 @@ import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 
 const HelpcentrumScreen = () => {
   const router = useRouter();
-  const [help, setHelp] = useState("");  // State voor de hulptekst
-  const [loading, setLoading] = useState(false); // Laadsymbool om in de gaten te houden of het verzoek bezig is
+  const [help, setHelp] = useState("");  
+  const [loading, setLoading] = useState(false); 
 
   const handleSubmit = async () => {
     if (help.trim() === "") {
@@ -51,7 +51,7 @@ const HelpcentrumScreen = () => {
         throw error;
       }
 
-      setHelp("");
+      setHelp("");  
       setLoading(false);
       
       router.push("/settings/hulp/sendhelp");
@@ -76,14 +76,14 @@ const HelpcentrumScreen = () => {
         style={styles.input}
         placeholder="Typ hier uw probleem..."
         placeholderTextColor="#aaa"
-        value={help} 
+        value={help}  
         onChangeText={setHelp}  
         multiline={true}
       />
 
       <TouchableOpacity
         style={styles.submitButton}
-        onPress={handleSubmit}  
+        onPress={handleSubmit} 
         disabled={loading}
       >
         <Text style={styles.submitText}>{loading ? 'VERZENDEN...' : 'VERSTUUR'}</Text>
