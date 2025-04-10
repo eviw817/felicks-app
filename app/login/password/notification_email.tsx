@@ -10,27 +10,25 @@ const NotficationEmailScreen = () => {
       const handleDeepLink = (event: { url: string }) => {
         let url = event.url;
         console.log("Deep link ontvangen:", url);
-  
-        // Controleer of de deep link de juiste pagina bevat
+    
+        // Controleer of de URL de juiste pagina bevat en de access_token is meegestuurd
         if (url.includes("login/password/newpassword")) {
-          // Hier gaan we de queryparameter 'access_token' extraheren
           const parsedUrl = new URL(url);
-          const token = parsedUrl.searchParams.get('access_token');  // Haal de access_token uit de URL
-  
+          const token = parsedUrl.searchParams.get('access_token');
           console.log("Token ontvangen:", token);
-          
-          // Als de token aanwezig is, stuur de gebruiker naar de juiste pagina
+    
           if (token) {
+            // Wanneer je de token hebt, stuur de gebruiker naar de juiste pagina met de token
             router.replace(`/login/password/newpassword?access_token=${token}`);
           } else {
             Alert.alert("Fout", "Geen geldig token in de deep link.");
           }
         }
       };
-  
-      // Luisteren naar inkomende deep links
+    
+      // Luister naar de deep link
       const subscription = Linking.addEventListener("url", handleDeepLink);
-  
+    
       return () => {
         subscription.remove(); // Verwijder de listener wanneer de component wordt verwijderd
       };

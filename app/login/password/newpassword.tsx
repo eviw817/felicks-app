@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, StyleSheet, TouchableOpacity, TextInput, Alert } from "react-native";
-import { useRouter } from "expo-router";  
+import { useRouter  } from "expo-router";
 import { supabase } from "../../../lib/supabase";
-import * as Linking from 'expo-linking';
+import { Linking } from 'react-native';
 
 const NewPasswordScreen = () => {
   const router = useRouter();
+  const [accessToken, setAccessToken] = useState<string | null>(null);
+
   const [loading, setLoading] = useState(false);
   const [nieuwpasswordFocus, setNieuwPasswordFocus] = useState(false);
   const [herhaalpasswordFocus, setHerhaalPasswordFocus] = useState(false);
@@ -15,53 +17,82 @@ const NewPasswordScreen = () => {
 
   const isNieuwPasswordFilled = nieuwpassword.trim() !== '';
   const isHerhaalPasswordFilled = herhaalpassword.trim() !== '';
-
+  
   useEffect(() => {
-    const checkSession = async () => {
-      const { data, error } = await supabase.auth.getSession();
-      if (!data.session || error) {
-        Alert.alert("Fout", "Geen geldige reset-link. Open de link in je e-mail.");
-        router.replace("/login/login"); // Terug naar login als er geen sessie is
+    const handleUrl = ({ url }: { url: string }) => {
+      const parsedUrl = new URL(url);
+  
+      // Zoek naar de 'access_token' in de hash (gebruik URLSearchParams)
+      const params = new URLSearchParams(parsedUrl.hash.replace('#', '')); // Verwijder '#' uit de hash
+      const token = params.get('access_token');  // Haal de access_token op uit de parameters
+  
+      console.log("Token ontvangen:", token);
+      if (token) {
+        setAccessToken(token); // Zet de token in de state
+      } else {
+        console.log("Geen token gevonden in de deep link.");
       }
     };
-    checkSession();
+  
+    const subscription = Linking.addEventListener('url', handleUrl);
+  
+    const fetchInitialUrl = async () => {
+      try {
+        const initialUrl = await Linking.getInitialURL();
+        if (initialUrl) {
+          const parsedUrl = new URL(initialUrl);
+  
+          // Zoek naar de 'access_token' in de hash (gebruik URLSearchParams)
+          const params = new URLSearchParams(parsedUrl.hash.replace('#', '')); // Verwijder '#' uit de hash
+          const token = params.get('access_token');  // Haal de access_token op uit de parameters
+  
+          console.log("Token ontvangen:", token);
+          setAccessToken(token); // Zet de token in de state
+        }
+      } catch (error) {
+        console.error("Fout bij het ophalen van de initial URL:", error);
+      }
+    };
+  
+    fetchInitialUrl();
+  
+    return () => {
+      subscription?.remove();
+    };
   }, []);
-
-  // useEffect(() => {
-  //   const handleDeepLink = (event: { url: string }) => {
-  //     let url = event.url;
-  //     console.log("Deep link ontvangen:", url);
-      
-  //     if (url.includes("login/password/newpassword")) {
-  //       router.replace("/login/password/newpassword");
-  //     }
-  //   };
-
-  //   // Luisteren naar deep links
-  //   const subscription = Linking.addEventListener("url", handleDeepLink);
-
-  //   return () => {
-  //     subscription.remove();
-  //   };
-  // }, []);
-
+  
+  
+  // Gebruik de token om het wachtwoord te resetten
   const handleResetPassword = async () => {
+    if (!nieuwpassword || !herhaalpassword) {
+      Alert.alert("Fout", "Voer een nieuw wachtwoord in.");
+      return;
+    }
+  
     if (nieuwpassword !== herhaalpassword) {
       Alert.alert("Fout", "De wachtwoorden komen niet overeen.");
       return;
     }
-
-    setLoading(true);
-
-    const { error } = await supabase.auth.updateUser({ password: nieuwpassword });
-
-    if (error) {
-      Alert.alert("Fout", "Het wachtwoord kon niet worden gewijzigd.");
-    } else {
-      Alert.alert("Succes", "Je wachtwoord is succesvol gewijzigd.");
-      router.push("/login/login"); // Terug naar login na reset
+  
+    if (!accessToken) {
+      Alert.alert("Fout", "Token niet gevonden.");
+      return;
     }
-
+  
+    setLoading(true);
+  
+    // Reset het wachtwoord via Supabase, inclusief de access_token
+    const { data: user, error } = await supabase.auth.updateUser({
+      password: nieuwpassword,
+    });
+  
+    if (error) {
+      Alert.alert("Fout", "Er is iets misgegaan bij het resetten van je wachtwoord.");
+    } else {
+      Alert.alert("Succes", "Je wachtwoord is succesvol gereset.");
+      router.push("/login/login");
+    }
+  
     setLoading(false);
   };
 
@@ -100,7 +131,7 @@ const NewPasswordScreen = () => {
         value={herhaalpassword}
       />
 
-      <TouchableOpacity style={styles.button} onPress={async () => await handleResetPassword()}>
+      <TouchableOpacity style={styles.button} onPress={handleResetPassword} disabled={loading}>
         <Text style={styles.buttonText}>OPSLAAN</Text>
       </TouchableOpacity>
     </View>
