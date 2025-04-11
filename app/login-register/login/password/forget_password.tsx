@@ -34,7 +34,7 @@ const ForgetPasswordScreen = () => {
     });
 
     if (error) {
-      Alert.alert("Fout", "Deze e-mail is niet geregistreerd.");
+      Alert.alert("Fout", "Dit e-mailadres is niet geregistreerd.");
     } else {
       router.push("../login/password/notification_email");
     }

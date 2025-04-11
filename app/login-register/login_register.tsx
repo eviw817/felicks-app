@@ -6,11 +6,11 @@ function LoginRegisterScreen() {
   const router = useRouter();
 
   const handleLoginPress = () => {
-    router.push("../login/login");
+    router.push("/login-register/login/login");
   };
 
   const handleRegisterPress = () => {
-    router.push("../register/register");
+    router.push("/login-register/register/register");
   };
 
   return (

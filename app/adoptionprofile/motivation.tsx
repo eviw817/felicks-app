@@ -1,11 +1,18 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, TextInput, ScrollView } from 'react-native';
-import { useRouter } from 'expo-router';
-import { Ionicons } from '@expo/vector-icons';
+import React, { useState } from "react";
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  TextInput,
+  ScrollView,
+} from "react-native";
+import { useRouter } from "expo-router";
+import { Ionicons } from "@expo/vector-icons";
 
 function MotivationScreen() {
   const router = useRouter();
-  const [motivation, setMotivation] = useState('');
+  const [motivation, setMotivation] = useState("");
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
@@ -24,7 +31,9 @@ function MotivationScreen() {
 
       {/* Motivatie veld */}
       <View style={styles.formContainer}>
-        <Text style={styles.sectionTitle}>Korte motivatie waarom je een hond wilt?</Text>
+        <Text style={styles.sectionTitle}>
+          Korte motivatie waarom je een hond wilt?
+        </Text>
         <TextInput
           style={styles.textArea}
           multiline
@@ -36,7 +45,10 @@ function MotivationScreen() {
       </View>
 
       {/* Volgende knop */}
-      <TouchableOpacity style={styles.button} onPress={() => router.push('/adoption_profile_loading')}>
+      <TouchableOpacity
+        style={styles.button}
+        onPress={() => router.push("./adoption_profile_loading")}
+      >
         <Text style={styles.buttonText}>VOLGENDE</Text>
       </TouchableOpacity>
     </ScrollView>
@@ -46,15 +58,15 @@ function MotivationScreen() {
 const styles = StyleSheet.create({
   container: {
     flexGrow: 1,
-    justifyContent: 'flex-start',
-    alignItems: 'center',
+    justifyContent: "flex-start",
+    alignItems: "center",
     padding: 20,
     paddingTop: 50,
-    backgroundColor: '#F8F8F8',
+    backgroundColor: "#F8F8F8",
   },
 
   backButton: {
-    position: 'absolute',
+    position: "absolute",
     top: 50,
     left: 20,
     zIndex: 10,
@@ -62,67 +74,67 @@ const styles = StyleSheet.create({
 
   title: {
     fontSize: 20,
-    color: '#183A36',
+    color: "#183A36",
     marginBottom: 20,
-    textAlign: 'center',
-    fontFamily: 'nunitoBold',
+    textAlign: "center",
+    fontFamily: "nunitoBold",
   },
 
   progressBar: {
-    width: '100%',
+    width: "100%",
     height: 6,
-    backgroundColor: '#E0E0E0',
+    backgroundColor: "#E0E0E0",
     borderRadius: 3,
     marginBottom: 20,
   },
 
   progressFill: {
-    width: '99.99%',
-    height: '100%',
-    backgroundColor: '#97B8A5',
+    width: "99.99%",
+    height: "100%",
+    backgroundColor: "#97B8A5",
     borderRadius: 3,
   },
 
   formContainer: {
-    width: '100%',
+    width: "100%",
     marginBottom: 30,
   },
 
   sectionTitle: {
     fontSize: 16,
-    fontWeight: 'bold',
-    color: '#183A36',
+    fontWeight: "bold",
+    color: "#183A36",
     marginBottom: 10,
-    fontFamily: 'nunitoBold',
+    fontFamily: "nunitoBold",
   },
 
   textArea: {
-    backgroundColor: '#FFF',
+    backgroundColor: "#FFF",
     borderRadius: 10,
-    borderColor: '#D0D0D0',
+    borderColor: "#D0D0D0",
     borderWidth: 1,
     padding: 15,
     fontSize: 16,
-    textAlignVertical: 'top',
-    fontFamily: 'nunitoRegular',
+    textAlignVertical: "top",
+    fontFamily: "nunitoRegular",
   },
 
   button: {
-    backgroundColor: '#97B8A5',
+    backgroundColor: "#97B8A5",
     paddingVertical: 15,
     borderRadius: 20,
-    width: '100%',
-    alignItems: 'center',
-    justifyContent: 'center',
+    width: "100%",
+    alignItems: "center",
+    justifyContent: "center",
   },
 
   buttonText: {
-    color: '#183A36',
+    color: "#183A36",
     fontSize: 14,
-    fontWeight: 'bold',
-    textTransform: 'uppercase',
-    textAlign: 'center',
-    fontFamily: 'nunitoBold',
+    fontWeight: "bold",
+    textTransform: "uppercase",
+    textAlign: "center",
+    fontFamily: "nunitoBold",
   },
 });
 

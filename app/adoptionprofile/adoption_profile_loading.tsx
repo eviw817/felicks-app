@@ -1,6 +1,6 @@
-import React, { useEffect } from 'react';
-import { View, Text, StyleSheet, ActivityIndicator } from 'react-native';
-import { useRouter } from 'expo-router';
+import React, { useEffect } from "react";
+import { View, Text, StyleSheet, ActivityIndicator } from "react-native";
+import { useRouter } from "expo-router";
 
 function LoadingScreen() {
   const router = useRouter();
@@ -8,7 +8,7 @@ function LoadingScreen() {
   // ⏳ Na 3 seconden navigeren
   useEffect(() => {
     const timer = setTimeout(() => {
-      router.push('/suitable_dogs'); // ← Pas deze route aan naar jouw volgende scherm
+      router.push("./suitable_dogs"); // ← Pas deze route aan naar jouw volgende scherm
     }, 3000);
 
     return () => clearTimeout(timer);
@@ -24,7 +24,7 @@ function LoadingScreen() {
 
       {/* Wachttekst */}
       <Text style={styles.loadingText}>
-        Even geduld…{'\n'}We zoeken jouw perfecte match!
+        Even geduld…{"\n"}We zoeken jouw perfecte match!
       </Text>
     </View>
   );
@@ -33,17 +33,17 @@ function LoadingScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FDFCF9',
-    justifyContent: 'center',
-    alignItems: 'center',
+    backgroundColor: "#FDFCF9",
+    justifyContent: "center",
+    alignItems: "center",
     paddingHorizontal: 20,
   },
 
   title: {
     fontSize: 20,
-    color: '#183A36',
-    fontFamily: 'nunitoBold',
-    position: 'absolute',
+    color: "#183A36",
+    fontFamily: "nunitoBold",
+    position: "absolute",
     top: 60,
   },
 
@@ -53,9 +53,9 @@ const styles = StyleSheet.create({
 
   loadingText: {
     fontSize: 16,
-    color: '#183A36',
-    textAlign: 'center',
-    fontFamily: 'nunitoRegular',
+    color: "#183A36",
+    textAlign: "center",
+    fontFamily: "nunitoRegular",
   },
 });
 

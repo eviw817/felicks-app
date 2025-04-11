@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import { useRouter } from 'expo-router';
-import { Ionicons } from '@expo/vector-icons';
-import { Picker } from '@react-native-picker/picker';
+import React, { useState } from "react";
+import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import { useRouter } from "expo-router";
+import { Ionicons } from "@expo/vector-icons";
+import { Picker } from "@react-native-picker/picker";
 
 type RadioButtonProps = {
   label: string;
@@ -11,9 +11,19 @@ type RadioButtonProps = {
   onSelect: (value: string) => void;
 };
 
-const RadioButton: React.FC<RadioButtonProps> = ({ label, value, selected, onSelect }) => (
-  <TouchableOpacity style={styles.radioContainer} onPress={() => onSelect(value)}>
-    <View style={[styles.radioCircle, selected === value && styles.radioSelected]} />
+const RadioButton: React.FC<RadioButtonProps> = ({
+  label,
+  value,
+  selected,
+  onSelect,
+}) => (
+  <TouchableOpacity
+    style={styles.radioContainer}
+    onPress={() => onSelect(value)}
+  >
+    <View
+      style={[styles.radioCircle, selected === value && styles.radioSelected]}
+    />
     <Text style={styles.radioLabel}>{label}</Text>
   </TouchableOpacity>
 );
@@ -43,7 +53,9 @@ function DailyRoutineScreen_1() {
       {/* Formulier */}
       <View style={styles.formContainer}>
         {/* Werkuren */}
-        <Text style={styles.sectionTitle}>Hoeveel uur per dag werk je gemiddeld?</Text>
+        <Text style={styles.sectionTitle}>
+          Hoeveel uur per dag werk je gemiddeld?
+        </Text>
         <View style={styles.pickerContainer}>
           <Picker
             selectedValue={workHours}
@@ -61,19 +73,54 @@ function DailyRoutineScreen_1() {
 
         {/* Werk je vanuit huis? */}
         <Text style={styles.sectionTitle}>Werk je vanuit huis?</Text>
-        <RadioButton label="Voltijd" value="voltijd" selected={workFromHome} onSelect={setWorkFromHome} />
-        <RadioButton label="Halftijds" value="halftijds" selected={workFromHome} onSelect={setWorkFromHome} />
-        <RadioButton label="Niet" value="niet" selected={workFromHome} onSelect={setWorkFromHome} />
+        <RadioButton
+          label="Voltijd"
+          value="voltijd"
+          selected={workFromHome}
+          onSelect={setWorkFromHome}
+        />
+        <RadioButton
+          label="Halftijds"
+          value="halftijds"
+          selected={workFromHome}
+          onSelect={setWorkFromHome}
+        />
+        <RadioButton
+          label="Niet"
+          value="niet"
+          selected={workFromHome}
+          onSelect={setWorkFromHome}
+        />
 
         {/* Tijd voor huisdier */}
-        <Text style={styles.sectionTitle}>Hoeveel tijd per dag kan je besteden aan een huisdier?</Text>
-        <RadioButton label="Minder dan 1 uur" value="minder1" selected={petTime} onSelect={setPetTime} />
-        <RadioButton label="1 - 3 uur" value="1-3" selected={petTime} onSelect={setPetTime} />
-        <RadioButton label="3+ uur" value="3+" selected={petTime} onSelect={setPetTime} />
+        <Text style={styles.sectionTitle}>
+          Hoeveel tijd per dag kan je besteden aan een huisdier?
+        </Text>
+        <RadioButton
+          label="Minder dan 1 uur"
+          value="minder1"
+          selected={petTime}
+          onSelect={setPetTime}
+        />
+        <RadioButton
+          label="1 - 3 uur"
+          value="1-3"
+          selected={petTime}
+          onSelect={setPetTime}
+        />
+        <RadioButton
+          label="3+ uur"
+          value="3+"
+          selected={petTime}
+          onSelect={setPetTime}
+        />
       </View>
 
       {/* Volgende knop */}
-      <TouchableOpacity style={styles.button} onPress={() => router.push('/daily_routine_2')}>
+      <TouchableOpacity
+        style={styles.button}
+        onPress={() => router.push("./daily_routine_2")}
+      >
         <Text style={styles.buttonText}>VOLGENDE</Text>
       </TouchableOpacity>
     </View>
@@ -83,15 +130,15 @@ function DailyRoutineScreen_1() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'flex-start',
-    alignItems: 'center',
+    justifyContent: "flex-start",
+    alignItems: "center",
     padding: 20,
     paddingTop: 50,
-    backgroundColor: '#F8F8F8',
+    backgroundColor: "#F8F8F8",
   },
 
   backButton: {
-    position: 'absolute',
+    position: "absolute",
     top: 50,
     left: 20,
     zIndex: 10,
@@ -99,56 +146,56 @@ const styles = StyleSheet.create({
 
   title: {
     fontSize: 20,
-    color: '#183A36',
+    color: "#183A36",
     marginBottom: 20,
-    textAlign: 'center',
-    fontFamily: 'nunitoBold',
+    textAlign: "center",
+    fontFamily: "nunitoBold",
   },
 
   progressBar: {
-    width: '100%',
+    width: "100%",
     height: 6,
-    backgroundColor: '#E0E0E0',
+    backgroundColor: "#E0E0E0",
     borderRadius: 3,
     marginBottom: 20,
   },
 
   progressFill: {
-    width: '44.44%',
-    height: '100%',
-    backgroundColor: '#97B8A5',
+    width: "44.44%",
+    height: "100%",
+    backgroundColor: "#97B8A5",
     borderRadius: 3,
   },
 
   formContainer: {
-    width: '100%',
+    width: "100%",
     marginBottom: 30,
   },
 
   sectionTitle: {
     fontSize: 16,
-    fontWeight: 'bold',
-    color: '#183A36',
+    fontWeight: "bold",
+    color: "#183A36",
     marginBottom: 10,
-    fontFamily: 'nunitoBold',
+    fontFamily: "nunitoBold",
   },
 
   pickerContainer: {
-    backgroundColor: '#FFF',
+    backgroundColor: "#FFF",
     borderRadius: 10,
     borderWidth: 1,
-    borderColor: '#97B8A5',
+    borderColor: "#97B8A5",
     marginBottom: 10,
   },
 
   picker: {
     height: 50,
-    width: '100%',
+    width: "100%",
   },
 
   radioContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     marginBottom: 10,
   },
 
@@ -157,37 +204,37 @@ const styles = StyleSheet.create({
     height: 20,
     borderRadius: 10,
     borderWidth: 2,
-    borderColor: '#97B8A5',
+    borderColor: "#97B8A5",
     marginRight: 10,
   },
 
   radioSelected: {
-    backgroundColor: '#97B8A5',
+    backgroundColor: "#97B8A5",
   },
 
   radioLabel: {
     fontSize: 16,
-    color: '#183A36',
-    fontFamily: 'nunitoRegular',
+    color: "#183A36",
+    fontFamily: "nunitoRegular",
   },
 
   button: {
-    backgroundColor: '#97B8A5',
+    backgroundColor: "#97B8A5",
     paddingVertical: 15,
     borderRadius: 20,
-    width: '100%',
-    alignItems: 'center',
-    justifyContent: 'center',
+    width: "100%",
+    alignItems: "center",
+    justifyContent: "center",
     marginTop: 20,
   },
 
   buttonText: {
-    color: '#183A36',
+    color: "#183A36",
     fontSize: 14,
-    fontWeight: 'bold',
-    textTransform: 'uppercase',
-    textAlign: 'center',
-    fontFamily: 'nunitoBold',
+    fontWeight: "bold",
+    textTransform: "uppercase",
+    textAlign: "center",
+    fontFamily: "nunitoBold",
   },
 });
 

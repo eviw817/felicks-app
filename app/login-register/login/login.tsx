@@ -102,7 +102,7 @@ const LoginScreen = () => {
       return;
     }
 
-    router.push("../../startpage/startpage");
+    // router.push(".");
     setLoading(false);
   }
 
