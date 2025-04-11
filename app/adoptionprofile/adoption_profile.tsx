@@ -6,8 +6,8 @@ import { Ionicons } from "@expo/vector-icons";
 
 function AdoptionProfileScreen() {
   const [fontsLoaded] = useFonts({
-    nunitoBold: require("../assets/fonts/nunito/Nunito-Bold.ttf"),
-    nunitoRegular: require("../assets/fonts/nunito/Nunito-Regular.ttf"),
+    nunitoBold: require("../../assets/fonts/nunito/Nunito-Bold.ttf"),
+    nunitoRegular: require("../../assets/fonts/nunito/Nunito-Regular.ttf"),
   });
 
   const router = useRouter();
@@ -38,7 +38,7 @@ function AdoptionProfileScreen() {
       {/* buttons */}
       <TouchableOpacity
         style={styles.button}
-        onPress={() => router.push("/living_situation_1")}
+        onPress={() => router.push("../living_situation_1")}
       >
         <Text style={styles.buttonText}>adoptieprofiel opzetten</Text>
       </TouchableOpacity>

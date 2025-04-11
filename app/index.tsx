@@ -7,7 +7,7 @@ export default function Index() {
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      router.replace("/login-register/startpage/startpage");
+      router.replace("../login-register/startpage/startpage");
     }, 3000);
 
     return () => clearTimeout(timer);
