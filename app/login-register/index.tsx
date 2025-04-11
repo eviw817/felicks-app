@@ -1,20 +1,20 @@
 import React, { useEffect } from "react";
 import { View, Image, StyleSheet } from "react-native";
-import { useRouter } from "expo-router";
+import { useRouter } from "expo-router"; 
 
 export default function Index() {
   const router = useRouter();
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      router.replace("/login-register/index");
+      router.replace("/login_register"); 
     }, 3000);
 
     return () => clearTimeout(timer);
   }, []);
 
   return (
-    <View style={styles.container} className="bg-baby-powder">
+    <View style={styles.container}>
       <Image
         source={require("../assets/images/logo_felicks.png")}
         style={styles.logo}
@@ -28,6 +28,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
+    backgroundColor: '#FFFDF9',
   },
   logo: {
     width: 340,

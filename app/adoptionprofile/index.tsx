@@ -7,7 +7,7 @@ export default function Index() {
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      router.replace("/login-register/index");
+      router.replace("/adoption_profile");
     }, 3000);
 
     return () => clearTimeout(timer);
