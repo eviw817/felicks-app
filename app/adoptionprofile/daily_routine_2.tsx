@@ -1,54 +1,37 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { useRouter } from "expo-router";
-import { Picker } from "@react-native-picker/picker";
 import { Ionicons } from "@expo/vector-icons";
-
-type RadioButtonProps = {
-  label: string;
-  value: string;
-  selected: string | null;
-  onSelect: (value: string) => void;
-};
-
-const RadioButton: React.FC<RadioButtonProps> = ({
-  label,
-  value,
-  selected,
-  onSelect,
-}) => (
-  <TouchableOpacity
-    style={styles.radioContainer}
-    onPress={() => onSelect(value)}
-  >
-    <View
-      style={[styles.radioCircle, selected === value && styles.radioSelected]}
-    />
-    <Text style={styles.radioLabel}>{label}</Text>
-  </TouchableOpacity>
-);
+import { Picker } from "@react-native-picker/picker";
+import { useAdoptionProfile } from "../../context/AdoptionProfileContext";
 
 function DailyRoutineScreen_2() {
   const router = useRouter();
-  const [timeWithDog, setTimeWithDog] = useState<string | null>(null);
-  const [weekendRoutine, setWeekendRoutine] = useState<string | null>(null);
+  const { profileData, updateProfile } = useAdoptionProfile();
+
+  const [timeWithDog, setTimeWithDog] = useState<string | null>(
+    profileData.timeWithDog
+  );
+  const [weekendRoutine, setWeekendRoutine] = useState<string | null>(
+    profileData.weekendRoutine
+  );
+
+  useEffect(() => {
+    updateProfile({ timeWithDog, weekendRoutine });
+  }, [timeWithDog, weekendRoutine]);
 
   return (
     <View style={styles.container}>
-      {/* Terugknop */}
       <TouchableOpacity style={styles.backButton} onPress={() => router.back()}>
         <Ionicons name="arrow-back" size={24} color="#183A36" />
       </TouchableOpacity>
 
-      {/* Titel */}
       <Text style={styles.title}>Dagelijkse routine</Text>
 
-      {/* Voortgangsbalk */}
       <View style={styles.progressBar}>
         <View style={styles.progressFill} />
       </View>
 
-      {/* Tijdsbesteding aan hond */}
       <View style={styles.formContainer}>
         <Text style={styles.sectionTitle}>
           Hoeveel tijd wil je dagelijks besteden aan je hond?
@@ -68,35 +51,29 @@ function DailyRoutineScreen_2() {
           </Picker>
         </View>
 
-        {/* Weekendroutine vraag */}
         <Text style={styles.sectionTitle}>Wat is je weekendroutine?</Text>
-        <RadioButton
-          label="Ik ben vaak buiten actief"
-          value="buiten-actief"
-          selected={weekendRoutine}
-          onSelect={setWeekendRoutine}
-        />
-        <RadioButton
-          label="Ik blijf meestal thuis"
-          value="thuis"
-          selected={weekendRoutine}
-          onSelect={setWeekendRoutine}
-        />
-        <RadioButton
-          label="Ik werk in het weekend"
-          value="werk-in-weekend"
-          selected={weekendRoutine}
-          onSelect={setWeekendRoutine}
-        />
-        <RadioButton
-          label="Mijn weekend wisselt steeds"
-          value="wisselt"
-          selected={weekendRoutine}
-          onSelect={setWeekendRoutine}
-        />
+        {[
+          { label: "Ik ben vaak buiten actief", value: "buiten-actief" },
+          { label: "Ik blijf meestal thuis", value: "thuis" },
+          { label: "Ik werk in het weekend", value: "werk-in-weekend" },
+          { label: "Mijn weekend wisselt steeds", value: "wisselt" },
+        ].map(({ label, value }) => (
+          <TouchableOpacity
+            key={value}
+            style={styles.radioContainer}
+            onPress={() => setWeekendRoutine(value)}
+          >
+            <View
+              style={[
+                styles.radioCircle,
+                weekendRoutine === value && styles.radioSelected,
+              ]}
+            />
+            <Text style={styles.radioLabel}>{label}</Text>
+          </TouchableOpacity>
+        ))}
       </View>
 
-      {/* Volgende knop */}
       <TouchableOpacity
         style={styles.button}
         onPress={() => router.push("./experience")}
@@ -116,14 +93,12 @@ const styles = StyleSheet.create({
     paddingTop: 50,
     backgroundColor: "#F8F8F8",
   },
-
   backButton: {
     position: "absolute",
     top: 50,
     left: 20,
     zIndex: 10,
   },
-
   title: {
     fontSize: 20,
     color: "#183A36",
@@ -131,7 +106,6 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontFamily: "nunitoBold",
   },
-
   progressBar: {
     width: "100%",
     height: 6,
@@ -139,19 +113,16 @@ const styles = StyleSheet.create({
     borderRadius: 3,
     marginBottom: 20,
   },
-
   progressFill: {
     width: "55.55%",
     height: "100%",
     backgroundColor: "#97B8A5",
     borderRadius: 3,
   },
-
   formContainer: {
     width: "100%",
     marginBottom: 30,
   },
-
   sectionTitle: {
     fontSize: 16,
     fontWeight: "bold",
@@ -159,7 +130,6 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     fontFamily: "nunitoBold",
   },
-
   pickerContainer: {
     backgroundColor: "#FFF",
     borderRadius: 10,
@@ -167,18 +137,15 @@ const styles = StyleSheet.create({
     borderColor: "#97B8A5",
     marginBottom: 10,
   },
-
   picker: {
     height: 50,
     width: "100%",
   },
-
   radioContainer: {
     flexDirection: "row",
     alignItems: "center",
     marginBottom: 10,
   },
-
   radioCircle: {
     width: 20,
     height: 20,
@@ -187,17 +154,14 @@ const styles = StyleSheet.create({
     borderColor: "#97B8A5",
     marginRight: 10,
   },
-
   radioSelected: {
     backgroundColor: "#97B8A5",
   },
-
   radioLabel: {
     fontSize: 16,
     color: "#183A36",
     fontFamily: "nunitoRegular",
   },
-
   button: {
     backgroundColor: "#97B8A5",
     paddingVertical: 15,
@@ -206,7 +170,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
-
   buttonText: {
     color: "#183A36",
     fontSize: 14,

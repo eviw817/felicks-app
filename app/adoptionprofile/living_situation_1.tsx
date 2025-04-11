@@ -1,10 +1,11 @@
+// app/adoptionprofile/living_situation_1.tsx
 import React, { useState } from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { useRouter } from "expo-router";
 import { useFonts } from "expo-font";
 import { Ionicons } from "@expo/vector-icons";
+import { useAdoptionProfile } from "../../context/AdoptionProfileContext";
 
-// RadioButton
 type RadioButtonProps = {
   label: string;
   value: string;
@@ -36,29 +37,38 @@ function LivingSituationScreen1() {
   });
 
   const router = useRouter();
+  const { updateProfile, profileData } = useAdoptionProfile();
 
-  const [woningType, setWoningType] = useState<string | null>(null);
-  const [tuin, setTuin] = useState<string | null>(null);
-  const [omgeving, setOmgeving] = useState<string | null>(null);
+  const [woningType, setWoningType] = useState<string | null>(
+    profileData.housingType
+  );
+  const [tuin, setTuin] = useState<string | null>(profileData.garden);
+  const [omgeving, setOmgeving] = useState<string | null>(
+    profileData.environment
+  );
+
+  const handleNext = () => {
+    updateProfile({
+      housingType: woningType,
+      garden: tuin,
+      environment: omgeving,
+    });
+    router.push("./living_situation_2");
+  };
 
   return (
     <View style={styles.container} className="bg-baby-powder">
-      {/* Terugknop */}
       <TouchableOpacity style={styles.backButton} onPress={() => router.back()}>
         <Ionicons name="arrow-back" size={24} color="#183A36" />
       </TouchableOpacity>
 
-      {/* Titel */}
       <Text style={styles.title}>Woonsituatie</Text>
 
-      {/* Voortgangsbalk */}
       <View style={styles.progressBar}>
         <View style={styles.progressFill} />
       </View>
 
-      {/* Vragenformulier */}
       <View style={styles.formContainer}>
-        {/* Woningtype */}
         <Text style={styles.sectionTitle}>Woningtype</Text>
         <RadioButton
           label="Appartement"
@@ -85,7 +95,6 @@ function LivingSituationScreen1() {
           onSelect={setWoningType}
         />
 
-        {/* Tuin of terras */}
         <Text style={styles.sectionTitle}>Heb je een tuin/terras?</Text>
         <RadioButton
           label="Ja, omheind"
@@ -106,7 +115,6 @@ function LivingSituationScreen1() {
           onSelect={setTuin}
         />
 
-        {/* Woonomgeving */}
         <Text style={styles.sectionTitle}>Woonomgeving</Text>
         <RadioButton
           label="Stedelijk"
@@ -128,11 +136,7 @@ function LivingSituationScreen1() {
         />
       </View>
 
-      {/* Volgende knop */}
-      <TouchableOpacity
-        style={styles.button}
-        onPress={() => router.push("./living_situation_2")}
-      >
+      <TouchableOpacity style={styles.button} onPress={handleNext}>
         <Text style={styles.buttonText}>VOLGENDE</Text>
       </TouchableOpacity>
     </View>
@@ -148,14 +152,12 @@ const styles = StyleSheet.create({
     paddingTop: 50,
     backgroundColor: "#F8F8F8",
   },
-
   backButton: {
     position: "absolute",
     top: 50,
     left: 20,
     zIndex: 10,
   },
-
   title: {
     fontSize: 20,
     color: "#183A36",
@@ -163,7 +165,6 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontFamily: "nunitoBold",
   },
-
   progressBar: {
     width: "100%",
     height: 6,
@@ -171,19 +172,16 @@ const styles = StyleSheet.create({
     borderRadius: 3,
     marginBottom: 20,
   },
-
   progressFill: {
     width: "11.11%",
     height: "100%",
     backgroundColor: "#97B8A5",
     borderRadius: 3,
   },
-
   formContainer: {
     width: "100%",
     marginBottom: 30,
   },
-
   sectionTitle: {
     fontSize: 16,
     fontWeight: "bold",
@@ -191,13 +189,11 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     fontFamily: "nunitoBold",
   },
-
   radioContainer: {
     flexDirection: "row",
     alignItems: "center",
     marginBottom: 10,
   },
-
   radioCircle: {
     width: 20,
     height: 20,
@@ -206,17 +202,14 @@ const styles = StyleSheet.create({
     borderColor: "#97B8A5",
     marginRight: 10,
   },
-
   radioSelected: {
     backgroundColor: "#97B8A5",
   },
-
   radioLabel: {
     fontSize: 16,
     color: "#183A36",
     fontFamily: "nunitoRegular",
   },
-
   button: {
     backgroundColor: "#97B8A5",
     paddingVertical: 15,
@@ -228,7 +221,6 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 4,
   },
-
   buttonText: {
     color: "#183A36",
     fontSize: 14,

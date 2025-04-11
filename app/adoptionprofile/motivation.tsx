@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -9,27 +9,30 @@ import {
 } from "react-native";
 import { useRouter } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
+import { useAdoptionProfile } from "../../context/AdoptionProfileContext";
 
 function MotivationScreen() {
   const router = useRouter();
-  const [motivation, setMotivation] = useState("");
+  const { profileData, updateProfile } = useAdoptionProfile();
+
+  const [motivation, setMotivation] = useState(profileData.motivation || "");
+
+  useEffect(() => {
+    updateProfile({ motivation });
+  }, [motivation]);
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      {/* Terugknop */}
       <TouchableOpacity style={styles.backButton} onPress={() => router.back()}>
         <Ionicons name="arrow-back" size={24} color="#183A36" />
       </TouchableOpacity>
 
-      {/* Titel */}
       <Text style={styles.title}>Motivatie</Text>
 
-      {/* Voortgangsbalk */}
       <View style={styles.progressBar}>
         <View style={styles.progressFill} />
       </View>
 
-      {/* Motivatie veld */}
       <View style={styles.formContainer}>
         <Text style={styles.sectionTitle}>
           Korte motivatie waarom je een hond wilt?
@@ -44,7 +47,6 @@ function MotivationScreen() {
         />
       </View>
 
-      {/* Volgende knop */}
       <TouchableOpacity
         style={styles.button}
         onPress={() => router.push("./adoption_profile_loading")}
@@ -64,14 +66,12 @@ const styles = StyleSheet.create({
     paddingTop: 50,
     backgroundColor: "#F8F8F8",
   },
-
   backButton: {
     position: "absolute",
     top: 50,
     left: 20,
     zIndex: 10,
   },
-
   title: {
     fontSize: 20,
     color: "#183A36",
@@ -79,7 +79,6 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontFamily: "nunitoBold",
   },
-
   progressBar: {
     width: "100%",
     height: 6,
@@ -87,19 +86,16 @@ const styles = StyleSheet.create({
     borderRadius: 3,
     marginBottom: 20,
   },
-
   progressFill: {
     width: "99.99%",
     height: "100%",
     backgroundColor: "#97B8A5",
     borderRadius: 3,
   },
-
   formContainer: {
     width: "100%",
     marginBottom: 30,
   },
-
   sectionTitle: {
     fontSize: 16,
     fontWeight: "bold",
@@ -107,7 +103,6 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     fontFamily: "nunitoBold",
   },
-
   textArea: {
     backgroundColor: "#FFF",
     borderRadius: 10,
@@ -118,7 +113,6 @@ const styles = StyleSheet.create({
     textAlignVertical: "top",
     fontFamily: "nunitoRegular",
   },
-
   button: {
     backgroundColor: "#97B8A5",
     paddingVertical: 15,
@@ -127,7 +121,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
-
   buttonText: {
     color: "#183A36",
     fontSize: 14,

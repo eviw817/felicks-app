@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -8,8 +8,8 @@ import {
 } from "react-native";
 import { useRouter } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
+import { useAdoptionProfile } from "../../context/AdoptionProfileContext";
 
-// RadioButton component
 type RadioButtonProps = {
   label: string;
   value: string;
@@ -34,7 +34,6 @@ const RadioButton: React.FC<RadioButtonProps> = ({
   </TouchableOpacity>
 );
 
-// Checkbox component
 type CheckboxProps = {
   label: string;
   value: string;
@@ -62,12 +61,15 @@ const Checkbox: React.FC<CheckboxProps> = ({
   </TouchableOpacity>
 );
 
-function experience() {
+function ExperienceScreen() {
   const router = useRouter();
-  const [experience, setExperience] = useState<string | null>(null);
-  const [petsOwned, setPetsOwned] = useState<string[]>([]);
+  const { profileData, updateProfile } = useAdoptionProfile();
 
-  // Functie om huisdieropties te selecteren of te deselecteren
+  const [experience, setExperience] = useState<string | null>(
+    profileData.experience
+  );
+  const [petsOwned, setPetsOwned] = useState<string[]>(profileData.petsOwned);
+
   const togglePetSelection = (value: string) => {
     if (petsOwned.includes(value)) {
       setPetsOwned(petsOwned.filter((item) => item !== value));
@@ -76,22 +78,22 @@ function experience() {
     }
   };
 
+  useEffect(() => {
+    updateProfile({ experience, petsOwned });
+  }, [experience, petsOwned]);
+
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      {/* Terugknop */}
       <TouchableOpacity style={styles.backButton} onPress={() => router.back()}>
         <Ionicons name="arrow-back" size={24} color="#183A36" />
       </TouchableOpacity>
 
-      {/* Titel */}
       <Text style={styles.title}>Ervaring met huisdieren</Text>
 
-      {/* Voortgangsbalk */}
       <View style={styles.progressBar}>
         <View style={styles.progressFill} />
       </View>
 
-      {/* Ervaring met huisdieren */}
       <View style={styles.formContainer}>
         <Text style={styles.sectionTitle}>
           Heb je eerder voor huisdieren gezorgd?
@@ -115,53 +117,31 @@ function experience() {
           onSelect={setExperience}
         />
 
-        {/* Alleen tonen als 'Ik heb verschillende huisdieren gehad' is geselecteerd */}
         {experience === "meerdere" && (
           <>
             <Text style={styles.sectionTitle}>
               Voor welk dier heb je gezorgd
             </Text>
-            <Checkbox
-              label="Kat"
-              value="kat"
-              selectedValues={petsOwned}
-              onSelect={togglePetSelection}
-            />
-            <Checkbox
-              label="Reptielen"
-              value="reptielen"
-              selectedValues={petsOwned}
-              onSelect={togglePetSelection}
-            />
-            <Checkbox
-              label="Vogels"
-              value="vogels"
-              selectedValues={petsOwned}
-              onSelect={togglePetSelection}
-            />
-            <Checkbox
-              label="Knaagdieren"
-              value="knaagdieren"
-              selectedValues={petsOwned}
-              onSelect={togglePetSelection}
-            />
-            <Checkbox
-              label="Vissen"
-              value="vissen"
-              selectedValues={petsOwned}
-              onSelect={togglePetSelection}
-            />
-            <Checkbox
-              label="Kippen"
-              value="kippen"
-              selectedValues={petsOwned}
-              onSelect={togglePetSelection}
-            />
+            {[
+              "Kat",
+              "Reptielen",
+              "Vogels",
+              "Knaagdieren",
+              "Vissen",
+              "Kippen",
+            ].map((pet) => (
+              <Checkbox
+                key={pet}
+                label={pet}
+                value={pet.toLowerCase()}
+                selectedValues={petsOwned}
+                onSelect={togglePetSelection}
+              />
+            ))}
           </>
         )}
       </View>
 
-      {/* Volgende knop */}
       <TouchableOpacity
         style={styles.button}
         onPress={() => router.push("./preference_1")}
@@ -181,14 +161,12 @@ const styles = StyleSheet.create({
     paddingTop: 50,
     backgroundColor: "#F8F8F8",
   },
-
   backButton: {
     position: "absolute",
     top: 50,
     left: 20,
     zIndex: 10,
   },
-
   title: {
     fontSize: 20,
     color: "#183A36",
@@ -196,7 +174,6 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontFamily: "nunitoBold",
   },
-
   progressBar: {
     width: "100%",
     height: 6,
@@ -204,19 +181,16 @@ const styles = StyleSheet.create({
     borderRadius: 3,
     marginBottom: 20,
   },
-
   progressFill: {
     width: "66.66%",
     height: "100%",
     backgroundColor: "#97B8A5",
     borderRadius: 3,
   },
-
   formContainer: {
     width: "100%",
     marginBottom: 30,
   },
-
   sectionTitle: {
     fontSize: 16,
     fontWeight: "bold",
@@ -224,13 +198,11 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     fontFamily: "nunitoBold",
   },
-
   radioContainer: {
     flexDirection: "row",
     alignItems: "center",
     marginBottom: 10,
   },
-
   radioCircle: {
     width: 20,
     height: 20,
@@ -239,17 +211,14 @@ const styles = StyleSheet.create({
     borderColor: "#97B8A5",
     marginRight: 10,
   },
-
   radioSelected: {
     backgroundColor: "#97B8A5",
   },
-
   radioLabel: {
     fontSize: 16,
     color: "#183A36",
     fontFamily: "nunitoRegular",
   },
-
   button: {
     backgroundColor: "#97B8A5",
     paddingVertical: 15,
@@ -258,7 +227,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
-
   buttonText: {
     color: "#183A36",
     fontSize: 14,
@@ -269,4 +237,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default experience;
+export default ExperienceScreen;

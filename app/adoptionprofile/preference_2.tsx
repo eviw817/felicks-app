@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -9,21 +9,18 @@ import {
 import { useRouter } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 import { Picker } from "@react-native-picker/picker";
+import { useAdoptionProfile } from "../../context/AdoptionProfileContext";
 
-// Typing for RadioButton Props
-interface RadioButtonProps {
-  label: string;
-  value: string;
-  selected: string | null;
-  onSelect: (value: string) => void;
-}
-
-// RadioButton component
-const RadioButton: React.FC<RadioButtonProps> = ({
+const RadioButton = ({
   label,
   value,
   selected,
   onSelect,
+}: {
+  label: string;
+  value: string;
+  selected: string | null;
+  onSelect: (value: string) => void;
 }) => (
   <TouchableOpacity
     style={styles.radioContainer}
@@ -38,28 +35,40 @@ const RadioButton: React.FC<RadioButtonProps> = ({
 
 function Preference2() {
   const router = useRouter();
-  const [selectedSize, setSelectedSize] = useState<string | null>(null);
-  const [selectedActivity, setSelectedActivity] = useState<string | null>(null);
-  const [selectedBreed, setSelectedBreed] = useState<string | null>(null);
+  const { profileData, updateProfile } = useAdoptionProfile();
+
+  const [selectedSize, setSelectedSize] = useState<string | null>(
+    profileData.preferredSize
+  );
+  const [selectedActivity, setSelectedActivity] = useState<string | null>(
+    profileData.activity_level
+  );
+  const [selectedBreed, setSelectedBreed] = useState<string | null>(
+    profileData.breed_pref
+  );
+
+  useEffect(() => {
+    updateProfile({
+      preferredSize: selectedSize,
+      activity_level: selectedActivity,
+      breed_pref: selectedBreed,
+    });
+  }, [selectedSize, selectedActivity, selectedBreed]);
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      {/* Terugknop */}
       <TouchableOpacity style={styles.backButton} onPress={() => router.back()}>
         <Ionicons name="arrow-back" size={24} color="#183A36" />
       </TouchableOpacity>
 
-      {/* Titel */}
       <Text style={styles.title}>
         Geef je voorkeuren op voor je ideale hond
       </Text>
 
-      {/* Voortgangsbalk */}
       <View style={styles.progressBar}>
         <View style={styles.progressFill} />
       </View>
 
-      {/* Grootte van het dier */}
       <View style={styles.formContainer}>
         <Text style={styles.sectionTitle}>Grootte van het dier</Text>
         <RadioButton
@@ -88,7 +97,6 @@ function Preference2() {
         />
       </View>
 
-      {/* Activiteitsniveau */}
       <View style={styles.formContainer}>
         <Text style={styles.sectionTitle}>Activiteitsniveau</Text>
         <RadioButton
@@ -111,7 +119,6 @@ function Preference2() {
         />
       </View>
 
-      {/* Specifieke rasvoorkeuren */}
       <View style={styles.formContainer}>
         <Text style={styles.sectionTitle}>Specifieke rasvoorkeuren?</Text>
         <View style={styles.pickerContainer}>
@@ -130,7 +137,6 @@ function Preference2() {
         </View>
       </View>
 
-      {/* Volgende knop */}
       <TouchableOpacity
         style={styles.button}
         onPress={() => router.push("./motivation")}
@@ -150,14 +156,12 @@ const styles = StyleSheet.create({
     paddingTop: 50,
     backgroundColor: "#F8F8F8",
   },
-
   backButton: {
     position: "absolute",
     top: 50,
     left: 20,
     zIndex: 10,
   },
-
   title: {
     fontSize: 20,
     color: "#183A36",
@@ -166,7 +170,6 @@ const styles = StyleSheet.create({
     fontFamily: "nunitoBold",
     marginLeft: 20,
   },
-
   progressBar: {
     width: "100%",
     height: 6,
@@ -174,19 +177,16 @@ const styles = StyleSheet.create({
     borderRadius: 3,
     marginBottom: 20,
   },
-
   progressFill: {
     width: "88.88%",
     height: "100%",
     backgroundColor: "#97B8A5",
     borderRadius: 3,
   },
-
   formContainer: {
     width: "100%",
     marginBottom: 30,
   },
-
   sectionTitle: {
     fontSize: 16,
     fontWeight: "bold",
@@ -194,7 +194,6 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     fontFamily: "nunitoBold",
   },
-
   pickerContainer: {
     backgroundColor: "#FFF",
     borderRadius: 10,
@@ -202,18 +201,15 @@ const styles = StyleSheet.create({
     borderColor: "#97B8A5",
     marginBottom: 10,
   },
-
   picker: {
     height: 50,
     width: "100%",
   },
-
   radioContainer: {
     flexDirection: "row",
     alignItems: "center",
     marginBottom: 10,
   },
-
   radioCircle: {
     width: 20,
     height: 20,
@@ -222,17 +218,14 @@ const styles = StyleSheet.create({
     borderColor: "#97B8A5",
     marginRight: 10,
   },
-
   radioSelected: {
     backgroundColor: "#97B8A5",
   },
-
   radioLabel: {
     fontSize: 16,
     color: "#183A36",
     fontFamily: "nunitoRegular",
   },
-
   button: {
     backgroundColor: "#97B8A5",
     paddingVertical: 15,
@@ -242,7 +235,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     marginTop: 20,
   },
-
   buttonText: {
     color: "#183A36",
     fontSize: 14,
@@ -252,4 +244,5 @@ const styles = StyleSheet.create({
     fontFamily: "nunitoBold",
   },
 });
+
 export default Preference2;

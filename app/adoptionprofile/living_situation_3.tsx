@@ -1,10 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { useRouter } from "expo-router";
-import { useFonts } from "expo-font";
 import { Ionicons } from "@expo/vector-icons";
+import { useAdoptionProfile } from "../../context/AdoptionProfileContext";
 
-// RadioButton component
 type RadioButtonProps = {
   label: string;
   value: string;
@@ -31,11 +30,15 @@ const RadioButton: React.FC<RadioButtonProps> = ({
 
 function LivingSituationScreen3() {
   const router = useRouter();
+  const { profileData, updateProfile } = useAdoptionProfile();
 
-  const [hasPets, setHasPets] = useState<string | null>(null);
-  const [selectedPets, setSelectedPets] = useState<string[]>([]);
+  const [hasPets, setHasPets] = useState<string | null>(profileData.hasPets);
+  const [selectedPets, setSelectedPets] = useState<string[]>(profileData.pets);
 
-  // Toggle huisdieren
+  useEffect(() => {
+    updateProfile({ hasPets, pets: selectedPets });
+  }, [hasPets, selectedPets]);
+
   const togglePetSelection = (pet: string) => {
     if (selectedPets.includes(pet)) {
       setSelectedPets(selectedPets.filter((item) => item !== pet));
@@ -46,22 +49,17 @@ function LivingSituationScreen3() {
 
   return (
     <View style={styles.container}>
-      {/* Terugknop */}
       <TouchableOpacity style={styles.backButton} onPress={() => router.back()}>
         <Ionicons name="arrow-back" size={24} color="#183A36" />
       </TouchableOpacity>
 
-      {/* Titel */}
       <Text style={styles.title}>Woonsituatie</Text>
 
-      {/* Voortgangsbalk */}
       <View style={styles.progressBar}>
         <View style={styles.progressFill} />
       </View>
 
-      {/* Formulier */}
       <View style={styles.formContainer}>
-        {/* Zijn er huisdieren? */}
         <Text style={styles.sectionTitle}>
           Zijn er andere huisdieren in huis?
         </Text>
@@ -78,7 +76,6 @@ function LivingSituationScreen3() {
           onSelect={setHasPets}
         />
 
-        {/* Selecteer huisdieren als "Ja" is geselecteerd */}
         {hasPets === "ja" && (
           <>
             <Text style={styles.sectionTitle}>Welke huisdieren?</Text>
@@ -109,7 +106,6 @@ function LivingSituationScreen3() {
         )}
       </View>
 
-      {/* Volgende knop */}
       <TouchableOpacity
         style={styles.button}
         onPress={() => router.push("./daily_routine_1")}
@@ -120,7 +116,6 @@ function LivingSituationScreen3() {
   );
 }
 
-// Stijlen
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -130,14 +125,12 @@ const styles = StyleSheet.create({
     paddingTop: 50,
     backgroundColor: "#F8F8F8",
   },
-
   backButton: {
     position: "absolute",
     top: 50,
     left: 20,
     zIndex: 10,
   },
-
   title: {
     fontSize: 20,
     color: "#183A36",
@@ -145,7 +138,6 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontFamily: "nunitoBold",
   },
-
   progressBar: {
     width: "100%",
     height: 6,
@@ -153,19 +145,16 @@ const styles = StyleSheet.create({
     borderRadius: 3,
     marginBottom: 20,
   },
-
   progressFill: {
     width: "33.33%",
     height: "100%",
     backgroundColor: "#97B8A5",
     borderRadius: 3,
   },
-
   formContainer: {
     width: "100%",
     marginBottom: 30,
   },
-
   sectionTitle: {
     fontSize: 16,
     fontWeight: "bold",
@@ -173,13 +162,11 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     fontFamily: "nunitoBold",
   },
-
   radioContainer: {
     flexDirection: "row",
     alignItems: "center",
     marginBottom: 10,
   },
-
   radioCircle: {
     width: 20,
     height: 20,
@@ -188,17 +175,14 @@ const styles = StyleSheet.create({
     borderColor: "#97B8A5",
     marginRight: 10,
   },
-
   radioSelected: {
     backgroundColor: "#97B8A5",
   },
-
   radioLabel: {
     fontSize: 16,
     color: "#183A36",
     fontFamily: "nunitoRegular",
   },
-
   button: {
     backgroundColor: "#97B8A5",
     paddingVertical: 15,
@@ -208,7 +192,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     marginTop: 20,
   },
-
   buttonText: {
     color: "#183A36",
     fontSize: 14,

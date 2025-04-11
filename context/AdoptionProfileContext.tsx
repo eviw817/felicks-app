@@ -6,7 +6,7 @@ interface AdoptionProfileData {
   garden: string | null;
   environment: string | null;
   livingSituation: string | null;
-  childrenInHouse: string | null;
+  hasChildren: string | null;
   childrenAges: number[];
   hasPets: string | null;
   pets: string[];
@@ -20,8 +20,8 @@ interface AdoptionProfileData {
   preferredAge: string | null;
   preferences: string[];
   preferredSize: string | null;
-  activityLevel: string | null;
-  breedPreference: string | null;
+  activity_level: string | null;
+  breed_pref: string | null;
   motivation: string;
 }
 
@@ -30,7 +30,7 @@ const defaultProfileData: AdoptionProfileData = {
   garden: null,
   environment: null,
   livingSituation: null,
-  childrenInHouse: null,
+  hasChildren: null,
   childrenAges: [],
   hasPets: null,
   pets: [],
@@ -44,8 +44,8 @@ const defaultProfileData: AdoptionProfileData = {
   preferredAge: null,
   preferences: [],
   preferredSize: null,
-  activityLevel: null,
-  breedPreference: null,
+  activity_level: null,
+  breed_pref: null,
   motivation: "",
 };
 

@@ -1,58 +1,39 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { useRouter } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 import { Picker } from "@react-native-picker/picker";
-
-type RadioButtonProps = {
-  label: string;
-  value: string;
-  selected: string | null;
-  onSelect: (value: string) => void;
-};
-
-const RadioButton: React.FC<RadioButtonProps> = ({
-  label,
-  value,
-  selected,
-  onSelect,
-}) => (
-  <TouchableOpacity
-    style={styles.radioContainer}
-    onPress={() => onSelect(value)}
-  >
-    <View
-      style={[styles.radioCircle, selected === value && styles.radioSelected]}
-    />
-    <Text style={styles.radioLabel}>{label}</Text>
-  </TouchableOpacity>
-);
+import { useAdoptionProfile } from "../../context/AdoptionProfileContext";
 
 function DailyRoutineScreen_1() {
   const router = useRouter();
+  const { profileData, updateProfile } = useAdoptionProfile();
 
-  const [workHours, setWorkHours] = useState<string | null>(null);
-  const [workFromHome, setWorkFromHome] = useState<string | null>(null);
-  const [petTime, setPetTime] = useState<string | null>(null);
+  const [workHours, setWorkHours] = useState<string | null>(
+    profileData.workHours
+  );
+  const [workFromHome, setWorkFromHome] = useState<string | null>(
+    profileData.workFromHome
+  );
+  const [petTime, setPetTime] = useState<string | null>(profileData.petTime);
+
+  useEffect(() => {
+    updateProfile({ workHours, workFromHome, petTime });
+  }, [workHours, workFromHome, petTime]);
 
   return (
     <View style={styles.container}>
-      {/* Terugknop */}
       <TouchableOpacity style={styles.backButton} onPress={() => router.back()}>
         <Ionicons name="arrow-back" size={24} color="#183A36" />
       </TouchableOpacity>
 
-      {/* Titel */}
       <Text style={styles.title}>Dagelijkse routine</Text>
 
-      {/* Voortgangsbalk */}
       <View style={styles.progressBar}>
         <View style={styles.progressFill} />
       </View>
 
-      {/* Formulier */}
       <View style={styles.formContainer}>
-        {/* Werkuren */}
         <Text style={styles.sectionTitle}>
           Hoeveel uur per dag werk je gemiddeld?
         </Text>
@@ -65,58 +46,57 @@ function DailyRoutineScreen_1() {
             <Picker.Item label="Selecteer een optie" value={null} />
             <Picker.Item label="Ik werk niet" value="ik werk niet" />
             <Picker.Item label="1-4 uur" value="1-4 uur" />
-            <Picker.Item label="5-6 uur" value="5-6-8 uur" />
+            <Picker.Item label="5-6 uur" value="5-6 uur" />
             <Picker.Item label="7-8 uur" value="7-8 uur" />
             <Picker.Item label="Meer dan 8 uur" value="8+ uur" />
           </Picker>
         </View>
 
-        {/* Werk je vanuit huis? */}
         <Text style={styles.sectionTitle}>Werk je vanuit huis?</Text>
-        <RadioButton
-          label="Voltijd"
-          value="voltijd"
-          selected={workFromHome}
-          onSelect={setWorkFromHome}
-        />
-        <RadioButton
-          label="Halftijds"
-          value="halftijds"
-          selected={workFromHome}
-          onSelect={setWorkFromHome}
-        />
-        <RadioButton
-          label="Niet"
-          value="niet"
-          selected={workFromHome}
-          onSelect={setWorkFromHome}
-        />
+        {[
+          { label: "Voltijd", value: "voltijd" },
+          { label: "Halftijds", value: "halftijds" },
+          { label: "Niet", value: "niet" },
+        ].map(({ label, value }) => (
+          <TouchableOpacity
+            key={value}
+            style={styles.radioContainer}
+            onPress={() => setWorkFromHome(value)}
+          >
+            <View
+              style={[
+                styles.radioCircle,
+                workFromHome === value && styles.radioSelected,
+              ]}
+            />
+            <Text style={styles.radioLabel}>{label}</Text>
+          </TouchableOpacity>
+        ))}
 
-        {/* Tijd voor huisdier */}
         <Text style={styles.sectionTitle}>
           Hoeveel tijd per dag kan je besteden aan een huisdier?
         </Text>
-        <RadioButton
-          label="Minder dan 1 uur"
-          value="minder1"
-          selected={petTime}
-          onSelect={setPetTime}
-        />
-        <RadioButton
-          label="1 - 3 uur"
-          value="1-3"
-          selected={petTime}
-          onSelect={setPetTime}
-        />
-        <RadioButton
-          label="3+ uur"
-          value="3+"
-          selected={petTime}
-          onSelect={setPetTime}
-        />
+        {[
+          { label: "Minder dan 1 uur", value: "minder1" },
+          { label: "1 - 3 uur", value: "1-3" },
+          { label: "3+ uur", value: "3+" },
+        ].map(({ label, value }) => (
+          <TouchableOpacity
+            key={value}
+            style={styles.radioContainer}
+            onPress={() => setPetTime(value)}
+          >
+            <View
+              style={[
+                styles.radioCircle,
+                petTime === value && styles.radioSelected,
+              ]}
+            />
+            <Text style={styles.radioLabel}>{label}</Text>
+          </TouchableOpacity>
+        ))}
       </View>
 
-      {/* Volgende knop */}
       <TouchableOpacity
         style={styles.button}
         onPress={() => router.push("./daily_routine_2")}
@@ -136,14 +116,12 @@ const styles = StyleSheet.create({
     paddingTop: 50,
     backgroundColor: "#F8F8F8",
   },
-
   backButton: {
     position: "absolute",
     top: 50,
     left: 20,
     zIndex: 10,
   },
-
   title: {
     fontSize: 20,
     color: "#183A36",
@@ -151,7 +129,6 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontFamily: "nunitoBold",
   },
-
   progressBar: {
     width: "100%",
     height: 6,
@@ -159,19 +136,16 @@ const styles = StyleSheet.create({
     borderRadius: 3,
     marginBottom: 20,
   },
-
   progressFill: {
     width: "44.44%",
     height: "100%",
     backgroundColor: "#97B8A5",
     borderRadius: 3,
   },
-
   formContainer: {
     width: "100%",
     marginBottom: 30,
   },
-
   sectionTitle: {
     fontSize: 16,
     fontWeight: "bold",
@@ -179,7 +153,6 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     fontFamily: "nunitoBold",
   },
-
   pickerContainer: {
     backgroundColor: "#FFF",
     borderRadius: 10,
@@ -187,18 +160,15 @@ const styles = StyleSheet.create({
     borderColor: "#97B8A5",
     marginBottom: 10,
   },
-
   picker: {
     height: 50,
     width: "100%",
   },
-
   radioContainer: {
     flexDirection: "row",
     alignItems: "center",
     marginBottom: 10,
   },
-
   radioCircle: {
     width: 20,
     height: 20,
@@ -207,17 +177,14 @@ const styles = StyleSheet.create({
     borderColor: "#97B8A5",
     marginRight: 10,
   },
-
   radioSelected: {
     backgroundColor: "#97B8A5",
   },
-
   radioLabel: {
     fontSize: 16,
     color: "#183A36",
     fontFamily: "nunitoRegular",
   },
-
   button: {
     backgroundColor: "#97B8A5",
     paddingVertical: 15,
@@ -227,7 +194,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     marginTop: 20,
   },
-
   buttonText: {
     color: "#183A36",
     fontSize: 14,
