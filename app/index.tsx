@@ -1,13 +1,13 @@
 import React, { useEffect } from "react";
 import { View, Image, StyleSheet } from "react-native";
-import { useRouter } from "expo-router"; 
+import { useRouter } from "expo-router";
 
 export default function Index() {
   const router = useRouter();
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      router.replace("/adoption_profile");  // ✅ Gebruik de route als string
+      router.replace("/adoption_profile");
     }, 3000);
 
     return () => clearTimeout(timer);
