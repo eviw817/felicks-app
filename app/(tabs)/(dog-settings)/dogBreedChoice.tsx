@@ -100,31 +100,54 @@ export default function DogBreed() {
                         fontWeight: 'normal',
                         fontSize: 16,
                         padding: 20,
+                        paddingTop: 16,
                     }}
                 >
                     Je gaf aan tijdens het invullen van het formulier dat je graag een labrador wilt.
                 </Text>
-                <Text
-                    style={{
+                <View style={{
+                    width: '100%',
+                    marginBottom: 30,
+                    padding: 20,
+                }}>
+                    {/* Werkuren */}
+                    <Text style={{
                         fontFamily: 'Nunito',
                         fontWeight: 'bold',
-                        fontSize: 18,
-                        padding: 20,
-                        paddingTop: 16,
-                    }}
-                >
-                    Wil je nog steeds voor een labrador gaan als virtuele hond?
-                </Text>
-                <RadioButton label="Ja" value="ja" selected={dogBreed} onSelect={setdogBreed} />
-                <RadioButton label="Nee" value="nee" selected={dogBreed} onSelect={setdogBreed} />
+                        fontSize: 16,
+                        marginBottom: 10,
+                    }}>Welk hondenras zou je liefst hebben?</Text>
+                    <View style={{
+                        backgroundColor: '#FFF',
+                        borderRadius: 10,
+                        borderWidth: 1,
+                        borderColor: '#97B8A5',
+                        marginBottom: 10,
+                    }}>
+                        <Picker
+                            selectedValue={dogBreed}
+                            onValueChange={(itemValue) => setdogBreed(itemValue)}
+                            style={{
+                                height: 54,
+                                width: '100%',
+                            }}
+                        >
+                            <Picker.Item label="Labrador retriever" value="Labrador retriever" />
+                            <Picker.Item label="German shepherd" value="German shepherd" />
+                            <Picker.Item label="Golden retriever" value="Golden retriever" />
+                            <Picker.Item label="Bulldog" value="Bulldog" />
+                            <Picker.Item label="Poodle" value="Poodle" />
+                            <Picker.Item label="Yorkshire terrier" value="Yorkshire terrier" />
+                            <Picker.Item label="Dachshund" value="Dachshund" />
+                            <Picker.Item label="Siberian husky" value="Siberian husky" />
+
+                        </Picker>
+                    </View>
+                </View>
                 <TouchableOpacity
                     disabled={!dogBreed}
                     onPress={() => {
-                        if (dogBreed === 'ja') {
-                            router.push('/dogName');
-                        } else if (dogBreed === 'nee') {
-                            router.push('/dogBreedChoice');
-                        }
+                        if (dogBreed) router.push('/dogName');
                     }}
                     style={{
                         opacity: dogBreed ? 1 : 0.5,

@@ -121,6 +121,7 @@ export default function DogNotifications() {
             fontWeight: "normal",
             fontSize: 16,
             padding: 20,
+            paddingRight: 40,
           }}
         >
           Geef toestemming voor het gebruik van je camera, geluid en meldingen,
@@ -159,7 +160,7 @@ export default function DogNotifications() {
               fontFamily: "Nunito",
               fontWeight: "normal",
               fontSize: 16,
-              paddingRight: 8,
+              paddingRight: 50,
             }}
           >
             Je camera gebruiken om je te helpen bij het maken van foto's van
@@ -214,7 +215,7 @@ export default function DogNotifications() {
               fontFamily: "Nunito",
               fontWeight: "normal",
               fontSize: 16,
-              paddingRight: 8,
+              paddingRight: 40,
             }}
           >
             Je waarschuwen wanneer Cooper honger heeft, wil spelen, wandelen of
@@ -228,6 +229,7 @@ export default function DogNotifications() {
             fontWeight: "normal",
             fontSize: 16,
             padding: 20,
+            paddingRight: 30,
             paddingTop: 12,
           }}
         >
@@ -264,7 +266,7 @@ export default function DogNotifications() {
           </Text>
           <Switch
             style={{
-              marginRight: 20,
+              marginRight: 30,
             }}
             trackColor={{ false: "#cac5c5", true: "#97b8a5" }}
             thumbColor={isSoundEnabled ? "#ececeb" : "#ececeb"}
@@ -291,7 +293,7 @@ export default function DogNotifications() {
           </Text>
           <Switch
             style={{
-              marginRight: 20,
+              marginRight: 30,
             }}
             trackColor={{ false: "#cac5c5", true: "#97b8a5" }}
             thumbColor={isCameraEnabled ? "#ececeb" : "#ececeb"}
@@ -318,7 +320,7 @@ export default function DogNotifications() {
           </Text>
           <Switch
             style={{
-              marginRight: 20,
+              marginRight: 30,
             }}
             trackColor={{ false: "#cac5c5", true: "#97b8a5" }}
             thumbColor={isNotificationEnabled ? "#ececeb" : "#ececeb"}
@@ -330,6 +332,7 @@ export default function DogNotifications() {
           style={{
             padding: 12,
             margin: 20,
+            marginRight: 40,
             paddingHorizontal: 20,
             backgroundColor: "#97B8A5",
             fontWeight: "bold",

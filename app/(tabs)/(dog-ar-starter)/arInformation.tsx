@@ -1,6 +1,6 @@
 import React from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { View, Text, TouchableOpacity } from 'react-native';
+import { ScrollView, View, Text, TouchableOpacity } from 'react-native';
 import { useRouter } from 'expo-router'; 
 import AntDesign from '@expo/vector-icons/AntDesign';
 import { Link } from 'expo-router';
@@ -17,6 +17,12 @@ export default function DogInformation() {
       alignItems: 'center',
       backgroundColor: '#FFFDF9',
       }}>
+      <ScrollView
+        contentContainerStyle={{
+          paddingVertical: 40,
+          justifyContent: "flex-start",
+        }}
+      >
         <TouchableOpacity  
             style={{
             position: "absolute",
@@ -57,6 +63,8 @@ export default function DogInformation() {
                 fontSize: 16,
                 padding: 20,
                 paddingTop: 8,
+                paddingRight: 30,
+                
             }}
             >De Labrador Retriever is een vriendelijke, zachtaardige en actieve hond met een aanhankelijk en gevoelig karakter. Hij is intelligent, betrouwbaar. Labradors zijn sociaal en extravert, waardoor ze goed overweg kunnen met kinderen en andere dieren. Ze zijn speels, liefdevol en werken graag samen, maar kunnen soms een tikje eigenwijs zijn.</Text>
             <View
@@ -80,7 +88,7 @@ export default function DogInformation() {
                  fontFamily: "Nunito",
                  fontWeight: "normal",
                  fontSize: 16,
-                 paddingRight: 8,
+                 paddingRight: 40,
                }}
              >
                Labradors hebben een grote eetlust en kunnen snel te zwaar worden. Maaltijden afwegen en traktaties beperken is belangrijk.
@@ -134,7 +142,7 @@ export default function DogInformation() {
                  fontFamily: "Nunito",
                  fontWeight: "normal",
                  fontSize: 16,
-                 paddingRight: 12,
+                 paddingRight: 40,
                }}
              >
                Labradors zijn nieuwsgierig en kunnen vuilnis doorzoeken of oneetbare dingen opeten.
@@ -148,6 +156,7 @@ export default function DogInformation() {
                 fontSize: 16,
                 padding: 20,
                 paddingTop: 8,
+                paddingRight: 30,
             }}
             >De Labrador Retriever is een liefdevolle en veelzijdige gezinshond, perfect voor actieve baasjes die tijd willen investeren in beweging, training en samenzijn. Met de juiste opvoeding is hij een loyale en vrolijke metgezel.</Text>
             <Link 
@@ -155,6 +164,7 @@ export default function DogInformation() {
                 padding: 12,
                 margin: 20,
                 paddingHorizontal: 20,
+                marginRight: 46,
                 backgroundColor: '#97B8A5',
                 fontWeight: 'bold',
                 borderRadius: 15,
@@ -162,5 +172,6 @@ export default function DogInformation() {
             }}
             href="/demo">DOORGAAN</Link>
         </View>
+        </ScrollView>
       </SafeAreaView>
 )};

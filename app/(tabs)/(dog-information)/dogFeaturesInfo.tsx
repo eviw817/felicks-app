@@ -58,6 +58,7 @@ export default function DogFeature() {
             fontWeight: "normal",
             fontSize: 16,
             padding: 20,
+            paddingRight: 40,
             marginRight: 10,
           }}
         >
@@ -100,7 +101,7 @@ export default function DogFeature() {
                 fontFamily: "Nunito",
                 fontWeight: "normal",
                 fontSize: 16,
-                paddingRight: 8,
+                paddingRight: 40,
               }}
             >
               De Home-knop brengt je altijd terug naar de startpagina.
@@ -170,7 +171,7 @@ export default function DogFeature() {
                 fontFamily: "Nunito",
                 fontWeight: "normal",
                 fontSize: 16,
-                paddingRight: 8,
+                paddingRight: 20,
                 marginRight: 20,
               }}
             >
@@ -269,7 +270,7 @@ export default function DogFeature() {
                 fontFamily: "Nunito",
                 fontWeight: "normal",
                 fontSize: 16,
-                paddingRight: 12,
+                paddingRight: 40,
                 marginRight: 20,
               }}
             >
@@ -295,6 +296,7 @@ export default function DogFeature() {
             fontWeight: "normal",
             fontSize: 16,
             padding: 20,
+            paddingRight: 40,
             paddingTop: 12,
           }}
         >
