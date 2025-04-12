@@ -67,7 +67,7 @@ export default function Demo() {
           key={buttonIndex}
           style={{
             margin: 20,
-            borderRadius: 7,
+            borderRadius: 20,
             overflow: 'hidden',
             width: 100,
             alignItems: 'center',
@@ -76,7 +76,7 @@ export default function Demo() {
           <FontAwesome6
             name={icon}
             size={24}
-            color={state[buttonIndex] ? "#ffffff" : "#ffffff"}
+            color={state[buttonIndex] ? "#97B8A5" : "#183A36"}
             />
           <Button
             onPress={() => {
@@ -87,7 +87,7 @@ export default function Demo() {
           });
             }}
             title={state[buttonIndex] ? `${label}` : `${altLabel}`}
-            color={state[buttonIndex] ? "#183A36" : "#A9A9A9"}
+            color={state[buttonIndex] ? "#183A36" : "#97B8A5"}
           />
         </View>
           );
