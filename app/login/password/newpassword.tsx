@@ -7,7 +7,6 @@ import { Linking } from 'react-native';
 const NewPasswordScreen = () => {
   const router = useRouter();
   const [accessToken, setAccessToken] = useState<string | null>(null);
-
   const [loading, setLoading] = useState(false);
   const [nieuwpasswordFocus, setNieuwPasswordFocus] = useState(false);
   const [herhaalpasswordFocus, setHerhaalPasswordFocus] = useState(false);
@@ -21,78 +20,58 @@ const NewPasswordScreen = () => {
   useEffect(() => {
     const handleUrl = ({ url }: { url: string }) => {
       const parsedUrl = new URL(url);
-  
-      // Zoek naar de 'access_token' in de hash (gebruik URLSearchParams)
-      const params = new URLSearchParams(parsedUrl.hash.replace('#', '')); // Verwijder '#' uit de hash
-      const token = params.get('access_token');  // Haal de access_token op uit de parameters
-  
-      console.log("Token ontvangen:", token);
+      const hashParams = new URLSearchParams(parsedUrl.hash.replace('#', ''));
+      const token = hashParams.get('access_token');
+      
       if (token) {
-        setAccessToken(token); // Zet de token in de state
+        setAccessToken(token);
       } else {
-        console.log("Geen token gevonden in de deep link.");
+        console.error("Geen token gevonden in de hash van de URL.");
       }
     };
   
     const subscription = Linking.addEventListener('url', handleUrl);
   
-    const fetchInitialUrl = async () => {
-      try {
-        const initialUrl = await Linking.getInitialURL();
-        if (initialUrl) {
-          const parsedUrl = new URL(initialUrl);
-  
-          // Zoek naar de 'access_token' in de hash (gebruik URLSearchParams)
-          const params = new URLSearchParams(parsedUrl.hash.replace('#', '')); // Verwijder '#' uit de hash
-          const token = params.get('access_token');  // Haal de access_token op uit de parameters
-  
-          console.log("Token ontvangen:", token);
-          setAccessToken(token); // Zet de token in de state
-        }
-      } catch (error) {
-        console.error("Fout bij het ophalen van de initial URL:", error);
-      }
-    };
-  
-    fetchInitialUrl();
-  
     return () => {
-      subscription?.remove();
+      subscription.remove();
     };
   }, []);
   
-  
-  // Gebruik de token om het wachtwoord te resetten
+
   const handleResetPassword = async () => {
     if (!nieuwpassword || !herhaalpassword) {
       Alert.alert("Fout", "Voer een nieuw wachtwoord in.");
       return;
     }
-  
+
     if (nieuwpassword !== herhaalpassword) {
       Alert.alert("Fout", "De wachtwoorden komen niet overeen.");
       return;
     }
-  
+
     if (!accessToken) {
       Alert.alert("Fout", "Token niet gevonden.");
       return;
     }
-  
+
     setLoading(true);
-  
-    // Reset het wachtwoord via Supabase, inclusief de access_token
-    const { data: user, error } = await supabase.auth.updateUser({
-      password: nieuwpassword,
-    });
-  
-    if (error) {
+
+    try {
+      const { error } = await supabase.auth.updateUser({
+        password: nieuwpassword,
+      });
+
+      if (error) {
+        Alert.alert("Fout", "Er is iets misgegaan bij het resetten van je wachtwoord.");
+      } else {
+        Alert.alert("Succes", "Je wachtwoord is succesvol gereset.");
+        router.push("/login/login");
+      }
+    } catch (error) {
+      console.error("Error tijdens het resetten van het wachtwoord:", error);
       Alert.alert("Fout", "Er is iets misgegaan bij het resetten van je wachtwoord.");
-    } else {
-      Alert.alert("Succes", "Je wachtwoord is succesvol gereset.");
-      router.push("/login/login");
     }
-  
+
     setLoading(false);
   };
 

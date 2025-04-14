@@ -11,14 +11,17 @@ const NotficationEmailScreen = () => {
         let url = event.url;
         console.log("Deep link ontvangen:", url);
     
-        // Controleer of de URL de juiste pagina bevat en de access_token is meegestuurd
-        if (url.includes("login/password/newpassword")) {
-          const parsedUrl = new URL(url);
-          const token = parsedUrl.searchParams.get('access_token');
-          console.log("Token ontvangen:", token);
+        // Zowel search als hash uitlezen
+        const parsedUrl = new URL(url);
+        const searchParams = new URLSearchParams(parsedUrl.search);
+        const hashParams = new URLSearchParams(parsedUrl.hash.replace('#', ''));
     
+        const token = searchParams.get('access_token') || hashParams.get('access_token');
+    
+        if (url.includes("login/password/newpassword")) {
           if (token) {
-            // Wanneer je de token hebt, stuur de gebruiker naar de juiste pagina met de token
+            console.log("Token ontvangen:", token);
+            // Stuur gebruiker naar de nieuwe wachtwoord-pagina
             router.replace(`/login/password/newpassword?access_token=${token}`);
           } else {
             Alert.alert("Fout", "Geen geldig token in de deep link.");
@@ -26,13 +29,13 @@ const NotficationEmailScreen = () => {
         }
       };
     
-      // Luister naar de deep link
       const subscription = Linking.addEventListener("url", handleDeepLink);
     
       return () => {
-        subscription.remove(); // Verwijder de listener wanneer de component wordt verwijderd
+        subscription.remove();
       };
     }, []);
+    
   
   return (
     <View style={styles.container}>

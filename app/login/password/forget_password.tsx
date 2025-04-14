@@ -20,8 +20,6 @@ const ForgetPasswordScreen = () => {
 
     setLoading(true);
 
-    // const { error } = await supabase.auth.resetPasswordForEmail(email);
-
     const { error } = await supabase.auth.resetPasswordForEmail(email, {
       redirectTo: 'com.anonymous.felicksapp://login/password/newpassword'
     });
@@ -55,7 +53,7 @@ const ForgetPasswordScreen = () => {
         value={email}
       />
   
-      <TouchableOpacity style={styles.button} onPress={async () => await handleResetPassword()}>
+      <TouchableOpacity style={styles.button} onPress={handleResetPassword}>
         <Text style={styles.buttonText}>VERZEND</Text>
       </TouchableOpacity>
 
