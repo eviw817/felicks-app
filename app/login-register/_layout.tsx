@@ -30,7 +30,7 @@ export default function RootLayout() {
           SecureStore.setItemAsync('access_token', accessToken).then(() => {
             // console.log('Access token opgeslagen!');
             // Navigeer naar de juiste pagina
-            router.push('/login/password/newpassword'); // Pas dit pad aan naar waar je de gebruiker wilt sturen
+            router.push('/login-register/login/password/newpassword'); // Pas dit pad aan naar waar je de gebruiker wilt sturen
           });
         } else {
           console.log('Geen access_token gevonden in deeplink');

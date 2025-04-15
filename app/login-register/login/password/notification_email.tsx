@@ -9,7 +9,7 @@ const NotficationEmailScreen = () => {
     useEffect(() => {
       const handleDeepLink = (event: { url: string }) => {
         const { url } = event;
-        console.log("Gevangen URL:", url); // Dit helpt je te debuggen
+        // console.log("Gevangen URL:", url); // Dit helpt je te debuggen
     
         if (url) {
           try {
@@ -17,8 +17,8 @@ const NotficationEmailScreen = () => {
             const hashParams = new URLSearchParams(parsedUrl.hash.replace('#', '')); // Verwijder de '#'
             const token = hashParams.get('access_token'); // Verkrijg het token uit de URL
     
-            if (url.includes("login/password/newpassword") && token) {
-              router.replace(`/login/password/newpassword?access_token=${token}`);
+            if (url.includes("/login-register/login/password/newpassword") && token) {
+              router.replace(`/login-register/login/password/newpassword?access_token=${token}`);
             } else {
               Alert.alert("Fout", "Geen geldig token in de deep link.");
             }

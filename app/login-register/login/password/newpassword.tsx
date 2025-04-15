@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, StyleSheet, TouchableOpacity, TextInput, Alert } from "react-native";
 import { useRouter, useLocalSearchParams } from "expo-router";
-import { supabase } from "../../../lib/supabase";
+import { supabase } from "../../../../lib/supabase";
 import * as Linking from "expo-linking";
 import * as SecureStore from 'expo-secure-store';
 
@@ -40,7 +40,7 @@ const NewPasswordScreen = () => {
         // Sla het token op in SecureStore
         SecureStore.setItemAsync('access_token', accessToken).then(() => {
           // console.log("Access token opgeslagen!");
-          router.push('/login/password/newpassword'); // Navigeer naar de juiste pagina
+          router.push('/login-register/login/password/newpassword'); // Navigeer naar de juiste pagina
         }).catch(error => {
           console.log("Fout bij het opslaan van de token:", error);
         });
@@ -97,7 +97,7 @@ const NewPasswordScreen = () => {
         Alert.alert("Fout", error.message);
       } else {
         Alert.alert("Succes", "Je wachtwoord is succesvol gereset!");
-        router.push("/login/login");
+        router.push("/login-register/login/login");
       }
     } catch (err) {
       Alert.alert("Fout", "Er is iets mis gegaan bij het resetten van je wachtwoord.");
