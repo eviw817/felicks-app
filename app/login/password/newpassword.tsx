@@ -1,12 +1,16 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, StyleSheet, TouchableOpacity, TextInput, Alert } from "react-native";
-import { useRouter  } from "expo-router";
+import { useRouter, useLocalSearchParams } from "expo-router";
 import { supabase } from "../../../lib/supabase";
-import { Linking } from 'react-native';
+import * as Linking from "expo-linking";
+import * as SecureStore from 'expo-secure-store';
 
 const NewPasswordScreen = () => {
   const router = useRouter();
+  const params = useLocalSearchParams();
   const [accessToken, setAccessToken] = useState<string | null>(null);
+  const [refreshToken, setRefreshToken] = useState<string | null>(null);
+
   const [loading, setLoading] = useState(false);
   const [nieuwpasswordFocus, setNieuwPasswordFocus] = useState(false);
   const [herhaalpasswordFocus, setHerhaalPasswordFocus] = useState(false);
@@ -18,62 +22,90 @@ const NewPasswordScreen = () => {
   const isHerhaalPasswordFilled = herhaalpassword.trim() !== '';
   
   useEffect(() => {
-    const handleUrl = ({ url }: { url: string }) => {
+    const handleDeepLink = (event: { url: string }) => {
+      const { url } = event;
+      // console.log("Deep link ontvangen:", url);
+  
+      // Verwerk de URL om zowel query als fragment parameters te verkrijgen
       const parsedUrl = new URL(url);
-      const hashParams = new URLSearchParams(parsedUrl.hash.replace('#', ''));
-      const token = hashParams.get('access_token');
-      
-      if (token) {
-        setAccessToken(token);
+      const queryParams = new URLSearchParams(parsedUrl.search);
+      const fragmentParams = new URLSearchParams(parsedUrl.hash.replace('#', ''));
+  
+      const accessToken = queryParams.get('access_token') || fragmentParams.get('access_token');
+      const refreshToken = queryParams.get('refresh_token') || fragmentParams.get('refresh_token');
+  
+      if (accessToken) {
+        // console.log("Access token ontvangen:", accessToken);
+  
+        // Sla het token op in SecureStore
+        SecureStore.setItemAsync('access_token', accessToken).then(() => {
+          // console.log("Access token opgeslagen!");
+          router.push('/login/password/newpassword'); // Navigeer naar de juiste pagina
+        }).catch(error => {
+          console.log("Fout bij het opslaan van de token:", error);
+        });
       } else {
-        console.error("Geen token gevonden in de hash van de URL.");
+        console.log("Geen access_token gevonden in deeplink.");
       }
     };
   
-    const subscription = Linking.addEventListener('url', handleUrl);
+    // Luister naar deeplinks
+    const linkingListener = Linking.addEventListener('url', handleDeepLink);
   
+    // Cleanup listener bij unmount
     return () => {
-      subscription.remove();
+      linkingListener.remove();
     };
-  }, []);
+  }, [router]);
   
-
+  
   const handleResetPassword = async () => {
     if (!nieuwpassword || !herhaalpassword) {
       Alert.alert("Fout", "Voer een nieuw wachtwoord in.");
       return;
     }
-
+  
     if (nieuwpassword !== herhaalpassword) {
       Alert.alert("Fout", "De wachtwoorden komen niet overeen.");
       return;
     }
-
-    if (!accessToken) {
-      Alert.alert("Fout", "Token niet gevonden.");
+  
+    // Haal het token op uit SecureStore
+    const storedAccessToken = await SecureStore.getItemAsync('access_token');
+    
+    if (!storedAccessToken) {
+      Alert.alert("Fout", "Token niet gevonden!");
       return;
     }
-
+  
+    // Stel de Supabase sessie in met het access token
+    const storedRefreshToken = await SecureStore.getItemAsync('refresh_token');
+    if (!storedRefreshToken) {
+      Alert.alert("Fout", "Refresh token niet gevonden!");
+      return;
+    }
+    supabase.auth.setSession({ access_token: storedAccessToken, refresh_token: storedRefreshToken });
+  
     setLoading(true);
-
+  
     try {
-      const { error } = await supabase.auth.updateUser({
+      const { data, error } = await supabase.auth.updateUser({
         password: nieuwpassword,
       });
-
+  
       if (error) {
-        Alert.alert("Fout", "Er is iets misgegaan bij het resetten van je wachtwoord.");
+        Alert.alert("Fout", error.message);
       } else {
-        Alert.alert("Succes", "Je wachtwoord is succesvol gereset.");
+        Alert.alert("Succes", "Je wachtwoord is succesvol gereset!");
         router.push("/login/login");
       }
-    } catch (error) {
-      console.error("Error tijdens het resetten van het wachtwoord:", error);
-      Alert.alert("Fout", "Er is iets misgegaan bij het resetten van je wachtwoord.");
+    } catch (err) {
+      Alert.alert("Fout", "Er is iets mis gegaan bij het resetten van je wachtwoord.");
     }
-
+  
     setLoading(false);
   };
+  
 
   return (
     <View style={styles.container}>
