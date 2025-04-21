@@ -78,43 +78,56 @@ const ProfileEditScreen = () => {
       fetchProfile();
     }, []);
 
-    const updateProfile = async (additionalFields: { [key: string]: any } = {}) => {
+    const updateAvatar = async (url: string) => {
+      const { error } = await supabase
+        .from("profiles")
+        .update({ avatar_url: url })
+        .eq("id", session?.user.id);
+  
+      if (error) {
+        Alert.alert("Fout", "Er is een probleem bij het updaten van je profielfoto.");
+      } else {
+        Alert.alert("Succes", "Je profielfoto is bijgewerkt!");
+      }
+    };
+  
+    const updateProfile = async () => {
       setLoading(true);
-    
+  
       const { error: emailError } = await supabase.auth.updateUser({
-        email: email,  
+        email: email,
       });
-    
+  
       if (emailError) {
         console.error("Fout bij het bijwerken van de email:", emailError.message);
         Alert.alert("Fout", "Er is een probleem bij het bijwerken van je e-mailadres.");
         setLoading(false);
         return;
       }
-
+  
       const updatedFields: { [key: string]: any } = {};
-    
+  
       if (firstname !== "") updatedFields.firstname = firstname;
       if (lastname !== "") updatedFields.lastname = lastname;
       if (birthdate !== "") updatedFields.birthdate = `${year}-${month}-${day}`;
-    
+  
       if (Object.keys(updatedFields).length === 0) {
         Alert.alert("Geen wijzigingen", "Je hebt geen gegevens gewijzigd.");
         setLoading(false);
         return;
       }
-    
+  
       const { error: profileError } = await supabase
         .from("profiles")
-        .update({ ...updatedFields, ...additionalFields })
+        .update(updatedFields)
         .eq("id", session?.user.id);
-    
+  
       if (profileError) {
         Alert.alert("Fout", "Er is een probleem bij het bijwerken van je profiel.");
         setLoading(false);
         return;
       }
-    
+  
       Alert.alert("Succes", "Je profiel is bijgewerkt!");
       router.push("/profile/profile");
       setLoading(false);
@@ -131,7 +144,7 @@ const ProfileEditScreen = () => {
         if (error) {
           console.error("Error fetching avatar:", error.message);
         } else {
-          console.log("Fetched Avatar URL:", data?.avatar_url); // ✅ Debugging
+          //console.log("Fetched Avatar URL:", data?.avatar_url); // ✅ Debugging
           setAvatarUrl(data?.avatar_url);
         }
       }
@@ -161,7 +174,7 @@ const ProfileEditScreen = () => {
             url={avatarUrl}
             onUpload={(url: string) => {
               setAvatarUrl(url)
-              updateProfile({ avatar_url: url })
+              updateAvatar(url);
             }}
           />
         </View>
@@ -258,20 +271,21 @@ const ProfileEditScreen = () => {
 
     {/* Wachtwoord input */}
     <Text style={styles.label}>Wachtwoord</Text>
-    <TextInput
-      style={[
-        styles.input, 
-        passwordFocus || isPasswordFilled ? styles.focusedInput : styles.unfocusedInput
-      ]}
-      placeholder="Wachtwoord" 
-      placeholderTextColor="rgba(151, 184, 165, 0.5)"
-      secureTextEntry={!isPasswordVisible}
-      onFocus={() => setIsEditingPassword(true)}
-      onBlur={() => setIsEditingPassword(false)}
-      onChangeText={setPassword}
-      value={isPasswordVisible ? password : "******"} 
-      onPress={() => setModalVisible(true)} 
-    />
+    <TouchableOpacity
+        style={[
+          styles.input,
+          passwordFocus || isPasswordFilled ? styles.focusedInput : styles.unfocusedInput,
+          { justifyContent: 'center' } // centreren van de tekst
+        ]}
+        onPress={() => setModalVisible(true)}
+        onFocus={() => setEmailFocus(true)} 
+        onBlur={() => setEmailFocus(false)} 
+        activeOpacity={0.7}
+      >
+        <Text style={{ color: '#183A36'}}>
+          ****** {/* Je zou hier eventueel `password.length` sterretjes kunnen tonen */}
+        </Text>
+      </TouchableOpacity>
     {/* Popup (modal) */}
     <Modal transparent={true} visible={modalVisible} animationType="fade">
         <View style={styles.modalBackground}>
