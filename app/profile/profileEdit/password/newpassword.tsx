@@ -1,11 +1,16 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, StyleSheet, TouchableOpacity, TextInput, Alert } from "react-native";
-import { useRouter } from "expo-router";  
+import { useRouter, useLocalSearchParams } from "expo-router";
 import { supabase } from "../../../../lib/supabase";
-import * as Linking from 'expo-linking';
+import * as Linking from "expo-linking";
+import * as SecureStore from 'expo-secure-store';
 
 const NewPasswordScreen = () => {
   const router = useRouter();
+  const params = useLocalSearchParams();
+  const [accessToken, setAccessToken] = useState<string | null>(null);
+  const [refreshToken, setRefreshToken] = useState<string | null>(null);
+
   const [loading, setLoading] = useState(false);
   const [nieuwpasswordFocus, setNieuwPasswordFocus] = useState(false);
   const [herhaalpasswordFocus, setHerhaalPasswordFocus] = useState(false);
@@ -15,55 +20,101 @@ const NewPasswordScreen = () => {
 
   const isNieuwPasswordFilled = nieuwpassword.trim() !== '';
   const isHerhaalPasswordFilled = herhaalpassword.trim() !== '';
-
-  useEffect(() => {
-    const checkSession = async () => {
-      const { data, error } = await supabase.auth.getSession();
-      if (!data.session || error) {
-        Alert.alert("Fout", "Geen geldige reset-link. Open de link in je e-mail.");
-        router.replace("/profile/profileEdit/profileEdit"); // Terug naar login als er geen sessie is
-      }
-    };
-    checkSession();
-  }, []);
-
+  
   useEffect(() => {
     const handleDeepLink = (event: { url: string }) => {
-      let url = event.url;
+      const { url } = event;
       console.log("Deep link ontvangen:", url);
-      
-      if (url.includes("/profile/profileEdit/password/newpassword")) {
-        router.replace("/profile/profileEdit/password/newpassword");
+
+      const parsedUrl = new URL(url);
+      const queryParams = new URLSearchParams(parsedUrl.search);
+      const fragmentParams = new URLSearchParams(parsedUrl.hash.replace('#', ''));
+
+      const accessToken = queryParams.get('access_token') || fragmentParams.get('access_token');
+      const refreshToken = queryParams.get('refresh_token') || fragmentParams.get('refresh_token');
+
+      if (accessToken && refreshToken) {
+        // Sla de tokens op in SecureStore
+        SecureStore.setItemAsync('access_token', accessToken).then(() => {
+          console.log("Access token opgeslagen!");
+        }).catch(error => {
+          console.log("Fout bij het opslaan van access token:", error);
+        });
+
+        SecureStore.setItemAsync('refresh_token', refreshToken).then(() => {
+          console.log("Refresh token opgeslagen!");
+
+          // Navigeer naar de juiste pagina op basis van de URL
+          if (url.includes("profileEdit")) {
+            router.push('/profile/profileEdit/password/newpassword'); // Voor profiel bewerking
+          } else {
+            router.push('/'); // Voor inloggen
+          }
+        }).catch(error => {
+          console.log("Fout bij het opslaan van refresh token:", error);
+        });
+      } else {
+        console.log("Geen geldige tokens gevonden in deeplink.");
       }
     };
 
-    // Luisteren naar deep links
-    const subscription = Linking.addEventListener("url", handleDeepLink);
+    // Luister naar deeplinks
+    const linkingListener = Linking.addEventListener('url', handleDeepLink);
 
+    // Cleanup listener bij unmount
     return () => {
-      subscription.remove();
+      linkingListener.remove();
     };
-  }, []);
+}, [router]);
 
+  
   const handleResetPassword = async () => {
+    if (!nieuwpassword || !herhaalpassword) {
+      Alert.alert("Fout", "Voer een nieuw wachtwoord in.");
+      return;
+    }
+  
     if (nieuwpassword !== herhaalpassword) {
       Alert.alert("Fout", "De wachtwoorden komen niet overeen.");
       return;
     }
-
-    setLoading(true);
-
-    const { error } = await supabase.auth.updateUser({ password: nieuwpassword });
-
-    if (error) {
-      Alert.alert("Fout", "Het wachtwoord kon niet worden gewijzigd.");
-    } else {
-      Alert.alert("Succes", "Je wachtwoord is succesvol gewijzigd.");
-      router.push("/profile/profile"); // Terug naar login na reset
+  
+    // Haal het token op uit SecureStore
+    const storedAccessToken = await SecureStore.getItemAsync('access_token');
+    
+    if (!storedAccessToken) {
+      Alert.alert("Fout", "Token niet gevonden!");
+      return;
     }
-
+  
+    // Stel de Supabase sessie in met het access token
+    const storedRefreshToken = await SecureStore.getItemAsync('refresh_token');
+    if (!storedRefreshToken) {
+      Alert.alert("Fout", "Refresh token niet gevonden!");
+      return;
+    }
+    supabase.auth.setSession({ access_token: storedAccessToken, refresh_token: storedRefreshToken });
+  
+    setLoading(true);
+  
+    try {
+      const { data, error } = await supabase.auth.updateUser({
+        password: nieuwpassword,
+      });
+  
+      if (error) {
+        Alert.alert("Fout", error.message);
+      } else {
+        Alert.alert("Succes", "Je wachtwoord is succesvol gereset!");
+        router.push("/profile/profile");
+      }
+    } catch (err) {
+      Alert.alert("Fout", "Er is iets mis gegaan bij het resetten van je wachtwoord.");
+    }
+  
     setLoading(false);
   };
+  
 
   return (
     <View style={styles.container}>
@@ -100,7 +151,7 @@ const NewPasswordScreen = () => {
         value={herhaalpassword}
       />
 
-      <TouchableOpacity style={styles.button} >      {/* onPress={async () => await handleResetPassword()}*/}
+      <TouchableOpacity style={styles.button} onPress={handleResetPassword} disabled={loading}>
         <Text style={styles.buttonText}>OPSLAAN</Text>
       </TouchableOpacity>
     </View>

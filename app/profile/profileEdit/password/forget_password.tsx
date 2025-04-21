@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { View, Text, StyleSheet, TouchableOpacity, TextInput, Alert } from "react-native";
 import { useRouter } from "expo-router";  
-import { supabase } from "../../../../lib/supabase";
+import { supabase } from "../../../../lib/supabase"; // Zorg ervoor dat je het juiste pad naar je supabase-bestand gebruikt
 
 const ForgetPasswordScreen = () => {
   const router = useRouter();
@@ -20,10 +20,8 @@ const ForgetPasswordScreen = () => {
 
     setLoading(true);
 
-    // const { error } = await supabase.auth.resetPasswordForEmail(email);
-
     const { error } = await supabase.auth.resetPasswordForEmail(email, {
-      redirectTo: 'com.anonymous.felicksapp://profile/profileEdit/password/newpassword'
+      redirectTo: 'com.anonymous.felicksapp://profile/profileEdit/password/newpassword',
     });
 
     if (error) {
@@ -55,7 +53,7 @@ const ForgetPasswordScreen = () => {
         value={email}
       />
   
-      <TouchableOpacity style={styles.button} onPress={async () => await handleResetPassword()}>
+      <TouchableOpacity style={styles.button} onPress={handleResetPassword}>
         <Text style={styles.buttonText}>VERZEND</Text>
       </TouchableOpacity>
 
