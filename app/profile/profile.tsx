@@ -1,4 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
+import { useFocusEffect } from "@react-navigation/native";
+
 import { View, Text, TouchableOpacity, StyleSheet, Alert } from "react-native";
 import { useRouter } from "expo-router";
 import { supabase } from "../../lib/supabase";
@@ -17,50 +19,58 @@ const ProfileScreen = () => {
       const [userId, setUserId] = useState<string | null>(null);
       const [loading, setLoading] = useState(true);
 
+      const fetchUserData = async () => {
+        setLoading(true);
+        try {
+          const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+          if (sessionError) throw new Error('Kan sessie niet ophalen.');
+    
+          setSession(session);
+    
+          if (session?.user?.id) {
+            const { data, error } = await supabase
+              .from("profiles")
+              .select("firstname, lastname, avatar_url")
+              .eq("id", session.user.id)
+              .single();
+    
+            if (error) throw new Error('Er is een probleem bij het ophalen van je profielgegevens.');
+    
+            setFirstname(data.firstname || "");
+            setLastname(data.lastname || "");
+            setEmail(session.user.email || '');
+            setAvatarUrl(data.avatar_url || null);
+          }
+        } catch (error) {
+          console.error(error);
+        } finally {
+          setLoading(false);
+        }
+      };
+    
+      // Vernieuw de sessie en email
+      const updateSessionAndEmail = async () => {
+        const { data: refreshedSession, error } = await supabase.auth.getSession();
+        if (error) {
+          console.error("Kon sessie niet vernieuwen", error);
+          return;
+        }
+        setSession(refreshedSession.session);
+        setEmail(refreshedSession.session?.user?.email ?? '');
+      };
+    
+      // Roep de sessie update aan wanneer de pagina weer zichtbaar wordt
+      useFocusEffect(
+        useCallback(() => {
+          updateSessionAndEmail();
+        }, [])
+      );
+    
+      // Haal gebruikersgegevens op bij het laden van de pagina
       useEffect(() => {
-        const fetchUserData = async () => {
-            setLoading(true); // Start loading
-            const { data: { session }, error: sessionError } = await supabase.auth.getSession();
-
-            if (sessionError) {
-                Alert.alert("Fout", "Kan sessie niet ophalen.");
-                setLoading(false);
-                return;
-            }
-
-            setSession(session);
-
-            if (!session || !session.user?.id) {
-                setLoading(false);
-                return;
-            }
-
-            try {
-                const { data, error } = await supabase
-                    .from("profiles")
-                    .select("firstname, lastname, avatar_url")
-                    .eq("id", session.user.id)
-                    .single();
-
-                if (error) {
-                    Alert.alert("Fout", "Er is een probleem bij het ophalen van je profielgegevens.");
-                    setLoading(false);
-                    return;
-                }
-
-                setFirstname(data.firstname || "");
-                setLastname(data.lastname || "");
-                setEmail(session.user.email || '');
-                setAvatarUrl(data.avatar_url || null);
-            } catch (error) {
-                console.error("Fout bij ophalen gegevens:", error);
-            } finally {
-                setLoading(false); 
-            }
-        };
-
         fetchUserData();
-    }, []);
+      }, []);
+    
 
     return (
       <View style={styles.container}>

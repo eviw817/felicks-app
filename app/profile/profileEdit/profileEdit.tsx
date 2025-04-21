@@ -1,6 +1,7 @@
 import React from "react";
-import { SafeAreaView } from 'react-native';
-import { View, Text, Image, TouchableOpacity, StyleSheet, TextInput, Modal, Alert } from "react-native";
+
+import { View, Text, Image, TouchableOpacity, StyleSheet, TextInput, Modal, Alert} from "react-native";
+import { SafeAreaView, KeyboardAvoidingView, Platform, ScrollView }from "react-native";
 import { useRouter } from "expo-router";
 import { useState, useEffect } from 'react'
 import { Picker } from '@react-native-picker/picker';
@@ -29,6 +30,7 @@ const ProfileEditScreen = () => {
     const [session, setSession] = useState<Session | null>(null);
     const [avatarUrl, setAvatarUrl] = useState<string | null>(null)
     const [uploading, setUploading] = useState(false)
+    const cleanEmail = email.trim();
 
      // Geboortedatum state
      const [day, setDay] = useState('01');
@@ -41,74 +43,60 @@ const ProfileEditScreen = () => {
     const isEmailFilled = email.trim() !== '';
     const isPasswordFilled = password.trim() !== '';
 
+    
     useEffect(() => {
-      const fetchProfile = async () => {
-
-        const { data: { session } } = await supabase.auth.getSession();
-        setSession(session);
-
-        if(session){
-        const { data, error } = await supabase
-          .from("profiles")
-          .select()
-          .eq("id", session.user.id)
-          .single(); 
-    
-          if (error) {
-            Alert.alert("Fout", "Er is een probleem bij het ophalen van je profielgegevens.");
-            return;
-          }
-    
-        if (data) {
-          setFirstname(data.firstname || ""); 
-          setLastname(data.lastname || "");
-          setEmail(session.user.email || '');
-          setBirthdate(data.birthdate || "");
-
-          if (data.birthdate) {
-            const [yearValue, monthValue, dayValue] = data.birthdate.split("-");
-            setYear(yearValue);
-            setMonth(monthValue);
-            setDay(dayValue);
-          }}
-        }
+      const fetchSession = async () => {
+          const { data: { session } } = await supabase.auth.getSession();
+          setSession(session);  // Zorg ervoor dat de session wordt geladen.
       };
-    
-      fetchProfile();
-    }, []);
 
-    const updateAvatar = async (url: string) => {
-      const { error } = await supabase
-        .from("profiles")
-        .update({ avatar_url: url })
-        .eq("id", session?.user.id);
-  
-      if (error) {
-        Alert.alert("Fout", "Er is een probleem bij het updaten van je profielfoto.");
-      } else {
-        // Alert.alert("Succes", "Je profielfoto is bijgewerkt!");
-      }
-    };
-  
+      fetchSession();  // Haal de sessie op
+      }, []);
+
+      useEffect(() => {
+        if (session?.user) {
+            const fetchProfile = async () => {
+                const { data, error } = await supabase
+                    .from("profiles")
+                    .select()
+                    .eq("id", session.user.id)
+                    .single();
+
+                if (error) {
+                    Alert.alert("Fout", "Er is een probleem bij het ophalen van je profielgegevens.");
+                    return;
+                }
+
+                if (data) {
+                    setFirstname(data.firstname || "");
+                    setLastname(data.lastname || "");
+                    setEmail(session.user.email || '');
+                    setBirthdate(data.birthdate || "");
+
+                    if (data.birthdate) {
+                        const [yearValue, monthValue, dayValue] = data.birthdate.split("-");
+                        setYear(yearValue);
+                        setMonth(monthValue);
+                        setDay(dayValue);
+                    }
+                }
+            };
+
+            fetchProfile();  // Haal profiel op zodra de sessie geladen is
+        }
+    }, [session]);
+
+      
     const updateProfile = async () => {
       setLoading(true);
-  
-      const { error: emailError } = await supabase.auth.updateUser({
-        email: email,
-      });
-  
-      if (emailError) {
-        console.error("Fout bij het bijwerken van de email:", emailError.message);
-        Alert.alert("Fout", "Er is een probleem bij het bijwerken van je e-mailadres.");
-        setLoading(false);
-        return;
-      }
-  
+
       const updatedFields: { [key: string]: any } = {};
   
       if (firstname !== "") updatedFields.firstname = firstname;
       if (lastname !== "") updatedFields.lastname = lastname;
       if (birthdate !== "") updatedFields.birthdate = `${year}-${month}-${day}`;
+
+      if (email !== session?.user.email) updatedFields.email = email;
   
       if (Object.keys(updatedFields).length === 0) {
         Alert.alert("Geen wijzigingen", "Je hebt geen gegevens gewijzigd.");
@@ -126,10 +114,46 @@ const ProfileEditScreen = () => {
         setLoading(false);
         return;
       }
+
+      // Update e-mail in Supabase Auth
+      if (email !== session?.user.email) {
+
+        // console.log("Updating email:", cleanEmail);
+        try {
+            const { data, error } = await supabase.auth.updateUser({
+              email: cleanEmail,
+            },
+            {
+              emailRedirectTo: 'com.anonymous.felicksapp://profile/profile', // Dit is de deep link naar je profielpagina
+            });
+            if (error) {
+              Alert.alert("Fout", "Er is een probleem bij het bijwerken van je e-mailadres.");
+              console.error("Email update error: ", error);
+            } else {
+              Alert.alert("Succes", "Je e-mailadres is succesvol bijgewerkt. Er wordt een bevestigingsmail verzonden naar je nieuwe e-mailadres.");
+            }
+          } catch (error) {
+            Alert.alert("Fout", "Er is een probleem bij het bijwerken van je e-mailadres.");
+            console.error("Error updating email: ", error);
+          }
+        }
+      
+        // Redirect after successful profile update
+        router.push("/profile/profile");
+        setLoading(false);
+      };
+
+    const updateAvatar = async (url: string) => {
+      const { error } = await supabase
+        .from("profiles")
+        .update({ avatar_url: url })
+        .eq("id", session?.user.id);
   
-      // Alert.alert("Succes", "Je profiel is bijgewerkt!");
-      router.push("/profile/profile");
-      setLoading(false);
+      if (error) {
+        Alert.alert("Fout", "Er is een probleem bij het updaten van je profielfoto.");
+      } else {
+        // Alert.alert("Succes", "Je profielfoto is bijgewerkt!");
+      }
     };
 
     useEffect(() => {
@@ -156,6 +180,11 @@ const ProfileEditScreen = () => {
     
     
     return (
+      <KeyboardAvoidingView 
+      style={{ flex: 1 }} 
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+    >
+      <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
       <SafeAreaView  style={styles.container} >
          <View style={styles.header}>
          <TouchableOpacity onPress={() => router.push("/profile/profile")} style={styles.backButton}>
@@ -321,6 +350,8 @@ const ProfileEditScreen = () => {
     </TouchableOpacity>
 
   </SafeAreaView>
+  </ScrollView>
+  </KeyboardAvoidingView>
     );
   };
 
