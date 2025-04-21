@@ -14,8 +14,8 @@ export default function Avatar({ url, size = 150, onUpload, showUploadButton = t
   const [uploading, setUploading] = useState(false)
   const [avatarUrl, setAvatarUrl] = useState<string | null>(null)
   const [modalVisible, setModalVisible] = useState(false);
-  const openModal = () => setModalVisible(true);
-  const closeModal = () => setModalVisible(false);  
+  const [chooseImageModalVisible, setChooseImageModalVisible] = useState(false)
+  const [removeModalVisible, setRemoveModalVisible] = useState(false)
   const avatarSize = { height: size, width: size }
 
   useEffect(() => {
@@ -41,105 +41,13 @@ export default function Avatar({ url, size = 150, onUpload, showUploadButton = t
       }
     }
   }
-
-  // async function uploadAvatar() {
-  //   try {
-  //     setUploading(true);
-
-  //     // Vraag de gebruiker of ze de camera of galerij willen gebruiken
-  //     Alert.alert(
-  //       'Kies een foto',
-  //       'Selecteer of maak een foto of verwijder de huidige.',
-  //       [
-  //         { text: 'Camera', onPress: async () => await selectImage('camera') },
-  //         { text: 'Galerij', onPress: async () => await selectImage('gallery') },
-  //         { text: 'Annuleren', onPress: () => {}, style: 'cancel' }, 
-  //         { text: 'Verwijderen', onPress: handleRemoveAvatar },
-  //       ]
-  //     );
-
-  //     // Functie om de afbeelding te selecteren afhankelijk van de keuze
-  //     const selectImage = async (source: 'camera' | 'gallery') => {
-  //       let result;
-  //       if (source === 'camera') {
-  //         result = await ImagePicker.launchCameraAsync({
-  //           mediaTypes: ['images'], 
-  //           allowsEditing: true,
-  //           quality: 1,
-  //         });
-  //       } else {
-  //         result = await ImagePicker.launchImageLibraryAsync({
-  //           mediaTypes: ['images'], 
-  //           allowsEditing: true,
-  //           quality: 1,
-  //         });
-  //       }
-
-  //       if (result.canceled || !result.assets || result.assets.length === 0) {
-  //         console.log('User cancelled image picker.');
-  //         return;
-  //       }
-
-  //       const image = result.assets[0];
-  //       console.log('Got image', image);
-
-  //       if (!image.uri) {
-  //         throw new Error('No image uri!');
-  //       }
-
-  //       const arraybuffer = await fetch(image.uri).then((res) => res.arrayBuffer());
-
-  //       const fileExt = image.uri.split('.').pop()?.toLowerCase() ?? 'jpeg';
-  //       const path = `${Date.now()}.${fileExt}`;
-  //       const { data, error: uploadError } = await supabase.storage
-  //         .from('avatars')
-  //         .upload(path, arraybuffer, {
-  //           contentType: image.mimeType ?? 'image/jpeg',
-  //         });
-
-  //       if (uploadError) {
-  //         throw uploadError;
-  //       }
-
-  //       onUpload(data.path);
-  //     };
-  //   } catch (error) {
-  //     if (error instanceof Error) {
-  //       Alert.alert(error.message);
-  //     } else {
-  //       throw error;
-  //     }
-  //   } finally {
-  //     setUploading(false);
-  //   }
-  // }
-
-  // const handleRemoveAvatar = async () => {
-  //   try {
-  //     setUploading(true);
-  //     if (!url) return;
   
-  //     const path = url.split('/').pop();
-  //     const { error } = await supabase.storage.from('avatars').remove([path ?? '']);
-  
-  //     if (error) throw error;
-  
-  //     setAvatarUrl(null);
-  //     onUpload('');
-  //     Alert.alert('Verwijderd', 'Je foto is succesvol verwijderd.');
-  //   } catch (error) {
-  //     if (error instanceof Error) Alert.alert('Fout', error.message);
-  //     else throw error;
-  //   } finally {
-  //     setUploading(false);
-  //   }
-  // };
   async function uploadAvatar() {
     try {
       setUploading(true)
 
       // Open the modal to choose the image source (camera, gallery or remove)
-      setModalVisible(true)
+      setChooseImageModalVisible(true)
       
     } catch (error) {
       if (error instanceof Error) {
@@ -190,10 +98,9 @@ export default function Avatar({ url, size = 150, onUpload, showUploadButton = t
     }
 
     onUpload(data.path)
-    setModalVisible(false) // Close the modal after uploading
+    setChooseImageModalVisible(false)  // Close the modal after uploading
   }
 
-  // Function to handle avatar removal
   const handleRemoveAvatar = async () => {
     if (!url) return
 
@@ -204,8 +111,9 @@ export default function Avatar({ url, size = 150, onUpload, showUploadButton = t
 
     setAvatarUrl(null)
     onUpload('')
-    setModalVisible(false) // Close modal after removing image
-    Alert.alert('Verwijderd', 'Je foto is succesvol verwijderd.')
+    setRemoveModalVisible(false) 
+    setChooseImageModalVisible(false) 
+    // Alert.alert('Verwijderd', 'Je foto is succesvol verwijderd.')
   }
 
   
@@ -230,7 +138,7 @@ export default function Avatar({ url, size = 150, onUpload, showUploadButton = t
 
         {/* Modal for choosing camera, gallery, or remove */}
         <Modal
-        visible={modalVisible}
+        visible={chooseImageModalVisible}
         animationType="slide"
         transparent={true}
         onRequestClose={() => setModalVisible(false)} // Close modal on back press (Android)
@@ -245,15 +153,37 @@ export default function Avatar({ url, size = 150, onUpload, showUploadButton = t
             <TouchableOpacity onPress={() => selectImage('gallery')}>
               <Text style={styles.modalButton}>Galerij</Text>
             </TouchableOpacity>
-            <TouchableOpacity onPress={handleRemoveAvatar}>
+            <TouchableOpacity onPress={() => setRemoveModalVisible(true)}>
               <Text style={styles.modalButton}>Verwijderen foto</Text>
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => setModalVisible(false)}>
+            <TouchableOpacity onPress={() => setChooseImageModalVisible(false)}>
               <Text style={styles.modalButtonAnnuleer}>Annuleren</Text>
             </TouchableOpacity>
           </View>
         </View>
       </Modal> 
+
+        {/* Modal voor bevestiging verwijderen */}
+        <Modal
+        visible={removeModalVisible}
+        transparent={true}
+        animationType="slide"
+        onRequestClose={() => setRemoveModalVisible(false)} // Sluit de modal als de gebruiker op de "back" knop drukt
+      >
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalContent}>
+            <Text style={styles.modalTitle}>Ben je zeker dat je je foto wilt verwijderen?</Text>
+            
+            <TouchableOpacity onPress={handleRemoveAvatar}>
+              <Text style={styles.modalButton}>Ja, verwijderen</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity onPress={() => setModalVisible(false)}>
+              <Text style={styles.modalButtonAnnuleer}>Annuleren</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
   </View>
   )
   
@@ -330,5 +260,17 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     marginVertical: 5,
     textAlign: 'center',
-  }
+  },
+  deleteButton: {
+    backgroundColor: '#F44336',
+    marginTop: 20,
+    paddingVertical: 8,
+    paddingHorizontal: 30,
+    borderRadius: 15,
+  },
+  deleteButtonText: {
+    color: '#fff',
+    fontWeight: 'bold',
+    fontSize: 14,
+  },
 })

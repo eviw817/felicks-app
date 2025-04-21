@@ -6,7 +6,6 @@ import { useState, useEffect } from 'react'
 import { Picker } from '@react-native-picker/picker';
 import { supabase } from "../../../lib/supabase";
 import { Session } from "@supabase/supabase-js";
-import * as ImagePicker from 'expo-image-picker';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 import { faGear } from '@fortawesome/free-solid-svg-icons';
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
@@ -87,7 +86,7 @@ const ProfileEditScreen = () => {
       if (error) {
         Alert.alert("Fout", "Er is een probleem bij het updaten van je profielfoto.");
       } else {
-        Alert.alert("Succes", "Je profielfoto is bijgewerkt!");
+        // Alert.alert("Succes", "Je profielfoto is bijgewerkt!");
       }
     };
   
@@ -128,7 +127,7 @@ const ProfileEditScreen = () => {
         return;
       }
   
-      Alert.alert("Succes", "Je profiel is bijgewerkt!");
+      // Alert.alert("Succes", "Je profiel is bijgewerkt!");
       router.push("/profile/profile");
       setLoading(false);
     };
@@ -144,7 +143,7 @@ const ProfileEditScreen = () => {
         if (error) {
           console.error("Error fetching avatar:", error.message);
         } else {
-          //console.log("Fetched Avatar URL:", data?.avatar_url); // ✅ Debugging
+          //console.log("Fetched Avatar URL:", data?.avatar_url); 
           setAvatarUrl(data?.avatar_url);
         }
       }
