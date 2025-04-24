@@ -7,17 +7,16 @@ export default function Index() {
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      // router.replace("../login-register/startpage/startpage");
-      router.replace("../login-register/login_register");
+      router.replace("../login_register");
     }, 3000);
 
     return () => clearTimeout(timer);
   }, []);
 
   return (
-    <View style={styles.container} className="bg-baby-powder">
+    <View style={styles.container}>
       <Image
-        source={require("../assets/images/logo_felicks.png")}
+        source={require("../../assets/images/logo_felicks.png")}
         style={styles.logo}
       />
     </View>
@@ -29,6 +28,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
+    backgroundColor: "#FFFDF9",
   },
   logo: {
     width: 340,

@@ -7,8 +7,7 @@ export default function Index() {
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      // router.replace("../login-register/startpage/startpage");
-      router.replace("../login-register/login_register");
+      router.replace("../adoption_profile");
     }, 3000);
 
     return () => clearTimeout(timer);
@@ -17,7 +16,7 @@ export default function Index() {
   return (
     <View style={styles.container} className="bg-baby-powder">
       <Image
-        source={require("../assets/images/logo_felicks.png")}
+        source={require("../../assets/images/logo_felicks.png")}
         style={styles.logo}
       />
     </View>
