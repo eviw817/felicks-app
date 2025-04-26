@@ -49,6 +49,15 @@ export default function RootLayout() {
         name="suitable_dogs"
         options={{ title: "Geschikte honden", headerShown: false }}
       />
+      <Stack.Screen
+        name="suitable_dogs_1"
+        options={{ title: "Geschikte honden", headerShown: false }}
+      />
+      <Stack.Screen
+        name="TestAdoptionProfile"
+        options={{ title: "TestAdoptionProfile", headerShown: false }}
+      />
+
       <Stack.Screen name="dog_info" options={{ title: "Hondeninformatie" }} />
     </Stack>
   );

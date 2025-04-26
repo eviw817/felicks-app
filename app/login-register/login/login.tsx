@@ -102,7 +102,7 @@ const LoginScreen = () => {
       return;
     }
 
-    // router.push(".");
+    // router.push("."); // aanpassen naar de juiste route
     setLoading(false);
   }
 
