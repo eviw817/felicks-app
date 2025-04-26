@@ -17,7 +17,7 @@ function StartScreen() {
       setSession(session);
 
       if (!session) {
-        router.replace("../login/login"); // Redirect als er geen sessie is
+        router.replace("/login-register/login/login"); // Redirect als er geen sessie is
       }
     };
 
@@ -28,7 +28,7 @@ function StartScreen() {
       (_event, session) => {
         setSession(session);
         if (!session) {
-          router.replace("../login/login"); // Als de gebruiker uitlogt, direct naar loginpagina
+          router.replace("/login-register/login/login"); // Als de gebruiker uitlogt, direct naar loginpagina
         }
       }
     );
@@ -40,7 +40,7 @@ function StartScreen() {
 
   async function signOut() {
     await supabase.auth.signOut();
-    router.replace("../login_register"); // Stuur gebruiker direct terug naar loginpagina
+    router.replace("/login-register/login_register"); // Stuur gebruiker direct terug naar loginpagina
   }
 
   return (

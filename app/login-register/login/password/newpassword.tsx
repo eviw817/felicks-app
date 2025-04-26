@@ -1,127 +1,127 @@
 import React, { useEffect, useState } from "react";
-import {
-  View,
-  Text,
-  StyleSheet,
-  TouchableOpacity,
-  TextInput,
-  Alert,
-} from "react-native";
-import { useRouter } from "expo-router";
+import { View, Text, StyleSheet, TouchableOpacity, TextInput, Alert } from "react-native";
+import { useRouter, useLocalSearchParams } from "expo-router";
 import { supabase } from "../../../../lib/supabase";
-import { Linking } from "react-native";
+import * as Linking from "expo-linking";
+import * as SecureStore from 'expo-secure-store';
 
 const NewPasswordScreen = () => {
   const router = useRouter();
+  const params = useLocalSearchParams();
   const [accessToken, setAccessToken] = useState<string | null>(null);
+  const [refreshToken, setRefreshToken] = useState<string | null>(null);
 
   const [loading, setLoading] = useState(false);
   const [nieuwpasswordFocus, setNieuwPasswordFocus] = useState(false);
   const [herhaalpasswordFocus, setHerhaalPasswordFocus] = useState(false);
 
-  const [nieuwpassword, setNieuwPassword] = useState("");
-  const [herhaalpassword, setHerhaalPassword] = useState("");
+  const [nieuwpassword, setNieuwPassword] = useState('');
+  const [herhaalpassword, setHerhaalPassword] = useState('');
 
-  const isNieuwPasswordFilled = nieuwpassword.trim() !== "";
-  const isHerhaalPasswordFilled = herhaalpassword.trim() !== "";
-
+  const isNieuwPasswordFilled = nieuwpassword.trim() !== '';
+  const isHerhaalPasswordFilled = herhaalpassword.trim() !== '';
+  
   useEffect(() => {
-    const handleUrl = ({ url }: { url: string }) => {
+    const handleDeepLink = (event: { url: string }) => {
+      const { url } = event;
+      // console.log("Deep link ontvangen:", url);
+  
+      // Verwerk de URL om zowel query als fragment parameters te verkrijgen
       const parsedUrl = new URL(url);
-
-      // Zoek naar de 'access_token' in de hash (gebruik URLSearchParams)
-      const params = new URLSearchParams(parsedUrl.hash.replace("#", "")); // Verwijder '#' uit de hash
-      const token = params.get("access_token"); // Haal de access_token op uit de parameters
-
-      console.log("Token ontvangen:", token);
-      if (token) {
-        setAccessToken(token); // Zet de token in de state
+      const queryParams = new URLSearchParams(parsedUrl.search);
+      const fragmentParams = new URLSearchParams(parsedUrl.hash.replace('#', ''));
+  
+      const accessToken = queryParams.get('access_token') || fragmentParams.get('access_token');
+      const refreshToken = queryParams.get('refresh_token') || fragmentParams.get('refresh_token');
+  
+      if (accessToken) {
+        // console.log("Access token ontvangen:", accessToken);
+  
+        // Sla het token op in SecureStore
+        SecureStore.setItemAsync('access_token', accessToken).then(() => {
+          // console.log("Access token opgeslagen!");
+          router.push('/login-register/login/password/newpassword'); // Navigeer naar de juiste pagina
+        }).catch(error => {
+          console.log("Fout bij het opslaan van de token:", error);
+        });
       } else {
-        console.log("Geen token gevonden in de deep link.");
+        console.log("Geen access_token gevonden in deeplink.");
       }
     };
-
-    const subscription = Linking.addEventListener("url", handleUrl);
-
-    const fetchInitialUrl = async () => {
-      try {
-        const initialUrl = await Linking.getInitialURL();
-        if (initialUrl) {
-          const parsedUrl = new URL(initialUrl);
-
-          // Zoek naar de 'access_token' in de hash (gebruik URLSearchParams)
-          const params = new URLSearchParams(parsedUrl.hash.replace("#", "")); // Verwijder '#' uit de hash
-          const token = params.get("access_token"); // Haal de access_token op uit de parameters
-
-          console.log("Token ontvangen:", token);
-          setAccessToken(token); // Zet de token in de state
-        }
-      } catch (error) {
-        console.error("Fout bij het ophalen van de initial URL:", error);
-      }
-    };
-
-    fetchInitialUrl();
-
+  
+    // Luister naar deeplinks
+    const linkingListener = Linking.addEventListener('url', handleDeepLink);
+  
+    // Cleanup listener bij unmount
     return () => {
-      subscription?.remove();
+      linkingListener.remove();
     };
-  }, []);
-
-  // Gebruik de token om het wachtwoord te resetten
+  }, [router]);
+  
+  
   const handleResetPassword = async () => {
     if (!nieuwpassword || !herhaalpassword) {
       Alert.alert("Fout", "Voer een nieuw wachtwoord in.");
       return;
     }
-
+  
     if (nieuwpassword !== herhaalpassword) {
       Alert.alert("Fout", "De wachtwoorden komen niet overeen.");
       return;
     }
-
-    if (!accessToken) {
-      Alert.alert("Fout", "Token niet gevonden.");
+  
+    // Haal het token op uit SecureStore
+    const storedAccessToken = await SecureStore.getItemAsync('access_token');
+    
+    if (!storedAccessToken) {
+      Alert.alert("Fout", "Token niet gevonden!");
       return;
     }
-
-    setLoading(true);
-
-    // Reset het wachtwoord via Supabase, inclusief de access_token
-    const { data: user, error } = await supabase.auth.updateUser({
-      password: nieuwpassword,
-    });
-
-    if (error) {
-      Alert.alert(
-        "Fout",
-        "Er is iets misgegaan bij het resetten van je wachtwoord."
-      );
-    } else {
-      Alert.alert("Succes", "Je wachtwoord is succesvol gereset.");
-      router.push("../login/login");
+  
+    // Stel de Supabase sessie in met het access token
+    const storedRefreshToken = await SecureStore.getItemAsync('refresh_token');
+    if (!storedRefreshToken) {
+      Alert.alert("Fout", "Refresh token niet gevonden!");
+      return;
     }
-
+    supabase.auth.setSession({ access_token: storedAccessToken, refresh_token: storedRefreshToken });
+  
+    setLoading(true);
+  
+    try {
+      const { data, error } = await supabase.auth.updateUser({
+        password: nieuwpassword,
+      });
+  
+      if (error) {
+        Alert.alert("Fout", error.message);
+      } else {
+        Alert.alert("Succes", "Je wachtwoord is succesvol gereset!");
+        router.push("/login-register/login/login");
+      }
+    } catch (err) {
+      Alert.alert("Fout", "Er is iets mis gegaan bij het resetten van je wachtwoord.");
+    }
+  
     setLoading(false);
   };
+  
 
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Reset wachtwoord</Text>
 
-      <Text style={styles.label}>Nieuw wachtwoord</Text>
+    <Text style={styles.label}>Nieuw wachtwoord</Text>
       <TextInput
         style={[
-          styles.input,
-          nieuwpasswordFocus || isNieuwPasswordFilled
-            ? styles.focusedInput
-            : styles.unfocusedInput,
+          styles.input, 
+          nieuwpasswordFocus || isNieuwPasswordFilled ? styles.focusedInput : styles.unfocusedInput
         ]}
-        placeholder="Nieuw wachtwoord"
+        placeholder="Nieuw wachtwoord" 
         placeholderTextColor="rgba(151, 184, 165, 0.5)"
-        secureTextEntry
-        onFocus={() => setNieuwPasswordFocus(true)}
-        onBlur={() => setNieuwPasswordFocus(false)}
+        secureTextEntry 
+        onFocus={() => setNieuwPasswordFocus(true)} 
+        onBlur={() => setNieuwPasswordFocus(false)} 
         onChangeText={setNieuwPassword}
         value={nieuwpassword}
       />
@@ -130,25 +130,19 @@ const NewPasswordScreen = () => {
       <Text style={styles.label}>Herhaal nieuw wachtwoord</Text>
       <TextInput
         style={[
-          styles.input,
-          herhaalpasswordFocus || isHerhaalPasswordFilled
-            ? styles.focusedInput
-            : styles.unfocusedInput,
+          styles.input, 
+          herhaalpasswordFocus || isHerhaalPasswordFilled ? styles.focusedInput : styles.unfocusedInput
         ]}
-        placeholder="Herhaal nieuw wachtwoord"
+        placeholder="Herhaal nieuw wachtwoord" 
         placeholderTextColor="rgba(151, 184, 165, 0.5)"
-        secureTextEntry
-        onFocus={() => setHerhaalPasswordFocus(true)}
-        onBlur={() => setHerhaalPasswordFocus(false)}
+        secureTextEntry 
+        onFocus={() => setHerhaalPasswordFocus(true)} 
+        onBlur={() => setHerhaalPasswordFocus(false)} 
         onChangeText={setHerhaalPassword}
         value={herhaalpassword}
       />
 
-      <TouchableOpacity
-        style={styles.button}
-        onPress={handleResetPassword}
-        disabled={loading}
-      >
+      <TouchableOpacity style={styles.button} onPress={handleResetPassword} disabled={loading}>
         <Text style={styles.buttonText}>OPSLAAN</Text>
       </TouchableOpacity>
     </View>
@@ -159,14 +153,14 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingTop: 100,
-    alignItems: "center",
+    alignItems: 'center',
     padding: 20,
-    backgroundColor: "#FFFDF9",
+    backgroundColor: '#FFFDF9',
   },
   title: {
     fontSize: 23,
     fontWeight: "bold",
-    color: "#183A36",
+    color: '#183A36',
     marginBottom: 60,
   },
   text: {
@@ -174,20 +168,20 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   button: {
-    backgroundColor: "#97B8A5",
+    backgroundColor: '#97B8A5',
     paddingVertical: 15,
-    borderRadius: 20,
+    borderRadius: 20, 
     marginBottom: 20,
-    width: "97%",
-    alignItems: "center",
+    width: '97%',
+    alignItems: 'center',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
   },
   buttonText: {
-    color: "#183A36",
+    color: '#183A36',
     fontSize: 16,
-    fontWeight: "bold",
+    fontWeight: 'bold',
   },
   label: {
     alignSelf: "flex-start",
@@ -200,17 +194,17 @@ const styles = StyleSheet.create({
     width: "100%",
     height: 45,
     borderBottomWidth: 1,
-    borderBottomColor: "#97B8A5",
+    borderBottomColor: "#97B8A5", 
     marginBottom: 25,
     fontSize: 16,
     color: "#183A36",
     paddingLeft: 15,
   },
   focusedInput: {
-    borderBottomColor: "#183A36",
+    borderBottomColor: '#183A36', 
   },
   unfocusedInput: {
-    borderBottomColor: "#97B8A5",
+    borderBottomColor: "#97B8A5", 
   },
   forgotPassword: {
     alignSelf: "flex-end",
@@ -220,8 +214,8 @@ const styles = StyleSheet.create({
     marginBottom: 5,
   },
   forgotPasswordContainer: {
-    width: "100%",
-    alignItems: "flex-end",
+    width: "100%", 
+    alignItems: 'flex-end', 
     marginBottom: 30,
   },
   registerText: {
