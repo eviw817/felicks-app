@@ -44,7 +44,7 @@ function AdoptionProfileScreen() {
       </TouchableOpacity>
 
       <TouchableOpacity style={styles.button}>
-        <Text style={styles.buttonText}>overslaan</Text>
+        <Text style={styles.buttonText} onPress={() => router.push('/homepage')}>overslaan</Text>
       </TouchableOpacity>
     </View>
   );

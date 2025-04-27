@@ -10,7 +10,6 @@ import {
 } from "react-native";
 import { useRouter } from "expo-router";
 import { supabase } from "../../../lib/supabase";
-import { Picker } from "@react-native-picker/picker";
 import { AppStateStatus } from "react-native";
 import { Session } from "@supabase/supabase-js";
 
@@ -102,7 +101,7 @@ const LoginScreen = () => {
       return;
     }
 
-    router.push("/login-register/startpage/startpage"); 
+    router.push("/homepage"); 
     setLoading(false);
   }
 
