@@ -53,7 +53,7 @@ function LivingSituationScreen1() {
       garden: tuin,
       environment: omgeving,
     });
-    router.push("./living_situation_2");
+    router.push("/living_situation_2");
   };
 
   return (

@@ -1,6 +1,6 @@
 // app/adoptionprofile/adoption_profile_loading.tsx
 import React, { useEffect } from "react";
-import { View, Text, StyleSheet, ActivityIndicator } from "react-native";
+import { View, Text, StyleSheet, ActivityIndicator, Alert } from "react-native";
 import { useRouter } from "expo-router";
 import { supabase } from "../../lib/supabase";
 import { useAdoptionProfile } from "../../context/AdoptionProfileContext";
@@ -21,12 +21,9 @@ function LoadingScreen() {
         return;
       }
 
-      await supabase.from("profiles").upsert({
-        id: user.id,
-        user_id: user.id, // ✅ voeg deze toe zodat de FK constraint niet faalt
-      });
+      console.log("Ingelogde user:", user.id);
 
-      // ✅ Format profile data zodat Supabase arrayvelden correct zijn
+      // ✅ Profieldata klaarmaken
       const formattedData = {
         user_id: user.id,
         living_type: profileData.housingType,
@@ -61,17 +58,23 @@ function LoadingScreen() {
         motivation: profileData.motivation,
       };
 
-      const { error } = await supabase
+      // ✅ Upsert naar Supabase: als user_id al bestaat ➔ update, anders ➔ insert
+      const { error: upsertError } = await supabase
         .from("adoption_profiles")
-        .insert([formattedData]);
+        .upsert(formattedData, { onConflict: "user_id" });
 
-      if (error) {
-        console.error("Fout bij opslaan profiel:", error);
+      if (upsertError) {
+        console.error("Fout bij opslaan profiel:", upsertError);
+        Alert.alert(
+          "Fout",
+          "Er is iets misgegaan bij het opslaan van je adoptieprofiel."
+        );
         return;
       }
 
+      console.log("Adoptieprofiel succesvol opgeslagen!");
       resetProfile();
-      router.push("./suitable_dogs");
+      router.push("/suitable_dogs_1");
     };
 
     saveProfile();

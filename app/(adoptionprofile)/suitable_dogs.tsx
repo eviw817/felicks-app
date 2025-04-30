@@ -49,7 +49,7 @@ function SuitableDogsScreen() {
             key={dog.id}
             style={styles.dogItem}
             onPress={() =>
-              router.push({ pathname: "./dog_info", params: { id: dog.id } })
+              router.push({ pathname: "/dog_info", params: { id: dog.id } })
             }
           >
             <Image source={dog.image} style={styles.image} />
@@ -61,7 +61,7 @@ function SuitableDogsScreen() {
       {/* Volgende knop */}
       <TouchableOpacity
         style={styles.button}
-        onPress={() => router.push("./adoption_profile_loading")}
+        onPress={() => router.push("/adoption_profile_loading")}
       >
         <Text style={styles.buttonText}>VOLGENDE</Text>
       </TouchableOpacity>

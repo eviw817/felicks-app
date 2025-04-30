@@ -38,7 +38,7 @@ function AdoptionProfileScreen() {
       {/* buttons */}
       <TouchableOpacity
         style={styles.button}
-        onPress={() => router.push("./living_situation_1")}
+        onPress={() => router.push("/living_situation_1")}
       >
         <Text style={styles.buttonText}>adoptieprofiel opzetten</Text>
       </TouchableOpacity>

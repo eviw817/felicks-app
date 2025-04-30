@@ -139,7 +139,7 @@ function Preference2() {
 
       <TouchableOpacity
         style={styles.button}
-        onPress={() => router.push("./motivation")}
+        onPress={() => router.push("/motivation")}
       >
         <Text style={styles.buttonText}>Volgende</Text>
       </TouchableOpacity>
