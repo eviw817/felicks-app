@@ -7,11 +7,11 @@ function LoginRegisterScreen() {
 
   const handleLoginPress = () => {
     // router.push("/login-register/login/login");
-    router.push("/adoptionprofile/test/test_adoption_profile");
+    router.push("/test/test_adoption_profile");
   };
 
   const handleRegisterPress = () => {
-    router.push("/login-register/register/register");
+    router.push("/register/register");
   };
 
   return (

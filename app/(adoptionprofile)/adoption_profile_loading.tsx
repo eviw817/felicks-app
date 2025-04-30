@@ -74,7 +74,7 @@ function LoadingScreen() {
 
       console.log("Adoptieprofiel succesvol opgeslagen!");
       resetProfile();
-      router.push("./suitable_dogs_1");
+      router.push("/suitable_dogs_1");
     };
 
     saveProfile();

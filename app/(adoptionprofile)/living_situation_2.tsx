@@ -85,7 +85,7 @@ function LivingSituationScreen2() {
       hasChildren,
       childrenAges,
     });
-    router.push("./living_situation_3");
+    router.push("/living_situation_3");
   };
 
   return (

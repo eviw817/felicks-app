@@ -206,7 +206,7 @@ export default function Registeren() {
       setYear("2000");
 
       // Redirect to login page
-      router.push("../../adoptionprofile/adoption_profile");
+      router.push("/adoption_profile");
     }
 
     setLoading(false);
@@ -356,7 +356,7 @@ export default function Registeren() {
             Al een account?{" "}
             <Text
               style={styles.registerLink}
-              onPress={() => router.push("../login/login")}
+              onPress={() => router.push("/login/login")}
             >
               Inloggen
             </Text>

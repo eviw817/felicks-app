@@ -144,7 +144,7 @@ function ExperienceScreen() {
 
       <TouchableOpacity
         style={styles.button}
-        onPress={() => router.push("./preference_1")}
+        onPress={() => router.push("/preference_1")}
       >
         <Text style={styles.buttonText}>Volgende</Text>
       </TouchableOpacity>

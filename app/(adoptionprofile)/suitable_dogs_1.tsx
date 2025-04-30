@@ -268,7 +268,7 @@ export default function SuitableDogsScreen() {
               style={styles.button}
               onPress={() =>
                 router.push({
-                  pathname: "./dog_info",
+                  pathname: "/dog_info",
                   params: { id: match.dog.id },
                 })
               }

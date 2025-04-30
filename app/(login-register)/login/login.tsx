@@ -102,7 +102,7 @@ const LoginScreen = () => {
       return;
     }
 
-    // router.push("/login-register/startpage/startpage");
+    // router.push("/startpage/startpage");
     // router.push(".");
     setLoading(false);
   }
@@ -150,9 +150,7 @@ const LoginScreen = () => {
       {/* Wachtwoord vergeten */}
       <View style={styles.forgotPasswordContainer}>
         <TouchableOpacity
-          onPress={() =>
-            router.push("/login-register/login/password/forget_password")
-          }
+          onPress={() => router.push("/login/password/forget_password")}
         >
           <Text style={styles.forgotPassword}>Wachtwoord vergeten?</Text>
         </TouchableOpacity>
@@ -170,7 +168,7 @@ const LoginScreen = () => {
         Nog geen account?{" "}
         <Text
           style={styles.registerLink}
-          onPress={() => router.push("/login-register/register/register")}
+          onPress={() => router.push("/register/register")}
         >
           Registreer hier
         </Text>
