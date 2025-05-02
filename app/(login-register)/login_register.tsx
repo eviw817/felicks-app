@@ -7,7 +7,7 @@ function LoginRegisterScreen() {
 
   const handleLoginPress = () => {
     // router.push("/login-register/login/login");
-    router.push("/test/test_adoption_profile");
+    router.push("/adoptionprofile1");
   };
 
   const handleRegisterPress = () => {
