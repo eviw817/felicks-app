@@ -1,6 +1,6 @@
 import { Stack } from 'expo-router';
 
-export default function ProfileLayout() {
+export default function SettingsLayout() {
   return (
     <Stack
       screenOptions={{
@@ -13,7 +13,7 @@ export default function ProfileLayout() {
           fontWeight: 'bold',
         },
       }}>
-      <Stack.Screen name="profile" options={{ title: "Profile" }} />
+      <Stack.Screen name="settings" options={{ title: "Settings" }} />
     </Stack>
   );
 }
