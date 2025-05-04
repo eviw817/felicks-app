@@ -1,5 +1,4 @@
-"use client";
-
+// app/(adoptionprofile1)/family_environment.tsx
 import React, { useState, useEffect } from "react";
 import {
   SafeAreaView,
@@ -14,145 +13,126 @@ import { supabase } from "../../lib/supabase";
 import { useFonts } from "expo-font";
 import { Ionicons } from "@expo/vector-icons";
 
-// RadioButton-component
-const RadioButton: React.FC<{
-  selected: boolean;
-  onPress: () => void;
-}> = ({ selected, onPress }) => (
+// Reusable Radio Button
+const RadioButton: React.FC<{ selected: boolean; onPress: () => void }> = ({
+  selected,
+  onPress,
+}) => (
   <TouchableOpacity style={styles.radioOuter} onPress={onPress}>
     {selected && <View style={styles.radioInner} />}
   </TouchableOpacity>
 );
 
-export default function LivingSituation() {
+export default function FamilyEnvironment() {
   const router = useRouter();
   const [userId, setUserId] = useState<string | null>(null);
-  const [loaded, setLoaded] = useState(false);
-  const [answers, setAnswers] = useState({
-    livingSituation: "",
-    homeFrequency: "",
+  const [answers, setAnswers] = useState<{
+    children: string;
+    otherPets: string;
+  }>({
+    children: "",
+    otherPets: "",
   });
 
-  // 1) fonts laden
+  // Load fonts
   const [fontsLoaded] = useFonts({
     "Nunito-Regular": require("../../assets/fonts/nunito/Nunito-Regular.ttf"),
     "Nunito-Bold": require("../../assets/fonts/nunito/Nunito-Bold.ttf"),
   });
 
-  // 2) bij mount: haal user én bestaande antwoorden op
+  // Fetch user once
   useEffect(() => {
     (async () => {
       const {
         data: { user },
       } = await supabase.auth.getUser();
-      if (!user) {
-        setLoaded(true);
-        return;
-      }
-      setUserId(user.id);
-      const { data, error } = await supabase
-        .from("profiles_breed_matches")
-        .select("living_situation,home_frequency")
-        .eq("user_id", user.id)
-        .maybeSingle();
-      if (!error && data) {
-        setAnswers({
-          livingSituation: data.living_situation ?? "",
-          homeFrequency: data.home_frequency ?? "",
-        });
-      }
-      setLoaded(true);
+      if (user) setUserId(user.id);
     })();
   }, []);
 
-  if (!fontsLoaded || !loaded) {
-    return null;
-  }
+  // Wait for fonts
+  if (!fontsLoaded) return null;
 
-  // 3) handler voor upsert
+  // Map categorical answers to boolean flags
+  const hasChildren = answers.children !== "none";
+  const hasOtherPets = answers.otherPets !== "firstPet";
+
+  // Save answers (booleans) to DB
   const handleAnswer = async (
-    field: "livingSituation" | "homeFrequency",
+    question: "children" | "otherPets",
     value: string
   ) => {
-    setAnswers((prev) => ({ ...prev, [field]: value }));
+    setAnswers((prev) => ({ ...prev, [question]: value }));
     if (!userId) return;
-
-    // bepaal kolomnaam
-    const column =
-      field === "livingSituation" ? "living_situation" : "home_frequency";
+    // Prepare payload
+    const payload: Record<string, any> = { user_id: userId };
+    if (question === "children") payload.good_with_children = hasChildren;
+    if (question === "otherPets") payload.good_with_pets = hasOtherPets;
 
     const { error } = await supabase
       .from("profiles_breed_matches")
-      .upsert({ user_id: userId, [column]: value }, { onConflict: "user_id" });
+      .upsert(payload, { onConflict: "user_id" });
     if (error) console.error("DB save error:", error.message);
   };
 
-  const canNext =
-    answers.livingSituation !== "" && answers.homeFrequency !== "";
+  const canNext = answers.children !== "" && answers.otherPets !== "";
 
-  const livingOptions = [
-    {
-      label: "In een gezellig appartement – knus en compact",
-      value: "appartement",
-    },
-    {
-      label: "Een huis zonder tuin, maar met wandelopties",
-      value: "huisZonderTuin",
-    },
-    { label: "We hebben een tuin waar de hond kan snuffelen", value: "tuin" },
-    {
-      label: "Veel ruimte, veel natuur – buiten zijn vanzelfsprekend",
-      value: "veelRuimte",
-    },
+  const childrenOptions = [
+    { label: "Ja, met jonge kinderen", value: "young" },
+    { label: "Ja, met tieners of oudere kinderen", value: "teens" },
+    { label: "Nee, er zijn geen kinderen in huis", value: "none" },
   ];
-  const homeOptions = [
-    {
-      label: "Bijna altijd, ik werk thuis of ben vaak thuis",
-      value: "vaakThuis",
-    },
-    { label: "Gedeeld – soms thuis, soms weg", value: "gedeeld" },
-    { label: "Vaak van huis – hond moet alleen kunnen zijn", value: "vaakWeg" },
+
+  const otherPetsOptions = [
+    { label: "Ja, één of meerdere honden", value: "dogs" },
+    { label: "Ja, katten of andere dieren", value: "cats" },
+    { label: "Nee, dit wordt ons eerste huisdier", value: "firstPet" },
   ];
 
   return (
     <SafeAreaView style={styles.container}>
+      {/* Back button */}
       <TouchableOpacity style={styles.backButton} onPress={() => router.back()}>
         <Ionicons name="arrow-back" size={24} color="#183A36" />
       </TouchableOpacity>
 
-      <Text style={styles.title}>Woonsituatie</Text>
+      <Text style={styles.title}>Gezin & omgeving</Text>
 
+      {/* Progress bar */}
       <View style={styles.progressBar}>
-        <View style={styles.progressFill1} />
+        <View style={styles.progressFill3} />
       </View>
 
-      <Text style={styles.question}>Waar woon je?</Text>
-      {livingOptions.map((opt) => (
+      {/* Question: Children */}
+      <Text style={styles.question}>Woon je samen met kinderen?</Text>
+      {childrenOptions.map((opt) => (
         <View key={opt.value} style={styles.radioRow}>
           <RadioButton
-            selected={answers.livingSituation === opt.value}
-            onPress={() => handleAnswer("livingSituation", opt.value)}
+            selected={answers.children === opt.value}
+            onPress={() => handleAnswer("children", opt.value)}
           />
           <Text style={styles.answerText}>{opt.label}</Text>
         </View>
       ))}
 
+      {/* Question: Other Pets */}
       <Text style={[styles.question, { marginTop: 32 }]}>
-        Hoe vaak ben je thuis?
+        Heb je al andere huisdieren?
       </Text>
-      {homeOptions.map((opt) => (
+      {otherPetsOptions.map((opt) => (
         <View key={opt.value} style={styles.radioRow}>
           <RadioButton
-            selected={answers.homeFrequency === opt.value}
-            onPress={() => handleAnswer("homeFrequency", opt.value)}
+            selected={answers.otherPets === opt.value}
+            onPress={() => handleAnswer("otherPets", opt.value)}
           />
           <Text style={styles.answerText}>{opt.label}</Text>
         </View>
       ))}
 
+      {/* Next button */}
       <TouchableOpacity
         style={[styles.button, !canNext && styles.buttonDisabled]}
-        onPress={() => router.push("/experience_size")}
+        onPress={() => router.push("/activity_personality")}
         disabled={!canNext}
       >
         <Text style={styles.buttonText}>VOLGENDE</Text>
@@ -183,14 +163,15 @@ const styles = StyleSheet.create({
   },
   progressBar: {
     width: "100%",
-    height: 10,
+    height: 6,
     borderColor: "#FFD87E",
     borderWidth: 1,
-    borderRadius: 6,
-    marginBottom: 25,
+    borderRadius: 3,
+    overflow: "hidden",
+    marginBottom: 20,
   },
-  progressFill1: {
-    width: "11.11%",
+  progressFill3: {
+    width: "42.84%",
     height: "100%",
     backgroundColor: "#FFD87E",
     borderTopRightRadius: 3,

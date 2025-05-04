@@ -1,3 +1,4 @@
+// app/(adoptionprofile1)/grooming_coat.tsx
 "use client";
 
 import React, { useState, useEffect } from "react";
@@ -14,145 +15,131 @@ import { supabase } from "../../lib/supabase";
 import { useFonts } from "expo-font";
 import { Ionicons } from "@expo/vector-icons";
 
-// RadioButton-component
-const RadioButton: React.FC<{
-  selected: boolean;
-  onPress: () => void;
-}> = ({ selected, onPress }) => (
+// Custom radio-button component
+const RadioButton: React.FC<{ selected: boolean; onPress: () => void }> = ({
+  selected,
+  onPress,
+}) => (
   <TouchableOpacity style={styles.radioOuter} onPress={onPress}>
     {selected && <View style={styles.radioInner} />}
   </TouchableOpacity>
 );
 
-export default function LivingSituation() {
+export default function GroomingCoat() {
   const router = useRouter();
   const [userId, setUserId] = useState<string | null>(null);
-  const [loaded, setLoaded] = useState(false);
   const [answers, setAnswers] = useState({
-    livingSituation: "",
-    homeFrequency: "",
+    grooming: "",
+    shedding: "",
   });
 
-  // 1) fonts laden
+  // 1. Fonts laden
   const [fontsLoaded] = useFonts({
     "Nunito-Regular": require("../../assets/fonts/nunito/Nunito-Regular.ttf"),
     "Nunito-Bold": require("../../assets/fonts/nunito/Nunito-Bold.ttf"),
   });
 
-  // 2) bij mount: haal user én bestaande antwoorden op
+  // 2. User fetchen
   useEffect(() => {
     (async () => {
       const {
         data: { user },
       } = await supabase.auth.getUser();
-      if (!user) {
-        setLoaded(true);
-        return;
-      }
-      setUserId(user.id);
-      const { data, error } = await supabase
-        .from("profiles_breed_matches")
-        .select("living_situation,home_frequency")
-        .eq("user_id", user.id)
-        .maybeSingle();
-      if (!error && data) {
-        setAnswers({
-          livingSituation: data.living_situation ?? "",
-          homeFrequency: data.home_frequency ?? "",
-        });
-      }
-      setLoaded(true);
+      if (user) setUserId(user.id);
     })();
   }, []);
 
-  if (!fontsLoaded || !loaded) {
-    return null;
-  }
+  // 3. Wacht op fonts
+  if (!fontsLoaded) return null;
 
-  // 3) handler voor upsert
+  // Antwoorden opslaan + upserten met juiste kolomnamen
   const handleAnswer = async (
-    field: "livingSituation" | "homeFrequency",
+    question: "grooming" | "shedding",
     value: string
   ) => {
-    setAnswers((prev) => ({ ...prev, [field]: value }));
+    setAnswers((prev) => ({ ...prev, [question]: value }));
     if (!userId) return;
 
-    // bepaal kolomnaam
-    const column =
-      field === "livingSituation" ? "living_situation" : "home_frequency";
+    // payload bouwen
+    const payload: Record<string, any> = { user_id: userId };
+    if (question === "grooming") payload.grooming = value;
+    else payload.shedding = value;
 
     const { error } = await supabase
       .from("profiles_breed_matches")
-      .upsert({ user_id: userId, [column]: value }, { onConflict: "user_id" });
+      .upsert(payload, { onConflict: "user_id" });
+
     if (error) console.error("DB save error:", error.message);
   };
 
-  const canNext =
-    answers.livingSituation !== "" && answers.homeFrequency !== "";
+  const canNext = answers.grooming !== "" && answers.shedding !== "";
 
-  const livingOptions = [
+  const groomingOptions = [
     {
-      label: "In een gezellig appartement – knus en compact",
-      value: "appartement",
+      label: "Zo weinig mogelijk – ik hou het graag praktisch",
+      value: "minimal",
     },
+    { label: "Af en toe borstelen? Dat hoort erbij", value: "occasional" },
     {
-      label: "Een huis zonder tuin, maar met wandelopties",
-      value: "huisZonderTuin",
-    },
-    { label: "We hebben een tuin waar de hond kan snuffelen", value: "tuin" },
-    {
-      label: "Veel ruimte, veel natuur – buiten zijn vanzelfsprekend",
-      value: "veelRuimte",
+      label: "Dagelijks borstelen is voor mij qualitytime",
+      value: "daily",
     },
   ];
-  const homeOptions = [
+
+  const sheddingOptions = [
+    { label: "Ik hou m’n huis graag netjes en haarvrij", value: "no_hair" },
     {
-      label: "Bijna altijd, ik werk thuis of ben vaak thuis",
-      value: "vaakThuis",
+      label: "Een beetje haar? Daar lig ik niet van wakker",
+      value: "some_hair",
     },
-    { label: "Gedeeld – soms thuis, soms weg", value: "gedeeld" },
-    { label: "Vaak van huis – hond moet alleen kunnen zijn", value: "vaakWeg" },
+    { label: "Ik accepteer dat het erbij hoort", value: "accept_hair" },
   ];
 
   return (
     <SafeAreaView style={styles.container}>
-      <TouchableOpacity style={styles.backButton} onPress={() => router.back()}>
+      {/* Back button */}
+      <TouchableOpacity style={styles.back} onPress={() => router.back()}>
         <Ionicons name="arrow-back" size={24} color="#183A36" />
       </TouchableOpacity>
 
-      <Text style={styles.title}>Woonsituatie</Text>
+      {/* Title */}
+      <Text style={styles.title}>Verzorging & vacht</Text>
 
+      {/* Progress bar */}
       <View style={styles.progressBar}>
-        <View style={styles.progressFill1} />
+        <View style={styles.progressFill6} />
       </View>
 
-      <Text style={styles.question}>Waar woon je?</Text>
-      {livingOptions.map((opt) => (
+      {/* Vraag: Grooming */}
+      <Text style={styles.question}>Hoeveel verzorging wil je geven?</Text>
+      {groomingOptions.map((opt) => (
         <View key={opt.value} style={styles.radioRow}>
           <RadioButton
-            selected={answers.livingSituation === opt.value}
-            onPress={() => handleAnswer("livingSituation", opt.value)}
+            selected={answers.grooming === opt.value}
+            onPress={() => handleAnswer("grooming", opt.value)}
           />
           <Text style={styles.answerText}>{opt.label}</Text>
         </View>
       ))}
 
+      {/* Vraag: Shedding */}
       <Text style={[styles.question, { marginTop: 32 }]}>
-        Hoe vaak ben je thuis?
+        Wat vind je van hondenhaar in huis?
       </Text>
-      {homeOptions.map((opt) => (
+      {sheddingOptions.map((opt) => (
         <View key={opt.value} style={styles.radioRow}>
           <RadioButton
-            selected={answers.homeFrequency === opt.value}
-            onPress={() => handleAnswer("homeFrequency", opt.value)}
+            selected={answers.shedding === opt.value}
+            onPress={() => handleAnswer("shedding", opt.value)}
           />
           <Text style={styles.answerText}>{opt.label}</Text>
         </View>
       ))}
 
+      {/* Next button */}
       <TouchableOpacity
         style={[styles.button, !canNext && styles.buttonDisabled]}
-        onPress={() => router.push("/experience_size")}
+        onPress={() => router.push("/breed_matching")}
         disabled={!canNext}
       >
         <Text style={styles.buttonText}>VOLGENDE</Text>
@@ -168,29 +155,28 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingTop: Platform.OS === "ios" ? 20 : 50,
   },
-  backButton: {
-    position: "absolute",
-    top: Platform.OS === "ios" ? 20 : 50,
-    left: 16,
-    zIndex: 10,
+  back: {
+    paddingVertical: 8,
   },
   title: {
     fontFamily: "Nunito-Bold",
     fontSize: 20,
     color: "#183A36",
     textAlign: "center",
-    marginBottom: 25,
+    marginBottom: 16,
   },
   progressBar: {
     width: "100%",
-    height: 10,
+    height: 6,
+    backgroundColor: "transparent",
     borderColor: "#FFD87E",
     borderWidth: 1,
-    borderRadius: 6,
-    marginBottom: 25,
+    borderRadius: 3,
+    overflow: "hidden",
+    marginBottom: 20,
   },
-  progressFill1: {
-    width: "11.11%",
+  progressFill6: {
+    width: "85.71%", // 6 van 7 stappen
     height: "100%",
     backgroundColor: "#FFD87E",
     borderTopRightRadius: 3,

@@ -1,3 +1,4 @@
+// app/(adoptionprofile1)/sound_behavior.tsx
 "use client";
 
 import React, { useState, useEffect } from "react";
@@ -14,145 +15,146 @@ import { supabase } from "../../lib/supabase";
 import { useFonts } from "expo-font";
 import { Ionicons } from "@expo/vector-icons";
 
-// RadioButton-component
-const RadioButton: React.FC<{
-  selected: boolean;
-  onPress: () => void;
-}> = ({ selected, onPress }) => (
+// Reusable Radio Button
+const RadioButton: React.FC<{ selected: boolean; onPress: () => void }> = ({
+  selected,
+  onPress,
+}) => (
   <TouchableOpacity style={styles.radioOuter} onPress={onPress}>
     {selected && <View style={styles.radioInner} />}
   </TouchableOpacity>
 );
 
-export default function LivingSituation() {
+export default function SoundBehavior() {
   const router = useRouter();
   const [userId, setUserId] = useState<string | null>(null);
-  const [loaded, setLoaded] = useState(false);
-  const [answers, setAnswers] = useState({
-    livingSituation: "",
-    homeFrequency: "",
-  });
+  const [answers, setAnswers] = useState({ barking: "", training: "" });
 
-  // 1) fonts laden
+  // Load Nunito fonts
   const [fontsLoaded] = useFonts({
     "Nunito-Regular": require("../../assets/fonts/nunito/Nunito-Regular.ttf"),
     "Nunito-Bold": require("../../assets/fonts/nunito/Nunito-Bold.ttf"),
   });
 
-  // 2) bij mount: haal user én bestaande antwoorden op
+  // Fetch user and existing answers on mount
   useEffect(() => {
     (async () => {
       const {
         data: { user },
       } = await supabase.auth.getUser();
-      if (!user) {
-        setLoaded(true);
-        return;
+      if (user?.id) {
+        setUserId(user.id);
+        const { data, error } = await supabase
+          .from("profiles_breed_matches")
+          .select("barking, training")
+          .eq("user_id", user.id)
+          .single();
+        if (!error && data) {
+          setAnswers({
+            barking: data.barking || "",
+            training: data.training || "",
+          });
+        }
       }
-      setUserId(user.id);
-      const { data, error } = await supabase
-        .from("profiles_breed_matches")
-        .select("living_situation,home_frequency")
-        .eq("user_id", user.id)
-        .maybeSingle();
-      if (!error && data) {
-        setAnswers({
-          livingSituation: data.living_situation ?? "",
-          homeFrequency: data.home_frequency ?? "",
-        });
-      }
-      setLoaded(true);
     })();
   }, []);
 
-  if (!fontsLoaded || !loaded) {
-    return null;
-  }
+  // Wait for fonts before render
+  if (!fontsLoaded) return null;
 
-  // 3) handler voor upsert
+  // Mapping question keys to DB column names
+  const columnMap: Record<string, string> = {
+    barking: "barking",
+    training: "training",
+  };
+
+  // Save or update answer in DB
   const handleAnswer = async (
-    field: "livingSituation" | "homeFrequency",
+    question: "barking" | "training",
     value: string
   ) => {
-    setAnswers((prev) => ({ ...prev, [field]: value }));
+    setAnswers((prev) => ({ ...prev, [question]: value }));
     if (!userId) return;
 
-    // bepaal kolomnaam
-    const column =
-      field === "livingSituation" ? "living_situation" : "home_frequency";
+    const payload: Record<string, any> = { user_id: userId };
+    payload[columnMap[question]] = value;
 
     const { error } = await supabase
       .from("profiles_breed_matches")
-      .upsert({ user_id: userId, [column]: value }, { onConflict: "user_id" });
+      .upsert(payload, { onConflict: "user_id" });
     if (error) console.error("DB save error:", error.message);
   };
 
-  const canNext =
-    answers.livingSituation !== "" && answers.homeFrequency !== "";
+  const canNext = answers.barking !== "" && answers.training !== "";
 
-  const livingOptions = [
-    {
-      label: "In een gezellig appartement – knus en compact",
-      value: "appartement",
-    },
-    {
-      label: "Een huis zonder tuin, maar met wandelopties",
-      value: "huisZonderTuin",
-    },
-    { label: "We hebben een tuin waar de hond kan snuffelen", value: "tuin" },
-    {
-      label: "Veel ruimte, veel natuur – buiten zijn vanzelfsprekend",
-      value: "veelRuimte",
-    },
+  const barkingOptions = [
+    { label: "Liever zo stil mogelijk", value: "quiet" },
+    { label: "Een beetje blaffen hoort erbij", value: "some" },
+    { label: "Een praatgrage hond is geen probleem", value: "talkative" },
   ];
-  const homeOptions = [
+
+  const trainingOptions = [
     {
-      label: "Bijna altijd, ik werk thuis of ben vaak thuis",
-      value: "vaakThuis",
+      label:
+        "Heel belangrijk – ik wil een hond die snel leert en goed luistert",
+      value: "very",
     },
-    { label: "Gedeeld – soms thuis, soms weg", value: "gedeeld" },
-    { label: "Vaak van huis – hond moet alleen kunnen zijn", value: "vaakWeg" },
+    {
+      label: "Belangrijk, maar het hoeft geen perfect gehoorzame hond te zijn",
+      value: "moderate",
+    },
+    {
+      label:
+        "Niet zo belangrijk – ik heb geduld en waardeer een zelfstandige hond",
+      value: "independent",
+    },
   ];
 
   return (
     <SafeAreaView style={styles.container}>
-      <TouchableOpacity style={styles.backButton} onPress={() => router.back()}>
+      {/* Back button */}
+      <TouchableOpacity style={styles.back} onPress={() => router.back()}>
         <Ionicons name="arrow-back" size={24} color="#183A36" />
       </TouchableOpacity>
 
-      <Text style={styles.title}>Woonsituatie</Text>
+      {/* Title */}
+      <Text style={styles.title}>Geluid & gedrag</Text>
 
+      {/* Progress bar */}
       <View style={styles.progressBar}>
-        <View style={styles.progressFill1} />
+        <View style={styles.progressFill5} />
       </View>
 
-      <Text style={styles.question}>Waar woon je?</Text>
-      {livingOptions.map((opt) => (
+      {/* Question: Barking */}
+      <Text style={styles.question}>Hoeveel mag je hond blaffen?</Text>
+      {barkingOptions.map((opt) => (
         <View key={opt.value} style={styles.radioRow}>
           <RadioButton
-            selected={answers.livingSituation === opt.value}
-            onPress={() => handleAnswer("livingSituation", opt.value)}
+            selected={answers.barking === opt.value}
+            onPress={() => handleAnswer("barking", opt.value)}
           />
           <Text style={styles.answerText}>{opt.label}</Text>
         </View>
       ))}
 
+      {/* Question: Training */}
       <Text style={[styles.question, { marginTop: 32 }]}>
-        Hoe vaak ben je thuis?
+        Hoe belangrijk is training voor jou?
       </Text>
-      {homeOptions.map((opt) => (
+      {trainingOptions.map((opt) => (
         <View key={opt.value} style={styles.radioRow}>
           <RadioButton
-            selected={answers.homeFrequency === opt.value}
-            onPress={() => handleAnswer("homeFrequency", opt.value)}
+            selected={answers.training === opt.value}
+            onPress={() => handleAnswer("training", opt.value)}
           />
           <Text style={styles.answerText}>{opt.label}</Text>
         </View>
       ))}
 
+      {/* Next button */}
       <TouchableOpacity
         style={[styles.button, !canNext && styles.buttonDisabled]}
-        onPress={() => router.push("/experience_size")}
+        onPress={() => router.push("/grooming_coat")}
         disabled={!canNext}
       >
         <Text style={styles.buttonText}>VOLGENDE</Text>
@@ -168,29 +170,26 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingTop: Platform.OS === "ios" ? 20 : 50,
   },
-  backButton: {
-    position: "absolute",
-    top: Platform.OS === "ios" ? 20 : 50,
-    left: 16,
-    zIndex: 10,
-  },
+  back: { paddingVertical: 8 },
   title: {
     fontFamily: "Nunito-Bold",
     fontSize: 20,
     color: "#183A36",
     textAlign: "center",
-    marginBottom: 25,
+    marginBottom: 16,
   },
   progressBar: {
     width: "100%",
-    height: 10,
+    height: 6,
+    backgroundColor: "transparent",
     borderColor: "#FFD87E",
     borderWidth: 1,
-    borderRadius: 6,
-    marginBottom: 25,
+    borderRadius: 3,
+    overflow: "hidden",
+    marginBottom: 20,
   },
-  progressFill1: {
-    width: "11.11%",
+  progressFill5: {
+    width: "71.42%",
     height: "100%",
     backgroundColor: "#FFD87E",
     borderTopRightRadius: 3,
