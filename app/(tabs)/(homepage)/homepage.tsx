@@ -164,6 +164,30 @@ export default function Homepage() {
             }}
             >LEES MEER TIPS</Text> 
       </View>
+      <View>
+        <View>
+          <Image 
+              style={{ width: 120, height: 120, borderRadius: 15, marginBottom: 10, borderWidth: 1, borderColor: '#97B8A5', marginLeft: 20 }} 
+              source={{ uri: 'https://letsgokids.co.nz/wp-content/uploads/2024/03/Pet-First-Aid-Kits-3.jpg' }} 
+            />
+          <View>
+            <Text>Naam:</Text>
+            <Text>Basiel</Text>
+          </View>
+          <View>
+            <Text>leeftijd:</Text>
+            <Text>4 jaar</Text>
+          </View>
+          <View>
+            <Text>Ras:</Text>
+            <Text>Labrador retriever</Text>
+          </View>
+          <View>
+            <Text>Asiel:</Text>
+            <Text>Dierenbescherming Mechelen</Text>
+          </View>
+          </View>
+      </View>
     </SafeAreaView>
   );
 }
