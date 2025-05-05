@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { View, Text, StyleSheet, TouchableOpacity, TextInput, Alert } from "react-native";
 import { useRouter } from "expo-router";  
-import { supabase } from "../../../../lib/supabase"; // Zorg ervoor dat je het juiste pad naar je supabase-bestand gebruikt
+import { supabase } from "../../../../../lib/supabase"; // Zorg ervoor dat je het juiste pad naar je supabase-bestand gebruikt
 
 const ForgetPasswordScreen = () => {
   const router = useRouter();

@@ -14,6 +14,7 @@ export default function ProfileLayout() {
         },
       }}>
       <Stack.Screen name="profile" options={{ title: "Profile" }} />
+      <Stack.Screen name="profileEdit" options={{ title: "ProfileEdit" }} />
     </Stack>
   );
 }

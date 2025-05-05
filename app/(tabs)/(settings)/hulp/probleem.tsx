@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { View, Text, TouchableOpacity, StyleSheet, TextInput, Alert } from "react-native";
 import { useRouter } from "expo-router";
-import { supabase } from "../../../lib/supabase";
+import { supabase } from "../../../../lib/supabase";
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 
@@ -52,7 +52,7 @@ const ProbleemScreen = () => {
         }
       
         setProbleem("");
-        router.push("/settings/hulp/sendprobleem");
+        router.push("../hulp/sendprobleem");
       } catch (error) {
         console.log("Error message:", error);  
         Alert.alert("Fout", "Er is een fout opgetreden bij het verzenden van het probleem.");
@@ -64,7 +64,7 @@ const ProbleemScreen = () => {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <TouchableOpacity onPress={() => router.push("/settings/hulp/hulp")} style={styles.backButton}>
+        <TouchableOpacity onPress={() => router.push("../hulp/hulp")} style={styles.backButton}>
           <FontAwesomeIcon icon={faArrowLeft} size={30} color={'#183A36'} style={styles.backButton} />
         </TouchableOpacity>
         <Text style={styles.title}>Probleem rapporteren</Text>

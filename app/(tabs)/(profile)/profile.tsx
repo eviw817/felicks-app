@@ -3,11 +3,11 @@ import { useFocusEffect } from "@react-navigation/native";
 
 import { View, Text, TouchableOpacity, StyleSheet, Alert } from "react-native";
 import { useRouter } from "expo-router";
-import { supabase } from "../../lib/supabase";
+import { supabase } from "../../../lib/supabase";
 import { Session } from "@supabase/supabase-js";
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 import { faGear } from '@fortawesome/free-solid-svg-icons';
-import Avatar from "../../components/Avatar";
+import Avatar from "../../../components/Avatar";
 
 const ProfileScreen = () => {
       const router = useRouter();

@@ -16,7 +16,7 @@ const SendProbleemScreen = () => {
              <Text style={styles.subtitle}>We sturen je antwoord zo snel mogelijk via mail. De mail kan altijd in je spam terecht komen,
                 gelieve ook deze te controleren. 
             </Text>
-            <TouchableOpacity style={styles.submitButton} onPress={() => router.push("/settings/hulp/hulp")} >
+            <TouchableOpacity style={styles.submitButton} onPress={() => router.push("../hulp/hulp")} >
                 <Text style={styles.submitText}>TERUG</Text>
             </TouchableOpacity>
           

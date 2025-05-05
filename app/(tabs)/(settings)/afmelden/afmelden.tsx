@@ -3,7 +3,7 @@ import { View, Text, TouchableOpacity, StyleSheet, Alert } from "react-native";
 import { useRouter } from "expo-router";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
-import { supabase } from "../../../lib/supabase";
+import { supabase } from "../../../../lib/supabase";
 
 const AfmeldenScreen = () => {
     const router = useRouter();
@@ -22,7 +22,7 @@ const AfmeldenScreen = () => {
         <View style={styles.container}>
             {/* Header met terugknop */}
             <View style={styles.header}>
-                <TouchableOpacity onPress={() => router.push("/settings/settings")}>
+                <TouchableOpacity onPress={() => router.push("../settings")}>
                     <FontAwesomeIcon icon={faArrowLeft} size={30} color="#183A36" />
                 </TouchableOpacity>
                 <Text style={styles.title}>Afmelden</Text>
@@ -33,7 +33,7 @@ const AfmeldenScreen = () => {
             <Text style={styles.confirmText}>Ben je zeker dat je zich wilt afmelden?</Text>
 
             {/* Knoppen */}
-            <TouchableOpacity style={styles.button} onPress={() => router.push("/settings/settings")}>
+            <TouchableOpacity style={styles.button} onPress={() => router.push("../settings")}>
                 <Text style={styles.buttonText}>NEE</Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.button} onPress={handleLogout}>

@@ -5,12 +5,12 @@ import { SafeAreaView, KeyboardAvoidingView, Platform, ScrollView }from "react-n
 import { useRouter } from "expo-router";
 import { useState, useEffect } from 'react'
 import { Picker } from '@react-native-picker/picker';
-import { supabase } from "../../../lib/supabase";
+import { supabase } from "../../../../lib/supabase";
 import { Session } from "@supabase/supabase-js";
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 import { faGear } from '@fortawesome/free-solid-svg-icons';
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
-import Avatar from "../../../components/Avatar";
+import Avatar from "../../../../components/Avatar";
 
 const ProfileEditScreen = () => {
     const router = useRouter();

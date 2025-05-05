@@ -15,7 +15,7 @@ const EditPetScreen = () => {
   return (
     <View style={styles.container}>
         <View style={styles.header}>
-                    <TouchableOpacity onPress={() => router.push("/settings/settings")} style={styles.backButton}>
+                    <TouchableOpacity onPress={() => router.push("../settings")} style={styles.backButton}>
                         <FontAwesomeIcon icon={faArrowLeft} size={30} color={'#183A36'} style={styles.backButton} />
                     </TouchableOpacity>
                     <Text style={styles.title}>Huisdier aanpassen</Text>
@@ -47,11 +47,11 @@ const EditPetScreen = () => {
         <Picker.Item label="Beagle" value="Beagle" />
       </Picker>
       </View>
-      <TouchableOpacity style={styles.saveButton} onPress={() => router.push("/settings/settings")}>
+      <TouchableOpacity style={styles.saveButton} onPress={() => router.push("../settings")}>
         <Text style={styles.saveButtonText}>OPSLAAN</Text>
       </TouchableOpacity>
       <TouchableOpacity>
-        <Text style={styles.deleteText} onPress={() => router.push("/settings/pet/removepet")}>Huisdier verwijderen</Text>
+        <Text style={styles.deleteText} onPress={() => router.push("../pet/removepet")}>Huisdier verwijderen</Text>
       </TouchableOpacity>
     </View>
   );

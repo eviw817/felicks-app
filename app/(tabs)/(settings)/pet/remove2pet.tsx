@@ -11,17 +11,17 @@ const Remove2PetScreen = () => {
   return (
     <View style={styles.container}>
         <View style={styles.header}>
-            <TouchableOpacity onPress={() => router.push("/settings/settings")} style={styles.backButton}>
+            <TouchableOpacity onPress={() => router.push("../settings")} style={styles.backButton}>
                 <FontAwesomeIcon icon={faArrowLeft} size={30} color={'#183A36'} style={styles.backButton} />
             </TouchableOpacity>
             <Text style={styles.title}>Huisdier verwijderen</Text>
         </View>
       <Image source={{ uri: "https://via.placeholder.com/150" }} style={styles.image} />
       <Text style={styles.label}>Ben je zeker dat je je huisdiertje wilt verwijderen?</Text>
-      <TouchableOpacity style={styles.saveButton} onPress={() => router.push("/settings/pet/pet")}>
+      <TouchableOpacity style={styles.saveButton} onPress={() => router.push("../pet/pet")}>
         <Text style={styles.saveButtonText}>Neen, ik wil mijn hondje behouden</Text>
       </TouchableOpacity>
-      <TouchableOpacity style={styles.saveButton} onPress={() => router.push("/settings/settings")}>
+      <TouchableOpacity style={styles.saveButton} onPress={() => router.push("../settings")}>
         <Text style={styles.saveButtonText}>Ja, ik wil mijn hondje verwijderen</Text>
       </TouchableOpacity>
     </View>

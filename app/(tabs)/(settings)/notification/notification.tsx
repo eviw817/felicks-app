@@ -3,7 +3,7 @@ import { View, Text, TouchableOpacity, StyleSheet, Switch, Alert } from "react-n
 import { useRouter } from "expo-router";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
-import { supabase } from "../../../lib/supabase";
+import { supabase } from "../../../../lib/supabase";
 
 const NotificatiesScreen = () => {
     const router = useRouter();
@@ -139,7 +139,7 @@ useEffect(() => {
         <View style={styles.container}>
             {/* Header */}
             <View style={styles.header}>
-                <TouchableOpacity onPress={() => router.push("/settings/settings")}>
+                <TouchableOpacity onPress={() => router.push("../settings")}>
                     <FontAwesomeIcon icon={faArrowLeft} size={30} color="#183A36" />
                 </TouchableOpacity>
                 <Text style={styles.title}>Meldingen en toestemmingen</Text>
