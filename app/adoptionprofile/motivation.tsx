@@ -49,7 +49,7 @@ function MotivationScreen() {
 
       <TouchableOpacity
         style={styles.button}
-        onPress={() => router.push("/adoption_profile_loading")}
+        onPress={() => router.push("./adoption_profile_loading")}
       >
         <Text style={styles.buttonText}>VOLGENDE</Text>
       </TouchableOpacity>

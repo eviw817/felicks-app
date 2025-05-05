@@ -8,8 +8,7 @@ export default function Index() {
   useEffect(() => {
     const timer = setTimeout(() => {
       // router.replace("../login-register/startpage/startpage");
-      // router.replace("../login-register/login_register");
-      router.replace("/login_register");
+      router.replace("../login-register/login_register");
     }, 3000);
 
     return () => clearTimeout(timer);

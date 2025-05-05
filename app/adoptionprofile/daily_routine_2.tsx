@@ -2,50 +2,23 @@ import React, { useState, useEffect } from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { useRouter } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
+import { Picker } from "@react-native-picker/picker";
 import { useAdoptionProfile } from "../../context/AdoptionProfileContext";
 
-type RadioButtonProps = {
-  label: string;
-  value: string;
-  selected: string | null;
-  onSelect: (value: string) => void;
-};
-
-const RadioButton: React.FC<RadioButtonProps> = ({
-  label,
-  value,
-  selected,
-  onSelect,
-}) => (
-  <TouchableOpacity
-    style={styles.radioContainer}
-    onPress={() => onSelect(value)}
-  >
-    <View
-      style={[styles.radioCircle, selected === value && styles.radioSelected]}
-    />
-    <Text style={styles.radioLabel}>{label}</Text>
-  </TouchableOpacity>
-);
-
-function LivingSituationScreen3() {
+function DailyRoutineScreen_2() {
   const router = useRouter();
   const { profileData, updateProfile } = useAdoptionProfile();
 
-  const [hasPets, setHasPets] = useState<string | null>(profileData.hasPets);
-  const [selectedPets, setSelectedPets] = useState<string[]>(profileData.pets);
+  const [timeWithDog, setTimeWithDog] = useState<string | null>(
+    profileData.timeWithDog
+  );
+  const [weekendRoutine, setWeekendRoutine] = useState<string | null>(
+    profileData.weekendRoutine
+  );
 
   useEffect(() => {
-    updateProfile({ hasPets, pets: selectedPets });
-  }, [hasPets, selectedPets]);
-
-  const togglePetSelection = (pet: string) => {
-    if (selectedPets.includes(pet)) {
-      setSelectedPets(selectedPets.filter((item) => item !== pet));
-    } else {
-      setSelectedPets([...selectedPets, pet]);
-    }
-  };
+    updateProfile({ timeWithDog, weekendRoutine });
+  }, [timeWithDog, weekendRoutine]);
 
   return (
     <View style={styles.container}>
@@ -53,7 +26,7 @@ function LivingSituationScreen3() {
         <Ionicons name="arrow-back" size={24} color="#183A36" />
       </TouchableOpacity>
 
-      <Text style={styles.title}>Woonsituatie</Text>
+      <Text style={styles.title}>Dagelijkse routine</Text>
 
       <View style={styles.progressBar}>
         <View style={styles.progressFill} />
@@ -61,56 +34,51 @@ function LivingSituationScreen3() {
 
       <View style={styles.formContainer}>
         <Text style={styles.sectionTitle}>
-          Zijn er andere huisdieren in huis?
+          Hoeveel tijd wil je dagelijks besteden aan je hond?
         </Text>
-        <RadioButton
-          label="Ja"
-          value="ja"
-          selected={hasPets}
-          onSelect={setHasPets}
-        />
-        <RadioButton
-          label="Nee"
-          value="nee"
-          selected={hasPets}
-          onSelect={setHasPets}
-        />
+        <View style={styles.pickerContainer}>
+          <Picker
+            selectedValue={timeWithDog}
+            onValueChange={(itemValue) => setTimeWithDog(itemValue)}
+            style={styles.picker}
+          >
+            <Picker.Item label="Selecteer een optie" value={null} />
+            <Picker.Item label="0-30 min" value="0-30 min" />
+            <Picker.Item label="30-60 min" value="30-60 min" />
+            <Picker.Item label="1-1,5 uur" value="1-1,5 uur" />
+            <Picker.Item label="1,5-2 uur" value="1,5-2 uur" />
+            <Picker.Item label="Meer dan 2 uur" value="2+" />
+          </Picker>
+        </View>
 
-        {hasPets === "ja" && (
-          <>
-            <Text style={styles.sectionTitle}>Welke huisdieren?</Text>
-            {[
-              "Hond",
-              "Kat",
-              "Reptielen",
-              "Vogels",
-              "Knaagdieren",
-              "Vissen",
-              "Kippen",
-            ].map((pet) => (
-              <TouchableOpacity
-                key={pet}
-                style={styles.radioContainer}
-                onPress={() => togglePetSelection(pet)}
-              >
-                <View
-                  style={[
-                    styles.radioCircle,
-                    selectedPets.includes(pet) && styles.radioSelected,
-                  ]}
-                />
-                <Text style={styles.radioLabel}>{pet}</Text>
-              </TouchableOpacity>
-            ))}
-          </>
-        )}
+        <Text style={styles.sectionTitle}>Wat is je weekendroutine?</Text>
+        {[
+          { label: "Ik ben vaak buiten actief", value: "buiten-actief" },
+          { label: "Ik blijf meestal thuis", value: "thuis" },
+          { label: "Ik werk in het weekend", value: "werk-in-weekend" },
+          { label: "Mijn weekend wisselt steeds", value: "wisselt" },
+        ].map(({ label, value }) => (
+          <TouchableOpacity
+            key={value}
+            style={styles.radioContainer}
+            onPress={() => setWeekendRoutine(value)}
+          >
+            <View
+              style={[
+                styles.radioCircle,
+                weekendRoutine === value && styles.radioSelected,
+              ]}
+            />
+            <Text style={styles.radioLabel}>{label}</Text>
+          </TouchableOpacity>
+        ))}
       </View>
 
       <TouchableOpacity
         style={styles.button}
-        onPress={() => router.push("/daily_routine_1")}
+        onPress={() => router.push("./experience")}
       >
-        <Text style={styles.buttonText}>VOLGENDE</Text>
+        <Text style={styles.buttonText}>Volgende</Text>
       </TouchableOpacity>
     </View>
   );
@@ -146,7 +114,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   progressFill: {
-    width: "33.33%",
+    width: "55.55%",
     height: "100%",
     backgroundColor: "#97B8A5",
     borderRadius: 3,
@@ -161,6 +129,17 @@ const styles = StyleSheet.create({
     color: "#183A36",
     marginBottom: 10,
     fontFamily: "nunitoBold",
+  },
+  pickerContainer: {
+    backgroundColor: "#FFF",
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: "#97B8A5",
+    marginBottom: 10,
+  },
+  picker: {
+    height: 50,
+    width: "100%",
   },
   radioContainer: {
     flexDirection: "row",
@@ -190,7 +169,6 @@ const styles = StyleSheet.create({
     width: "100%",
     alignItems: "center",
     justifyContent: "center",
-    marginTop: 20,
   },
   buttonText: {
     color: "#183A36",
@@ -202,4 +180,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default LivingSituationScreen3;
+export default DailyRoutineScreen_2;

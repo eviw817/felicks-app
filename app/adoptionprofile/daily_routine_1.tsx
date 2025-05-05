@@ -5,20 +5,21 @@ import { Ionicons } from "@expo/vector-icons";
 import { Picker } from "@react-native-picker/picker";
 import { useAdoptionProfile } from "../../context/AdoptionProfileContext";
 
-function DailyRoutineScreen_2() {
+function DailyRoutineScreen_1() {
   const router = useRouter();
   const { profileData, updateProfile } = useAdoptionProfile();
 
-  const [timeWithDog, setTimeWithDog] = useState<string | null>(
-    profileData.timeWithDog
+  const [workHours, setWorkHours] = useState<string | null>(
+    profileData.workHours
   );
-  const [weekendRoutine, setWeekendRoutine] = useState<string | null>(
-    profileData.weekendRoutine
+  const [workFromHome, setWorkFromHome] = useState<string | null>(
+    profileData.workFromHome
   );
+  const [petTime, setPetTime] = useState<string | null>(profileData.petTime);
 
   useEffect(() => {
-    updateProfile({ timeWithDog, weekendRoutine });
-  }, [timeWithDog, weekendRoutine]);
+    updateProfile({ workHours, workFromHome, petTime });
+  }, [workHours, workFromHome, petTime]);
 
   return (
     <View style={styles.container}>
@@ -34,39 +35,61 @@ function DailyRoutineScreen_2() {
 
       <View style={styles.formContainer}>
         <Text style={styles.sectionTitle}>
-          Hoeveel tijd wil je dagelijks besteden aan je hond?
+          Hoeveel uur per dag werk je gemiddeld?
         </Text>
         <View style={styles.pickerContainer}>
           <Picker
-            selectedValue={timeWithDog}
-            onValueChange={(itemValue) => setTimeWithDog(itemValue)}
+            selectedValue={workHours}
+            onValueChange={(itemValue) => setWorkHours(itemValue)}
             style={styles.picker}
           >
             <Picker.Item label="Selecteer een optie" value={null} />
-            <Picker.Item label="0-30 min" value="0-30 min" />
-            <Picker.Item label="30-60 min" value="30-60 min" />
-            <Picker.Item label="1-1,5 uur" value="1-1,5 uur" />
-            <Picker.Item label="1,5-2 uur" value="1,5-2 uur" />
-            <Picker.Item label="Meer dan 2 uur" value="2+" />
+            <Picker.Item label="Ik werk niet" value="ik werk niet" />
+            <Picker.Item label="1-4 uur" value="1-4 uur" />
+            <Picker.Item label="5-6 uur" value="5-6 uur" />
+            <Picker.Item label="7-8 uur" value="7-8 uur" />
+            <Picker.Item label="Meer dan 8 uur" value="8+ uur" />
           </Picker>
         </View>
 
-        <Text style={styles.sectionTitle}>Wat is je weekendroutine?</Text>
+        <Text style={styles.sectionTitle}>Werk je vanuit huis?</Text>
         {[
-          { label: "Ik ben vaak buiten actief", value: "buiten-actief" },
-          { label: "Ik blijf meestal thuis", value: "thuis" },
-          { label: "Ik werk in het weekend", value: "werk-in-weekend" },
-          { label: "Mijn weekend wisselt steeds", value: "wisselt" },
+          { label: "Voltijd", value: "voltijd" },
+          { label: "Halftijds", value: "halftijds" },
+          { label: "Niet", value: "niet" },
         ].map(({ label, value }) => (
           <TouchableOpacity
             key={value}
             style={styles.radioContainer}
-            onPress={() => setWeekendRoutine(value)}
+            onPress={() => setWorkFromHome(value)}
           >
             <View
               style={[
                 styles.radioCircle,
-                weekendRoutine === value && styles.radioSelected,
+                workFromHome === value && styles.radioSelected,
+              ]}
+            />
+            <Text style={styles.radioLabel}>{label}</Text>
+          </TouchableOpacity>
+        ))}
+
+        <Text style={styles.sectionTitle}>
+          Hoeveel tijd per dag kan je besteden aan een huisdier?
+        </Text>
+        {[
+          { label: "Minder dan 1 uur", value: "minder1" },
+          { label: "1 - 3 uur", value: "1-3" },
+          { label: "3+ uur", value: "3+" },
+        ].map(({ label, value }) => (
+          <TouchableOpacity
+            key={value}
+            style={styles.radioContainer}
+            onPress={() => setPetTime(value)}
+          >
+            <View
+              style={[
+                styles.radioCircle,
+                petTime === value && styles.radioSelected,
               ]}
             />
             <Text style={styles.radioLabel}>{label}</Text>
@@ -76,9 +99,9 @@ function DailyRoutineScreen_2() {
 
       <TouchableOpacity
         style={styles.button}
-        onPress={() => router.push("/experience")}
+        onPress={() => router.push("./daily_routine_2")}
       >
-        <Text style={styles.buttonText}>Volgende</Text>
+        <Text style={styles.buttonText}>VOLGENDE</Text>
       </TouchableOpacity>
     </View>
   );
@@ -114,7 +137,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   progressFill: {
-    width: "55.55%",
+    width: "44.44%",
     height: "100%",
     backgroundColor: "#97B8A5",
     borderRadius: 3,
@@ -169,6 +192,7 @@ const styles = StyleSheet.create({
     width: "100%",
     alignItems: "center",
     justifyContent: "center",
+    marginTop: 20,
   },
   buttonText: {
     color: "#183A36",
@@ -180,4 +204,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default DailyRoutineScreen_2;
+export default DailyRoutineScreen_1;
