@@ -1,29 +1,27 @@
-import React, { useState } from "react";
+import React from "react";
 import { View, Text, TouchableOpacity, Image, StyleSheet } from "react-native";
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import { useRouter } from "expo-router";
 
-const Remove2PetScreen = () => {
-  const [petName, setPetName] = useState("");;
+const RemovePetScreen = () => {
   const router = useRouter();
 
   return (
     <View style={styles.container}>
         <View style={styles.header}>
-            <TouchableOpacity onPress={() => router.push("../settings")} style={styles.backButton}>
-                <FontAwesomeIcon icon={faArrowLeft} size={30} color={'#183A36'} style={styles.backButton} />
-            </TouchableOpacity>
-            <Text style={styles.title}>Huisdier verwijderen</Text>
-        </View>
-      <Image source={{ uri: "https://via.placeholder.com/150" }} style={styles.image} />
-      <Text style={styles.label}>Ben je zeker dat je je huisdiertje wilt verwijderen?</Text>
-      <TouchableOpacity style={styles.saveButton} onPress={() => router.push("../pet/pet")}>
-        <Text style={styles.saveButtonText}>Neen, ik wil mijn hondje behouden</Text>
+                    <TouchableOpacity onPress={() => router.push("../settings")} style={styles.backButton}>
+                        <FontAwesomeIcon icon={faArrowLeft} size={30} color={'#183A36'} style={styles.backButton} />
+                    </TouchableOpacity>
+                    <Text style={styles.title}>Verwijder je huisdier</Text>
+                </View>
+      <Text style={styles.label}>Het spijt ons dat je het huisdier wilt verwijderen, maar we hopen dat je naar een levend huisdier bent gegaan. Houd er rekening mee dat het permanent wordt verwijderd en dat je de hond opnieuw moet aanmaken. 
+      </Text>
+     
+      <TouchableOpacity style={styles.saveButton} onPress={() => router.push("../remove2pet")}>
+        <Text style={styles.saveButtonText}>VERWIJDER HUISDIER</Text>
       </TouchableOpacity>
-      <TouchableOpacity style={styles.saveButton} onPress={() => router.push("../settings")}>
-        <Text style={styles.saveButtonText}>Ja, ik wil mijn hondje verwijderen</Text>
-      </TouchableOpacity>
+
     </View>
   );
 };
@@ -49,16 +47,10 @@ title: {
     fontSize: 23,
     fontWeight: "bold",
     color: '#183A36',
-    marginBottom: 20,
+    marginBottom: 190,
     textAlign: "center",
 },
-  image: {
-    width: 110,
-    height: 110,
-    borderRadius: 50,
-    marginBottom: 20,
-    backgroundColor: "#E0E0E0",
-  },
+
   label: {
     color: '#183A36',
     alignSelf: "center",
@@ -66,20 +58,21 @@ title: {
     fontSize: 16,
     marginBottom: 25,
   },
+ 
   saveButton: {
     backgroundColor: "#97B8A5",
     paddingVertical: 15,
     borderRadius: 20,
     width: "100%",
     alignItems: "center",
-    marginBottom: 15,
+    marginBottom: 75,
   },
   saveButtonText: {
     color: "#183A36",
     fontSize: 16,
     fontWeight: "bold",
-    textTransform: "uppercase"
   },
+
   backButton: {
     position: "absolute",
     left: 5,
@@ -87,4 +80,4 @@ title: {
   },
 });
 
-export default Remove2PetScreen;
+export default RemovePetScreen;

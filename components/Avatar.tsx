@@ -178,7 +178,7 @@ export default function Avatar({ url, size = 150, onUpload, showUploadButton = t
               <Text style={styles.modalButton}>Ja, verwijderen</Text>
             </TouchableOpacity>
 
-            <TouchableOpacity onPress={() => setModalVisible(false)}>
+            <TouchableOpacity onPress={() => setRemoveModalVisible(false)}>
               <Text style={styles.modalButtonAnnuleer}>Annuleren</Text>
             </TouchableOpacity>
           </View>

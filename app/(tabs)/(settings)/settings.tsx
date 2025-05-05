@@ -13,14 +13,14 @@ const SettingsScreen = () => {
     return (
         <View style={styles.container} >
             <View style={styles.header}>
-                <TouchableOpacity onPress={() => router.push("/")} style={styles.backButton}>
+                <TouchableOpacity onPress={() => router.push("/profile")} style={styles.backButton}>
                     <FontAwesomeIcon icon={faArrowLeft} size={30} color={'#183A36'} style={styles.backButton} />
                 </TouchableOpacity>
                 <Text style={styles.title}>Instellingen</Text>
             </View>
 
             <View style={styles.menu}>
-                <TouchableOpacity style={styles.menuItem} onPress={() => router.push("../hulp/hulp")}>
+                <TouchableOpacity style={styles.menuItem} onPress={() => router.push("../hulp")}>
                     <View style={styles.leftSection}>
                         <FontAwesomeIcon icon={faCircleInfo} size={30} color="#183A36" />
                         <Text style={styles.menuText}>Hulp</Text>
@@ -28,7 +28,7 @@ const SettingsScreen = () => {
                     <FontAwesomeIcon icon={faChevronRight} size={25} color="#183A36" />
                 </TouchableOpacity>
 
-                <TouchableOpacity style={styles.menuItem} onPress={() => router.push("../notification/notification")}>
+                <TouchableOpacity style={styles.menuItem} onPress={() => router.push("../notification")}>
                     <View style={styles.leftSection}>
                         <FontAwesomeIcon icon={faBell} size={30} color="#183A36" />
                         <Text style={styles.menuText}>Meldingen</Text>
@@ -36,7 +36,7 @@ const SettingsScreen = () => {
                     <FontAwesomeIcon icon={faChevronRight} size={25} color="#183A36" />
                 </TouchableOpacity>
 
-                <TouchableOpacity style={styles.menuItem} onPress={() => router.push("../pet/pet")}>
+                <TouchableOpacity style={styles.menuItem} onPress={() => router.push("../pet")}>
                     <View style={styles.leftSection}>
                         <FontAwesomeIcon icon={faPaw} size={30} color="#183A36" />
                         <Text style={styles.menuText}>Pas je huisdier aan</Text>
@@ -48,10 +48,10 @@ const SettingsScreen = () => {
 
             {/* Afmelden & Account verwijderen */}
             <View style={styles.logoutSection}>
-                <TouchableOpacity onPress={() => router.push("../afmelden/afmelden")}>
+                <TouchableOpacity onPress={() => router.push("../afmelden")}>
                     <Text style={styles.logoutText}>Afmelden</Text>
                 </TouchableOpacity>
-                <TouchableOpacity  onPress={() => router.push("../account/account")}>
+                <TouchableOpacity  onPress={() => router.push("../account")}>
                     <Text style={styles.deleteText}>Account verwijderen</Text>
                 </TouchableOpacity>
             </View>

@@ -3,7 +3,7 @@ import { View, Text, TouchableOpacity, StyleSheet, Alert } from "react-native";
 import { useRouter } from "expo-router";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
-import { supabase } from "../../../../lib/supabase";
+import { supabase } from "../../../lib/supabase";
 
 const AfmeldenScreen = () => {
     const router = useRouter();
@@ -36,7 +36,7 @@ const AfmeldenScreen = () => {
             <TouchableOpacity style={styles.button} onPress={() => router.push("../settings")}>
                 <Text style={styles.buttonText}>NEE</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.button} onPress={handleLogout}>
+            <TouchableOpacity style={styles.nobutton} onPress={handleLogout}>
                 <Text style={styles.buttonText}>JA</Text>
             </TouchableOpacity>
         </View>
@@ -86,7 +86,7 @@ const styles = StyleSheet.create({
         backgroundColor: "#97B8A5",
         paddingVertical: 15,
         borderRadius: 20,
-        width: "90%",
+        width: "100%",
         alignItems: "center",
         marginBottom: 15,
     },
@@ -95,6 +95,16 @@ const styles = StyleSheet.create({
         fontSize: 16,
         fontWeight: "bold",
     },
+    nobutton: {
+        borderWidth: 2,
+        borderColor: "#97B8A5",  
+        backgroundColor: "transparent",
+        paddingVertical: 15,
+        borderRadius: 20,
+        width: "100%",
+        alignItems: "center",
+        marginBottom: 15,
+      }
 });
 
 export default AfmeldenScreen;

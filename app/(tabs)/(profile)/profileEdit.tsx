@@ -5,12 +5,12 @@ import { SafeAreaView, KeyboardAvoidingView, Platform, ScrollView }from "react-n
 import { useRouter } from "expo-router";
 import { useState, useEffect } from 'react'
 import { Picker } from '@react-native-picker/picker';
-import { supabase } from "../../../../lib/supabase";
+import { supabase } from "../../../lib/supabase";
 import { Session } from "@supabase/supabase-js";
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 import { faGear } from '@fortawesome/free-solid-svg-icons';
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
-import Avatar from "../../../../components/Avatar";
+import Avatar from "../../../components/Avatar";
 
 const ProfileEditScreen = () => {
     const router = useRouter();
@@ -139,7 +139,7 @@ const ProfileEditScreen = () => {
         }
       
         // Redirect after successful profile update
-        router.push("../profile");
+        router.push("/profile");
         setLoading(false);
       };
 
@@ -177,21 +177,27 @@ const ProfileEditScreen = () => {
       }
     }, [session]);
     
+       const goToSettings = () => {
+        router.push('/settings');
+      };
     
+
     
     return (
       <KeyboardAvoidingView 
       style={{ flex: 1 }} 
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
     >
-      <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+      <ScrollView contentContainerStyle={{ flexGrow: 1, paddingBottom: 50}}>
       <SafeAreaView  style={styles.container} >
          <View style={styles.header}>
-         <TouchableOpacity onPress={() => router.push("../profile")} style={styles.backButton}>
+         <TouchableOpacity onPress={() => router.push("/profile")} style={styles.backButton}>
          <FontAwesomeIcon icon={faArrowLeft} size={30} color={'#183A36'} style={styles.backButton} />
         </TouchableOpacity>
           <Text style={styles.title}>Profiel bewerken</Text>
-          <FontAwesomeIcon icon={faGear} size={28} color={'#183A36'} style={styles.settingicon} />
+            <TouchableOpacity onPress={goToSettings} style={styles.settingsicon}>
+              <FontAwesomeIcon icon={faGear} size={28} color={'#183A36'}  />
+            </TouchableOpacity>
         </View>
   
         {/* Profielsectie */}
@@ -328,14 +334,14 @@ const ProfileEditScreen = () => {
                 style={styles.buttons} 
                 onPress={() => {
                   setModalVisible(false);
-                  router.push("../profileEdit/password/forget_password");
+                  router.push("../forget_password");
                 }}
               >
                 <Text style={styles.buttonText}>Ja</Text>
               </TouchableOpacity>
 
               <TouchableOpacity 
-                style={styles.buttons} 
+                style={[styles.buttons, styles.noButton]} 
                 onPress={() => setModalVisible(false)}
               >
                 <Text style={styles.buttonText}>Neen</Text>
@@ -385,7 +391,7 @@ const ProfileEditScreen = () => {
         position: "relative", 
         paddingVertical: 10,
       },
-    settingicon: {
+     settingsicon: {
       position: "absolute",
       right: 15, 
       top: 12,
@@ -458,6 +464,15 @@ const ProfileEditScreen = () => {
         color: '#183A36',
         fontSize: 16,
         fontWeight: "bold", 
+      },
+      noButton: {
+        backgroundColor: 'transparent',  
+        borderWidth: 2,                 
+        borderColor: '#97B8A5',          
+        borderRadius: 15,                
+        padding: 15,                     
+        marginHorizontal: 5,             
+        alignItems: 'center',            
       },
       label: {
         alignSelf: "flex-start",

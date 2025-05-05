@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, StyleSheet, TouchableOpacity, TextInput, Alert } from "react-native";
 import { useRouter, useLocalSearchParams } from "expo-router";
-import { supabase } from "../../../../../lib/supabase";
+import { supabase } from "../../../lib/supabase";
 import * as Linking from "expo-linking";
 import * as SecureStore from 'expo-secure-store';
 
@@ -46,7 +46,7 @@ const NewPasswordScreen = () => {
 
           // Navigeer naar de juiste pagina op basis van de URL
           if (url.includes("profileEdit")) {
-            router.push('/profile/profileEdit/password/newpassword'); // Voor profiel bewerking
+            router.push('../newpassword'); // Voor profiel bewerking
           } else {
             router.push('/'); // Voor inloggen
           }
@@ -106,7 +106,7 @@ const NewPasswordScreen = () => {
         Alert.alert("Fout", error.message);
       } else {
         Alert.alert("Succes", "Je wachtwoord is succesvol gereset!");
-        router.push("/profile/profile");
+        router.push("../profile");
       }
     } catch (err) {
       Alert.alert("Fout", "Er is iets mis gegaan bij het resetten van je wachtwoord.");

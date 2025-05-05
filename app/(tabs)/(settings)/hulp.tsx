@@ -20,14 +20,14 @@ const HulpScreen = () => {
             </View>
 
             <View style={styles.menu}>
-                <TouchableOpacity style={styles.menuItem} onPress={() => router.push("../hulp/probleem")}>
+                <TouchableOpacity style={styles.menuItem} onPress={() => router.push("../probleem")}>
                     <View style={styles.leftSection}>
                         <Text style={styles.menuText}>Probleem rapporteren</Text>
                     </View>
                     <FontAwesomeIcon icon={faChevronRight} size={25} color="#183A36" />
                 </TouchableOpacity>
 
-                <TouchableOpacity style={styles.menuItem} onPress={() => router.push("../hulp/helpcentrum")}>
+                <TouchableOpacity style={styles.menuItem} onPress={() => router.push("../helpcentrum")}>
                     <View style={styles.leftSection}>
                         <Text style={styles.menuText}>Helpcentrum</Text>
                     </View>

@@ -11,7 +11,7 @@ export default function TabLayout() {
           headerShown: false,
         }}
       />
-      {/* Demo Tab */}
+      {/* Setting Tab */}
       <Stack.Screen
         name="(settings)" // Verwijst naar de map app/(tabs)/(settings)
         options={{
@@ -20,6 +20,6 @@ export default function TabLayout() {
         }}
       />
     
-    </Stack> //voor een navigatie te maken moet alles Tabs zijn, dus ook Tabs.Scree
+    </Stack> 
   );
 }

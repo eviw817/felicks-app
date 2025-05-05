@@ -51,7 +51,7 @@ const EditPetScreen = () => {
         <Text style={styles.saveButtonText}>OPSLAAN</Text>
       </TouchableOpacity>
       <TouchableOpacity>
-        <Text style={styles.deleteText} onPress={() => router.push("../pet/removepet")}>Huisdier verwijderen</Text>
+        <Text style={styles.deleteText} onPress={() => router.push("../removepet")}>Huisdier verwijderen</Text>
       </TouchableOpacity>
     </View>
   );

@@ -99,7 +99,7 @@ const ProfileScreen = () => {
 
       
       {/* De bewerk-knop onder de tekst */}
-      <TouchableOpacity style={styles.editButton}  onPress={() => router.push("../profileEdit/profileEdit")}>
+      <TouchableOpacity style={styles.editButton}  onPress={() => router.push("../profileEdit")}>
         <Text style={styles.editButtonText}>BEWERKEN</Text>
       </TouchableOpacity>
     </View>

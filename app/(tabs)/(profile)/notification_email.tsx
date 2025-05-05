@@ -17,9 +17,12 @@ const NotficationEmailScreen = () => {
             const hashParams = new URLSearchParams(parsedUrl.hash.replace('#', '')); // Verwijder de '#'
             const token = hashParams.get('access_token'); // Verkrijg het token uit de URL
     
-            if (url.includes("profile/profileEdit/password/newpassword") && token) {
+            if (url.includes("newpassword") && token) {
               console.log("Token gevonden:", token);
-              router.replace(`/profile/profileEdit/password/newpassword?access_token=${token}`);
+              router.replace({
+                pathname: "/(tabs)/(login-register)/newpassword",
+                params: { access_token: token }
+              });
             } else {
               console.log("Geen geldig token in de deep link.");
               Alert.alert("Fout", "Geen geldig token in de deep link.");
