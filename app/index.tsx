@@ -78,7 +78,7 @@ const LoginScreen = () => {
       return;
     }
 
-    router.push("/profile/profile"); 
+    router.push("../profile"); 
     setLoading(false);
   }
 
@@ -132,7 +132,7 @@ const LoginScreen = () => {
       {/* Registreren link */}
       <Text style={styles.registerText}>
         Nog geen account?{" "}
-        <Text style={styles.registerLink} onPress={() => router.push("/profile/profile")}>
+        <Text style={styles.registerLink} onPress={() => router.push("../profile")}>
           Registreer hier
         </Text>
       </Text>

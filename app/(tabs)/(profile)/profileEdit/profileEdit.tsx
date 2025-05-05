@@ -139,7 +139,7 @@ const ProfileEditScreen = () => {
         }
       
         // Redirect after successful profile update
-        router.push("/profile/profile");
+        router.push("../profile");
         setLoading(false);
       };
 
@@ -187,7 +187,7 @@ const ProfileEditScreen = () => {
       <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
       <SafeAreaView  style={styles.container} >
          <View style={styles.header}>
-         <TouchableOpacity onPress={() => router.push("/profile/profile")} style={styles.backButton}>
+         <TouchableOpacity onPress={() => router.push("../profile")} style={styles.backButton}>
          <FontAwesomeIcon icon={faArrowLeft} size={30} color={'#183A36'} style={styles.backButton} />
         </TouchableOpacity>
           <Text style={styles.title}>Profiel bewerken</Text>
@@ -328,7 +328,7 @@ const ProfileEditScreen = () => {
                 style={styles.buttons} 
                 onPress={() => {
                   setModalVisible(false);
-                  router.push("/profile/profileEdit/password/forget_password");
+                  router.push("../profileEdit/password/forget_password");
                 }}
               >
                 <Text style={styles.buttonText}>Ja</Text>

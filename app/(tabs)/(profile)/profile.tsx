@@ -70,13 +70,19 @@ const ProfileScreen = () => {
       useEffect(() => {
         fetchUserData();
       }, []);
+
+      const goToSettings = () => {
+        router.push('/settings');
+      };
     
 
     return (
       <View style={styles.container}>
          <View style={styles.header}>
         <Text style={styles.title}>Profiel</Text>
-       <FontAwesomeIcon icon={faGear} size={28} color={'#183A36'} style={styles.settingsicon} />
+       <TouchableOpacity onPress={goToSettings} style={styles.settingsicon}>
+         <FontAwesomeIcon icon={faGear} size={28} color={'#183A36'}  />
+       </TouchableOpacity>
         </View>
   
         {/* Profielsectie */}
@@ -93,7 +99,7 @@ const ProfileScreen = () => {
 
       
       {/* De bewerk-knop onder de tekst */}
-      <TouchableOpacity style={styles.editButton}  onPress={() => router.push("/profile/profileEdit/profileEdit")}>
+      <TouchableOpacity style={styles.editButton}  onPress={() => router.push("../profileEdit/profileEdit")}>
         <Text style={styles.editButtonText}>BEWERKEN</Text>
       </TouchableOpacity>
     </View>
