@@ -4,6 +4,7 @@ import { supabase } from "../../../lib/supabase";
 import { Session } from '@supabase/supabase-js';
 import { FontAwesome } from '@expo/vector-icons';
 import { TouchableOpacity } from 'react-native';
+import { Link } from 'expo-router';
 
 export default function Homepage() {
   const [firstname, setFirstname] = useState<string>(""); // State to store firstname
@@ -101,12 +102,12 @@ export default function Homepage() {
         top: 70,
         right: 30,
       }}>
-        {/* Envelope Icon */}
+        <Link href="/notifications_home">
         <FontAwesome
           name="envelope-o"
           size={30} // Icon size
           color="#183A36" // Icon color
-        />
+        /></Link>
       </View>
       <ScrollView  contentContainerStyle={{ flexGrow: 1, paddingBottom: 80 }}
         style={{

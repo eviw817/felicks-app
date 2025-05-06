@@ -11,6 +11,14 @@ export default function TabLayout() {
           headerShown: false,
         }}
       />
+      {/* notifications Tab */}
+      <Stack.Screen
+        name="(notifications)" // Verwijst naar de map app/(tabs)/(homepage)
+        options={{
+          title: "Notifications",
+          headerShown: false,
+        }}
+      />
     </Stack> //voor een navigatie te maken moet alles Tabs zijn, dus ook Tabs.Scree
   );
 }
