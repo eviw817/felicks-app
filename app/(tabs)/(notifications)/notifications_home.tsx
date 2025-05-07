@@ -49,13 +49,105 @@ export default function Notifications() {
                     fontSize: 20,
                     padding: 10,
                 }}>Recente meldingen</Text>
-                <Text style={{
-                    fontFamily: "Nunito",
-                    fontWeight: "semibold",
-                    fontSize: 16,
-                    padding: 10,
-                    color: 'rgba(24, 58, 54, 0.5)',
-                }}>Geen meldingen</Text>
+                <View style={{
+                    marginVertical: 10,
+                    display: 'flex',
+                    flexDirection: 'row',
+                }}>
+                    <Image 
+                        style={{ width: 100, height: 100, borderRadius: 15, marginRight: 4 }} 
+                        source={require("../../../assets/images/cooper-profile.png")}
+                    />
+                    <View style={{
+                        display:'flex',
+                        flexDirection:'column',
+                        padding: 10,
+                        gap: 4,
+                    }}>
+                        <View style={{
+                            display: 'flex',
+                            flexDirection:'row',
+                            gap: 4,
+
+                        }}>
+                            <FontAwesome name="exclamation-triangle" size={20} color="#F18B7E" />
+                            <Text style={{
+                                color: "#F18B7E",
+                            }}>Cooper moet naar het toilet</Text>
+
+                        </View>
+                        <Text style={{
+                            marginRight: 80,
+                            color: "#183A36",
+                        }}>Als Cooper nog lang moet wachten, is de kans dat hij zijn boodschap binnen doet groot</Text>
+                    </View>
+                </View>
+                <View style={{
+                    marginVertical: 10,
+                    display: 'flex',
+                    flexDirection: 'row',
+                }}>
+                    <Image 
+                        style={{ width: 100, height: 100, borderRadius: 15, marginRight: 4 }} 
+                        source={require("../../../assets/images/cooper-profile.png")}
+                    />
+                    <View style={{
+                        display:'flex',
+                        flexDirection:'column',
+                        padding: 10,
+                        gap: 4,
+                    }}>
+                        <View style={{
+                            display: 'flex',
+                            flexDirection:'row',
+                            gap: 4,
+
+                        }}>
+                            <FontAwesome name="exclamation-triangle" size={20} color="#F18B7E" />
+                            <Text style={{
+                                color: "#F18B7E",
+                            }}>Cooper moet gaan wandelen</Text>
+
+                        </View>
+                        <Text style={{
+                            marginRight: 80,
+                            color: "#183A36",
+                        }}>Als Cooper geen fysieke uitdaging krijgt, gaat hij waarschijnlijk beginnen bijten aan je meubelen, kleren, schoenen, ...</Text>
+                    </View>
+                </View>
+                <View style={{
+                    marginVertical: 10,
+                    display: 'flex',
+                    flexDirection: 'row',
+                }}>
+                    <Image 
+                        style={{ width: 100, height: 100, borderRadius: 15, marginRight: 4 }} 
+                        source={require("../../../assets/images/dogfoto1.png")}
+                    />
+                    <View style={{
+                        display:'flex',
+                        flexDirection:'column',
+                        padding: 10,
+                        gap: 4,
+                    }}>
+                        <View style={{
+                            display: 'flex',
+                            flexDirection:'row',
+                            gap: 4,
+
+                        }}>
+                            <FontAwesome name="exclamation-triangle" size={20} color="#F18B7E" />
+                            <Text style={{
+                                color: "#F18B7E",
+                            }}>Status verandering in je dossier </Text>
+
+                        </View>
+                        <Text style={{
+                            marginRight: 80,
+                            color: "#183A36",
+                        }}>Er is een update in je adoptieaanvraag! Voor meer details over de huidige status kun je terecht in je profiel. </Text>
+                    </View>
+                </View>
             </View>
         </ScrollView>
     </SafeAreaView>
