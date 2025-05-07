@@ -1,10 +1,10 @@
 import React from "react";
 import { View, Text, TouchableOpacity, StyleSheet, ScrollView, Image } from "react-native";
 import { useFonts } from 'expo-font';
-import { useRouter } from "expo-router"; // Import useRouter
+import { useRouter } from "expo-router"; // Expo Router navigatie
 
 export default function BewustzijnScreen() {
-  const router = useRouter(); // Gebruik de router om te navigeren
+  const router = useRouter(); // Router hook
 
   const [fontsLoaded] = useFonts({
     "Nunito-Regular": require("../assets/fonts/nunito/Nunito-Regular.ttf"),
@@ -17,11 +17,11 @@ export default function BewustzijnScreen() {
   }
 
   const topics = [
-    { title: "VOEDING", image: require("../assets/images/voeding.png") },
-    { title: "VEILIGHEID", image: require("../assets/images/veiligheid.png") },
-    { title: "TRAINING", image: require("../assets/images/training.png") },
-    { title: "VERZORGING", image: require("../assets/images/verzorging.png") },
-    { title: "ACTIVITEIT", image: require("../assets/images/activiteit.png") },
+    { title: "VOEDING", image: require("../assets/images/voeding.png"), categorie: "voeding" },
+    { title: "VEILIGHEID", image: require("../assets/images/veiligheid.png"), categorie: "veiligheid" },
+    { title: "TRAINING", image: require("../assets/images/training.png"), categorie: "training" },
+    { title: "VERZORGING", image: require("../assets/images/verzorging.png"), categorie: "verzorging" },
+    { title: "ACTIVITEIT", image: require("../assets/images/activiteit.png"), categorie: "activiteit" },
   ];
 
   return (
@@ -29,7 +29,6 @@ export default function BewustzijnScreen() {
       <Text style={styles.title}>Bewustzijn</Text>
       <Text style={styles.subtitle}>Doe de quiz van de week</Text>
 
-      {/* Update: Navigeren naar quiz-index.tsx */}
       <TouchableOpacity style={styles.quizButton} onPress={() => router.push("/quiz_index")}>
         <Text style={styles.quizButtonText}>QUIZ VAN DE WEEK</Text>
       </TouchableOpacity>
@@ -38,7 +37,17 @@ export default function BewustzijnScreen() {
 
       <ScrollView contentContainerStyle={styles.buttonContainer}>
         {topics.map((item, index) => (
-          <TouchableOpacity key={index} style={styles.infoButton}>
+          <TouchableOpacity
+            key={index}
+            style={styles.infoButton}
+            onPress={() =>
+              router.push({
+                pathname: "/artikels_index",
+                params: { categorie: item.categorie },
+              })
+            }
+            
+          >
             <View style={styles.infoContent}>
               <Image source={item.image} style={styles.infoImage} />
               <Text style={styles.infoButtonText}>{item.title}</Text>
@@ -49,6 +58,7 @@ export default function BewustzijnScreen() {
     </View>
   );
 }
+
 
 const styles = StyleSheet.create({
   container: {
@@ -73,7 +83,7 @@ const styles = StyleSheet.create({
   },
 
   quizButton: {
-    backgroundColor: "#FFD87E",
+    backgroundColor: "#F18B7E",
     paddingVertical: 12,
     paddingHorizontal: 25,
     borderRadius: 15,
@@ -97,7 +107,7 @@ const styles = StyleSheet.create({
   },
 
   infoButton: {
-    backgroundColor: "#97B8A5",
+    backgroundColor: "#FFD87E",
     paddingVertical: 15,
     borderRadius: 15,
     marginVertical: 5,
