@@ -17,7 +17,7 @@ function StartScreen() {
       setSession(session);
 
       if (!session) {
-        router.replace("/login-register/login/login"); // Redirect als er geen sessie is
+        router.replace("/login"); // Redirect als er geen sessie is
       }
     };
 
@@ -28,7 +28,7 @@ function StartScreen() {
       (_event, session) => {
         setSession(session);
         if (!session) {
-          router.replace("/login-register/login/login"); // Als de gebruiker uitlogt, direct naar loginpagina
+          router.replace("/login"); // Als de gebruiker uitlogt, direct naar loginpagina
         }
       }
     );
