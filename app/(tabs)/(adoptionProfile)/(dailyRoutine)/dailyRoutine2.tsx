@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
-import { useRouter } from "expo-router";
+import { useRouter, Link } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 import { Picker } from "@react-native-picker/picker";
-import { useAdoptionProfile } from "../../context/AdoptionProfileContext";
+import { useAdoptionProfile } from "../../../../context/AdoptionProfileContext";
 
 function DailyRoutineScreen_2() {
   const router = useRouter();
@@ -74,12 +74,11 @@ function DailyRoutineScreen_2() {
         ))}
       </View>
 
-      <TouchableOpacity
+      <Link
         style={styles.button}
-        onPress={() => router.push("./experience")}
-      >
+        href="/experience">
         <Text style={styles.buttonText}>Volgende</Text>
-      </TouchableOpacity>
+      </Link>
     </View>
   );
 }

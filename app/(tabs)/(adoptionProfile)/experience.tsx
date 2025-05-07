@@ -6,9 +6,9 @@ import {
   TouchableOpacity,
   ScrollView,
 } from "react-native";
-import { useRouter } from "expo-router";
+import { useRouter, Link } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
-import { useAdoptionProfile } from "../../context/AdoptionProfileContext";
+import { useAdoptionProfile } from "../../../context/AdoptionProfileContext";
 
 type RadioButtonProps = {
   label: string;
@@ -142,12 +142,11 @@ function ExperienceScreen() {
         )}
       </View>
 
-      <TouchableOpacity
+      <Link
         style={styles.button}
-        onPress={() => router.push("./preference_1")}
-      >
+        href="/preference1">
         <Text style={styles.buttonText}>Volgende</Text>
-      </TouchableOpacity>
+      </Link>
     </ScrollView>
   );
 }

@@ -4,7 +4,7 @@ import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { useRouter } from "expo-router";
 import { useFonts } from "expo-font";
 import { Ionicons } from "@expo/vector-icons";
-import { useAdoptionProfile } from "../../context/AdoptionProfileContext";
+import { useAdoptionProfile } from "../../../../context/AdoptionProfileContext";
 
 type RadioButtonProps = {
   label: string;
@@ -32,8 +32,8 @@ const RadioButton: React.FC<RadioButtonProps> = ({
 
 function LivingSituationScreen1() {
   const [fontsLoaded] = useFonts({
-    nunitoBold: require("../../assets/fonts/nunito/Nunito-Bold.ttf"),
-    nunitoRegular: require("../../assets/fonts/nunito/Nunito-Regular.ttf"),
+    nunitoBold: require("../../../../assets/fonts/nunito/Nunito-Bold.ttf"),
+    nunitoRegular: require("../../../../assets/fonts/nunito/Nunito-Regular.ttf"),
   });
 
   const router = useRouter();
@@ -53,7 +53,7 @@ function LivingSituationScreen1() {
       garden: tuin,
       environment: omgeving,
     });
-    router.push("./living_situation_2");
+    router.push("/livingSituation2");
   };
 
   return (

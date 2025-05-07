@@ -6,10 +6,10 @@ import {
   TouchableOpacity,
   ScrollView,
 } from "react-native";
-import { useRouter } from "expo-router";
+import { useRouter, Link } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 import { Picker } from "@react-native-picker/picker";
-import { useAdoptionProfile } from "../../context/AdoptionProfileContext";
+import { useAdoptionProfile } from "../../../../context/AdoptionProfileContext";
 
 const RadioButton = ({
   label,
@@ -137,12 +137,11 @@ function Preference2() {
         </View>
       </View>
 
-      <TouchableOpacity
+      <Link
         style={styles.button}
-        onPress={() => router.push("./motivation")}
-      >
+        href="/motivation">
         <Text style={styles.buttonText}>Volgende</Text>
-      </TouchableOpacity>
+      </Link>
     </ScrollView>
   );
 }

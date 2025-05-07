@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
-import { useRouter } from "expo-router";
+import { useRouter, Link } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
-import { useAdoptionProfile } from "../../context/AdoptionProfileContext";
+import { useAdoptionProfile } from "../../../../context/AdoptionProfileContext";
 
 type RadioButtonProps = {
   label: string;
@@ -106,12 +106,11 @@ function LivingSituationScreen3() {
         )}
       </View>
 
-      <TouchableOpacity
+      <Link
         style={styles.button}
-        onPress={() => router.push("./daily_routine_1")}
-      >
+        href="/dailyRoutine1">
         <Text style={styles.buttonText}>VOLGENDE</Text>
-      </TouchableOpacity>
+      </Link>
     </View>
   );
 }

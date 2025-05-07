@@ -11,7 +11,7 @@ import { Ionicons } from "@expo/vector-icons";
 import DateTimePicker, {
   DateTimePickerEvent,
 } from "@react-native-community/datetimepicker";
-import { useAdoptionProfile } from "../../context/AdoptionProfileContext";
+import { useAdoptionProfile } from "../../../../context/AdoptionProfileContext";
 
 const RadioButton = ({
   label,
@@ -85,7 +85,7 @@ function LivingSituationScreen2() {
       hasChildren,
       childrenAges,
     });
-    router.push("./living_situation_3");
+    router.push("/livingSituation3");
   };
 
   return (

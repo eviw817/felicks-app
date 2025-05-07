@@ -13,9 +13,24 @@ export default function TabLayout() {
       />
       {/* notifications Tab */}
       <Stack.Screen
-        name="(notifications)" // Verwijst naar de map app/(tabs)/(homepage)
+        name="(notifications)" // Verwijst naar de map app/(tabs)/(notifications)
         options={{
           title: "Notifications",
+          headerShown: false,
+        }}
+      />
+      {/* login Tab */}
+      <Stack.Screen
+        name="(login-register)" // Verwijst naar de map app/(tabs)/(login-register)
+        options={{
+          title: "Login or Register",
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="(adoptionProfile)" // Verwijst naar de map app/(tabs)/(adoptionProfile)
+        options={{
+          title: "Adoption profile",
           headerShown: false,
         }}
       />

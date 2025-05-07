@@ -7,28 +7,28 @@ import {
   TouchableOpacity,
   ScrollView,
 } from "react-native";
-import { useRouter } from "expo-router";
+import { useRouter, Link } from "expo-router";
 
 const dogs = [
   {
     id: "appenzeller",
     name: "Appenzeller Sennenhond",
-    image: require("../../assets/images/appenzeller.png"),
+    image: require("../../../../assets/images/appenzeller.png"),
   },
   {
     id: "cocker",
     name: "Engelse cocker spaniel",
-    image: require("../../assets/images/cocker.png"),
+    image: require("../../../../assets/images/cocker.png"),
   },
   {
     id: "jack",
     name: "Jack russell terriër",
-    image: require("../../assets/images/jack.png"),
+    image: require("../../../../assets/images/jack.png"),
   },
   {
     id: "border",
     name: "Border collie",
-    image: require("../../assets/images/collie.png"),
+    image: require("../../../../assets/images/collie.png"),
   },
 ];
 
@@ -49,7 +49,7 @@ function SuitableDogsScreen() {
             key={dog.id}
             style={styles.dogItem}
             onPress={() =>
-              router.push({ pathname: "./dog_info", params: { id: dog.id } })
+              router.push({ pathname: "/dogInfo", params: { id: dog.id } })
             }
           >
             <Image source={dog.image} style={styles.image} />
@@ -59,12 +59,11 @@ function SuitableDogsScreen() {
       </View>
 
       {/* Volgende knop */}
-      <TouchableOpacity
+      <Link
         style={styles.button}
-        onPress={() => router.push("./adoption_profile_loading")}
-      >
-        <Text style={styles.buttonText}>VOLGENDE</Text>
-      </TouchableOpacity>
+        href="/homepage">
+        <Text style={styles.buttonText}>Naar home</Text>
+      </Link>
     </ScrollView>
   );
 }

@@ -7,9 +7,9 @@ import {
   TextInput,
   ScrollView,
 } from "react-native";
-import { useRouter } from "expo-router";
+import { useRouter, Link } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
-import { useAdoptionProfile } from "../../context/AdoptionProfileContext";
+import { useAdoptionProfile } from "../../../context/AdoptionProfileContext";
 
 function MotivationScreen() {
   const router = useRouter();
@@ -47,12 +47,11 @@ function MotivationScreen() {
         />
       </View>
 
-      <TouchableOpacity
+      <Link
         style={styles.button}
-        onPress={() => router.push("./adoption_profile_loading")}
-      >
+        href="/adoptionProfileLoading">
         <Text style={styles.buttonText}>VOLGENDE</Text>
-      </TouchableOpacity>
+      </Link>
     </ScrollView>
   );
 }

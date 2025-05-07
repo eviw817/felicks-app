@@ -6,7 +6,7 @@ import { FontAwesome } from '@expo/vector-icons';
 import { TouchableOpacity } from 'react-native';
 import { Link } from 'expo-router';
 
-export default function Homepage() {
+export default function HomepageScreen() {
   const [firstname, setFirstname] = useState<string>(""); // State to store firstname
   const [session, setSession] = useState<Session | null>(null);
   const [loading, setLoading] = useState<boolean>(true); // Loading state for the initial session

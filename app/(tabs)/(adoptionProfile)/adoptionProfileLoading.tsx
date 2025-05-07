@@ -2,8 +2,8 @@
 import React, { useEffect } from "react";
 import { View, Text, StyleSheet, ActivityIndicator } from "react-native";
 import { useRouter } from "expo-router";
-import { supabase } from "../../lib/supabase";
-import { useAdoptionProfile } from "../../context/AdoptionProfileContext";
+import { supabase } from "../../../lib/supabase";
+import { useAdoptionProfile } from "../../../context/AdoptionProfileContext";
 
 function LoadingScreen() {
   const router = useRouter();
@@ -71,7 +71,7 @@ function LoadingScreen() {
       }
 
       resetProfile();
-      router.push("./suitable_dogs");
+      router.push("/suitableDogs");
     };
 
     saveProfile();
