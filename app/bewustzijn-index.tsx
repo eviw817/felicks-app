@@ -1,10 +1,10 @@
 import React from "react";
 import { View, Text, TouchableOpacity, StyleSheet, ScrollView, Image } from "react-native";
 import { useFonts } from 'expo-font';
-import { useRouter } from "expo-router"; // Expo Router navigatie
+import { useRouter } from "expo-router"; 
 
 export default function BewustzijnScreen() {
-  const router = useRouter(); // Router hook
+  const router = useRouter();
 
   const [fontsLoaded] = useFonts({
     "Nunito-Regular": require("../assets/fonts/nunito/Nunito-Regular.ttf"),
@@ -88,11 +88,13 @@ const styles = StyleSheet.create({
     paddingHorizontal: 25,
     borderRadius: 15,
     alignItems: "center",
+    
   },
 
   quizButtonText: {
     fontFamily: 'Nunito-Bold',
     fontSize: 14,
+    color: "#FFFDF9",
   },
 
   learnMore: {

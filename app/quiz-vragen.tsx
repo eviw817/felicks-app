@@ -15,7 +15,7 @@ import { useRouter } from 'expo-router'
 import BaseText from '@/components/BaseText'
 import { supabase } from '../lib/supabaseClient'
 
-// 1) Shape van je database-rij
+
 type DBQuizRow = {
   id: string
   question: string
@@ -27,7 +27,7 @@ type DBQuizRow = {
   explanation: string | null
 }
 
-// 2) Front-end model
+
 type Question = {
   question: string
   options: string[]
@@ -38,19 +38,18 @@ type Question = {
 export default function AwarenessQuiz() {
   const router = useRouter()
 
-  // quiz-data state
+
   const [questions, setQuestions] = useState<Question[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
-  // UI state
+
   const [currentIndex, setCurrentIndex] = useState(0)
   const [selected, setSelected] = useState<string | null>(null)
   const [checked, setChecked] = useState(false)
   const [correct, setCorrect] = useState(false)
   const [finished, setFinished] = useState(false)
 
-  // 3) Fetch vragen uit Supabase
   useEffect(() => {
     const loadQuestions = async () => {
       setLoading(true)
@@ -80,7 +79,7 @@ export default function AwarenessQuiz() {
             ...(row.option_d ? [row.option_d] : []),
           ]
 
-          // typesafe switch voor correct antwoord
+          
           const correctText = (() => {
             switch (row.correct_option) {
               case 'A':
@@ -113,7 +112,7 @@ export default function AwarenessQuiz() {
 
   const current = questions[currentIndex]
 
-  // Handlers
+
   const checkAnswer = () => {
     if (!selected) return
     setCorrect(selected === current.correctAnswer)
@@ -136,7 +135,7 @@ export default function AwarenessQuiz() {
       { text: 'Ja', onPress: () => router.replace('/bewustzijn-index') },
     ])
 
-  // Loading state
+
   if (loading)
     return (
       <View style={[styles.container, styles.center]}>
@@ -145,7 +144,7 @@ export default function AwarenessQuiz() {
       </View>
     )
 
-  // Error state
+ 
   if (error)
     return (
       <View style={[styles.container, styles.center]}>
@@ -155,7 +154,7 @@ export default function AwarenessQuiz() {
       </View>
     )
 
-  // Finished state
+
   if (finished)
     return (
       <View style={styles.container}>
@@ -178,7 +177,7 @@ export default function AwarenessQuiz() {
       </View>
     )
 
-  // Main quiz UI
+// UI
   return (
     <View style={styles.container}>
       <TouchableOpacity onPress={exitQuiz} style={styles.backButton}>

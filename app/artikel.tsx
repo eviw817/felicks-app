@@ -51,10 +51,10 @@ export default function Artikel() {
         );
     }
 
-    // Lees direct van het artikel-object
+ 
     const { title, summary, category, description } = artikel;
 
-    // Build plaintext uit rich-text of string
+  
     let descText = "Geen beschrijving beschikbaar.";
     if (Array.isArray(description)) {
         descText = description
@@ -70,21 +70,20 @@ export default function Artikel() {
 
     return (
         <ScrollView style={styles.container}>
-            {/* Topbar met terugpijl en titel */}
+          
             <View style={styles.topbar}>
                 <Pressable onPress={() => router.back()} style={styles.backButton}>
                     <Ionicons name="arrow-back" size={24} color="#183A36" />
                 </Pressable>
                 <Text style={styles.header}>{title}</Text>
-                {/* tekst in midden */}
+               
                 <View style={styles.backButton} />
             </View>
 
 
-            {/* Badge onder de titel */}
             <Text style={styles.badge}>{category?.name || "Onbekend"}</Text>
 
-            {/* Summary en body */}
+   
             <Text style={styles.summary}>{summary}</Text>
             <Text style={styles.body}>{descText}</Text>
         </ScrollView>
