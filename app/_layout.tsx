@@ -26,5 +26,6 @@ export default function RootLayout() {
       </Stack>
       <StatusBar />
     </AdoptionProfileProvider>
+
   );
 }
