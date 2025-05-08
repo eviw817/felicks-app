@@ -18,10 +18,18 @@
     "@expo/vector-icons": "^14.0.2",
 
     "@fortawesome/fontawesome-svg-core": "^6.7.2",
-    "@fortawesome/free-brands-svg-icons": "^6.7.2",
-    "@fortawesome/free-regular-svg-icons": "^6.7.2",
     "@fortawesome/free-solid-svg-icons": "^6.7.2",
     "@fortawesome/react-native-fontawesome": "^0.3.2",
+    "@react-navigation/bottom-tabs": "^7.2.0",
+    "@react-navigation/native": "^7.0.14",
+    "@supabase/supabase-js": "^2.49.4",
+
+
+    
+    "@fortawesome/free-brands-svg-icons": "^6.7.2",
+    "@fortawesome/free-regular-svg-icons": "^6.7.2",
+    
+    
     "@gluestack-ui/icon": "^0.1.25",
     "@gluestack-ui/nativewind-utils": "^1.0.26",
     "@gluestack-ui/overlay": "^0.1.16",
@@ -30,21 +38,22 @@
     "@react-native-community/datetimepicker": "^8.3.0",
 
     "@react-native-picker/picker": "^2.11.0",
-    "@react-navigation/bottom-tabs": "^7.2.0",
-    "@react-navigation/native": "^7.0.14",
+    
+    
     "@rneui/themed": "^4.0.0-rc.8",
 
-    "@supabase/supabase-js": "^2.49.4",
+    
 
     "aes-js": "^3.1.2",
+
     "babel-plugin-module-resolver": "^5.0.2",
     "base64-arraybuffer": "^1.0.2",
     "date-fns": "^4.1.0",
     "expo": "~52.0.27",
     "expo-blur": "~14.0.2",
     "expo-constants": "~17.0.4",
-    "expo-dev-client": "~5.0.10",
-    "expo-font": "~13.0.3",
+    "expo-dev-client": "~5.0.12",
+    "expo-font": "~13.0.4",
     "expo-haptics": "~14.0.1",
 
     "expo-image-picker": "~16.0.6",
@@ -64,6 +73,7 @@
     "react-dom": "18.3.1",
     "react-native": "0.76.7",
     "react-native-css-interop": "^0.1.22",
+    "react-native-dotenv": "^3.4.11",
     "react-native-gesture-handler": "~2.20.2",
     "react-native-get-random-values": "^1.11.0",
 
