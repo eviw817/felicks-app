@@ -15,7 +15,7 @@ export default function PasswordLayout() {
       }}>
       <Stack.Screen name="forgetPassword" options={{ title: "Forget password" }} />
       <Stack.Screen name="newPassword" options={{ title: "New password" }} />
-      <Stack.Screen name="notification" options={{ title: "Notification password" }} />
+      <Stack.Screen name="notificationEmail" options={{ title: "Notification password" }} />
     </Stack>
   );
 }

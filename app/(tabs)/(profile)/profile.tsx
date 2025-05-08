@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from "react";
 import { useFocusEffect } from "@react-navigation/native";
 
 import { View, Text, TouchableOpacity, StyleSheet, Alert } from "react-native";
-import { useRouter } from "expo-router";
+import { useRouter, Link } from "expo-router";
 import { supabase } from "../../../lib/supabase";
 import { Session } from "@supabase/supabase-js";
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
@@ -72,7 +72,7 @@ const ProfileScreen = () => {
       }, []);
 
       const goToSettings = () => {
-        router.push('/settings');
+        router.push('../settings');
       };
     
 
@@ -99,9 +99,10 @@ const ProfileScreen = () => {
 
       
       {/* De bewerk-knop onder de tekst */}
-      <TouchableOpacity style={styles.editButton}  onPress={() => router.push("../profileEdit")}>
+      <Link style={styles.editButton}
+        href="../profileEdit">
         <Text style={styles.editButtonText}>BEWERKEN</Text>
-      </TouchableOpacity>
+      </Link>
     </View>
   
         {/* Info Secties */}

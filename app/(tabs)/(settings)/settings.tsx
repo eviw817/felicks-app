@@ -13,7 +13,7 @@ const SettingsScreen = () => {
     return (
         <View style={styles.container} >
             <View style={styles.header}>
-                <TouchableOpacity onPress={() => router.push("/profile")} style={styles.backButton}>
+                <TouchableOpacity onPress={() => router.push("../profile")} style={styles.backButton}>
                     <FontAwesomeIcon icon={faArrowLeft} size={30} color={'#183A36'} style={styles.backButton} />
                 </TouchableOpacity>
                 <Text style={styles.title}>Instellingen</Text>

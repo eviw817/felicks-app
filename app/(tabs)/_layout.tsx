@@ -21,7 +21,6 @@ export default function TabLayout() {
         }}
       />
   
-
       {/* Homepage Tab */}
       <Stack.Screen
         name="(homepage)" // Verwijst naar de map app/(tabs)/(homepage)
