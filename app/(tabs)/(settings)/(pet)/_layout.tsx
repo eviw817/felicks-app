@@ -1,6 +1,6 @@
 import { Stack } from 'expo-router';
 
-export default function ProfileLayout() {
+export default function PetLayout() {
   return (
     <Stack
       screenOptions={{
@@ -13,7 +13,9 @@ export default function ProfileLayout() {
           fontWeight: 'bold',
         },
       }}>
-      <Stack.Screen name="profile" options={{ title: "Profile" }} />
+      <Stack.Screen name="pet" options={{ title: "Pet" }} />
+      <Stack.Screen name="removePet" options={{ title: "Remove pet" }} />
+      <Stack.Screen name="removeSecondPet" options={{ title: "Remove second page pet" }} />
 
     </Stack>
   );

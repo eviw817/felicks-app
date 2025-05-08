@@ -7,7 +7,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 import { faArrowLeft, faChevronRight } from "@fortawesome/free-solid-svg-icons";
 
 
-const HulpScreen = () => {
+const HelpScreen = () => {
       const router = useRouter();
   
     return (
@@ -20,14 +20,14 @@ const HulpScreen = () => {
             </View>
 
             <View style={styles.menu}>
-                <TouchableOpacity style={styles.menuItem} onPress={() => router.push("../probleem")}>
+                <TouchableOpacity style={styles.menuItem} onPress={() => router.push("../problem")}>
                     <View style={styles.leftSection}>
                         <Text style={styles.menuText}>Probleem rapporteren</Text>
                     </View>
                     <FontAwesomeIcon icon={faChevronRight} size={25} color="#183A36" />
                 </TouchableOpacity>
 
-                <TouchableOpacity style={styles.menuItem} onPress={() => router.push("../helpcentrum")}>
+                <TouchableOpacity style={styles.menuItem} onPress={() => router.push("../helpCentrum")}>
                     <View style={styles.leftSection}>
                         <Text style={styles.menuText}>Helpcentrum</Text>
                     </View>
@@ -88,4 +88,4 @@ const HulpScreen = () => {
       },
   });
   
-  export default HulpScreen;
+  export default HelpScreen;

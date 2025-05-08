@@ -1,6 +1,6 @@
 import { Stack } from 'expo-router';
 
-export default function ProfileLayout() {
+export default function PasswordLayout() {
   return (
     <Stack
       screenOptions={{
@@ -13,8 +13,9 @@ export default function ProfileLayout() {
           fontWeight: 'bold',
         },
       }}>
-      <Stack.Screen name="profile" options={{ title: "Profile" }} />
-
+      <Stack.Screen name="forgetPassword" options={{ title: "Forget password" }} />
+      <Stack.Screen name="newPassword" options={{ title: "New password" }} />
+      <Stack.Screen name="notification" options={{ title: "Notification password" }} />
     </Stack>
   );
 }

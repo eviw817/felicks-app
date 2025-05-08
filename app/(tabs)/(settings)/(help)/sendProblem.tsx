@@ -7,16 +7,16 @@ import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 import { faArrowLeft} from "@fortawesome/free-solid-svg-icons";
 
 
-const SendHelpScreen = () => {
+const SendProblemScreen = () => {
       const router = useRouter();
   
     return (
         <View style={styles.container} >
-             <Text style={styles.title}>Je vraag is verzonden.</Text>
+             <Text style={styles.title}>Je probleem is verzonden.</Text>
              <Text style={styles.subtitle}>We sturen je antwoord zo snel mogelijk via mail. De mail kan altijd in je spam terecht komen,
                 gelieve ook deze te controleren. 
             </Text>
-            <TouchableOpacity style={styles.submitButton} onPress={() => router.push("../hulp")} >
+            <TouchableOpacity style={styles.submitButton} onPress={() => router.push("../help")} >
                 <Text style={styles.submitText}>TERUG</Text>
             </TouchableOpacity>
           
@@ -68,4 +68,4 @@ const SendHelpScreen = () => {
     
   });
   
-  export default SendHelpScreen;
+  export default SendProblemScreen;

@@ -18,7 +18,7 @@ const RemovePetScreen = () => {
       <Text style={styles.label}>Het spijt ons dat je het huisdier wilt verwijderen, maar we hopen dat je naar een levend huisdier bent gegaan. Houd er rekening mee dat het permanent wordt verwijderd en dat je de hond opnieuw moet aanmaken. 
       </Text>
      
-      <TouchableOpacity style={styles.saveButton} onPress={() => router.push("../remove2pet")}>
+      <TouchableOpacity style={styles.saveButton} onPress={() => router.push("../removeSecondPet")}>
         <Text style={styles.saveButtonText}>VERWIJDER HUISDIER</Text>
       </TouchableOpacity>
 

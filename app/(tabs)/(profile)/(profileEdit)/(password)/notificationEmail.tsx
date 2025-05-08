@@ -17,10 +17,10 @@ const NotficationEmailScreen = () => {
             const hashParams = new URLSearchParams(parsedUrl.hash.replace('#', '')); // Verwijder de '#'
             const token = hashParams.get('access_token'); // Verkrijg het token uit de URL
     
-            if (url.includes("newpassword") && token) {
+            if (url.includes("newPassword") && token) {
               console.log("Token gevonden:", token);
               router.replace({
-                pathname: "/(tabs)/(login-register)/newpassword",
+                pathname: "/newpassword",
                 params: { access_token: token }
               });
             } else {

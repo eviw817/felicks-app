@@ -3,7 +3,7 @@ import { View, Text, TouchableOpacity, StyleSheet, Switch, Alert } from "react-n
 import { useRouter } from "expo-router";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
-import { supabase } from "../../../lib/supabase";
+import { supabase } from "../../../../lib/supabase";
 
 const NotificatiesScreen = () => {
     const router = useRouter();

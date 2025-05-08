@@ -3,9 +3,9 @@ import { View, Text, TouchableOpacity, StyleSheet, Alert } from "react-native";
 import { useRouter } from "expo-router";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
-import { supabase } from "../../../lib/supabase";
+import { supabase } from "../../../../lib/supabase";
 
-const AfmeldenScreen = () => {
+const signOutScreen = () => {
     const router = useRouter();
     const handleLogout = async () => {
         try {
@@ -107,4 +107,4 @@ const styles = StyleSheet.create({
       }
 });
 
-export default AfmeldenScreen;
+export default signOutScreen;

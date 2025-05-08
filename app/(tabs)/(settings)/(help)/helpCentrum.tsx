@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 import { View, Text, TouchableOpacity, StyleSheet, TextInput, Alert } from "react-native";
 import { useRouter } from "expo-router";
-import { supabase } from "../../../lib/supabase"; 
+import { supabase } from "../../../../lib/supabase"; 
 import { Session } from "@supabase/supabase-js"; 
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 
-const HelpcentrumScreen = () => {
+const HelpCentrumScreen = () => {
   const router = useRouter();
   const [help, setHelp] = useState("");  
   const [loading, setLoading] = useState(false); 
@@ -54,7 +54,7 @@ const HelpcentrumScreen = () => {
       setHelp("");  
       setLoading(false);
       
-      router.push("../hulp/sendhelp");
+      router.push("../hulp/sendHelp");
 
     } catch (error) {
       Alert.alert("Fout", "Er is een fout opgetreden bij het verzenden van het probleem.");
@@ -65,7 +65,7 @@ const HelpcentrumScreen = () => {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <TouchableOpacity onPress={() => router.push("../hulp")} style={styles.backButton}>
+        <TouchableOpacity onPress={() => router.push("../help")} style={styles.backButton}>
           <FontAwesomeIcon icon={faArrowLeft} size={30} color={'#183A36'} />
         </TouchableOpacity>
         <Text style={styles.title}>Helpcentrum</Text>
@@ -161,4 +161,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default HelpcentrumScreen;
+export default HelpCentrumScreen;

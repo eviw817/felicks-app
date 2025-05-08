@@ -20,7 +20,7 @@ const SettingsScreen = () => {
             </View>
 
             <View style={styles.menu}>
-                <TouchableOpacity style={styles.menuItem} onPress={() => router.push("../hulp")}>
+                <TouchableOpacity style={styles.menuItem} onPress={() => router.push("../help")}>
                     <View style={styles.leftSection}>
                         <FontAwesomeIcon icon={faCircleInfo} size={30} color="#183A36" />
                         <Text style={styles.menuText}>Hulp</Text>
@@ -48,7 +48,7 @@ const SettingsScreen = () => {
 
             {/* Afmelden & Account verwijderen */}
             <View style={styles.logoutSection}>
-                <TouchableOpacity onPress={() => router.push("../afmelden")}>
+                <TouchableOpacity onPress={() => router.push("../signOut")}>
                     <Text style={styles.logoutText}>Afmelden</Text>
                 </TouchableOpacity>
                 <TouchableOpacity  onPress={() => router.push("../account")}>
