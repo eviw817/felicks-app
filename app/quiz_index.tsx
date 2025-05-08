@@ -4,6 +4,7 @@ import FontAwesome from '@expo/vector-icons/FontAwesome';
 
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
+import BaseText from "@/components/BaseText";
 
 
 import { useRouter } from "expo-router";
@@ -23,7 +24,7 @@ export default function QuizIndex() {
 
       </TouchableOpacity>
 
-      <Text style={styles.title}>Bewustzijn quiz</Text>
+      <BaseText style={styles.title}>Bewustzijn</BaseText>
 
       <Text style={styles.question}>
         Wat is het doel van deze quiz?
@@ -59,7 +60,7 @@ const styles = StyleSheet.create({
 
   backButton: { //aangepast zodat het klikbare gebied rond pijl groter is 
     position: "absolute",
-    top: 83,
+    top: 84,
     left: 20,
     zIndex: 10,
     padding: 10,
@@ -68,8 +69,8 @@ const styles = StyleSheet.create({
   },
 
   title: {
-    fontSize: 20,
-    fontFamily: 'Nunito-Bold',
+    fontSize: 24,
+    fontFamily: 'Sirenia-Medium',
     marginTop: 75,
     textAlign: "center",
   },

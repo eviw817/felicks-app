@@ -16,6 +16,7 @@ import BaseText from '@/components/BaseText'
 import { supabase } from '../lib/supabaseClient'
 
 
+
 type DBQuizRow = {
   id: string
   question: string
@@ -260,7 +261,7 @@ const styles = StyleSheet.create({
   },
   backButton: {
     position: 'absolute',
-    top: 83,
+    top: 84,
     left: 20,
     padding: 10,
     borderRadius: 20,
@@ -268,10 +269,10 @@ const styles = StyleSheet.create({
     zIndex: 10,
   },
   title: {
-    fontSize: 20, 
-    fontFamily: 'Nunito-Bold',
+    fontSize: 24,
+    fontFamily: 'Sirenia-Medium',
     marginTop: 75,
-    textAlign: 'center',
+    textAlign: "center",
   },
   question: {
     marginTop: 50,
@@ -286,9 +287,10 @@ const styles = StyleSheet.create({
   optionRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginVertical: 6,
+    marginVertical: 4,
     paddingVertical: 6,
-    paddingHorizontal: 4,
+    paddingHorizontal: 6,
+    paddingLeft: 18,
   },
   radioOuter: {
     width: 20,
@@ -315,7 +317,7 @@ const styles = StyleSheet.create({
     fontFamily: 'Nunito-Regular',
   },
   continueButton: {
-    marginTop: 24,
+    marginTop: 32,
     backgroundColor: '#97B8A5',
     paddingVertical: 12,
     paddingHorizontal: 25,

@@ -2,6 +2,7 @@ import React from "react";
 import { View, Text, TouchableOpacity, StyleSheet, ScrollView, Image } from "react-native";
 import { useFonts } from 'expo-font';
 import { useRouter } from "expo-router"; 
+import BaseText from "@/components/BaseText";
 
 export default function BewustzijnScreen() {
   const router = useRouter();
@@ -10,6 +11,7 @@ export default function BewustzijnScreen() {
     "Nunito-Regular": require("../assets/fonts/nunito/Nunito-Regular.ttf"),
     "Nunito-SemiBold": require("../assets/fonts/nunito/Nunito-SemiBold.ttf"),
     "Nunito-Bold": require("../assets/fonts/nunito/Nunito-Bold.ttf"),
+    'Sirenia-Medium': require('../assets/fonts/Sirenia/Sirenia_medium.ttf'),
   });
 
   if (!fontsLoaded) {
@@ -70,8 +72,8 @@ const styles = StyleSheet.create({
   },
 
   title: {
-    fontSize: 20,
-    fontFamily: 'Nunito-Bold',
+    fontSize: 24,
+    fontFamily: 'Sirenia-Medium',
     marginTop: 75,
     textAlign: "center",
   },

@@ -13,6 +13,7 @@ import {
   ActivityIndicator,
 } from 'react-native'
 import { Ionicons } from '@expo/vector-icons'
+import BaseText from "@/components/BaseText";
 
 const STRAPI_BASE_URL = 'https://landingspagina-felicks.onrender.com'
 
@@ -70,7 +71,7 @@ export default function ArtikelsIndex() {
         >
           <Ionicons name="arrow-back" size={24} color="#183A36" />
         </Pressable>
-        <Text style={styles.header}>{categorie}</Text>
+        <BaseText style={styles.header}>{categorie}</BaseText>
         <View style={{ width: 24 }} />
       </View>
 
@@ -86,9 +87,9 @@ export default function ArtikelsIndex() {
       {/* Articles */}
       <ScrollView>
         {filtered.length === 0 ? (
-          <Text style={styles.noResults}>
+          <BaseText style={styles.noResults}>
             Geen artikels gevonden voor deze categorie.
-          </Text>
+          </BaseText>
         ) : (
           filtered.map(article => {
             const { id, title, summary, slug, category, image } = article
@@ -116,10 +117,10 @@ export default function ArtikelsIndex() {
                     resizeMode="cover"
                   />
                 )}
-                <Text style={styles.badgeOverlay}>{categoryName}</Text>
+                <BaseText style={styles.badgeOverlay}>{categoryName}</BaseText>
                 <View style={styles.cardContent}>
-                  <Text style={styles.title}>{title}</Text>
-                  <Text style={styles.summary}>{summary}</Text>
+                  <BaseText style={styles.title}>{title}</BaseText>
+                  <BaseText style={styles.summary}>{summary}</BaseText>
                 </View>
               </Pressable>
             )
@@ -152,10 +153,11 @@ const styles = StyleSheet.create({
     alignItems: 'flex-start',
   },
   header: {
-    fontSize: 20,
-    fontFamily: 'Nunito-Bold',
-    color: '#183A36',
-    textAlign: 'center',
+    flex: 1,
+    fontSize: 24,
+    fontFamily: "Sirenia-Medium",
+    color: "#183A36",
+    textAlign: "center",
   },
   search: {
     backgroundColor: '#fff',
@@ -208,8 +210,8 @@ const styles = StyleSheet.create({
   },
   
   title: {
-    fontSize: 16,
-    fontFamily: 'Nunito-Bold',
+    fontSize: 20,
+    fontFamily: 'Sirenia-SemiBold',
     marginTop: 4,
     marginBottom: 4,
     color: '#183A36',

@@ -9,6 +9,9 @@ import {
     Pressable,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
+import BaseText from "@/components/BaseText";
+
+
 
 const STRAPI_BASE_URL = "https://landingspagina-felicks.onrender.com";
 
@@ -75,17 +78,17 @@ export default function Artikel() {
                 <Pressable onPress={() => router.back()} style={styles.backButton}>
                     <Ionicons name="arrow-back" size={24} color="#183A36" />
                 </Pressable>
-                <Text style={styles.header}>{title}</Text>
+                <BaseText style={styles.header}>{title}</BaseText>
                
                 <View style={styles.backButton} />
             </View>
 
 
-            <Text style={styles.badge}>{category?.name || "Onbekend"}</Text>
+            <BaseText style={styles.badge}>{category?.name || "Onbekend"}</BaseText>
 
    
-            <Text style={styles.summary}>{summary}</Text>
-            <Text style={styles.body}>{descText}</Text>
+            <BaseText style={styles.summary}>{summary}</BaseText>
+            <BaseText style={styles.body}>{descText}</BaseText>
         </ScrollView>
     );
 }
@@ -95,60 +98,60 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: "#FFFDF9",
         padding: 16,
-    },
-    topbar: {
+      },
+      topbar: {
         flexDirection: "row",
         alignItems: "flex-start",
         justifyContent: "space-between",
         marginTop: 75,
         marginBottom: 36,
-        
-    },
-    backButton: {
+      },
+      backButton: {
         width: 24,
-
+        marginTop: 4,
         alignItems: "flex-start",
-    },
-    header: {
-        fontSize: 20,
-        fontFamily: "Nunito-Bold",
+      },
+      header: {
+        flex: 1,
+        fontSize: 24,
+        fontFamily: "Sirenia-Medium",
         color: "#183A36",
         textAlign: "center",
-        maxWidth: 300,
-        
-    },
-    badge: {
+      },
+      badge: {
         alignSelf: "flex-start",
         backgroundColor: "#F18B7E",
-        
         fontFamily: "Nunito-SemiBold",
         fontSize: 12,
         paddingHorizontal: 10,
         paddingVertical: 4,
         borderRadius: 12,
-        marginBottom: 16,
-    },
-    summary: {
-        fontFamily: "Nunito-Regular",
+        marginBottom: 36,
+        
+      },
+      summary: {
+        fontFamily: "Nunito-MediumItalic",
         fontSize: 14,
         color: "#183A36",
         marginBottom: 20,
-    },
-    body: {
+        maxWidth: "95%",
+      },
+      body: {
         fontFamily: "Nunito-Regular",
         fontSize: 14,
         color: "#183A36",
+        marginTop: 24,
         lineHeight: 20,
-    },
-    center: {
+      },
+      center: {
         flex: 1,
         justifyContent: "center",
         alignItems: "center",
         backgroundColor: "#FFFDF9",
-    },
-    error: {
+      },
+      error: {
         fontFamily: "Nunito-Regular",
         color: "#183A36",
         fontSize: 16,
-    },
+      },
 });
