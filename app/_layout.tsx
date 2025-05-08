@@ -1,18 +1,34 @@
-import { Stack } from "expo-router";
+import { SplashScreen, Stack } from "expo-router";
+import { AdoptionProfileProvider } from "../context/AdoptionProfileContext"; // importeren
+import { StatusBar } from "react-native";
+import { useFonts } from "expo-font";
+import { useEffect } from "react";
 
 
 
 export default function RootLayout() {
+
+  const [loaded] = useFonts({
+    SpaceMono: require("../assets/fonts/SpaceMono-Regular.ttf"),
+  });
+
+  useEffect(() => {
+    if (loaded) {
+      SplashScreen.hideAsync();
+    }
+  }, [loaded]);
+
+  if (!loaded) {
+    return null;
+  }
   return (
-    <Stack>
-      <Stack.Screen name="index" options={{ headerShown: false }} />
-      <Stack.Screen name="bewustzijn-index" options={{ headerShown: false }} />
+    <AdoptionProfileProvider>
+      <Stack screenOptions={{ headerShown: false }}>
+        <Stack.Screen name="(tabs)" />
+        <Stack.Screen name="+not-found" />
+      </Stack>
+      <StatusBar />
+    </AdoptionProfileProvider>
 
-      <Stack.Screen name="quiz_index" options={{ headerShown: false }} />
-      <Stack.Screen name="quiz-vragen" options={{ headerShown: false }} />
-
-      <Stack.Screen name="artikels_index" options={{ headerShown: false }} />
-      <Stack.Screen name="artikel" options={{ headerShown: false }} />
-    </Stack>
   );
 }
