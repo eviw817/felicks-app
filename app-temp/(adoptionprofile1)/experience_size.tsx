@@ -1,4 +1,3 @@
-// app/(adoptionprofile1)/grooming_coat.tsx
 "use client";
 
 import React, { useState, useEffect } from "react";
@@ -15,7 +14,6 @@ import { supabase } from "../../lib/supabase";
 import { useFonts } from "expo-font";
 import { Ionicons } from "@expo/vector-icons";
 
-// Custom radio-button component
 const RadioButton: React.FC<{ selected: boolean; onPress: () => void }> = ({
   selected,
   onPress,
@@ -25,21 +23,18 @@ const RadioButton: React.FC<{ selected: boolean; onPress: () => void }> = ({
   </TouchableOpacity>
 );
 
-export default function GroomingCoat() {
+export default function ExperienceSize() {
   const router = useRouter();
   const [userId, setUserId] = useState<string | null>(null);
   const [answers, setAnswers] = useState({
-    grooming: "",
-    shedding: "",
+    experience: "",
+    preferredSize: "",
   });
 
-  // 1. Fonts laden
   const [fontsLoaded] = useFonts({
     "Nunito-Regular": require("../../assets/fonts/nunito/Nunito-Regular.ttf"),
     "Nunito-Bold": require("../../assets/fonts/nunito/Nunito-Bold.ttf"),
   });
-
-  // 2. User fetchen
   useEffect(() => {
     (async () => {
       const {
@@ -48,98 +43,85 @@ export default function GroomingCoat() {
       if (user) setUserId(user.id);
     })();
   }, []);
-
-  // 3. Wacht op fonts
   if (!fontsLoaded) return null;
 
-  // Antwoorden opslaan + upserten met juiste kolomnamen
   const handleAnswer = async (
-    question: "grooming" | "shedding",
+    question: "experience" | "preferredSize",
     value: string
   ) => {
     setAnswers((prev) => ({ ...prev, [question]: value }));
     if (!userId) return;
 
-    // payload bouwen
     const payload: Record<string, any> = { user_id: userId };
-    if (question === "grooming") payload.grooming = value;
-    else payload.shedding = value;
+    if (question === "experience") payload.experience_level = value;
+    if (question === "preferredSize") payload.preferred_size = value;
 
     const { error } = await supabase
       .from("profiles_breed_matches")
       .upsert(payload, { onConflict: "user_id" });
-
     if (error) console.error("DB save error:", error.message);
   };
 
-  const canNext = answers.grooming !== "" && answers.shedding !== "";
+  const canNext = answers.experience !== "" && answers.preferredSize !== "";
 
-  const groomingOptions = [
+  const experienceOptions = [
+    { label: "Ik heb nog geen ervaring met honden", value: "none" },
     {
-      label: "Zo weinig mogelijk – ik hou het graag praktisch",
-      value: "minimal",
+      label: "Ik heb al eens een hond gehad of ken er veel over",
+      value: "some",
     },
-    { label: "Af en toe borstelen? Dat hoort erbij", value: "occasional" },
     {
-      label: "Dagelijks borstelen is voor mij qualitytime",
-      value: "daily",
+      label: "Honden zijn altijd al deel van mijn leven geweest",
+      value: "extensive",
     },
   ];
-
-  const sheddingOptions = [
-    { label: "Ik hou m’n huis graag netjes en haarvrij", value: "no_hair" },
+  const sizeOptions = [
+    { label: "Klein en compact – makkelijk mee te nemen", value: "small" },
+    { label: "Middelgroot – ideaal voor thuis én onderweg", value: "medium" },
     {
-      label: "Een beetje haar? Daar lig ik niet van wakker",
-      value: "some_hair",
+      label: "Groot en imposant – ik hou van honden met aanwezigheid",
+      value: "large",
     },
-    { label: "Ik accepteer dat het erbij hoort", value: "accept_hair" },
   ];
 
   return (
     <SafeAreaView style={styles.container}>
-      {/* Back button */}
       <TouchableOpacity style={styles.back} onPress={() => router.back()}>
         <Ionicons name="arrow-back" size={24} color="#183A36" />
       </TouchableOpacity>
 
-      {/* Title */}
-      <Text style={styles.title}>Verzorging & vacht</Text>
-
-      {/* Progress bar */}
+      <Text style={styles.title}>Ervaring & grootte</Text>
       <View style={styles.progressBar}>
-        <View style={styles.progressFill6} />
+        <View style={styles.progressFill2} />
       </View>
 
-      {/* Vraag: Grooming */}
-      <Text style={styles.question}>Hoeveel verzorging wil je geven?</Text>
-      {groomingOptions.map((opt) => (
+      <Text style={styles.question}>Hoeveel ervaring heb je met honden?</Text>
+      {experienceOptions.map((opt) => (
         <View key={opt.value} style={styles.radioRow}>
           <RadioButton
-            selected={answers.grooming === opt.value}
-            onPress={() => handleAnswer("grooming", opt.value)}
+            selected={answers.experience === opt.value}
+            onPress={() => handleAnswer("experience", opt.value)}
           />
           <Text style={styles.answerText}>{opt.label}</Text>
         </View>
       ))}
 
-      {/* Vraag: Shedding */}
       <Text style={[styles.question, { marginTop: 32 }]}>
-        Wat vind je van hondenhaar in huis?
+        Hoe groot mag je hond zijn?
       </Text>
-      {sheddingOptions.map((opt) => (
+      {sizeOptions.map((opt) => (
         <View key={opt.value} style={styles.radioRow}>
           <RadioButton
-            selected={answers.shedding === opt.value}
-            onPress={() => handleAnswer("shedding", opt.value)}
+            selected={answers.preferredSize === opt.value}
+            onPress={() => handleAnswer("preferredSize", opt.value)}
           />
           <Text style={styles.answerText}>{opt.label}</Text>
         </View>
       ))}
 
-      {/* Next button */}
       <TouchableOpacity
         style={[styles.button, !canNext && styles.buttonDisabled]}
-        onPress={() => router.push("/breed_matching")}
+        onPress={() => router.push("/family_environment")}
         disabled={!canNext}
       >
         <Text style={styles.buttonText}>VOLGENDE</Text>
@@ -155,9 +137,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingTop: Platform.OS === "ios" ? 20 : 50,
   },
-  back: {
-    paddingVertical: 8,
-  },
+  back: { paddingVertical: 8 },
   title: {
     fontFamily: "Nunito-Bold",
     fontSize: 20,
@@ -168,15 +148,14 @@ const styles = StyleSheet.create({
   progressBar: {
     width: "100%",
     height: 6,
-    backgroundColor: "transparent",
     borderColor: "#FFD87E",
     borderWidth: 1,
     borderRadius: 3,
     overflow: "hidden",
     marginBottom: 20,
   },
-  progressFill6: {
-    width: "85.71%", // 6 van 7 stappen
+  progressFill2: {
+    width: "28.56%", // 2/7
     height: "100%",
     backgroundColor: "#FFD87E",
     borderTopRightRadius: 3,
@@ -186,7 +165,6 @@ const styles = StyleSheet.create({
     fontFamily: "Nunito-Bold",
     fontSize: 18,
     color: "#183A36",
-    alignSelf: "flex-start",
     marginBottom: 8,
   },
   radioRow: {
@@ -220,14 +198,10 @@ const styles = StyleSheet.create({
     marginTop: 40,
     backgroundColor: "#97B8A5",
     paddingVertical: 14,
-    paddingHorizontal: 16,
     borderRadius: 25,
     alignItems: "center",
-    width: "100%",
   },
-  buttonDisabled: {
-    opacity: 0.5,
-  },
+  buttonDisabled: { opacity: 0.5 },
   buttonText: {
     fontFamily: "Nunito-Bold",
     fontSize: 16,

@@ -1,4 +1,5 @@
-// app/(adoptionprofile1)/activity_personality.tsx
+"use client";
+
 import React, { useState, useEffect } from "react";
 import {
   SafeAreaView,
@@ -13,7 +14,6 @@ import { supabase } from "../../lib/supabase";
 import { useFonts } from "expo-font";
 import { Ionicons } from "@expo/vector-icons";
 
-// Reusable Radio Button
 const RadioButton: React.FC<{ selected: boolean; onPress: () => void }> = ({
   selected,
   onPress,
@@ -23,24 +23,19 @@ const RadioButton: React.FC<{ selected: boolean; onPress: () => void }> = ({
   </TouchableOpacity>
 );
 
-export default function ActivityPersonality() {
+export default function LivingSituation() {
   const router = useRouter();
   const [userId, setUserId] = useState<string | null>(null);
-  const [answers, setAnswers] = useState<{
-    activity: string;
-    personality: string;
-  }>({
-    activity: "",
-    personality: "",
+  const [answers, setAnswers] = useState({
+    livingSituation: "",
+    homeFrequency: "",
   });
 
-  // Load Nunito fonts
   const [fontsLoaded] = useFonts({
     "Nunito-Regular": require("../../assets/fonts/nunito/Nunito-Regular.ttf"),
     "Nunito-Bold": require("../../assets/fonts/nunito/Nunito-Bold.ttf"),
   });
 
-  // Fetch user ID on mount
   useEffect(() => {
     (async () => {
       const {
@@ -50,103 +45,106 @@ export default function ActivityPersonality() {
     })();
   }, []);
 
-  // Wait for fonts
   if (!fontsLoaded) return null;
 
-  // Save answer and upsert to DB
   const handleAnswer = async (
-    question: "activity" | "personality",
+    question: "livingSituation" | "homeFrequency",
     value: string
   ) => {
-    setAnswers((prev) => ({ ...prev, [question]: value }));
-    if (!userId) return;
+    const newAnswers = { ...answers, [question]: value };
+    setAnswers(newAnswers);
 
-    // prepare payload with correct column mapping
+    console.log("Waarde van userId voor upsert:", userId); // Voeg deze log toe
+
+    if (!userId) {
+      console.warn("Gebruikers-ID is niet beschikbaar, kan data niet opslaan.");
+      return;
+    }
+
     const payload: Record<string, any> = { user_id: userId };
-    if (question === "activity") payload.activity_level = value;
-    if (question === "personality") payload.personality_type = value;
+    if (newAnswers.livingSituation)
+      payload.living_situation = newAnswers.livingSituation;
+    if (newAnswers.homeFrequency)
+      payload.home_frequency = newAnswers.homeFrequency;
+
+    console.log("Volledige payload voor upsert:", payload); // Log de volledige payload
 
     const { error } = await supabase
-      .from("profiles_breed_matches")
+      .from("adoption_profiles")
       .upsert(payload, { onConflict: "user_id" });
     if (error) console.error("DB save error:", error.message);
+    else console.log("✅ Antwoorden opgeslagen:", payload);
   };
 
-  const canNext = answers.activity !== "" && answers.personality !== "";
+  const canNext =
+    answers.livingSituation !== "" && answers.homeFrequency !== "";
 
-  const activityOptions = [
-    { label: "Ik hou van rust en korte wandelingen in de buurt", value: "low" },
+  const livingOptions = [
     {
-      label: "Ik wandel graag elke dag, soms een stevige tocht",
-      value: "medium",
+      label: "In een gezellig appartement – knus en compact",
+      value: "appartement",
     },
     {
-      label: "Ik ben altijd in beweging – hiken, sporten, buiten zijn!",
-      value: "high",
+      label: "Een huis zonder tuin, maar met wandelopties",
+      value: "huisZonderTuin",
+    },
+    { label: "We hebben een tuin waar de hond kan snuffelen", value: "tuin" },
+    {
+      label: "Veel ruimte, veel natuur – buiten zijn vanzelfsprekend",
+      value: "veelRuimte",
     },
   ];
 
-  const personalityOptions = [
+  const homeOptions = [
     {
-      label: "Gezelligheid en rust – een trouwe metgezel in huis",
-      value: "companion",
+      label: "Bijna altijd, ik werk thuis of ben vaak thuis",
+      value: "vaakThuis",
     },
-    { label: "Een vrolijk maatje voor wandelingen en spel", value: "playmate" },
+    { label: "Gedeeld – soms thuis, soms weg", value: "gedeeld" },
     {
-      label: "Een loyale hond die ook goed waakt als dat nodig is",
-      value: "guard",
-    },
-    {
-      label: "Een slimme hond om mee te trainen en dingen aan te leren",
-      value: "trainable",
+      label: "Vaak van huis – hond moet alleen kunnen zijn",
+      value: "vaakWeg",
     },
   ];
 
   return (
     <SafeAreaView style={styles.container}>
-      {/* Back button */}
       <TouchableOpacity style={styles.back} onPress={() => router.back()}>
         <Ionicons name="arrow-back" size={24} color="#183A36" />
       </TouchableOpacity>
 
-      {/* Title */}
-      <Text style={styles.title}>Activiteit & persoonlijkheid</Text>
-
-      {/* Progress bar */}
+      <Text style={styles.title}>Woonsituatie</Text>
       <View style={styles.progressBar}>
-        <View style={styles.progressFill4} />
+        <View style={styles.progressFill1} />
       </View>
 
-      {/* Question: Activity */}
-      <Text style={styles.question}>Hoe actief ben je?</Text>
-      {activityOptions.map((opt) => (
+      <Text style={styles.question}>Waar woon je?</Text>
+      {livingOptions.map((opt) => (
         <View key={opt.value} style={styles.radioRow}>
           <RadioButton
-            selected={answers.activity === opt.value}
-            onPress={() => handleAnswer("activity", opt.value)}
+            selected={answers.livingSituation === opt.value}
+            onPress={() => handleAnswer("livingSituation", opt.value)}
           />
           <Text style={styles.answerText}>{opt.label}</Text>
         </View>
       ))}
 
-      {/* Question: Personality */}
       <Text style={[styles.question, { marginTop: 32 }]}>
-        Wat zoek je in een hond?
+        Hoe vaak ben je thuis?
       </Text>
-      {personalityOptions.map((opt) => (
+      {homeOptions.map((opt) => (
         <View key={opt.value} style={styles.radioRow}>
           <RadioButton
-            selected={answers.personality === opt.value}
-            onPress={() => handleAnswer("personality", opt.value)}
+            selected={answers.homeFrequency === opt.value}
+            onPress={() => handleAnswer("homeFrequency", opt.value)}
           />
           <Text style={styles.answerText}>{opt.label}</Text>
         </View>
       ))}
 
-      {/* Next button */}
       <TouchableOpacity
         style={[styles.button, !canNext && styles.buttonDisabled]}
-        onPress={() => router.push("/sound_behavior")}
+        onPress={() => router.push("/experience_size")}
         disabled={!canNext}
       >
         <Text style={styles.buttonText}>VOLGENDE</Text>
@@ -173,15 +171,14 @@ const styles = StyleSheet.create({
   progressBar: {
     width: "100%",
     height: 6,
-    backgroundColor: "transparent",
     borderColor: "#FFD87E",
     borderWidth: 1,
     borderRadius: 3,
     overflow: "hidden",
     marginBottom: 20,
   },
-  progressFill4: {
-    width: "57.14%",
+  progressFill1: {
+    width: "14.28%",
     height: "100%",
     backgroundColor: "#FFD87E",
     borderTopRightRadius: 3,
@@ -191,7 +188,6 @@ const styles = StyleSheet.create({
     fontFamily: "Nunito-Bold",
     fontSize: 18,
     color: "#183A36",
-    alignSelf: "flex-start",
     marginBottom: 8,
   },
   radioRow: {
@@ -225,14 +221,10 @@ const styles = StyleSheet.create({
     marginTop: 40,
     backgroundColor: "#97B8A5",
     paddingVertical: 14,
-    paddingHorizontal: 16,
     borderRadius: 25,
     alignItems: "center",
-    width: "100%",
   },
-  buttonDisabled: {
-    opacity: 0.5,
-  },
+  buttonDisabled: { opacity: 0.5 },
   buttonText: {
     fontFamily: "Nunito-Bold",
     fontSize: 16,

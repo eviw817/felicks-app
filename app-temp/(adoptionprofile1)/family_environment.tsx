@@ -1,4 +1,3 @@
-// app/(adoptionprofile1)/sound_behavior.tsx
 "use client";
 
 import React, { useState, useEffect } from "react";
@@ -15,7 +14,6 @@ import { supabase } from "../../lib/supabase";
 import { useFonts } from "expo-font";
 import { Ionicons } from "@expo/vector-icons";
 
-// Reusable Radio Button
 const RadioButton: React.FC<{ selected: boolean; onPress: () => void }> = ({
   selected,
   onPress,
@@ -25,59 +23,43 @@ const RadioButton: React.FC<{ selected: boolean; onPress: () => void }> = ({
   </TouchableOpacity>
 );
 
-export default function SoundBehavior() {
+export default function FamilyEnvironment() {
   const router = useRouter();
   const [userId, setUserId] = useState<string | null>(null);
-  const [answers, setAnswers] = useState({ barking: "", training: "" });
+  const [answers, setAnswers] = useState({
+    children: "",
+    otherPets: "",
+  });
 
-  // Load Nunito fonts
   const [fontsLoaded] = useFonts({
     "Nunito-Regular": require("../../assets/fonts/nunito/Nunito-Regular.ttf"),
     "Nunito-Bold": require("../../assets/fonts/nunito/Nunito-Bold.ttf"),
   });
-
-  // Fetch user and existing answers on mount
   useEffect(() => {
     (async () => {
       const {
         data: { user },
       } = await supabase.auth.getUser();
-      if (user?.id) {
-        setUserId(user.id);
-        const { data, error } = await supabase
-          .from("profiles_breed_matches")
-          .select("barking, training")
-          .eq("user_id", user.id)
-          .single();
-        if (!error && data) {
-          setAnswers({
-            barking: data.barking || "",
-            training: data.training || "",
-          });
-        }
-      }
+      if (user) setUserId(user.id);
     })();
   }, []);
-
-  // Wait for fonts before render
   if (!fontsLoaded) return null;
 
-  // Mapping question keys to DB column names
-  const columnMap: Record<string, string> = {
-    barking: "barking",
-    training: "training",
-  };
-
-  // Save or update answer in DB
   const handleAnswer = async (
-    question: "barking" | "training",
+    question: "children" | "otherPets",
     value: string
   ) => {
     setAnswers((prev) => ({ ...prev, [question]: value }));
     if (!userId) return;
 
     const payload: Record<string, any> = { user_id: userId };
-    payload[columnMap[question]] = value;
+    if (question === "children") {
+      // ja => true, nee => false
+      payload.good_with_children = value !== "none";
+    }
+    if (question === "otherPets") {
+      payload.good_with_pets = value !== "firstPet";
+    }
 
     const { error } = await supabase
       .from("profiles_breed_matches")
@@ -85,76 +67,57 @@ export default function SoundBehavior() {
     if (error) console.error("DB save error:", error.message);
   };
 
-  const canNext = answers.barking !== "" && answers.training !== "";
+  const canNext = answers.children !== "" && answers.otherPets !== "";
 
-  const barkingOptions = [
-    { label: "Liever zo stil mogelijk", value: "quiet" },
-    { label: "Een beetje blaffen hoort erbij", value: "some" },
-    { label: "Een praatgrage hond is geen probleem", value: "talkative" },
+  const childrenOptions = [
+    { label: "Ja, met jonge kinderen", value: "young" },
+    { label: "Ja, met tieners of oudere kinderen", value: "teens" },
+    { label: "Nee, er zijn geen kinderen in huis", value: "none" },
   ];
-
-  const trainingOptions = [
-    {
-      label:
-        "Heel belangrijk – ik wil een hond die snel leert en goed luistert",
-      value: "very",
-    },
-    {
-      label: "Belangrijk, maar het hoeft geen perfect gehoorzame hond te zijn",
-      value: "moderate",
-    },
-    {
-      label:
-        "Niet zo belangrijk – ik heb geduld en waardeer een zelfstandige hond",
-      value: "independent",
-    },
+  const otherPetsOptions = [
+    { label: "Ja, één of meerdere honden", value: "dogs" },
+    { label: "Ja, katten of andere dieren", value: "cats" },
+    { label: "Nee, dit wordt ons eerste huisdier", value: "firstPet" },
   ];
 
   return (
     <SafeAreaView style={styles.container}>
-      {/* Back button */}
       <TouchableOpacity style={styles.back} onPress={() => router.back()}>
         <Ionicons name="arrow-back" size={24} color="#183A36" />
       </TouchableOpacity>
 
-      {/* Title */}
-      <Text style={styles.title}>Geluid & gedrag</Text>
-
-      {/* Progress bar */}
+      <Text style={styles.title}>Gezin & omgeving</Text>
       <View style={styles.progressBar}>
-        <View style={styles.progressFill5} />
+        <View style={styles.progressFill3} />
       </View>
 
-      {/* Question: Barking */}
-      <Text style={styles.question}>Hoeveel mag je hond blaffen?</Text>
-      {barkingOptions.map((opt) => (
+      <Text style={styles.question}>Woon je samen met kinderen?</Text>
+      {childrenOptions.map((opt) => (
         <View key={opt.value} style={styles.radioRow}>
           <RadioButton
-            selected={answers.barking === opt.value}
-            onPress={() => handleAnswer("barking", opt.value)}
+            selected={answers.children === opt.value}
+            onPress={() => handleAnswer("children", opt.value)}
           />
           <Text style={styles.answerText}>{opt.label}</Text>
         </View>
       ))}
 
-      {/* Question: Training */}
       <Text style={[styles.question, { marginTop: 32 }]}>
-        Hoe belangrijk is training voor jou?
+        Heb je al andere huisdieren?
       </Text>
-      {trainingOptions.map((opt) => (
+      {otherPetsOptions.map((opt) => (
         <View key={opt.value} style={styles.radioRow}>
           <RadioButton
-            selected={answers.training === opt.value}
-            onPress={() => handleAnswer("training", opt.value)}
+            selected={answers.otherPets === opt.value}
+            onPress={() => handleAnswer("otherPets", opt.value)}
           />
           <Text style={styles.answerText}>{opt.label}</Text>
         </View>
       ))}
 
-      {/* Next button */}
       <TouchableOpacity
         style={[styles.button, !canNext && styles.buttonDisabled]}
-        onPress={() => router.push("/grooming_coat")}
+        onPress={() => router.push("/activity_personality")}
         disabled={!canNext}
       >
         <Text style={styles.buttonText}>VOLGENDE</Text>
@@ -181,15 +144,14 @@ const styles = StyleSheet.create({
   progressBar: {
     width: "100%",
     height: 6,
-    backgroundColor: "transparent",
     borderColor: "#FFD87E",
     borderWidth: 1,
     borderRadius: 3,
     overflow: "hidden",
     marginBottom: 20,
   },
-  progressFill5: {
-    width: "71.42%",
+  progressFill3: {
+    width: "42.84%",
     height: "100%",
     backgroundColor: "#FFD87E",
     borderTopRightRadius: 3,
@@ -199,7 +161,6 @@ const styles = StyleSheet.create({
     fontFamily: "Nunito-Bold",
     fontSize: 18,
     color: "#183A36",
-    alignSelf: "flex-start",
     marginBottom: 8,
   },
   radioRow: {
@@ -233,14 +194,10 @@ const styles = StyleSheet.create({
     marginTop: 40,
     backgroundColor: "#97B8A5",
     paddingVertical: 14,
-    paddingHorizontal: 16,
     borderRadius: 25,
     alignItems: "center",
-    width: "100%",
   },
-  buttonDisabled: {
-    opacity: 0.5,
-  },
+  buttonDisabled: { opacity: 0.5 },
   buttonText: {
     fontFamily: "Nunito-Bold",
     fontSize: 16,

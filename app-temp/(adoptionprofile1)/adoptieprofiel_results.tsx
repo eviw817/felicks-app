@@ -1,4 +1,3 @@
-// app/(adoptionprofile1)/adoptieprofiel_results.tsx
 "use client";
 
 import React, { useState, useEffect } from "react";
@@ -11,54 +10,52 @@ import {
   TouchableOpacity,
   Image,
   Platform,
+  ActivityIndicator,
 } from "react-native";
 import { useRouter } from "expo-router";
 import { supabase } from "../../lib/supabase";
 import { Ionicons } from "@expo/vector-icons";
 
-type Prefs = {
-  user_id: string;
+// Voeg has_garden toe aan Prefs
+interface Prefs {
   living_situation: string;
   home_frequency: string;
-  experience: boolean;
+  experience_level: string;
   preferred_size: string;
   good_with_children: boolean;
   good_with_pets: boolean;
   activity_level: string;
-  personality: string;
+  personality_type: string;
   barking: string;
   training: string;
   grooming: string;
   shedding: string;
-  has_garden: boolean;
-};
+  has_garden: boolean | null;
+}
 
-type Breed = {
+interface Breed {
   id: number;
   name: string;
-  image_url: string;
-  living_situation: string;
-  home_frequency: string;
-  experience_required: boolean;
-  size_category: string;
+  image: string;
+  size: string;
+  activity_level: string;
   good_with_children: boolean;
   good_with_pets: boolean;
-  activity_level: string;
-  personality: string;
+  shedding: string;
   barking: string;
   training: string;
   grooming: string;
-  shedding: string;
   needs_garden: boolean;
-};
+  experience: boolean;
+}
 
 export default function AdoptieProfielResults() {
   const router = useRouter();
   const [prefs, setPrefs] = useState<Prefs | null>(null);
   const [breeds, setBreeds] = useState<Breed[]>([]);
   const [matches, setMatches] = useState<{ breed: Breed; score: number }[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  // 1) haal voorkeuren + rassen op
   useEffect(() => {
     (async () => {
       const {
@@ -66,67 +63,62 @@ export default function AdoptieProfielResults() {
       } = await supabase.auth.getUser();
       if (!user) return;
 
-      // voorkeuren
       const { data: p, error: perr } = await supabase
         .from("profiles_breed_matches")
-        .select("*")
+        .select(
+          `living_situation, home_frequency, experience_level, preferred_size,
+           good_with_children, good_with_pets, activity_level,
+           personality_type, barking, training, grooming, shedding, has_garden`
+        )
         .eq("user_id", user.id)
         .single();
       if (perr || !p) {
         console.error("Error fetching prefs:", perr);
+        setLoading(false);
         return;
       }
       setPrefs(p as Prefs);
 
-      // alle rassen
-      const { data: b, error: berr } = await supabase
-        .from("dog_breeds")
-        .select("*");
+      const { data: b, error: berr } = await supabase.from("dog_breeds").select(
+        `id, name, image, size, activity_level, good_with_children,
+           good_with_pets, shedding, barking, training, grooming,
+           needs_garden, experience`
+      );
       if (berr || !b) {
         console.error("Error fetching breeds:", berr);
+        setLoading(false);
         return;
       }
       setBreeds(b as Breed[]);
+      setLoading(false);
     })();
   }, []);
 
-  // 2) zodra prefs + breeds geladen: bereken score en filter ≥ 60%
   useEffect(() => {
     if (!prefs || breeds.length === 0) return;
 
     const criteria: {
-      prefKey: keyof Prefs;
-      breedKey: keyof Breed;
+      pref: keyof Prefs;
+      breed: keyof Breed;
       type: "equal" | "bool";
     }[] = [
-      {
-        prefKey: "living_situation",
-        breedKey: "living_situation",
-        type: "equal",
-      },
-      { prefKey: "home_frequency", breedKey: "home_frequency", type: "equal" },
-      { prefKey: "experience", breedKey: "experience_required", type: "bool" },
-      { prefKey: "preferred_size", breedKey: "size_category", type: "equal" },
-      {
-        prefKey: "good_with_children",
-        breedKey: "good_with_children",
-        type: "bool",
-      },
-      { prefKey: "good_with_pets", breedKey: "good_with_pets", type: "bool" },
-      { prefKey: "activity_level", breedKey: "activity_level", type: "equal" },
-      { prefKey: "personality", breedKey: "personality", type: "equal" },
-      { prefKey: "barking", breedKey: "barking", type: "equal" },
-      { prefKey: "training", breedKey: "training", type: "equal" },
-      { prefKey: "grooming", breedKey: "grooming", type: "equal" },
-      { prefKey: "shedding", breedKey: "shedding", type: "equal" },
-      { prefKey: "has_garden", breedKey: "needs_garden", type: "bool" },
+      { pref: "experience_level", breed: "experience", type: "equal" },
+      { pref: "preferred_size", breed: "size", type: "equal" },
+      { pref: "good_with_children", breed: "good_with_children", type: "bool" },
+      { pref: "good_with_pets", breed: "good_with_pets", type: "bool" },
+      { pref: "activity_level", breed: "activity_level", type: "equal" },
+      { pref: "barking", breed: "barking", type: "equal" },
+      { pref: "training", breed: "training", type: "equal" },
+      { pref: "grooming", breed: "grooming", type: "equal" },
+      { pref: "shedding", breed: "shedding", type: "equal" },
+      { pref: "has_garden", breed: "needs_garden", type: "bool" },
     ];
 
     const scored = breeds.map((breed) => {
       let matchCount = 0;
       criteria.forEach((c) => {
-        const pv = prefs[c.prefKey];
-        const bv = breed[c.breedKey];
+        const pv = prefs[c.pref];
+        const bv = breed[c.breed];
         if (c.type === "bool") {
           if (Boolean(pv) === Boolean(bv)) matchCount++;
         } else {
@@ -136,12 +128,18 @@ export default function AdoptieProfielResults() {
       return { breed, score: matchCount / criteria.length };
     });
 
-    const filtered = scored
-      .filter((r) => r.score >= 0.6)
-      .sort((a, b) => b.score - a.score);
-
-    setMatches(filtered);
+    setMatches(
+      scored.filter((r) => r.score >= 0.3).sort((a, b) => b.score - a.score)
+    );
   }, [prefs, breeds]);
+
+  if (loading) {
+    return (
+      <SafeAreaView style={styles.container}>
+        <ActivityIndicator size="large" color="#97B8A5" />
+      </SafeAreaView>
+    );
+  }
 
   return (
     <SafeAreaView style={styles.container}>
@@ -153,9 +151,7 @@ export default function AdoptieProfielResults() {
       </TouchableOpacity>
 
       <Text style={styles.title}>Geschikte honden</Text>
-      <Text style={styles.subtitle}>
-        Alleen rassen met ≥ 60% match op jouw profiel
-      </Text>
+      <Text style={styles.subtitle}>Alle rassen ≥ 60% match</Text>
 
       {matches.length === 0 ? (
         <Text style={styles.noMatch}>Geen rassen boven de 60% gevonden.</Text>
@@ -167,10 +163,7 @@ export default function AdoptieProfielResults() {
           contentContainerStyle={styles.list}
           renderItem={({ item }) => (
             <View style={styles.card}>
-              <Image
-                source={{ uri: item.breed.image_url }}
-                style={styles.image}
-              />
+              <Image source={{ uri: item.breed.image }} style={styles.image} />
               <Text style={styles.breedName}>{item.breed.name}</Text>
               <Text style={styles.score}>{Math.round(item.score * 100)}%</Text>
             </View>
