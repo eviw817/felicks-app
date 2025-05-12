@@ -145,18 +145,20 @@ export default function HomepageScreen() {
         }}>
           Doe nog snel de quiz van deze week, voor je informatie misloopt.
         </Text>
-        <Text 
-            style={{
-                padding: 12,
-                margin: 20,
-                paddingHorizontal: 20,
-                backgroundColor: '#F18B7E',
-                fontWeight: 'bold',
-                borderRadius: 15,
-                textAlign: 'center',
-                color: '#FFFDF9',
-            }}
-            >START DE QUIZ</Text> 
+        <Link
+        href="/quizIndex" 
+        style={{
+          padding: 12,
+          margin: 20,
+          paddingHorizontal: 20,
+          backgroundColor: '#F18B7E',
+          fontWeight: 'bold',
+          borderRadius: 15,
+          textAlign: 'center',
+          color: '#FFFDF9',
+        }}
+        >START DE QUIZ
+        </Link> 
       </View>
 
       <View>
@@ -216,17 +218,19 @@ export default function HomepageScreen() {
         }}>
           Lees eerst wat je moet weten over hondenbezit.
         </Text>
-        <Text 
-            style={{
-                padding: 12,
-                margin: 20,
-                paddingHorizontal: 20,
-                backgroundColor: '#FFD87E',
-                fontWeight: 'bold',
-                borderRadius: 15,
-                textAlign: 'center',
-            }}
-            >LEES MEER TIPS</Text> 
+        <Link
+        href="/artikelsIndex" 
+        style={{
+          padding: 12,
+          margin: 20,
+          paddingHorizontal: 20,
+          backgroundColor: '#FFD87E',
+          fontWeight: 'bold',
+          borderRadius: 15,
+          textAlign: 'center',
+        }}
+        >LEES MEER TIPS
+        </Link> 
       </View>
       <View>
         <Text style={{

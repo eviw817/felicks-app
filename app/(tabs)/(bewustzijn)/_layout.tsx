@@ -13,7 +13,7 @@ export default function ProfileLayout() {
           fontWeight: 'bold',
         },
       }}>
-      <Stack.Screen name="profile" options={{ title: "Profile" }} />
+      <Stack.Screen name="bewustzijnIndex" options={{ title: "Bewustzijn Index" }} />
     </Stack>
   );
 }

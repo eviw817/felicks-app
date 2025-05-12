@@ -8,10 +8,10 @@ export default function BewustzijnScreen() {
   const router = useRouter();
 
   const [fontsLoaded] = useFonts({
-    "Nunito-Regular": require("../assets/fonts/nunito/Nunito-Regular.ttf"),
-    "Nunito-SemiBold": require("../assets/fonts/nunito/Nunito-SemiBold.ttf"),
-    "Nunito-Bold": require("../assets/fonts/nunito/Nunito-Bold.ttf"),
-    'Sirenia-Medium': require('../assets/fonts/Sirenia/Sirenia_medium.ttf'),
+    "Nunito-Regular": require("../../../assets/fonts/nunito/Nunito-Regular.ttf"),
+    "Nunito-SemiBold": require("../../../assets/fonts/nunito/Nunito-SemiBold.ttf"),
+    "Nunito-Bold": require("../../../assets/fonts/nunito/Nunito-Bold.ttf"),
+    'Sirenia-Medium': require("../../../assets/fonts/Sirenia/Sirenia_medium.ttf"),
   });
 
   if (!fontsLoaded) {
@@ -19,11 +19,11 @@ export default function BewustzijnScreen() {
   }
 
   const topics = [
-    { title: "VOEDING", image: require("../assets/images/voeding.png"), categorie: "voeding" },
-    { title: "VEILIGHEID", image: require("../assets/images/veiligheid.png"), categorie: "veiligheid" },
-    { title: "TRAINING", image: require("../assets/images/training.png"), categorie: "training" },
-    { title: "VERZORGING", image: require("../assets/images/verzorging.png"), categorie: "verzorging" },
-    { title: "ACTIVITEIT", image: require("../assets/images/activiteit.png"), categorie: "activiteit" },
+    { title: "VOEDING", image: require("../../../assets/images/voeding.png"), categorie: "voeding" },
+    { title: "VEILIGHEID", image: require("../../../assets/images/veiligheid.png"), categorie: "veiligheid" },
+    { title: "TRAINING", image: require("../../../assets/images/training.png"), categorie: "training" },
+    { title: "VERZORGING", image: require("../../../assets/images/verzorging.png"), categorie: "verzorging" },
+    { title: "ACTIVITEIT", image: require("../../../assets/images/activiteit.png"), categorie: "activiteit" },
   ];
 
   return (
@@ -31,7 +31,7 @@ export default function BewustzijnScreen() {
       <Text style={styles.title}>Bewustzijn</Text>
       <Text style={styles.subtitle}>Doe de quiz van de week</Text>
 
-      <TouchableOpacity style={styles.quizButton} onPress={() => router.push("/quiz_index")}>
+      <TouchableOpacity style={styles.quizButton} onPress={() => router.push("/quizIndex")}>
         <Text style={styles.quizButtonText}>QUIZ VAN DE WEEK</Text>
       </TouchableOpacity>
 
@@ -44,7 +44,7 @@ export default function BewustzijnScreen() {
             style={styles.infoButton}
             onPress={() =>
               router.push({
-                pathname: "/artikels_index",
+                pathname: "/artikelsIndex",
                 params: { categorie: item.categorie },
               })
             }

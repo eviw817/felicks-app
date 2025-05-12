@@ -7,7 +7,7 @@ import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 import BaseText from "@/components/BaseText";
 
 
-import { useRouter } from "expo-router";
+import { useRouter, Link } from "expo-router";
 
 export default function QuizIndex() {
   const router = useRouter();
@@ -15,7 +15,7 @@ export default function QuizIndex() {
   return (
     <View style={styles.container}>
       <TouchableOpacity
-        onPress={() => router.replace("/bewustzijn-index")}
+        onPress={() => router.replace("../bewustzijnIndex")}
         style={styles.backButton}
         hitSlop={{ top: 20, bottom: 20, left: 20, right: 20 }} // //aangepast zodat het klikbare gebied rond pijl groter is 
       >
@@ -37,12 +37,11 @@ export default function QuizIndex() {
         Ga ervoor en verbreed je kennis!
       </Text>
 
-      <TouchableOpacity
+      <Link
         style={styles.continueButton}
-        onPress={() => router.push("/quiz-vragen")}
-      >
+        href="../quizVragen">
         <Text style={styles.continueText}>DOORGAAN</Text>
-      </TouchableOpacity>
+      </Link>
 
 
     </View>

@@ -13,7 +13,7 @@ import { faArrowLeft } from '@fortawesome/free-solid-svg-icons'
 import { useRouter } from 'expo-router'
 
 import BaseText from '@/components/BaseText'
-import { supabase } from '../lib/supabaseClient'
+import { supabase } from '../../../../lib/supabaseClient'
 
 
 
@@ -133,7 +133,7 @@ export default function AwarenessQuiz() {
   const exitQuiz = () =>
     Alert.alert('Quiz verlaten', 'Weet je het zeker?', [
       { text: 'Nee', style: 'cancel' },
-      { text: 'Ja', onPress: () => router.replace('/bewustzijn-index') },
+      { text: 'Ja', onPress: () => router.replace('../bewustzijnIndex') },
     ])
 
 
@@ -169,7 +169,7 @@ export default function AwarenessQuiz() {
         </BaseText>
         <TouchableOpacity
           style={styles.continueButton}
-          onPress={() => router.replace('/bewustzijn-index')}
+          onPress={() => router.replace('../bewustzijnIndex')}
         >
           <BaseText style={styles.continueText}>
             Terug naar overzicht

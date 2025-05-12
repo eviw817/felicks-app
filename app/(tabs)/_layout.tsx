@@ -52,6 +52,13 @@ export default function TabLayout() {
           headerShown: false,
         }}
       />
+      <Stack.Screen
+        name="(bewustzijn)" // Verwijst naar de map app/(tabs)/(adoptionProfile)
+        options={{
+          title: "Bewustzijn",
+          headerShown: false,
+        }}
+      />
     </Stack> //voor een navigatie te maken moet alles Tabs zijn, dus ook Tabs.Scree
 
   );

@@ -108,7 +108,7 @@ export default function ArtikelsIndex() {
               <Pressable
                 key={id}
                 style={styles.card}
-                onPress={() => router.push(`/artikel?slug=${slug}`)}
+                onPress={() => router.push(`../artikel?slug=${slug}`)}
               >
                 {imageUri && (
                   <Image
