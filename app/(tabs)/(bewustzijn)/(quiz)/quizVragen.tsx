@@ -5,7 +5,7 @@ import {
   TouchableOpacity,
   StyleSheet,
   Alert,
-  ActivityIndicator,
+  ActivityIndicator, ScrollView
 } from 'react-native'
 import FontAwesome from '@expo/vector-icons/FontAwesome'
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
@@ -137,28 +137,32 @@ export default function AwarenessQuiz() {
     ])
 
 
-  if (loading)
-    return (
-      <View style={[styles.container, styles.center]}>
-        <ActivityIndicator size="large" color="#97B8A5" />
-        <BaseText style={styles.loadingText}>Laden…</BaseText>
-      </View>
-    )
-
- 
-  if (error)
-    return (
-      <View style={[styles.container, styles.center]}>
-        <BaseText style={[styles.loadingText, { color: 'red' }]}>
-          {error}
-        </BaseText>
-      </View>
-    )
+    if (loading)
+      return (
+        <View style={[styles.container, styles.center]}> 
+          <ActivityIndicator size="large" color="#97B8A5" />
+          <BaseText style={styles.loadingText}>Laden…</BaseText>
+        </View>
+      )
+  
+   
+    if (error)
+      return (
+        <View style={[styles.container, styles.center]}> 
+          <BaseText style={[styles.loadingText, { color: 'red' }]}>
+            {error}
+          </BaseText>
+        </View>
+      )
 
 
   if (finished)
     return (
-      <View style={styles.container}>
+      <ScrollView
+        style={styles.container}
+        contentContainerStyle={{ flexGrow: 1 }}
+        keyboardShouldPersistTaps="handled"
+      >
         <BaseText style={styles.title}>Bewustzijn quiz</BaseText>
         <View style={styles.iconWrapper}>
           <FontAwesome name="check-circle" size={100} color="#FFD87E" />
@@ -175,12 +179,16 @@ export default function AwarenessQuiz() {
             Terug naar overzicht
           </BaseText>
         </TouchableOpacity>
-      </View>
+      </ScrollView>
     )
 
 // UI
   return (
-    <View style={styles.container}>
+    <ScrollView
+        style={styles.container}
+        contentContainerStyle={{ flexGrow: 1 }}
+        keyboardShouldPersistTaps="handled"
+      >
       <TouchableOpacity onPress={exitQuiz} style={styles.backButton}>
         <FontAwesomeIcon icon={faArrowLeft} size={24} color="#183A36" />
       </TouchableOpacity>
@@ -242,7 +250,7 @@ export default function AwarenessQuiz() {
           </TouchableOpacity>
         </View>
       )}
-    </View>
+    </ScrollView>
   )
 }
 
@@ -261,7 +269,7 @@ const styles = StyleSheet.create({
   },
   backButton: {
     position: 'absolute',
-    top: 84,
+    top: 36,
     left: 20,
     padding: 10,
     borderRadius: 20,
@@ -271,7 +279,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 24,
     fontFamily: 'Sirenia-Medium',
-    marginTop: 75,
+    marginTop: 40,
     textAlign: "center",
   },
   question: {
@@ -283,7 +291,6 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     
   },
-
   optionRow: {
     flexDirection: 'row',
     alignItems: 'center',

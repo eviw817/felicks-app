@@ -99,5 +99,6 @@ const styles = StyleSheet.create({
   continueText: {
     fontFamily: 'Nunito-Bold',
     fontSize: 14,
+    textAlign: "center",
   },
 });
