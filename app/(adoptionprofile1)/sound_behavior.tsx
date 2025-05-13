@@ -35,31 +35,62 @@ export default function SoundBehavior() {
     "Nunito-Regular": require("../../assets/fonts/nunito/Nunito-Regular.ttf"),
     "Nunito-Bold": require("../../assets/fonts/nunito/Nunito-Bold.ttf"),
   });
+
   useEffect(() => {
     (async () => {
+      const { data: session } = await supabase.auth.getSession();
       const {
         data: { user },
       } = await supabase.auth.getUser();
-      if (user) setUserId(user.id);
+
+      if (user) {
+        setUserId(user.id);
+
+        const { data, error } = await supabase
+          .from("adoption_profiles")
+          .select("barking, training")
+          .eq("user_id", user.id)
+          .single();
+
+        if (error) {
+          console.error(
+            "❌ Ophalen bestaande antwoorden mislukt:",
+            error.message
+          );
+        } else if (data) {
+          console.log("✅ Bestaande antwoorden:", data);
+          setAnswers({
+            barking: data.barking || "",
+            training: data.training || "",
+          });
+        }
+      }
     })();
   }, []);
+
   if (!fontsLoaded) return null;
 
   const handleAnswer = async (
     question: "barking" | "training",
     value: string
   ) => {
-    setAnswers((prev) => ({ ...prev, [question]: value }));
+    const updatedAnswers = { ...answers, [question]: value };
+    setAnswers(updatedAnswers);
+
     if (!userId) return;
 
-    const payload: Record<string, any> = { user_id: userId };
-    if (question === "barking") payload.barking = value;
-    if (question === "training") payload.training = value;
+    const payload = {
+      user_id: userId,
+      barking: updatedAnswers.barking,
+      training: updatedAnswers.training,
+    };
 
     const { error } = await supabase
-      .from("profiles_breed_matches")
+      .from("adoption_profiles")
       .upsert(payload, { onConflict: "user_id" });
-    if (error) console.error("DB save error:", error.message);
+
+    if (error) console.error("❌ DB save error:", error.message);
+    else console.log("✅ Antwoorden opgeslagen:", payload);
   };
 
   const canNext = answers.barking !== "" && answers.training !== "";
@@ -69,6 +100,7 @@ export default function SoundBehavior() {
     { label: "Een beetje blaffen hoort erbij", value: "some" },
     { label: "Een praatgrage hond is geen probleem", value: "talkative" },
   ];
+
   const trainingOptions = [
     {
       label:
