@@ -206,7 +206,6 @@ export default function Registeren() {
       setYear("2000");
 
       // Redirect to login page
-      // router.push("/adoption_profile");
       router.push("/adoptionprofile1");
     }
 
