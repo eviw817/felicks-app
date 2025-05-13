@@ -40,12 +40,30 @@ export default function ExperienceSize() {
   useEffect(() => {
     (async () => {
       const { data: session } = await supabase.auth.getSession();
-      console.log("✅ Supabase UID:", session?.session?.user.id);
+      const uid = session?.session?.user.id;
+      if (!uid) return;
 
-      const {
-        data: { user },
-      } = await supabase.auth.getUser();
-      if (user) setUserId(user.id);
+      setUserId(uid);
+
+      const { data, error } = await supabase
+        .from("adoption_profiles")
+        .select("experience_level, preferred_size")
+        .eq("user_id", uid)
+        .single();
+
+      if (data) {
+        setAnswers({
+          experience: data.experience_level || "",
+          preferredSize: data.preferred_size || "",
+        });
+      }
+
+      if (error) {
+        console.warn(
+          "⚠️ Geen bestaande antwoorden gevonden of andere fout:",
+          error.message
+        );
+      }
     })();
   }, []);
 
