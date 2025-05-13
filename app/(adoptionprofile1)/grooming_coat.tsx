@@ -35,31 +35,61 @@ export default function GroomingCoat() {
     "Nunito-Regular": require("../../assets/fonts/nunito/Nunito-Regular.ttf"),
     "Nunito-Bold": require("../../assets/fonts/nunito/Nunito-Bold.ttf"),
   });
+
+  // ✅ Ophalen van bestaande antwoorden
   useEffect(() => {
     (async () => {
       const {
         data: { user },
       } = await supabase.auth.getUser();
-      if (user) setUserId(user.id);
+      if (user) {
+        setUserId(user.id);
+
+        // Ophalen bestaande antwoorden
+        const { data, error } = await supabase
+          .from("adoption_profiles")
+          .select("grooming, shedding")
+          .eq("user_id", user.id)
+          .single();
+
+        if (error) {
+          console.error(
+            "❌ Ophalen bestaande antwoorden mislukt:",
+            error.message
+          );
+        } else if (data) {
+          setAnswers({
+            grooming: data.grooming || "",
+            shedding: data.shedding || "",
+          });
+        }
+      }
     })();
   }, []);
+
   if (!fontsLoaded) return null;
 
+  // ✅ Bijwerken van antwoord in state + Supabase
   const handleAnswer = async (
     question: "grooming" | "shedding",
     value: string
   ) => {
-    setAnswers((prev) => ({ ...prev, [question]: value }));
+    const newAnswers = { ...answers, [question]: value };
+    setAnswers(newAnswers);
+
     if (!userId) return;
 
-    const payload: Record<string, any> = { user_id: userId };
-    if (question === "grooming") payload.grooming = value;
-    if (question === "shedding") payload.shedding = value;
+    const payload = {
+      user_id: userId,
+      grooming: newAnswers.grooming,
+      shedding: newAnswers.shedding,
+    };
 
     const { error } = await supabase
-      .from("profiles_breed_matches")
+      .from("adoption_profiles")
       .upsert(payload, { onConflict: "user_id" });
-    if (error) console.error("DB save error:", error.message);
+
+    if (error) console.error("❌ DB save error:", error.message);
   };
 
   const canNext = answers.grooming !== "" && answers.shedding !== "";
@@ -72,6 +102,7 @@ export default function GroomingCoat() {
     { label: "Af en toe borstelen? Dat hoort erbij", value: "occasional" },
     { label: "Dagelijks borstelen is voor mij qualitytime", value: "daily" },
   ];
+
   const sheddingOptions = [
     { label: "Ik hou m’n huis graag netjes en haarvrij", value: "no_hair" },
     {
