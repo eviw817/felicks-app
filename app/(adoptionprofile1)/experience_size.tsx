@@ -35,31 +35,52 @@ export default function ExperienceSize() {
     "Nunito-Regular": require("../../assets/fonts/nunito/Nunito-Regular.ttf"),
     "Nunito-Bold": require("../../assets/fonts/nunito/Nunito-Bold.ttf"),
   });
+
+  // ✅ Haal Supabase user ID op
   useEffect(() => {
     (async () => {
+      const { data: session } = await supabase.auth.getSession();
+      console.log("✅ Supabase UID:", session?.session?.user.id);
+
       const {
         data: { user },
       } = await supabase.auth.getUser();
       if (user) setUserId(user.id);
     })();
   }, []);
+
+  // ✅ Als fonts nog niet geladen zijn, toon niets
   if (!fontsLoaded) return null;
 
   const handleAnswer = async (
     question: "experience" | "preferredSize",
     value: string
   ) => {
-    setAnswers((prev) => ({ ...prev, [question]: value }));
-    if (!userId) return;
+    const newAnswers = { ...answers, [question]: value };
+    setAnswers(newAnswers);
 
-    const payload: Record<string, any> = { user_id: userId };
-    if (question === "experience") payload.experience_level = value;
-    if (question === "preferredSize") payload.preferred_size = value;
+    console.log("🟡 Antwoord aangepast:", question, "→", value);
+    console.log("📦 Huidige answer state:", newAnswers);
+
+    if (!userId || typeof userId !== "string") {
+      console.error("❌ Ongeldige userId:", userId);
+      return;
+    }
+
+    const payload: Record<string, any> = {
+      user_id: userId,
+      experience_level: newAnswers.experience,
+      preferred_size: newAnswers.preferredSize,
+    };
+
+    console.log("📤 Payload voor Supabase upsert:", payload);
 
     const { error } = await supabase
-      .from("profiles_breed_matches")
+      .from("adoption_profiles") // ⚠️ tabel aangepast!
       .upsert(payload, { onConflict: "user_id" });
-    if (error) console.error("DB save error:", error.message);
+
+    if (error) console.error("❌ DB save error:", error.message);
+    else console.log("✅ Antwoorden opgeslagen:", payload);
   };
 
   const canNext = answers.experience !== "" && answers.preferredSize !== "";
@@ -75,6 +96,7 @@ export default function ExperienceSize() {
       value: "extensive",
     },
   ];
+
   const sizeOptions = [
     { label: "Klein en compact – makkelijk mee te nemen", value: "small" },
     { label: "Middelgroot – ideaal voor thuis én onderweg", value: "medium" },
@@ -155,7 +177,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   progressFill2: {
-    width: "28.56%", // 2/7
+    width: "28.56%", // 2/7 stappen
     height: "100%",
     backgroundColor: "#FFD87E",
     borderTopRightRadius: 3,
