@@ -35,35 +35,53 @@ export default function FamilyEnvironment() {
     "Nunito-Regular": require("../../assets/fonts/nunito/Nunito-Regular.ttf"),
     "Nunito-Bold": require("../../assets/fonts/nunito/Nunito-Bold.ttf"),
   });
+
   useEffect(() => {
     (async () => {
+      const { data: session } = await supabase.auth.getSession();
       const {
         data: { user },
       } = await supabase.auth.getUser();
-      if (user) setUserId(user.id);
+      if (!user) return;
+      const userId = user.id;
+      setUserId(userId);
+
+      // ✅ Ophalen van bestaande antwoorden
+      const { data, error } = await supabase
+        .from("adoption_profiles")
+        .select("has_children, has_pets")
+        .eq("user_id", userId)
+        .single();
+
+      if (data) {
+        setAnswers({
+          children: data.has_children || "",
+          otherPets: data.has_pets || "",
+        });
+      }
     })();
   }, []);
+
   if (!fontsLoaded) return null;
 
   const handleAnswer = async (
     question: "children" | "otherPets",
     value: string
   ) => {
-    setAnswers((prev) => ({ ...prev, [question]: value }));
+    const newAnswers = { ...answers, [question]: value };
+    setAnswers(newAnswers);
     if (!userId) return;
 
-    const payload: Record<string, any> = { user_id: userId };
-    if (question === "children") {
-      // ja => true, nee => false
-      payload.good_with_children = value !== "none";
-    }
-    if (question === "otherPets") {
-      payload.good_with_pets = value !== "firstPet";
-    }
+    const payload: Record<string, any> = {
+      user_id: userId,
+      has_children: newAnswers.children,
+      has_pets: newAnswers.otherPets,
+    };
 
     const { error } = await supabase
-      .from("profiles_breed_matches")
+      .from("adoption_profiles")
       .upsert(payload, { onConflict: "user_id" });
+
     if (error) console.error("DB save error:", error.message);
   };
 
