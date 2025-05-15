@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   SafeAreaView,
   View,
@@ -8,13 +8,10 @@ import {
   StyleSheet,
   FlatList,
   TouchableOpacity,
-  Image,
-  Platform,
   ActivityIndicator,
 } from "react-native";
 import { useRouter } from "expo-router";
 import { supabase } from "../../lib/supabase";
-import { Ionicons } from "@expo/vector-icons";
 
 interface Prefs {
   living_situation: string;
@@ -35,7 +32,6 @@ interface Prefs {
 interface Breed {
   id: number;
   name: string;
-  image_url?: string;
   size: string;
   activity_level: string;
   good_with_children: boolean;
@@ -47,15 +43,19 @@ interface Breed {
   needs_garden: boolean;
   experience_required: boolean;
   personality_type: string;
-  can_be_alone: string;
+  living_situation: string;
 }
 
-export default function AdoptieProfielResults() {
+export default function AdoptieprofielResults() {
   const router = useRouter();
-  const [userId, setUserId] = useState<string | null>(null);
   const [prefs, setPrefs] = useState<Prefs | null>(null);
   const [breeds, setBreeds] = useState<Breed[]>([]);
-  const [matches, setMatches] = useState<{ breed: Breed; score: number }[]>([]);
+  const [topMatches, setTopMatches] = useState<
+    { breed: Breed; score: number }[]
+  >([]);
+  const [otherMatches, setOtherMatches] = useState<
+    { breed: Breed; score: number }[]
+  >([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -64,92 +64,102 @@ export default function AdoptieProfielResults() {
         data: { user },
       } = await supabase.auth.getUser();
       if (!user) return;
-      setUserId(user.id);
 
-      const { data: profile, error } = await supabase
+      const { data: prefsData } = await supabase
         .from("adoption_profiles")
         .select("*")
         .eq("user_id", user.id)
         .single();
 
-      if (!profile || error) {
-        console.warn("⚠️ Geen profielvoorkeuren gevonden.");
-        setLoading(false);
-        return;
-      }
+      setPrefs(prefsData ?? null);
 
-      setPrefs(profile as Prefs);
-
-      const { data: breedData, error: bErr } = await supabase
+      const { data: breedsData } = await supabase
         .from("dog_breeds")
         .select("*");
-
-      if (!breedData || bErr) {
-        console.error("❌ Error fetching breeds:", bErr);
-        setLoading(false);
-        return;
-      }
-
-      setBreeds(breedData);
+      setBreeds(breedsData ?? []);
       setLoading(false);
     })();
   }, []);
 
   useEffect(() => {
-    if (!prefs || breeds.length === 0 || !userId) return;
+    if (!prefs || breeds.length === 0) return;
 
-    const criteria: {
-      pref: keyof Prefs;
-      breed: keyof Breed;
-      type: "equal" | "bool";
-    }[] = [
-      { pref: "experience_level", breed: "experience_required", type: "equal" },
-      { pref: "preferred_size", breed: "size", type: "equal" },
-      { pref: "good_with_children", breed: "good_with_children", type: "bool" },
-      { pref: "good_with_pets", breed: "good_with_pets", type: "bool" },
-      { pref: "activity_level", breed: "activity_level", type: "equal" },
-      { pref: "barking", breed: "barking", type: "equal" },
-      { pref: "training", breed: "training", type: "equal" },
-      { pref: "grooming", breed: "grooming", type: "equal" },
-      { pref: "shedding", breed: "shedding", type: "equal" },
-      { pref: "has_garden", breed: "needs_garden", type: "bool" },
-    ];
-
-    const scored = breeds.map((breed) => {
-      let matchCount = 0;
-      criteria.forEach((c) => {
-        const pv = prefs[c.pref];
-        const bv = breed[c.breed];
-        if (c.type === "bool") {
-          if (Boolean(pv) === Boolean(bv)) matchCount++;
-        } else {
-          if (pv === bv) matchCount++;
-        }
-      });
-      return { ...breed, score: matchCount / criteria.length };
-    });
-
-    const filtered = scored.filter((r) => r.score >= 0.6);
-    setMatches(filtered.map((r) => ({ breed: r, score: r.score })));
-
-    // ✅ Save to DB
-    const saveMatches = async () => {
-      const matchPayload = filtered.map((r) => ({
-        user_id: userId,
-        breed_id: r.id,
-        match_score: Number((r.score * 100).toFixed(2)),
-      }));
-
-      if (matchPayload.length > 0) {
-        const { error } = await supabase
-          .from("profiles_breed_matches")
-          .upsert(matchPayload, { onConflict: "user_id,breed_id" });
-        if (error) console.error("❌ Error saving matches:", error.message);
-      }
+    const toleranceMap: Record<string, string[]> = {
+      apartment: ["house_no_garden", "garden", "lots_of_space"],
+      house_no_garden: ["garden", "lots_of_space"],
+      quiet: ["some", "talkative"],
+      minimal: ["occasional", "daily"],
+      no_hair: ["some_hair", "accept_hair"],
     };
 
-    saveMatches();
-  }, [prefs, breeds, userId]);
+    const softMatch = (
+      pref: string,
+      value: string,
+      tolerance: Record<string, string[]>
+    ): boolean => {
+      return (
+        pref === value || (tolerance[pref] && tolerance[pref].includes(value))
+      );
+    };
+
+    const scored = breeds.map((breed) => {
+      let score = 0;
+
+      // Booleans
+      if (prefs.experience_level === "none" && !breed.experience_required)
+        score++;
+      if (prefs.experience_level !== "none" && breed.experience_required)
+        score++;
+      if (prefs.good_with_children === breed.good_with_children) score++;
+      if (prefs.good_with_pets === breed.good_with_pets) score++;
+
+      // Exact matches
+      if (prefs.preferred_size === breed.size) score++;
+      if (prefs.activity_level === breed.activity_level) score++;
+      if (prefs.personality_type === breed.personality_type) score++;
+
+      // Soft matches
+      if (
+        softMatch(prefs.living_situation, breed.living_situation, toleranceMap)
+      )
+        score++;
+      if (softMatch(prefs.barking, breed.barking, toleranceMap)) score++;
+      if (softMatch(prefs.grooming, breed.grooming, toleranceMap)) score++;
+      if (softMatch(prefs.shedding, breed.shedding, toleranceMap)) score++;
+
+      // Garden
+      if (prefs.has_garden === breed.needs_garden) score++;
+
+      const scorePercentage = score / 12;
+      return { breed, score: scorePercentage };
+    });
+
+    console.log(
+      "🔍 Scores:",
+      scored.map((s) => ({
+        name: s.breed.name,
+        score: `${Math.round(s.score * 100)}%`,
+      }))
+    );
+
+    setTopMatches(scored.filter((r) => r.score >= 0.6));
+    setOtherMatches(scored.filter((r) => r.score >= 0.3 && r.score < 0.6));
+  }, [prefs, breeds]);
+
+  const renderBreed = ({ item }: { item: { breed: Breed; score: number } }) => (
+    <TouchableOpacity
+      style={styles.card}
+      onPress={() =>
+        router.push({
+          pathname: "/(adoptionprofile1)/breed/[id]",
+          params: { id: item.breed.id.toString() },
+        } as any)
+      }
+    >
+      <Text style={styles.name}>{item.breed.name}</Text>
+      <Text style={styles.score}>{Math.round(item.score * 100)}% match</Text>
+    </TouchableOpacity>
+  );
 
   if (loading) {
     return (
@@ -161,61 +171,65 @@ export default function AdoptieProfielResults() {
 
   return (
     <SafeAreaView style={styles.container}>
-      <TouchableOpacity style={styles.back} onPress={() => router.back()}>
-        <Ionicons name="arrow-back" size={24} color="#183A36" />
-      </TouchableOpacity>
-
-      <Text style={styles.title}>Jouw matches</Text>
-      {matches.length === 0 ? (
-        <Text style={styles.noMatch}>Geen geschikte honden gevonden.</Text>
+      <Text style={styles.title}>🎯 Topmatches</Text>
+      {topMatches.length === 0 ? (
+        <Text style={styles.empty}>Geen topmatches gevonden</Text>
       ) : (
         <FlatList
-          data={matches}
+          data={topMatches}
           keyExtractor={(item) => item.breed.id.toString()}
-          renderItem={({ item }) => (
-            <View style={styles.card}>
-              <Text style={styles.name}>{item.breed.name}</Text>
-              <Text style={styles.score}>
-                Matchscore: {Math.round(item.score * 100)}%
-              </Text>
-            </View>
-          )}
+          renderItem={renderBreed}
         />
       )}
+
+      <Text style={[styles.title, { marginTop: 32 }]}>
+        💡 Andere mogelijke matches
+      </Text>
+      {otherMatches.length === 0 ? (
+        <Text style={styles.empty}>Geen andere matches gevonden</Text>
+      ) : (
+        <FlatList
+          data={otherMatches}
+          keyExtractor={(item) => item.breed.id.toString()}
+          renderItem={renderBreed}
+        />
+      )}
+
+      <TouchableOpacity onPress={() => router.back()} style={styles.button}>
+        <Text style={styles.buttonText}>Terug</Text>
+      </TouchableOpacity>
     </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: "#F8F8F8", padding: 20 },
-  back: { paddingVertical: 8 },
+  container: { flex: 1, padding: 20, backgroundColor: "#fff" },
   title: {
     fontSize: 22,
     fontWeight: "bold",
+    marginBottom: 12,
     color: "#183A36",
-    marginBottom: 16,
   },
-  noMatch: {
-    fontSize: 16,
-    textAlign: "center",
-    marginTop: 40,
-    color: "#999",
-  },
+  name: { fontSize: 16, fontWeight: "600", color: "#183A36" },
+  score: { fontSize: 14, color: "#97B8A5" },
   card: {
-    backgroundColor: "#fff",
-    padding: 16,
-    borderRadius: 10,
     marginBottom: 16,
-    elevation: 3,
+    padding: 12,
+    backgroundColor: "#F0F5F3",
+    borderRadius: 10,
   },
-  name: {
-    fontSize: 18,
-    fontWeight: "bold",
-    color: "#183A36",
-    marginBottom: 4,
+  button: {
+    marginTop: 32,
+    backgroundColor: "#97B8A5",
+    padding: 14,
+    borderRadius: 25,
+    alignItems: "center",
   },
-  score: {
+  buttonText: { color: "#fff", fontWeight: "bold", fontSize: 16 },
+  empty: {
     fontSize: 14,
-    color: "#97B8A5",
+    textAlign: "center",
+    color: "#888",
+    marginVertical: 12,
   },
 });
