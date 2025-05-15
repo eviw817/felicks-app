@@ -124,32 +124,34 @@ export default function LivingSituation() {
   const canNext =
     answers.livingSituation !== "" && answers.homeFrequency !== "";
 
-  // ✅ Opties
   const livingOptions = [
     {
       label: "In een gezellig appartement – knus en compact",
-      value: "appartement",
+      value: "apartment",
     },
     {
       label: "Een huis zonder tuin, maar met wandelopties",
-      value: "huisZonderTuin",
+      value: "house_no_garden",
     },
-    { label: "We hebben een tuin waar de hond kan snuffelen", value: "tuin" },
+    {
+      label: "We hebben een tuin waar de hond kan snuffelen",
+      value: "garden",
+    },
     {
       label: "Veel ruimte, veel natuur – buiten zijn vanzelfsprekend",
-      value: "veelRuimte",
+      value: "nature",
     },
   ];
 
   const homeOptions = [
     {
       label: "Bijna altijd, ik werk thuis of ben vaak thuis",
-      value: "vaakThuis",
+      value: "mostly_home",
     },
-    { label: "Gedeeld – soms thuis, soms weg", value: "gedeeld" },
+    { label: "Gedeeld – soms thuis, soms weg", value: "mixed" },
     {
       label: "Vaak van huis – hond moet alleen kunnen zijn",
-      value: "vaakWeg",
+      value: "often_away",
     },
   ];
 

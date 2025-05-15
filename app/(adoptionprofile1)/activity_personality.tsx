@@ -36,33 +36,31 @@ export default function ActivityPersonality() {
     "Nunito-Bold": require("../../assets/fonts/nunito/Nunito-Bold.ttf"),
   });
 
-  // ✅ User ophalen en bestaande antwoorden ophalen
   useEffect(() => {
     (async () => {
       const {
         data: { user },
       } = await supabase.auth.getUser();
-      if (user) {
-        setUserId(user.id);
+      if (!user) return;
 
-        const { data, error } = await supabase
-          .from("adoption_profiles")
-          .select("activity_level, personality")
-          .eq("user_id", user.id)
-          .single();
+      setUserId(user.id);
 
-        if (data) {
-          setAnswers({
-            activity: data.activity_level || "",
-            personality: data.personality || "",
-          });
-        }
+      // ✅ Ophalen van bestaande antwoorden
+      const { data, error } = await supabase
+        .from("adoption_profiles")
+        .select("activity_level, personality")
+        .eq("user_id", user.id)
+        .single();
 
-        if (error)
-          console.error(
-            "❌ Ophalen bestaande antwoorden mislukt:",
-            error.message
-          );
+      if (data) {
+        setAnswers({
+          activity: data.activity_level || "",
+          personality: data.personality || "",
+        });
+      }
+
+      if (error) {
+        console.warn("⚠️ Ophalen bestaande antwoorden mislukt:", error.message);
       }
     })();
   }, []);
@@ -89,6 +87,7 @@ export default function ActivityPersonality() {
       .upsert(payload, { onConflict: "user_id" });
 
     if (error) console.error("❌ DB save error:", error.message);
+    else console.log("✅ Opgeslagen:", payload);
   };
 
   const canNext = answers.activity !== "" && answers.personality !== "";

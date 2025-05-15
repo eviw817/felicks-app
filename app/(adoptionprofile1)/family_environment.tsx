@@ -92,10 +92,11 @@ export default function FamilyEnvironment() {
     { label: "Ja, met tieners of oudere kinderen", value: "teens" },
     { label: "Nee, er zijn geen kinderen in huis", value: "none" },
   ];
+
   const otherPetsOptions = [
     { label: "Ja, één of meerdere honden", value: "dogs" },
     { label: "Ja, katten of andere dieren", value: "cats" },
-    { label: "Nee, dit wordt ons eerste huisdier", value: "firstPet" },
+    { label: "Nee, dit wordt ons eerste huisdier", value: "first_pet" },
   ];
 
   return (

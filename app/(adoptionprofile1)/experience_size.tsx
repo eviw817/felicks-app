@@ -94,8 +94,8 @@ export default function ExperienceSize() {
     console.log("📤 Payload voor Supabase upsert:", payload);
 
     const { error } = await supabase
-      .from("adoption_profiles") // ⚠️ tabel aangepast!
-      .upsert(payload, { onConflict: "user_id" });
+      .from("adoption_profiles")
+      .upsert([payload], { onConflict: "user_id" });
 
     if (error) console.error("❌ DB save error:", error.message);
     else console.log("✅ Antwoorden opgeslagen:", payload);

@@ -36,7 +36,7 @@ interface Prefs {
 interface Breed {
   id: number;
   name: string;
-  image: string;
+  // image: string;
   size: string;
   activity_level: string;
   good_with_children: boolean;
@@ -79,8 +79,13 @@ export default function AdoptieProfielResults() {
       }
       setPrefs(p as Prefs);
 
+      // const { data: b, error: berr } = await supabase.from("dog_breeds").select(
+      //   `id, name, image, size, activity_level, good_with_children,
+      //      good_with_pets, shedding, barking, training, grooming,
+      //      needs_garden, experience`
+      // );
       const { data: b, error: berr } = await supabase.from("dog_breeds").select(
-        `id, name, image, size, activity_level, good_with_children,
+        `id, name, size, activity_level, good_with_children,
            good_with_pets, shedding, barking, training, grooming,
            needs_garden, experience`
       );
@@ -163,7 +168,7 @@ export default function AdoptieProfielResults() {
           contentContainerStyle={styles.list}
           renderItem={({ item }) => (
             <View style={styles.card}>
-              <Image source={{ uri: item.breed.image }} style={styles.image} />
+              {/* s<Image source={{ uri: item.breed.image }} style={styles.image} /> */}
               <Text style={styles.breedName}>{item.breed.name}</Text>
               <Text style={styles.score}>{Math.round(item.score * 100)}%</Text>
             </View>
