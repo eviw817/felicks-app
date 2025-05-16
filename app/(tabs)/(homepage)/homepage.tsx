@@ -5,6 +5,7 @@ import { Session } from '@supabase/supabase-js';
 import { FontAwesome } from '@expo/vector-icons';
 import { TouchableOpacity } from 'react-native';
 import { Link } from 'expo-router';
+import NavBar from "../../../components/NavigationBar";
 
 export default function HomepageScreen() {
   const [firstname, setFirstname] = useState<string>(""); // State to store firstname
@@ -382,8 +383,19 @@ export default function HomepageScreen() {
                 </View>
             </View>
           </View>
+          
         </View>
       </ScrollView>
+        {/* Fixed navbar onderaan scherm */}
+        <View style={{
+          position: 'absolute',
+          bottom: 0,
+          left: 0,
+          right: 0,
+  
+        }}>
+        <NavBar />
+    </View>
     </SafeAreaView>
   );
 }

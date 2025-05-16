@@ -6,6 +6,7 @@ import { FontAwesome } from '@expo/vector-icons';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import { useRouter } from 'expo-router'; 
 import { Link } from 'expo-router';
+import NavBar from "../../../components/NavigationBar";
 
 export default function Notifications() {
 
@@ -150,6 +151,15 @@ export default function Notifications() {
                 </View>
             </View>
         </ScrollView>
+         {/* NavBar onderaan fixed position */}
+            <View style={{
+                position: 'absolute',
+                bottom: 0,
+                left: 0,
+                right: 0,
+            }}>
+                <NavBar />
+            </View>
     </SafeAreaView>
   );
 }
