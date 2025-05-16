@@ -1,0 +1,25 @@
+# Start with entries from .gitignore
+node_modules/
+.git/
+.env
+
+# Exclude directories not needed for Android builds
+ios/
+docs/
+tests/
+coverage/
+
+# Exclude build artifacts
+build/
+dist/
+
+# Exclude logs and temporary files
+*.log
+*.tmp
+
+# Include files necessary for the build that might be ignored in .gitignore
+!app.json
+!eas.json
+!google-services.json
+
+.DS_Store

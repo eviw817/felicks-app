@@ -3,14 +3,13 @@
   "compilerOptions": {
     "jsx": "react-native",
     "strict": true,
+    "esModuleInterop": true, // <--- ADD THIS LINE
     "paths": {
       "@/*": [
         "./*"
-      ],
-      "tailwind.config": [
-        "./tailwind.config.js"
       ]
     }
+    // ... any other compiler options you have
   },
   "include": [
     "**/*.ts",

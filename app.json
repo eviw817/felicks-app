@@ -9,7 +9,18 @@
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.anonymous.felicksapp"
+    },
+    "extra": {
+      "supabaseUrl": "https://vgbuoxdfrbzqbqltcelz.supabase.co",
+      "supabaseAnonKey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZnYnVveGRmcmJ6cWJxbHRjZWx6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDEwMTgyMzQsImV4cCI6MjA1NjU5NDIzNH0.JJdiJGHZS1yhVP_hnFAdve-VGfNBK5LmiBSMICSdkbk",
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "d93aaaff-53c2-4e30-8868-6e58d0ebaa92"
+      }
     },
     "android": {
       "adaptiveIcon": {
@@ -34,6 +45,7 @@
           "backgroundColor": "#ffffff"
         }
       ],
+      "expo-font",
       "expo-secure-store"
     ],
     "experiments": {

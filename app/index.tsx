@@ -1,13 +1,17 @@
 import React, { useEffect } from "react";
 import { View, Image, StyleSheet } from "react-native";
-import { useRouter } from "expo-router";
+
+import { useRouter } from "expo-router"; 
+
 
 export default function Index() {
   const router = useRouter();
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      router.replace("/loginRegister");
+
+      router.replace("../../loginRegister");
+
     }, 3000);
 
     return () => clearTimeout(timer);
@@ -34,4 +38,6 @@ const styles = StyleSheet.create({
     height: 340,
     resizeMode: "contain",
   },
+
 });
+
