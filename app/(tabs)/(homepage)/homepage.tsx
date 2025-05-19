@@ -151,10 +151,13 @@ export default function HomepageScreen() {
         }}
       >
         <View>
-          <Button
-            onPress={() => router.navigate("/augumentedDog")}
-            title="Go to da dog"
-          />
+          <Link 
+            style={{
+              padding: 12,
+              paddingHorizontal: 20,
+              backgroundColor: '#97B8A5',
+              borderRadius: 7 }}
+            href="/dogStart">Ga naar Hond AR</Link>
           <Text
             style={{
               fontFamily: "Nunito",

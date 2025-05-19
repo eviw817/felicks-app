@@ -59,6 +59,13 @@ export default function TabLayout() {
           headerShown: false,
         }}
       />
+      <Stack.Screen
+        name="(dog-ar)" // Verwijst naar de map app/(tabs)/(adoptionProfile)
+        options={{
+          title: "Dog AR",
+          headerShown: false,
+        }}
+      />
     </Stack> //voor een navigatie te maken moet alles Tabs zijn, dus ook Tabs.Scree
 
   );
