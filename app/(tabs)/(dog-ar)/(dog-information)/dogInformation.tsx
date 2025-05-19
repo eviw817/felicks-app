@@ -1,6 +1,6 @@
 import React from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { View, Text, TouchableOpacity } from 'react-native';
+import { View, Text, TouchableOpacity, ScrollView } from 'react-native';
 import { useRouter } from 'expo-router'; 
 import AntDesign from '@expo/vector-icons/AntDesign';
 import { Link } from 'expo-router';
@@ -17,11 +17,15 @@ export default function DogInformation() {
       alignItems: 'center',
       backgroundColor: '#FFFDF9',
       }}>
+        <ScrollView
+            contentContainerStyle={{
+                justifyContent: "flex-start",
+            }}>
         <TouchableOpacity  
             style={{
             position: "absolute",
-            top: 98,
-            left: 16,
+            top: 68,
+            left: 40,
             }} onPress={() => router.back()}>
             <AntDesign name="arrowleft" size={24} color="black"/>
         </TouchableOpacity>
@@ -38,6 +42,7 @@ export default function DogInformation() {
                 fontWeight: 'bold',
                 fontSize: 20,
                 padding: 20,
+                paddingHorizontal: 80,
                 textAlign: 'center',
             }}
             >Tijd om voor Cooper te zorgen!</Text>
@@ -48,34 +53,111 @@ export default function DogInformation() {
                 fontSize: 16,
                 padding: 20,
             }}
-            >Cooper kan niet wachten om jouw nieuwe virtuele beste vriend te worden! Ben je er klaar voor om samen een avontuur te beginnen?</Text>
+            >Cooper staat te trappelen om jouw nieuwe virtuele beste vriend te worden!</Text>
             <Text
             style={{
                 fontFamily: 'Nunito',
                 fontWeight: 'bold',
                 fontSize: 16,
-                paddingTop: 20,
+                paddingTop: 8,
                 paddingLeft: 20,
             }}
-            >Hoe werkt het?</Text>
+            >Klaar om samen op avontuur te gaan?</Text>
             <Text
             style={{
                 fontFamily: 'Nunito',
                 fontWeight: 'normal',
                 fontSize: 16,
                 padding: 20,
-                paddingTop: 8,
+                paddingTop: 0,
             }}
-            >Via de camera op je telefoon komt Cooper tot leven in AR (Augmented Reality). Dat betekent dat je hem overal mee naartoe kunt nemen en met hem kunt spelen alsof hij écht bij je is. Hoe leuk is dat? 🎉</Text>
+            >Met de camera van je telefoon komt Cooper tot leven in AR (Augmented Reality).</Text>
             <Text
             style={{
                 fontFamily: 'Nunito',
                 fontWeight: 'normal',
                 fontSize: 16,
                 padding: 20,
-                paddingTop: 8,
+                paddingTop: 0,
             }}
-            >Maar Cooper is meer dan alleen een virtuele hond. Hij is hier om jou te laten ervaren wat er allemaal komt kijken bij het verzorgen van een huisdier. Honden kunnen niet zomaar op "pauze" worden gezet. Ze hebben liefde, tijd en aandacht nodig. Spelen is belangrijk, maar er is nog zoveel meer te ontdekken!</Text>
+            >Neem hem overal mee naartoe en speel met hem alsof hij echt bij je is. </Text>
+            <Text
+            style={{
+                fontFamily: 'Nunito',
+                fontWeight: 'bold',
+                fontSize: 16,
+                paddingTop: 8,
+                paddingLeft: 20,
+            }}
+            >Hoe leuk is dat? </Text>
+            <Text
+            style={{
+                fontFamily: 'Nunito',
+                fontWeight: 'normal',
+                fontSize: 16,
+                padding: 20,
+                paddingBottom: 0,
+            }}
+            ><Text style={{fontWeight: 'bold'}}>Maar</Text> Cooper is meer dan alleen een schattige hond. Honden kunnen niet zomaar op "pauze" worden gezet. </Text>
+            <Text
+            style={{
+                fontFamily: 'Nunito',
+                fontWeight: 'normal',
+                fontSize: 16,
+                padding: 20,
+                paddingTop: 0,
+            }}
+            >Hij laat je zien wat er echt bij een huisdier komt kijken:</Text>
+            <View
+            style={{
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                margin: 20,
+            }}>
+                <Text
+                style={{
+                    fontFamily: 'Nunito',
+                    fontWeight: 'normal',
+                    fontSize: 16,
+                    padding: 20,
+                    paddingVertical: 10,
+                    marginTop: 0,
+                    backgroundColor: '#FFD87E',
+                    borderRadius: 10,
+                }}>Liefde</Text>
+                <Text
+                style={{
+                    fontFamily: 'Nunito',
+                    fontWeight: 'normal',
+                    fontSize: 16,
+                    padding: 20,
+                    paddingVertical: 10,
+                    marginTop: 0,
+                    backgroundColor: '#FFD87E',
+                    borderRadius: 10,
+                }}>Tijd</Text>
+                <Text
+                    style={{
+                    fontFamily: 'Nunito',
+                    fontWeight: 'normal',
+                    fontSize: 16,
+                    padding: 20,
+                    paddingVertical: 10,
+                    marginTop: 0,
+                    backgroundColor: '#FFD87E',
+                    borderRadius: 10,
+                }}>Aandacht</Text>
+            </View>
+            <Text
+                style={{
+                    fontFamily: 'Nunito',
+                    fontWeight: 'normal',
+                    fontSize: 16,
+                    padding: 20,
+                    paddingTop: 0,
+                }}
+            >Spelen is pas het begin… er valt nog zoveel meer te ontdekken!</Text>
             <Link 
             style={{
                 padding: 12,
@@ -88,5 +170,6 @@ export default function DogInformation() {
             }}
             href="/dogNotifications">DOORGAAN</Link>
         </View>
+        </ScrollView>
       </SafeAreaView>
 )};
