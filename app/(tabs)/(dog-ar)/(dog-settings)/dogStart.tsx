@@ -1,5 +1,5 @@
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { View, Text } from 'react-native';
+import { View, Text, Image } from 'react-native';
 import { Link } from 'expo-router';
 
 export default function DogStart() {
@@ -18,6 +18,7 @@ export default function DogStart() {
             flex: 1,
             marginTop: 40,
             justifyContent: 'flex-start',
+            paddingHorizontal: 60
             }}>
             <Text
             style={{
@@ -31,20 +32,97 @@ export default function DogStart() {
             <Text
             style={{
                 fontFamily: 'Nunito',
-                fontWeight: 'normal',
+                fontWeight: 'bold',
                 fontSize: 16,
-                padding: 20,
+                paddingHorizontal: 20,
             }}
-            >Wil je ontdekken hoe het is om een trouwe viervoeter in huis te hebben? Stel je eigen virtuele hond samen en ervaar wat het betekent om voor een huisdier te zorgen.</Text>
+            >Altijd al gedroomd van een trouwe viervoeter in huis?</Text>
             <Text
             style={{
                 fontFamily: 'Nunito',
                 fontWeight: 'normal',
                 fontSize: 16,
-                padding: 20,
+                paddingHorizontal: 20,
             }}
-            >Een huisdier nemen is een grote stap en het is belangrijk om te weten of je er klaar voor bent. Ga je mee op avontuur met onze virtuele hond en ontdek het zelf? 🎉
-            Maak je klaar voor een leerzame en leuke ervaring! 🌟</Text>
+            >Maar ben jij er klaar voor? Dan is deze ervaring precies wat je nodig hebt om daar achter te komen!</Text>
+            <View
+                style={{
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    margin: 20,
+                }}>
+                <Image
+                    style={{
+                        width: 120,
+                        height: 120,
+                        borderRadius: 15,
+                        marginBottom: 10,
+                        borderWidth: 1,
+                        borderColor: "#97B8A5",
+                    }}
+                    source={require('../../../../assets/images/step1.png')}
+                />
+                <View>
+                    <Text
+                    style={{
+                        fontFamily: 'Nunito',
+                        fontWeight: 'bold',
+                        fontSize: 16,
+                        paddingHorizontal: 20,
+                    }}
+                    >Step 1</Text>
+                    <Text
+                    style={{
+                        fontFamily: 'Nunito',
+                        fontWeight: 'normal',
+                        fontSize: 16,
+                        paddingHorizontal: 20,
+                        marginRight: 100
+                    }}
+                    >Maak jouw virtuele hond aan.</Text>
+                </View>
+            </View>
+            <View
+                style={{
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                }}>
+                <Image
+                    style={{
+                        width: 120,
+                        height: 120,
+                        borderRadius: 15,
+                        marginBottom: 10,
+                        borderWidth: 1,
+                        borderColor: "#97B8A5",
+                        marginLeft: 20,
+                    }}
+                    source={require('../../../../assets/images/step2.png')}
+                />
+                <View
+                    style={{
+                        marginRight: 20
+                    }}>
+                    <Text
+                    style={{
+                        fontFamily: 'Nunito',
+                        fontWeight: 'bold',
+                        fontSize: 16,
+                        paddingHorizontal: 20,
+                    }}
+                    >Step 2</Text>
+                    <Text
+                    style={{
+                        fontFamily: 'Nunito',
+                        fontWeight: 'normal',
+                        fontSize: 16,
+                        paddingHorizontal: 20,
+                        marginRight: 120
+                    }}
+                    >Ga op avontuur met jouw viervoeter en ontdek het zelf!</Text>
+                </View>
+            </View>
             <Link 
             style={{
                 padding: 12,

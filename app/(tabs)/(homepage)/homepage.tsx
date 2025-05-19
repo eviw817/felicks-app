@@ -240,8 +240,7 @@ export default function HomepageScreen() {
               display: "flex",
               flexDirection: "row",
               maxWidth: "100%",
-            }}
-          >
+            }}>
             <Image
               style={{
                 width: 120,
