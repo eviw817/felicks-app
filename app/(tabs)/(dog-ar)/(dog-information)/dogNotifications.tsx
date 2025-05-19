@@ -113,24 +113,36 @@ export default function DogNotifications() {
             textAlign: "center",
           }}
         >
-          Tijd om voor Cooper te zorgen!
+          Toestemming
         </Text>
         <Text
           style={{
             fontFamily: "Nunito",
             fontWeight: "normal",
             fontSize: 16,
-            padding: 20,
+            paddingTop: 20,
+            paddingLeft: 20,
             paddingRight: 40,
           }}
         >
-          Geef toestemming voor het gebruik van je camera, geluid en meldingen,
-          zodat we je optimaal kunnen ondersteunen bij de zorg voor Cooper.
+          Geef toestemming voor camera, geluid en meldingen.
         </Text>
         <Text
           style={{
             fontFamily: "Nunito",
             fontWeight: "normal",
+            fontSize: 16,
+            paddingBottom: 20,
+            paddingLeft: 20,
+            paddingRight: 40,
+          }}
+        >
+          Zo kunnen we jou helpen goed voor Cooper te zorgen!
+        </Text>
+        <Text
+          style={{
+            fontFamily: "Nunito",
+            fontWeight: "bold",
             fontSize: 16,
             padding: 20,
             paddingTop: 20,
@@ -142,6 +154,7 @@ export default function DogNotifications() {
         <View
           style={{
             flexDirection: "row",
+            alignItems: "flex-start",
             paddingHorizontal: 20,
           }}
         >
@@ -151,9 +164,10 @@ export default function DogNotifications() {
               fontWeight: "normal",
               fontSize: 36,
               paddingRight: 8,
+              lineHeight: 36,
             }}
           >
-            •
+            -
           </Text>
           <Text
             style={{
@@ -161,15 +175,16 @@ export default function DogNotifications() {
               fontWeight: "normal",
               fontSize: 16,
               paddingRight: 50,
+              lineHeight: 32,
             }}
           >
-            Je camera gebruiken om je te helpen bij het maken van foto's van
-            Cooper.
+            Cooper tot leven brengen in AR
           </Text>
         </View>
         <View
           style={{
             flexDirection: "row",
+            alignItems: "flex-start",
             paddingHorizontal: 20,
           }}
         >
@@ -179,9 +194,10 @@ export default function DogNotifications() {
               fontWeight: "normal",
               fontSize: 36,
               paddingRight: 8,
+              lineHeight: 36,
             }}
           >
-            •
+            -
           </Text>
           <Text
             style={{
@@ -189,14 +205,16 @@ export default function DogNotifications() {
               fontWeight: "normal",
               fontSize: 16,
               paddingRight: 12,
+              lineHeight: 32,
             }}
           >
-            Geluid inschakelen voor interactie en meldingen.
+            Geluid gebruiken voor leuke interacties
           </Text>
         </View>
         <View
           style={{
             flexDirection: "row",
+            alignItems: "flex-start",
             paddingHorizontal: 20,
           }}
         >
@@ -206,9 +224,10 @@ export default function DogNotifications() {
               fontWeight: "normal",
               fontSize: 36,
               paddingRight: 8,
+              lineHeight: 36,
             }}
           >
-            •
+            -
           </Text>
           <Text
             style={{
@@ -216,10 +235,10 @@ export default function DogNotifications() {
               fontWeight: "normal",
               fontSize: 16,
               paddingRight: 40,
+              lineHeight: 32,
             }}
           >
-            Je waarschuwen wanneer Cooper honger heeft, wil spelen, wandelen of
-            naar het toilet moet.
+             Je waarschuwen als Cooper honger heeft, wil spelen of naar buiten moet
           </Text>
         </View>
 
