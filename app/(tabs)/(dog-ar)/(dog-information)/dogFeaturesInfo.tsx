@@ -35,7 +35,7 @@ export default function DogFeature() {
           style={{
             position: "absolute",
             top: 64,
-            left: 16,
+            left: 20,
           }}
           onPress={() => router.back()}
         >
@@ -47,22 +47,22 @@ export default function DogFeature() {
             fontWeight: "bold",
             fontSize: 20,
             padding: 20,
+            paddingHorizontal: 60,
             textAlign: "center",
           }}
-        >
-          Tijd om voor Cooper te zorgen!
+        >Welkom bij jouw virtuele hond, Cooper!
         </Text>
         <Text
           style={{
             fontFamily: "Nunito",
-            fontWeight: "normal",
+            fontWeight: "bold",
             fontSize: 16,
             padding: 20,
             paddingRight: 40,
             marginRight: 10,
           }}
         >
-          Welkom bij jouw virtuele hond, Cooper! Hier ontdek je hoe je voor hem kunt zorgen en hem gelukkig kunt maken.
+          Leer hoe je voor hem zorgt en hem blij houdt:
         </Text>
         <View
         style={{
@@ -71,57 +71,26 @@ export default function DogFeature() {
           <Text
             style={{
               fontFamily: "Nunito",
-              fontWeight: "semibold",
+              fontWeight: "bold",
               fontSize: 18,
               padding: 20,
               paddingTop: 20,
               paddingBottom: 0,
             }}
           >
-            1. Navigatiehulp:
+            1. Navigatie:
           </Text>
-          <View
-            style={{
-              flexDirection: "row",
-              paddingHorizontal: 20,
-            }}
-          >
-            <Text
-              style={{
-                fontFamily: "Nunito",
-                fontWeight: "normal",
-                fontSize: 36,
-                paddingRight: 8,
-              }}
-            >
-              •
-            </Text>
             <Text
               style={{
                 fontFamily: "Nunito",
                 fontWeight: "normal",
                 fontSize: 16,
                 paddingRight: 40,
+                marginLeft: 20,
+                paddingHorizontal: 20,
               }}
             >
-              De Home-knop brengt je altijd terug naar de startpagina.
-            </Text>
-          </View>
-          <View
-            style={{
-              flexDirection: "row",
-              paddingHorizontal: 20,
-            }}
-          >
-            <Text
-              style={{
-                fontFamily: "Nunito",
-                fontWeight: "normal",
-                fontSize: 36,
-                paddingRight: 8,
-              }}
-            >
-              •
+              Tik op Home om terug te keren naar de start.
             </Text>
             <Text
               style={{
@@ -130,42 +99,27 @@ export default function DogFeature() {
                 fontSize: 16,
                 paddingRight: 12,
                 marginRight: 10,
+                marginLeft: 20,
+                paddingHorizontal: 20,
               }}
             >
-              Onderin vind je de opties om Cooper te voeren, spelen, wandelen en zelfs naar het toilet te laten gaan. 
+              Onderaan vind je opties om Cooper te voeren, spelen, wandelen en hem naar het toilet te laten gaan.
             </Text>
-          </View>
         </View>
 
         <View>
           <Text
             style={{
               fontFamily: "Nunito",
-              fontWeight: "semibold",
+              fontWeight: "bold",
               fontSize: 18,
               padding: 20,
               paddingTop: 20,
               paddingBottom: 0,
             }}
           >
-            2. Cooper's behoeften:
+            2. Meldingen:
           </Text>
-          <View
-            style={{
-              flexDirection: "row",
-              paddingHorizontal: 20,
-            }}
-          >
-            <Text
-              style={{
-                fontFamily: "Nunito",
-                fontWeight: "normal",
-                fontSize: 36,
-                paddingRight: 8,
-              }}
-            >
-              •
-            </Text>
             <Text
               style={{
                 fontFamily: "Nunito",
@@ -173,26 +127,11 @@ export default function DogFeature() {
                 fontSize: 16,
                 paddingRight: 20,
                 marginRight: 20,
+                marginLeft: 20,
+                paddingHorizontal: 20,
               }}
             >
-              Je ontvangt meldingen als Cooper iets nodig heeft, zoals eten of een wandeling. Het is jouw taak om goed voor hem te zorgen.
-            </Text>
-          </View>
-          <View
-            style={{
-              flexDirection: "row",
-              paddingHorizontal: 20,
-            }}
-          >
-            <Text
-              style={{
-                fontFamily: "Nunito",
-                fontWeight: "normal",
-                fontSize: 36,
-                paddingRight: 8,
-              }}
-            >
-              •
+              Je krijgt een seintje als Cooper honger heeft of naar buiten wil. 
             </Text>
             <Text
               style={{
@@ -201,69 +140,39 @@ export default function DogFeature() {
                 fontSize: 16,
                 paddingRight: 12,
                 marginRight: 20,
+                marginLeft: 20,
+                paddingHorizontal: 20,
               }}
             >
-              Vergeet niet: een gelukkige Cooper betekent een blije jij! 
+              Goede zorgen = blije Cooper!
             </Text>
-          </View>
         </View>
 
         <View>
           <Text
             style={{
               fontFamily: "Nunito",
-              fontWeight: "semibold",
+              fontWeight: "bold",
               fontSize: 18,
               padding: 20,
               paddingTop: 20,
               paddingBottom: 0,
             }}
           >
-            3. Realistisch en interactief:
+            3. Realistisch & interactief:
           </Text>
-          <View
-            style={{
-              flexDirection: "row",
-              paddingHorizontal: 20,
-            }}
-          >
-            <Text
-              style={{
-                fontFamily: "Nunito",
-                fontWeight: "normal",
-                fontSize: 36,
-                paddingRight: 8,
-              }}
-            >
-              •
-            </Text>
             <Text
               style={{
                 fontFamily: "Nunito",
                 fontWeight: "normal",
                 fontSize: 16,
                 paddingRight: 8,
+                paddingHorizontal: 20,
                 marginRight: 20,
+                marginLeft: 20,
               }}
             >
-              Cooper reageert op hoe jij voor hem zorgt. Geef hem aandacht en hij zal stralen. Verwaarloos je hem? Dan zal hij minder gelukkig zijn. Het draait om échte verantwoordelijkheid.
-            </Text>
-          </View>
-          <View
-            style={{
-              flexDirection: "row",
-              paddingHorizontal: 20,
-            }}
-          >
-            <Text
-              style={{
-                fontFamily: "Nunito",
-                fontWeight: "normal",
-                fontSize: 36,
-                paddingRight: 8,
-              }}
-            >
-              •
+              Cooper reageert op jouw aandacht. Verzorg je hem goed? Dan straalt hij. Vergeet je hem? 
             </Text>
             <Text
               style={{
@@ -271,43 +180,70 @@ export default function DogFeature() {
                 fontWeight: "normal",
                 fontSize: 16,
                 paddingRight: 40,
+                paddingHorizontal: 20,
                 marginRight: 20,
+                marginLeft: 20,
               }}
             >
-              Als je om welke reden dan ook wilt stoppen, kun je hem via de instellingen genoeg verwijderen. Maar wie zou zo'n schattig hondje willen laten gaan? 😉
+              Dan wordt hij verdrietig.
             </Text>
-          </View>
         </View>
-
         <Text
           style={{
             fontFamily: "Nunito",
-            fontWeight: "normal",
+            fontWeight: "bold",
             fontSize: 16,
-            padding: 20,
-            paddingTop: 12,
+            paddingTop: 20,
+            paddingLeft: 20,
+            paddingRight: 40,
+            marginRight: 10,
           }}
         >
-          Klaar om aan jullie avontuur te beginnen?
+          Wil je stoppen? 
         </Text>
         <Text
           style={{
             fontFamily: "Nunito",
             fontWeight: "normal",
             fontSize: 16,
-            padding: 20,
+            paddingLeft: 20,
             paddingRight: 40,
-            paddingTop: 12,
+            marginRight: 10,
           }}
         >
-           Druk op de knop hieronder en ontmoet je nieuwe beste vriend!
+          Dat kan via de instellingen – maar wie laat nou zo’n schatje achter? 
+        </Text>
+        <Text
+          style={{
+            fontFamily: "Nunito",
+            fontWeight: "bold",
+            fontSize: 16,
+            paddingTop: 20,
+            paddingLeft: 20,
+            paddingRight: 40,
+            marginRight: 10,
+          }}
+        >
+          Klaar voor jullie avontuur?
+        </Text>
+        <Text
+          style={{
+            fontFamily: "Nunito",
+            fontWeight: "normal",
+            fontSize: 16,
+            paddingLeft: 20,
+            paddingRight: 40,
+            marginRight: 10,
+          }}
+        >
+          Druk op de knop hieronder en ontmoet Cooper! 
         </Text>
         <Link
           style={{
             padding: 12,
             paddingHorizontal: 4,
             margin: 20,
-            marginRight: 45,
+            marginRight: 20,
             backgroundColor: "#97B8A5",
             fontWeight: "bold",
             borderRadius: 15,
