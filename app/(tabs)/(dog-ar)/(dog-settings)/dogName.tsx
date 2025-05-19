@@ -21,7 +21,7 @@ export default function DogName() {
       <TouchableOpacity  
         style={{
           position: "absolute",
-          top: 106,
+          top: 68,
           left: 40,
         }} 
         onPress={() => router.back()}
@@ -50,12 +50,12 @@ export default function DogName() {
         <Text
           style={{
             fontFamily: 'Nunito',
-            fontWeight: 'normal',
+            fontWeight: 'bold',
             fontSize: 16,
             padding: 20,
           }}
         >
-          Gefeliciteerd! Je gezin is net een pootje groter geworden!
+          Gefeliciteerd!
         </Text>
         <Text
           style={{
@@ -63,10 +63,10 @@ export default function DogName() {
             fontWeight: 'normal',
             fontSize: 16,
             padding: 20,
-            paddingTop: 16,
+            paddingTop: 12,
           }}
         >
-          Je hebt een labrador gekozen. Nu is het tijd om jouw nieuwe maatje een naam te geven.
+          Je hebt net een labrador toegevoegd aan je gezin. Tijd voor een naam!
         </Text>
         <Text
           style={{
