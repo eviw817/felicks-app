@@ -20,7 +20,7 @@ export default function DogInformation() {
         <TouchableOpacity  
             style={{
             position: "absolute",
-            top: 98,
+            top: 66,
             left: 16,
             }} onPress={() => router.back()}>
             <AntDesign name="arrowleft" size={24} color="black"/>
@@ -54,19 +54,48 @@ export default function DogInformation() {
             <Text
             style={{
                 fontFamily: 'Nunito',
-                fontWeight: 'normal',
+                fontWeight: 'bold',
                 fontSize: 16,
                 padding: 20,
+                paddingBottom: 0,
             }}
-            >Dit is jouw nieuwe hondje, Cooper. Vanaf nu ben jij verantwoordelijk voor zijn verzorging en welzijn. Zorg goed voor hem en leer stap voor stap hoe je de beste hondenvriend wordt.</Text>
+            >Dit is Cooper, jouw nieuwe hondenvriend!</Text>
             <Text
             style={{
                 fontFamily: 'Nunito',
                 fontWeight: 'normal',
                 fontSize: 16,
                 padding: 20,
+                paddingVertical: 0,
             }}
-            >Ben je er klaar voor? Laten we beginnen!</Text>
+            >Vanaf nu ben jij verantwoordelijk voor zijn zorg en geluk.</Text>
+            <Text
+            style={{
+                fontFamily: 'Nunito',
+                fontWeight: 'normal',
+                fontSize: 16,
+                padding: 20,
+                paddingVertical: 0,
+            }}
+            >Leer stap voor stap hoe je de beste hondenbaas wordt.</Text>
+            <Text
+            style={{
+                fontFamily: 'Nunito',
+                fontWeight: 'bold',
+                fontSize: 16,
+                padding: 20,
+                paddingBottom: 0,
+            }}
+            >Klaar om te beginnen?</Text>
+            <Text
+            style={{
+                fontFamily: 'Nunito',
+                fontWeight: 'bold',
+                fontSize: 20,
+                padding: 20,
+                paddingTop: 0,
+            }}
+            >Let's go!</Text>
             <Link 
             style={{
                 padding: 12,
