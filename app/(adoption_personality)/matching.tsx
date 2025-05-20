@@ -9,6 +9,7 @@ import {
   FlatList,
   TouchableOpacity,
   ActivityIndicator,
+  Alert,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
@@ -28,6 +29,7 @@ interface Dog {
   social_with_cats: boolean;
   description: string;
   images: string[];
+  shelter: string;
 }
 
 export default function Matching() {
@@ -52,65 +54,92 @@ export default function Matching() {
 
       const { data: dogs } = await supabase.from("adoption_dogs").select("*");
 
-      if (!prefs || !dogs) return;
+      if (!prefs || !dogs) {
+        setLoading(false);
+        return;
+      }
 
-      const scored = dogs.map((dog: Dog) => {
-        let score = 0;
-        let total = 0;
+      const scored = await Promise.all(
+        dogs.map(async (dog: Dog) => {
+          let score = 0;
+          let total = 0;
 
-        if (prefs.preferred_age && prefs.preferred_age !== "geen_voorkeur") {
-          total++;
-          const age = getAgeCategory(dog.birthdate);
-          if (prefs.preferred_age === age) score++;
-        }
-
-        if (prefs.training_level) {
-          total++;
-          if (prefs.training_level === "geen_voorkeur" || dog.house_trained)
-            score++;
-        }
-
-        if (prefs.interaction_children) {
-          total++;
-          if (
-            prefs.interaction_children === "niet van toepassing" ||
-            dog.child_friendly_under_6 ||
-            dog.child_friendly_over_6
-          ) {
-            score++;
+          if (prefs.preferred_age && prefs.preferred_age !== "geen_voorkeur") {
+            total++;
+            const age = getAgeCategory(dog.birthdate);
+            if (prefs.preferred_age === age) score++;
           }
-        }
 
-        if (prefs.interaction_dogs) {
-          total++;
-          if (
-            prefs.interaction_dogs === "niet van toepassing" ||
-            (prefs.interaction_dogs === "goed" && dog.social_with_dogs) ||
-            (prefs.interaction_dogs === "beetje" && dog.social_with_dogs)
-          ) {
-            score++;
+          if (prefs.training_level) {
+            total++;
+            if (prefs.training_level === "geen_voorkeur" || dog.house_trained)
+              score++;
           }
-        }
 
-        if (prefs.energy_preference) {
-          total++;
-          if (
-            (prefs.energy_preference === "enthousiasme" &&
-              dog.activity_level === "high") ||
-            (prefs.energy_preference === "ontspanning" &&
-              dog.activity_level !== "high")
-          ) {
-            score++;
+          if (prefs.interaction_children) {
+            total++;
+            if (
+              prefs.interaction_children === "niet van toepassing" ||
+              dog.child_friendly_under_6 ||
+              dog.child_friendly_over_6
+            ) {
+              score++;
+            }
           }
-        }
 
-        return {
-          dog,
-          score: Math.round((score / total) * 100),
-        };
-      });
+          if (prefs.interaction_dogs) {
+            total++;
+            if (
+              prefs.interaction_dogs === "niet van toepassing" ||
+              (prefs.interaction_dogs === "goed" && dog.social_with_dogs) ||
+              (prefs.interaction_dogs === "beetje" && dog.social_with_dogs)
+            ) {
+              score++;
+            }
+          }
+
+          if (prefs.energy_preference) {
+            total++;
+            if (
+              (prefs.energy_preference === "enthousiasme" &&
+                dog.activity_level === "high") ||
+              (prefs.energy_preference === "ontspanning" &&
+                dog.activity_level !== "high")
+            ) {
+              score++;
+            }
+          }
+
+          const match_score =
+            total === 0 ? 0 : Math.round((score / total) * 100);
+
+          // Debug output
+          console.log(`Matchscore ${dog.name}:`, match_score);
+
+          // Upsert match naar adoption_matches
+          const { error } = await supabase.from("adoption_matches").upsert(
+            {
+              user_id: user.id,
+              dog_id: dog.id,
+              match_score,
+            },
+            { onConflict: "user_id,dog_id" }
+          );
+
+          if (error) {
+            console.error(
+              `❌ Fout bij opslaan match voor ${dog.name}:`,
+              error.message
+            );
+          }
+
+          return { dog, score: match_score };
+        })
+      );
 
       const filtered = scored.filter((match) => match.score >= 50);
+      console.log("🐾 MATCHED DOGS:", filtered);
+
       setMatches(filtered.sort((a, b) => b.score - a.score));
       setLoading(false);
     })();
@@ -146,11 +175,15 @@ export default function Matching() {
 
       <Text style={styles.title}>Jouw matches</Text>
 
-      <FlatList
-        data={matches}
-        keyExtractor={(item) => item.dog.id}
-        renderItem={({ item }: { item: { dog: Dog; score: number } }) => {
-          return (
+      {matches.length === 0 ? (
+        <Text style={{ fontSize: 16, textAlign: "center" }}>
+          Geen geschikte matches gevonden.
+        </Text>
+      ) : (
+        <FlatList
+          data={matches}
+          keyExtractor={(item) => item.dog.id}
+          renderItem={({ item }) => (
             <TouchableOpacity
               style={styles.card}
               onPress={() =>
@@ -162,9 +195,9 @@ export default function Matching() {
               <Text style={styles.name}>{item.dog.name}</Text>
               <Text style={styles.score}>{item.score}% match</Text>
             </TouchableOpacity>
-          );
-        }}
-      />
+          )}
+        />
+      )}
     </SafeAreaView>
   );
 }
