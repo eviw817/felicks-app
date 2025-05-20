@@ -257,7 +257,7 @@ export default function AdoptieprofielResults() {
         )}
 
         <TouchableOpacity
-          onPress={() => router.push("/")}
+          onPress={() => router.push("/homepage")}
           style={styles.button}
         >
           <Text style={styles.buttonText}>Naar Home</Text>
