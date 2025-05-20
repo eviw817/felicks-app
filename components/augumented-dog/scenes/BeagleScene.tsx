@@ -25,30 +25,30 @@ export const BeagleScene = ({ children, ...rest }: BeagleSceneProps) => {
   return (
     <ViroARScene onTrackingUpdated={onInitialized} {...rest}>
       <ViroAmbientLight color="#FFFFFF" />
-      <ViroARPlaneSelector>
+      <ViroARPlaneSelector maxPlanes={1}>
         <BeagleObject
-          scale={[0.5, 0.5, 0.5]}
-          position={[0, 0, -1]}
+          scale={[0.2, 0.2, 0.2]}
+          position={[0, -10, -20]}
           rotation={[0, 0, 0]}
           onLoadStart={() => console.log("Loading ShibaInu model...")}
           onLoadEnd={() => console.log("Finished loading ShibaInu model")}
           onError={({ nativeEvent }) =>
-            console.log("Error loading ShibaInu model: ", nativeEvent)
+        console.log("Error loading ShibaInu model: ", nativeEvent)
           }
           dragType="FixedDistance"
           animation={{
-            name: "idle", // Ensure this animation name matches one in the FBX file's animations
-            run: true,
-            loop: true,
-            delay: 0,
+        name: "idle",
+        run: true,
+        loop: true,
+        delay: 0,
           }}
           onAnchorUpdated={(anchor) => {
-            const cameraPosition = anchor.cameraTransform.position;
-            const objectPosition = anchor.position;
-            const dx = cameraPosition[0] - objectPosition[0];
-            const dz = cameraPosition[2] - objectPosition[2];
-            const angle = (Math.atan2(dx, dz) * 180) / Math.PI;
-            anchor.rotation = [0, angle, 0];
+        const cameraPosition = anchor.cameraTransform.position;
+        const objectPosition = anchor.position;
+        const dx = cameraPosition[0] - objectPosition[0];
+        const dz = cameraPosition[2] - objectPosition[2];
+        const angle = (Math.atan2(dx, dz) * 180) / Math.PI;
+        anchor.rotation = [0, angle, 0];
           }}
         />
       </ViroARPlaneSelector>
