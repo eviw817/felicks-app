@@ -100,6 +100,8 @@ export default function DogBreed() {
                         backgroundColor: '#97B8A5',
                         borderRadius: 15,
                         alignItems: 'center',
+                        justifyContent: 'center',
+                        textAlign: 'center',
                         opacity: dogBreed === "selecteer een optie" || !dogBreed ? 0.5 : 1,
                     }}
                     aria-disabled={dogBreed === "selecteer een optie" || !dogBreed}
