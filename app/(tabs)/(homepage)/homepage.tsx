@@ -9,12 +9,12 @@ import {
   Image,
   Button,
 } from "react-native";
-import { supabase } from "../../../lib/supabase";
-import { Session } from '@supabase/supabase-js';
-import { FontAwesome } from '@expo/vector-icons';
-import { TouchableOpacity } from 'react-native';
-import { Link } from 'expo-router';
-import NavBar from "../../../components/NavigationBar";
+import { supabase } from "@/lib/supabase";
+import { Session } from "@supabase/supabase-js";
+import { FontAwesome } from "@expo/vector-icons";
+import { TouchableOpacity } from "react-native";
+import { Link } from "expo-router";
+import NavBar from "@/components/NavigationBar";
 
 export default function HomepageScreen() {
   const [firstname, setFirstname] = useState<string>(""); // State to store firstname
@@ -46,7 +46,7 @@ export default function HomepageScreen() {
       (_, session) => {
         setSession(session);
         setLoading(false);
-      },
+      }
     );
 
     // Clean up the listener on unmount
@@ -73,7 +73,7 @@ export default function HomepageScreen() {
           // Explicitly cast the error to 'any' here
           Alert.alert(
             "Error",
-            error.message || "An error occurred while fetching the profile",
+            error.message || "An error occurred while fetching the profile"
           );
         }
       };
@@ -105,6 +105,7 @@ export default function HomepageScreen() {
         flex: 1,
         backgroundColor: "#97B8A5",
         position: "relative",
+        paddingBottom: 80,
       }}
     >
       <View
@@ -152,13 +153,6 @@ export default function HomepageScreen() {
         }}
       >
         <View>
-          <Link 
-            style={{
-              padding: 12,
-              paddingHorizontal: 20,
-              backgroundColor: '#97B8A5',
-              borderRadius: 7 }}
-            href="/dogStart">Ga naar Hond AR</Link>
           <Text
             style={{
               fontFamily: "Nunito",
@@ -241,7 +235,8 @@ export default function HomepageScreen() {
               display: "flex",
               flexDirection: "row",
               maxWidth: "100%",
-            }}>
+            }}
+          >
             <Image
               style={{
                 width: 120,
@@ -538,19 +533,19 @@ export default function HomepageScreen() {
               </View>
             </View>
           </View>
-          
         </View>
       </ScrollView>
-        {/* Fixed navbar onderaan scherm */}
-        <View style={{
-          position: 'absolute',
+      {/* Fixed navbar onderaan scherm */}
+      <View
+        style={{
+          position: "absolute",
           bottom: 0,
           left: 0,
           right: 0,
-  
-        }}>
+        }}
+      >
         <NavBar />
-    </View>
+      </View>
     </SafeAreaView>
   );
 }

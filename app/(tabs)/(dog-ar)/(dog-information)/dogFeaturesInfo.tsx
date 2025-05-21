@@ -9,10 +9,11 @@ import {
   Animated,
   Easing,
 } from "react-native";
-import { useRouter, useLocalSearchParams  } from "expo-router";
+import { useRouter, useLocalSearchParams } from "expo-router";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import { Link } from "expo-router";
-import { supabase } from '../../../../lib/supabase'; // adjust if your path is different
+import { supabase } from "@/lib/supabase"; // adjust if your path is different
+import NavBar from "@/components/NavigationBar";
 
 export default function DogFeature() {
   const router = useRouter();
@@ -24,7 +25,7 @@ export default function DogFeature() {
   const [fetchError, setFetchError] = React.useState("");
 
   React.useEffect(() => {
-    console.log('DogInformation petId:', petId);  // <-- Debug: log petId here
+    console.log("DogInformation petId:", petId); // <-- Debug: log petId here
 
     if (petId && typeof petId === "string" && petId.length > 0) {
       const fetchDogName = async () => {
@@ -58,7 +59,6 @@ export default function DogFeature() {
     }
   }, [petId]);
 
-
   return (
     <SafeAreaView
       style={{
@@ -66,6 +66,7 @@ export default function DogFeature() {
         justifyContent: "center",
         alignItems: "center",
         backgroundColor: "#FFFDF9",
+        paddingBottom: 80,
       }}
     >
       <ScrollView
@@ -93,7 +94,8 @@ export default function DogFeature() {
             paddingHorizontal: 60,
             textAlign: "center",
           }}
-        >Welkom bij jouw virtuele hond, {dogName || "nog geen naam"}!
+        >
+          Welkom bij jouw virtuele hond, {dogName || "nog geen naam"}!
         </Text>
         <Text
           style={{
@@ -108,9 +110,10 @@ export default function DogFeature() {
           Leer hoe je voor hem zorgt en hem blij houdt:
         </Text>
         <View
-        style={{
-          marginRight: 10,
-        }}>
+          style={{
+            marginRight: 10,
+          }}
+        >
           <Text
             style={{
               fontFamily: "Nunito",
@@ -123,31 +126,32 @@ export default function DogFeature() {
           >
             1. Navigatie:
           </Text>
-            <Text
-              style={{
-                fontFamily: "Nunito",
-                fontWeight: "normal",
-                fontSize: 16,
-                paddingRight: 40,
-                marginLeft: 20,
-                paddingHorizontal: 20,
-              }}
-            >
-              Tik op Home om terug te keren naar de start.
-            </Text>
-            <Text
-              style={{
-                fontFamily: "Nunito",
-                fontWeight: "normal",
-                fontSize: 16,
-                paddingRight: 12,
-                marginRight: 10,
-                marginLeft: 20,
-                paddingHorizontal: 20,
-              }}
-            >
-              Onderaan vind je opties om {dogName || "nog geen naam"} te voeren, spelen, wandelen en hem naar het toilet te laten gaan.
-            </Text>
+          <Text
+            style={{
+              fontFamily: "Nunito",
+              fontWeight: "normal",
+              fontSize: 16,
+              paddingRight: 40,
+              marginLeft: 20,
+              paddingHorizontal: 20,
+            }}
+          >
+            Tik op Home om terug te keren naar de start.
+          </Text>
+          <Text
+            style={{
+              fontFamily: "Nunito",
+              fontWeight: "normal",
+              fontSize: 16,
+              paddingRight: 12,
+              marginRight: 10,
+              marginLeft: 20,
+              paddingHorizontal: 20,
+            }}
+          >
+            Onderaan vind je opties om {dogName || "nog geen naam"} te voeren,
+            spelen, wandelen en hem naar het toilet te laten gaan.
+          </Text>
         </View>
 
         <View>
@@ -163,32 +167,33 @@ export default function DogFeature() {
           >
             2. Meldingen:
           </Text>
-            <Text
-              style={{
-                fontFamily: "Nunito",
-                fontWeight: "normal",
-                fontSize: 16,
-                paddingRight: 20,
-                marginRight: 20,
-                marginLeft: 20,
-                paddingHorizontal: 20,
-              }}
-            >
-              Je krijgt een seintje als {dogName || "nog geen naam"} honger heeft of naar buiten wil. 
-            </Text>
-            <Text
-              style={{
-                fontFamily: "Nunito",
-                fontWeight: "normal",
-                fontSize: 16,
-                paddingRight: 12,
-                marginRight: 20,
-                marginLeft: 20,
-                paddingHorizontal: 20,
-              }}
-            >
-              Goede zorgen = blije {dogName || "nog geen naam"}!
-            </Text>
+          <Text
+            style={{
+              fontFamily: "Nunito",
+              fontWeight: "normal",
+              fontSize: 16,
+              paddingRight: 20,
+              marginRight: 20,
+              marginLeft: 20,
+              paddingHorizontal: 20,
+            }}
+          >
+            Je krijgt een seintje als {dogName || "nog geen naam"} honger heeft
+            of naar buiten wil.
+          </Text>
+          <Text
+            style={{
+              fontFamily: "Nunito",
+              fontWeight: "normal",
+              fontSize: 16,
+              paddingRight: 12,
+              marginRight: 20,
+              marginLeft: 20,
+              paddingHorizontal: 20,
+            }}
+          >
+            Goede zorgen = blije {dogName || "nog geen naam"}!
+          </Text>
         </View>
 
         <View>
@@ -204,32 +209,33 @@ export default function DogFeature() {
           >
             3. Realistisch & interactief:
           </Text>
-            <Text
-              style={{
-                fontFamily: "Nunito",
-                fontWeight: "normal",
-                fontSize: 16,
-                paddingRight: 8,
-                paddingHorizontal: 20,
-                marginRight: 20,
-                marginLeft: 20,
-              }}
-            >
-              {dogName || "nog geen naam"} reageert op jouw aandacht. Verzorg je hem goed? Dan straalt hij. Vergeet je hem? 
-            </Text>
-            <Text
-              style={{
-                fontFamily: "Nunito",
-                fontWeight: "normal",
-                fontSize: 16,
-                paddingRight: 40,
-                paddingHorizontal: 20,
-                marginRight: 20,
-                marginLeft: 20,
-              }}
-            >
-              Dan wordt hij verdrietig.
-            </Text>
+          <Text
+            style={{
+              fontFamily: "Nunito",
+              fontWeight: "normal",
+              fontSize: 16,
+              paddingRight: 8,
+              paddingHorizontal: 20,
+              marginRight: 20,
+              marginLeft: 20,
+            }}
+          >
+            {dogName || "nog geen naam"} reageert op jouw aandacht. Verzorg je
+            hem goed? Dan straalt hij. Vergeet je hem?
+          </Text>
+          <Text
+            style={{
+              fontFamily: "Nunito",
+              fontWeight: "normal",
+              fontSize: 16,
+              paddingRight: 40,
+              paddingHorizontal: 20,
+              marginRight: 20,
+              marginLeft: 20,
+            }}
+          >
+            Dan wordt hij verdrietig.
+          </Text>
         </View>
         <Text
           style={{
@@ -242,7 +248,7 @@ export default function DogFeature() {
             marginRight: 10,
           }}
         >
-          Wil je stoppen? 
+          Wil je stoppen?
         </Text>
         <Text
           style={{
@@ -254,7 +260,7 @@ export default function DogFeature() {
             marginRight: 10,
           }}
         >
-          Dat kan via de instellingen – maar wie laat nou zo’n schatje achter? 
+          Dat kan via de instellingen – maar wie laat nou zo’n schatje achter?
         </Text>
         <Text
           style={{
@@ -279,7 +285,7 @@ export default function DogFeature() {
             marginRight: 10,
           }}
         >
-          Druk op de knop hieronder en ontmoet {dogName || "nog geen naam"}! 
+          Druk op de knop hieronder en ontmoet {dogName || "nog geen naam"}!
         </Text>
         <Link
           style={{
@@ -297,6 +303,17 @@ export default function DogFeature() {
           MAAK KENNIS MET JE NIEUWE VRIENDJE
         </Link>
       </ScrollView>
+      {/* Fixed navbar onderaan scherm */}
+      <View
+        style={{
+          position: "absolute",
+          bottom: 0,
+          left: 0,
+          right: 0,
+        }}
+      >
+        <NavBar />
+      </View>
     </SafeAreaView>
   );
 }

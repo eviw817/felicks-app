@@ -1,4 +1,4 @@
-import { Stack } from 'expo-router';
+import { Stack } from "expo-router";
 
 export default function HomepageLayout() {
   return (
@@ -6,13 +6,14 @@ export default function HomepageLayout() {
       screenOptions={{
         headerShown: false,
         headerStyle: {
-          backgroundColor: '#f4511e',
+          backgroundColor: "#f4511e",
         },
-        headerTintColor: '#fff',
+        headerTintColor: "#fff",
         headerTitleStyle: {
-          fontWeight: 'bold',
+          fontWeight: "bold",
         },
-      }}>
+      }}
+    >
       <Stack.Screen name="homepage" options={{ title: "Homepage" }} />
     </Stack>
   );

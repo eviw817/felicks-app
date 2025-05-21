@@ -3,7 +3,6 @@ import { Stack } from "expo-router";
 export default function TabLayout() {
   return (
     <Stack screenOptions={{ headerTintColor: "blue" }}>
-
       {/* Profiel Tab */}
       <Stack.Screen
         name="(demo)" // Verwijst naar de map app/(tabs)/(profile)
@@ -20,7 +19,7 @@ export default function TabLayout() {
           headerShown: false,
         }}
       />
-  
+
       {/* Homepage Tab */}
       <Stack.Screen
         name="(dog-information)" // Verwijst naar de map app/(tabs)/(homepage)
@@ -38,6 +37,5 @@ export default function TabLayout() {
         }}
       />
     </Stack> //voor een navigatie te maken moet alles Tabs zijn, dus ook Tabs.Scree
-
   );
 }

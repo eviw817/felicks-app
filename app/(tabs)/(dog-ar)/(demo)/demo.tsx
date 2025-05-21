@@ -1,10 +1,11 @@
 import { BeagleScene } from "@/components/augumented-dog/scenes/BeagleScene";
 import { ViroARSceneNavigator } from "@reactvision/react-viro";
 import { SafeAreaView, View, Text, TouchableOpacity } from "react-native";
-import { useState, useEffect } from 'react';
-import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
-import { supabase } from "../../../../lib/supabase";
+import { useState, useEffect } from "react";
+import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
+import { supabase } from "@/lib/supabase";
 import { useLocalSearchParams } from "expo-router";
+import NavBar from "@/components/NavigationBar";
 
 const AugumentedDog = () => {
   const { petId } = useLocalSearchParams();
@@ -21,7 +22,9 @@ const AugumentedDog = () => {
   }>(null);
 
   const [loading, setLoading] = useState(true);
-  const [lastToggledField, setLastToggledField] = useState<null | keyof typeof defaultStatus>(null);
+  const [lastToggledField, setLastToggledField] = useState<
+    null | keyof typeof defaultStatus
+  >(null);
 
   const defaultStatus = {
     is_eating: false,
@@ -39,15 +42,15 @@ const AugumentedDog = () => {
     const fetchStatus = async () => {
       setLoading(true);
       const { data, error } = await supabase
-        .from('ar_dog')
-        .select('*')
-        .eq('id', petId)
+        .from("ar_dog")
+        .select("*")
+        .eq("id", petId)
         .single();
 
       if (error) {
-        console.error('❌ Error fetching dog status:', error);
+        console.error("❌ Error fetching dog status:", error);
       } else if (!data) {
-        console.warn('⚠️ No dog found for this petId:', petId);
+        console.warn("⚠️ No dog found for this petId:", petId);
       } else {
         setStatus(data);
       }
@@ -57,9 +60,7 @@ const AugumentedDog = () => {
     fetchStatus();
   }, [petId]);
 
-  const toggleStatus = async (
-    field: keyof typeof defaultStatus
-  ) => {
+  const toggleStatus = async (field: keyof typeof defaultStatus) => {
     if (!status) return;
 
     const newValue = !status[field];
@@ -74,12 +75,12 @@ const AugumentedDog = () => {
 
     // Update Supabase
     const { error } = await supabase
-      .from('ar_dog')
+      .from("ar_dog")
       .update({ [field]: newValue })
-      .eq('id', status.id);
+      .eq("id", status.id);
 
     if (error) {
-      console.error('❌ Failed to update status:', error);
+      console.error("❌ Failed to update status:", error);
       // Revert state
       setStatus((prev) => {
         if (!prev) return prev;
@@ -124,10 +125,10 @@ const AugumentedDog = () => {
   });
 
   const fieldPriority: (keyof typeof defaultStatus)[] = [
-    'is_eating',
-    'is_playing',
-    'is_running',
-    'is_toilet',
+    "is_eating",
+    "is_playing",
+    "is_running",
+    "is_toilet",
   ];
 
   const getCurrentMessages = (): string[] => {
@@ -137,19 +138,23 @@ const AugumentedDog = () => {
 
     // If a field was toggled last, show only that message
     if (lastToggledField) {
-      return [messagesMap[lastToggledField][status[lastToggledField] ? "true" : "false"]];
+      return [
+        messagesMap[lastToggledField][
+          status[lastToggledField] ? "true" : "false"
+        ],
+      ];
     }
 
     // Otherwise, show the first message in priority order
     const firstField = fieldPriority[0];
     return [messagesMap[firstField][status[firstField] ? "true" : "false"]];
   };
-  
+
   const buttons: { field: keyof typeof defaultStatus; icon: any }[] = [
-    { field: 'is_eating', icon: 'bowl-food' },
-    { field: 'is_playing', icon: 'baseball' },
-    { field: 'is_running', icon: 'person-running' },
-    { field: 'is_toilet', icon: 'poop' },
+    { field: "is_eating", icon: "bowl-food" },
+    { field: "is_playing", icon: "baseball" },
+    { field: "is_running", icon: "person-running" },
+    { field: "is_toilet", icon: "poop" },
   ];
 
   return (
@@ -166,16 +171,16 @@ const AugumentedDog = () => {
 
       <View
         style={{
-          position: 'absolute',
+          position: "absolute",
           top: 40,
           left: 0,
           right: 0,
           zIndex: 10,
-          flexDirection: 'row',
-          justifyContent: 'center',
-          alignItems: 'center',
-          width: '100%',
-          flexWrap: 'wrap',
+          flexDirection: "row",
+          justifyContent: "center",
+          alignItems: "center",
+          width: "100%",
+          flexWrap: "wrap",
         }}
       >
         {getCurrentMessages().map((msg, idx) => (
@@ -184,14 +189,14 @@ const AugumentedDog = () => {
             style={{
               margin: 6,
               borderRadius: 10,
-              overflow: 'hidden',
+              overflow: "hidden",
               backgroundColor: "#FDE4D2",
               padding: 12,
-              fontFamily: 'Nunito',
-              fontWeight: 'normal',
+              fontFamily: "Nunito",
+              fontWeight: "normal",
               fontSize: 16,
               color: "#183A36",
-              textAlign: 'center',
+              textAlign: "center",
             }}
           >
             {msg}
@@ -201,15 +206,16 @@ const AugumentedDog = () => {
 
       <View
         style={{
-          position: 'absolute',
+          position: "absolute",
           bottom: 40,
           left: 0,
           right: 0,
           zIndex: 10,
-          flexDirection: 'row',
-          justifyContent: 'center',
-          alignItems: 'center',
-          width: '100%',
+          flexDirection: "row",
+          justifyContent: "center",
+          alignItems: "center",
+          width: "100%",
+          paddingBottom: 100,
         }}
       >
         {buttons.map(({ field, icon }, index) => (
@@ -220,24 +226,31 @@ const AugumentedDog = () => {
             style={{
               marginHorizontal: 10,
               borderRadius: 10,
-              overflow: 'hidden',
+              overflow: "hidden",
               width: 60,
               height: 60,
-              alignItems: 'center',
-              justifyContent: 'center',
+              alignItems: "center",
+              justifyContent: "center",
               backgroundColor: status[field]
                 ? "rgba(255, 216, 126, 1)"
                 : "rgba(253, 228, 210, 0.5)",
             }}
             accessibilityLabel={icon}
           >
-            <FontAwesome6
-              name={icon}
-              size={28}
-              color="#183A36"
-            />
+            <FontAwesome6 name={icon} size={28} color="#183A36" />
           </TouchableOpacity>
         ))}
+      </View>
+      {/* Fixed navbar onderaan scherm */}
+      <View
+        style={{
+          position: "absolute",
+          bottom: 0,
+          left: 0,
+          right: 0,
+        }}
+      >
+        <NavBar />
       </View>
     </SafeAreaView>
   );

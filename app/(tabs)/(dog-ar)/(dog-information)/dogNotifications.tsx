@@ -12,7 +12,8 @@ import {
 } from "react-native";
 import { useRouter, useLocalSearchParams } from "expo-router";
 import AntDesign from "@expo/vector-icons/AntDesign";
-import { supabase } from "../../../../lib/supabase";
+import { supabase } from "@/lib/supabase";
+import NavBar from "@/components/NavigationBar";
 
 export default function UserPermissions() {
   const router = useRouter();
@@ -129,17 +130,20 @@ export default function UserPermissions() {
         } else {
           // If data is missing, default to true
           setIsNotificationEnabled(
-            data?.push_notifications !== null && data?.push_notifications !== undefined
+            data?.push_notifications !== null &&
+              data?.push_notifications !== undefined
               ? data.push_notifications
               : true
           );
           setIsSoundEnabled(
-            data?.sound_permission !== null && data?.sound_permission !== undefined
+            data?.sound_permission !== null &&
+              data?.sound_permission !== undefined
               ? data.sound_permission
               : true
           );
           setIsCameraEnabled(
-            data?.camera_permission !== null && data?.camera_permission !== undefined
+            data?.camera_permission !== null &&
+              data?.camera_permission !== undefined
               ? data.camera_permission
               : true
           );
@@ -205,6 +209,7 @@ export default function UserPermissions() {
         justifyContent: "center",
         alignItems: "center",
         backgroundColor: "#FFFDF9",
+        paddingBottom: 80,
       }}
     >
       <ScrollView
@@ -257,7 +262,8 @@ export default function UserPermissions() {
             paddingRight: 40,
           }}
         >
-          Zo kunnen we jou helpen goed voor {dogName || "nog geen naam"} te zorgen!
+          Zo kunnen we jou helpen goed voor {dogName || "nog geen naam"} te
+          zorgen!
         </Text>
         <Text
           style={{
@@ -358,7 +364,8 @@ export default function UserPermissions() {
               lineHeight: 32,
             }}
           >
-             Je waarschuwen als {dogName || "nog geen naam"} honger heeft, wil spelen of naar buiten moet
+            Je waarschuwen als {dogName || "nog geen naam"} honger heeft, wil
+            spelen of naar buiten moet
           </Text>
         </View>
 
@@ -372,8 +379,8 @@ export default function UserPermissions() {
             paddingTop: 12,
           }}
         >
-          Klaar om {dogName || "nog geen naam"} de beste zorg te geven? Zet de schuifjes aan en druk
-          op 'Opslaan' om verder te gaan!
+          Klaar om {dogName || "nog geen naam"} de beste zorg te geven? Zet de
+          schuifjes aan en druk op 'Opslaan' om verder te gaan!
         </Text>
         <Text
           style={{
@@ -499,6 +506,17 @@ export default function UserPermissions() {
           </Text>
         </TouchableOpacity>
       </ScrollView>
+      {/* Fixed navbar onderaan scherm */}
+      <View
+        style={{
+          position: "absolute",
+          bottom: 0,
+          left: 0,
+          right: 0,
+        }}
+      >
+        <NavBar />
+      </View>
     </SafeAreaView>
   );
 }
