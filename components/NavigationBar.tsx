@@ -5,10 +5,10 @@ import { Ionicons } from "@expo/vector-icons";
 
 const tabs = [
   { name: "homepage", label: "Home", icon: "home" },
-  { name: "adoptie", label: "Adoptie", icon: "list" },
-  { name: "virtuele-hond", label: "Virtuele\nhond", icon: "paw" },
-  { name: "bewustzijn", label: "Bewustzijn", icon: "bulb" },
-  { name: "profiel", label: "Profiel", icon: "person" },
+  { name: "adoptionProfileStart", label: "Adoptie", icon: "list" },
+  { name: "dogStart", label: "Virtuele\nhond", icon: "paw" },
+  { name: "bewustzijnIndex", label: "Bewustzijn", icon: "bulb" },
+  { name: "profile", label: "Profiel", icon: "person" },
 ];
 
 export default function NavBar() {
