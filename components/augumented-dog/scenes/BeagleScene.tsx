@@ -28,7 +28,7 @@ export const BeagleScene = ({ children, ...rest }: BeagleSceneProps) => {
       <ViroARPlaneSelector maxPlanes={1}>
         <BeagleObject
           scale={[0.2, 0.2, 0.2]}
-          position={[0, -10, -20]}
+          position={[0, -5, -20]}
           rotation={[0, 0, 0]}
           onLoadStart={() => console.log("Loading ShibaInu model...")}
           onLoadEnd={() => console.log("Finished loading ShibaInu model")}

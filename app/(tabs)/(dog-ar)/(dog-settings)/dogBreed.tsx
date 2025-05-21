@@ -1,114 +1,136 @@
 import { useState } from 'react';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { View, Text, TouchableOpacity } from 'react-native';
+import { SafeAreaView, View, Text, TouchableOpacity, Alert } from 'react-native';
 import { useRouter, Link } from 'expo-router'; 
 import AntDesign from '@expo/vector-icons/AntDesign';
 import { Picker } from '@react-native-picker/picker';
 
-export default function DogBreed() {
-    const router = useRouter();
-    const [dogBreed, setdogBreed] = useState<string | null>(null);
+import { supabase } from '../../../../lib/supabase'; // adjust path if needed
+import { useEffect } from 'react';
 
-    return (
-        <SafeAreaView 
-            style={{
-                flex: 1,
-                justifyContent: 'center',
-                alignItems: 'center',
-                backgroundColor: '#FFFDF9',
-                position: 'relative',
-            }}
+export default function DogBreed() {
+  const router = useRouter();
+  const [dogBreed, setdogBreed] = useState<string | null>(null);
+
+  const handleBreedSubmit = async () => {
+    if (!dogBreed) return;
+
+    // Get the current user
+    const {
+      data: { user },
+      error: userError,
+    } = await supabase.auth.getUser();
+
+    if (userError || !user) {
+      console.log('User fetch error:', userError);
+      Alert.alert('Fout', 'Kon gebruiker niet ophalen.');
+      return;
+    }
+
+    console.log('User ID:', user.id);
+    console.log('Selected breed:', dogBreed);
+
+    try {
+      // Check if dog already exists for this user
+      const { data: existingDog, error: fetchError } = await supabase
+        .from('ar_dog')
+        .select('*')
+        .eq('user_id', user.id)
+        .single();
+
+      if (fetchError && fetchError.code !== 'PGRST116') {
+        // PGRST116 means no rows found, so ignore that error
+        console.log('Fetch existing dog error:', fetchError);
+        Alert.alert('Fout', 'Kon hond niet ophalen.');
+        return;
+      }
+
+      let dogId = existingDog?.id;
+
+      if (dogId) {
+        // Dog exists, update it
+        const { data, error } = await supabase
+          .from('ar_dog')
+          .update({ breed: dogBreed })
+          .eq('id', dogId)
+          .select()
+          .single();
+
+        if (error) {
+          console.log('Update error:', error);
+          Alert.alert('Kon hond niet bijwerken', error.message);
+          return;
+        }
+
+        console.log('Update succeeded:', data);
+        router.push({ pathname: '/dogName', params: { petId: data.id } });
+      } else {
+        // Dog does not exist, insert new
+        const { data, error } = await supabase
+          .from('ar_dog')
+          .insert({ user_id: user.id, breed: dogBreed })
+          .select()
+          .single();
+
+        if (error) {
+          console.log('Insert error:', error);
+          Alert.alert('Kon hond niet opslaan', error.message);
+          return;
+        }
+
+        console.log('Insert succeeded:', data);
+        router.push({ pathname: '/dogName', params: { petId: data.id } });
+      }
+    } catch (err) {
+      console.log('Caught error:', err);
+      const message = err instanceof Error ? err.message : 'Onbekende fout';
+      Alert.alert('Kon hond niet opslaan', message);
+    }
+  };
+ 
+  return (
+    <SafeAreaView style={{ flex: 1, alignItems: 'center', backgroundColor: '#FFFDF9' }}>
+      <TouchableOpacity style={{ position: 'absolute', top: 68, left: 40 }} onPress={() => router.back()}>
+        <AntDesign name="arrowleft" size={24} color="black" />
+      </TouchableOpacity>
+      <View style={{ marginTop: 62, width: '100%', paddingHorizontal: 20 }}>
+        <Text style={{ fontFamily: 'Nunito', fontWeight: 'bold', fontSize: 24, textAlign: 'center' }}>
+          Virtuele hond
+        </Text>
+        <Text style={{ fontFamily: 'Nunito', fontSize: 16, marginTop: 20 }}>
+          Denk aan jouw favoriete hond...
+        </Text>
+        <Text style={{ fontFamily: 'Nunito', fontSize: 16, marginTop: 12 }}>
+          Welk ras schiet er als eerste te binnen? Dat wordt jouw virtuele maatje!
+        </Text>
+        <View style={{ backgroundColor: '#FFF', borderRadius: 10, borderWidth: 1, borderColor: '#97B8A5', marginTop: 20 }}>
+          <Picker
+            selectedValue={dogBreed}
+            onValueChange={(itemValue) => setdogBreed(itemValue)}
+            style={{ height: 56, width: '100%' }}
+          >
+            <Picker.Item label="Selecteer een optie" value={null} />
+            <Picker.Item label="Engelse cocker spaniël" value="engelse cocker spaniël" />
+            <Picker.Item label="Golden retriever" value="golden retriever" />
+            <Picker.Item label="Witte zwitserse herder" value="witte zwitserse herder" />
+            <Picker.Item label="Border collie" value="border collie" />
+            <Picker.Item label="Jack russel" value="jack russel" />
+          </Picker>
+        </View>
+        <TouchableOpacity
+          onPress={handleBreedSubmit}
+          disabled={!dogBreed}
+          style={{
+            padding: 12,
+            marginTop: 20,
+            backgroundColor: '#97B8A5',
+            borderRadius: 15,
+            alignItems: 'center',
+            opacity: !dogBreed ? 0.5 : 1,
+          }}
         >
-            <TouchableOpacity  
-                style={{
-                    position: "absolute",
-                    top: 68,
-                    left: 40,
-                }}
-                onPress={() => router.back()}
-            >
-                <AntDesign name="arrowleft" size={24} color="black" />
-            </TouchableOpacity>
-            <View
-                style={{
-                    top: 1,
-                    flex: 1,
-                    marginTop: 40,
-                    justifyContent: 'flex-start',
-                }}
-            >
-                <Text
-                    style={{
-                        fontFamily: 'Nunito',
-                        fontWeight: 'bold',
-                        fontSize: 24,
-                        padding: 20,
-                        textAlign: 'center',
-                    }}
-                >
-                    Virtuele hond
-                </Text>
-                <Text
-                    style={{
-                        fontFamily: 'Nunito',
-                        fontWeight: 'normal',
-                        fontSize: 16,
-                        padding: 20,
-                    }}>
-                    Denk aan jouw favoriete hond... 
-                </Text>
-                <Text
-                    style={{
-                        fontFamily: 'Nunito',
-                        fontWeight: 'normal',
-                        fontSize: 16,
-                        padding: 20,
-                        paddingTop: 12,
-                    }}
-                >
-                    Welk ras schiet er als eerste te binnen? Dat wordt jouw virtuele maatje!
-                </Text>
-                <View style={{
-                    backgroundColor: '#FFF',
-                    borderRadius: 10,
-                    borderWidth: 1,
-                    borderColor: '#97B8A5',
-                    marginBottom: 10,
-                    marginHorizontal: 20,
-                }}>
-                    <Picker
-                        selectedValue={dogBreed}
-                        onValueChange={(itemValue) => setdogBreed(itemValue)}
-                        style={{
-                            height: 56,
-                            width: '100%',
-                        }}>
-                        <Picker.Item label="Selecteer een optie" value="selecteer een optie" />
-                        <Picker.Item label="Engelse cocker spaniël" value="engelse cocker spaniël" />
-                        <Picker.Item label="Golden retriever" value="golden retriever" />
-                        <Picker.Item label="Witte zwitserse herder" value="witte zwitserse herder" />
-                        <Picker.Item label="Border collie" value="border collie" />
-                        <Picker.Item label="Jack russel" value="jack russel" />
-                    </Picker>
-                </View>
-                <Link
-                    href="/dogName"
-                    style={{
-                        padding: 12,
-                        margin: 20,
-                        paddingHorizontal: 20,
-                        backgroundColor: '#97B8A5',
-                        borderRadius: 15,
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        textAlign: 'center',
-                        opacity: dogBreed === "selecteer een optie" || !dogBreed ? 0.5 : 1,
-                    }}
-                    aria-disabled={dogBreed === "selecteer een optie" || !dogBreed}
-                >
-                    <Text style={{ fontWeight: 'bold', color: '#000000' }}>DOORGAAN</Text>
-                </Link>
-            </View>
-        </SafeAreaView>
-    );
+          <Text style={{ fontWeight: 'bold', color: '#000000' }}>DOORGAAN</Text>
+        </TouchableOpacity>
+      </View>
+    </SafeAreaView>
+  );
 }
