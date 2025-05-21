@@ -211,6 +211,7 @@ export default function UserPermissions() {
         contentContainerStyle={{
           paddingVertical: 40,
           justifyContent: "flex-start",
+          marginRight: 20,
         }}
       >
         <TouchableOpacity

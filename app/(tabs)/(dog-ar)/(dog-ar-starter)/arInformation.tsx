@@ -106,7 +106,7 @@ export default function DogInformation() {
                 fontSize: 16,
                 paddingTop: 20,
                 paddingLeft: 20,
-                marginRight: 20,
+                marginRight: 30,
             }}
             >Jouw {dogBreed || "hond"} in een notendop:</Text>
             <Text
@@ -245,7 +245,7 @@ export default function DogInformation() {
                 borderRadius: 15,
                 textAlign: 'center',
             }}
-            href="/demo">DOORGAAN</Link>
+            href={`/demo?petId=${petId}`}>DOORGAAN</Link>
         </View>
         </ScrollView>
       </SafeAreaView>
