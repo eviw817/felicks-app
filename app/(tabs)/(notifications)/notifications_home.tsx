@@ -1,15 +1,13 @@
-import React from "react";
-import {
-  ScrollView,
-  SafeAreaView,
-  Text,
-  View,
-  Image,
-  TouchableOpacity,
-} from "react-native";
-import { FontAwesome } from "@expo/vector-icons";
-import AntDesign from "@expo/vector-icons/AntDesign";
-import { useRouter } from "expo-router";
+import React, { useEffect, useState } from 'react';
+import { ScrollView, SafeAreaView, Text, View, ActivityIndicator, Alert, Image, TouchableOpacity } from 'react-native';
+import { supabase } from "../../../lib/supabase";
+import { Session } from '@supabase/supabase-js';
+import { FontAwesome } from '@expo/vector-icons';
+import AntDesign from '@expo/vector-icons/AntDesign';
+import { useRouter } from 'expo-router'; 
+import { Link } from 'expo-router';
+import NavBar from "../../../components/NavigationBar";
+
 
 export default function Notifications() {
   const router = useRouter();
@@ -236,6 +234,15 @@ export default function Notifications() {
           </View>
         </View>
       </ScrollView>
+         {/* NavBar onderaan fixed position */}
+            <View style={{
+                position: 'absolute',
+                bottom: 0,
+                left: 0,
+                right: 0,
+            }}>
+                <NavBar />
+            </View>
     </SafeAreaView>
   );
 }
