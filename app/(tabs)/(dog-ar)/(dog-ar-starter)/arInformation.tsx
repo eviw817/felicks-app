@@ -1,13 +1,65 @@
 import React from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ScrollView, View, Text, TouchableOpacity } from 'react-native';
-import { useRouter } from 'expo-router'; 
+import { useRouter, useLocalSearchParams  } from "expo-router"; 
 import AntDesign from '@expo/vector-icons/AntDesign';
 import { Link } from 'expo-router';
+import { supabase } from '../../../../lib/supabase'; // adjust if your path is different
 
 export default function DogInformation() {
 
     const router = useRouter();
+
+    const { petId } = useLocalSearchParams();
+
+    const [dogName, setDogName] = React.useState("");
+    const [dogBreed, setDogBreed] = React.useState("");
+    const [loading, setLoading] = React.useState(true);
+    const [fetchError, setFetchError] = React.useState("");
+
+    React.useEffect(() => {
+      console.log('DogInformation petId:', petId);  // Debug
+
+      if (petId && typeof petId === "string" && petId.length > 0) {
+        const fetchDogData = async () => {
+          setLoading(true);
+          setFetchError("");
+
+          const { data, error } = await supabase
+            .from("ar_dog")
+            .select("name, breed")
+            .eq("id", petId)
+            .single();
+
+          console.log("Supabase fetch result:", { data, error }); // Debug
+
+          if (error) {
+            console.log("Error fetching dog data:", error.message);
+            setFetchError(error.message);
+            setDogName("");
+            setDogBreed("");
+          } else {
+            setDogName(data?.name || "");
+            setDogBreed(data?.breed || "");
+          }
+
+          setLoading(false);
+        };
+
+        fetchDogData();
+      } else {
+        // Invalid or missing petId
+        setLoading(false);
+        setFetchError("Ongeldig of ontbrekend petId.");
+        setDogName("");
+        setDogBreed("");
+      }
+    }, [petId]);
+
+    function capitalizeFirstLetter(text: string) {
+      if (!text) return "";
+      return text.charAt(0).toUpperCase() + text.slice(1);
+    }
 
     return(
     <SafeAreaView 
@@ -46,7 +98,7 @@ export default function DogInformation() {
                 padding: 20,
                 textAlign: 'center',
             }}
-            >Cooper</Text>
+            >{dogName || "nog geen naam"}</Text>
             <Text
             style={{
                 fontFamily: 'Nunito',
@@ -54,8 +106,9 @@ export default function DogInformation() {
                 fontSize: 16,
                 paddingTop: 20,
                 paddingLeft: 20,
+                marginRight: 20,
             }}
-            >Jouw labrador in een notendop:</Text>
+            >Jouw {dogBreed || "hond"} in een notendop:</Text>
             <Text
             style={{
                 fontFamily: 'Nunito',
@@ -73,9 +126,8 @@ export default function DogInformation() {
                 padding: 20,
                 paddingTop: 8,
                 paddingRight: 30,
-                
             }}
-            >Labradors zijn vriendelijk, zachtaardig en dol op gezelschap. Ze zijn slim, sociaal en werken graag samen, perfect voor gezinnen met kinderen en andere dieren. Soms een tikkeltje eigenwijs, maar altijd liefdevol en enthousiast!</Text>
+            >{capitalizeFirstLetter(dogBreed || "hond")} zijn vriendelijk, zachtaardig en dol op gezelschap. Ze zijn slim, sociaal en werken graag samen, perfect voor gezinnen met kinderen en andere dieren. Soms een tikkeltje eigenwijs, maar altijd liefdevol en enthousiast!</Text>
             <Text
             style={{
                 fontFamily: 'Nunito',
@@ -181,7 +233,7 @@ export default function DogInformation() {
                 padding: 20,
                 paddingRight: 30,
             }}
-            >Een labrador is de ideale gezinshond voor actieve baasjes die houden van wandelen, trainen en samen plezier maken. Geef je hem de juiste aandacht, dan heb je er een vrolijke vriend voor het leven aan!</Text>
+            >Een {dogBreed || "hond"} is de ideale gezinshond voor actieve baasjes die houden van wandelen, trainen en samen plezier maken. Geef je hem de juiste aandacht, dan heb je er een vrolijke vriend voor het leven aan!</Text>
             <Link 
             style={{
                 padding: 12,

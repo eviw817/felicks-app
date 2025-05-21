@@ -1,13 +1,55 @@
 import React from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { View, Text, TouchableOpacity, Image } from 'react-native';
-import { useRouter } from 'expo-router'; 
+import { useRouter, useLocalSearchParams  } from "expo-router";
 import AntDesign from '@expo/vector-icons/AntDesign';
 import { Link } from 'expo-router';
+import { supabase } from '../../../../lib/supabase'; // adjust if your path is different
 
 export default function DogInformation() {
 
     const router = useRouter();
+
+    const { petId } = useLocalSearchParams();
+
+    const [dogName, setDogName] = React.useState("");
+    const [loading, setLoading] = React.useState(true);
+    const [fetchError, setFetchError] = React.useState("");
+
+    React.useEffect(() => {
+        console.log('DogInformation petId:', petId);  // <-- Debug: log petId here
+
+        if (petId && typeof petId === "string" && petId.length > 0) {
+        const fetchDogName = async () => {
+            setLoading(true);
+            setFetchError("");
+
+            const { data, error } = await supabase
+            .from("ar_dog")
+            .select("name")
+            .eq("id", petId)
+            .single();
+
+            console.log("Supabase fetch result:", { data, error }); // <-- Debug: log result
+
+            if (error) {
+            console.log("Error fetching dog name:", error.message);
+            setFetchError(error.message);
+            setDogName("");
+            } else {
+            setDogName(data?.name || "");
+            }
+
+            setLoading(false);
+        };
+
+        fetchDogName();
+        } else {
+        // If petId is invalid or missing
+        setLoading(false);
+        setFetchError("Ongeldig of ontbrekend petId.");
+        }
+    }, [petId]);
 
     return(
     <SafeAreaView 
@@ -40,7 +82,7 @@ export default function DogInformation() {
                 padding: 20,
                 textAlign: 'center',
             }}
-            >Welkom Cooper</Text>
+            >Welkom {dogName || "nog geen naam"}</Text>
             <Image
                 source={require('../../../../assets/images/ARDog.png')}
                 style={{
@@ -59,7 +101,7 @@ export default function DogInformation() {
                 padding: 20,
                 paddingBottom: 0,
             }}
-            >Dit is Cooper, jouw nieuwe hondenvriend!</Text>
+            >Dit is {dogName || "nog geen naam"}, jouw nieuwe hondenvriend!</Text>
             <Text
             style={{
                 fontFamily: 'Nunito',
@@ -106,7 +148,7 @@ export default function DogInformation() {
                 borderRadius: 15,
                 textAlign: 'center',
             }}
-            href="/arInformation">DOORGAAN</Link>
+            href={`/arInformation?petId=${petId}`}>DOORGAAN</Link>
         </View>
       </SafeAreaView>
 )};

@@ -9,12 +9,55 @@ import {
   Animated,
   Easing,
 } from "react-native";
-import { useRouter } from "expo-router";
+import { useRouter, useLocalSearchParams  } from "expo-router";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import { Link } from "expo-router";
+import { supabase } from '../../../../lib/supabase'; // adjust if your path is different
 
 export default function DogFeature() {
   const router = useRouter();
+
+  const { petId } = useLocalSearchParams();
+
+  const [dogName, setDogName] = React.useState("");
+  const [loading, setLoading] = React.useState(true);
+  const [fetchError, setFetchError] = React.useState("");
+
+  React.useEffect(() => {
+    console.log('DogInformation petId:', petId);  // <-- Debug: log petId here
+
+    if (petId && typeof petId === "string" && petId.length > 0) {
+      const fetchDogName = async () => {
+        setLoading(true);
+        setFetchError("");
+
+        const { data, error } = await supabase
+          .from("ar_dog")
+          .select("name")
+          .eq("id", petId)
+          .single();
+
+        console.log("Supabase fetch result:", { data, error }); // <-- Debug: log result
+
+        if (error) {
+          console.log("Error fetching dog name:", error.message);
+          setFetchError(error.message);
+          setDogName("");
+        } else {
+          setDogName(data?.name || "");
+        }
+
+        setLoading(false);
+      };
+
+      fetchDogName();
+    } else {
+      // If petId is invalid or missing
+      setLoading(false);
+      setFetchError("Ongeldig of ontbrekend petId.");
+    }
+  }, [petId]);
+
 
   return (
     <SafeAreaView
@@ -50,7 +93,7 @@ export default function DogFeature() {
             paddingHorizontal: 60,
             textAlign: "center",
           }}
-        >Welkom bij jouw virtuele hond, Cooper!
+        >Welkom bij jouw virtuele hond, {dogName || "nog geen naam"}!
         </Text>
         <Text
           style={{
@@ -103,7 +146,7 @@ export default function DogFeature() {
                 paddingHorizontal: 20,
               }}
             >
-              Onderaan vind je opties om Cooper te voeren, spelen, wandelen en hem naar het toilet te laten gaan.
+              Onderaan vind je opties om {dogName || "nog geen naam"} te voeren, spelen, wandelen en hem naar het toilet te laten gaan.
             </Text>
         </View>
 
@@ -131,7 +174,7 @@ export default function DogFeature() {
                 paddingHorizontal: 20,
               }}
             >
-              Je krijgt een seintje als Cooper honger heeft of naar buiten wil. 
+              Je krijgt een seintje als {dogName || "nog geen naam"} honger heeft of naar buiten wil. 
             </Text>
             <Text
               style={{
@@ -144,7 +187,7 @@ export default function DogFeature() {
                 paddingHorizontal: 20,
               }}
             >
-              Goede zorgen = blije Cooper!
+              Goede zorgen = blije {dogName || "nog geen naam"}!
             </Text>
         </View>
 
@@ -172,7 +215,7 @@ export default function DogFeature() {
                 marginLeft: 20,
               }}
             >
-              Cooper reageert op jouw aandacht. Verzorg je hem goed? Dan straalt hij. Vergeet je hem? 
+              {dogName || "nog geen naam"} reageert op jouw aandacht. Verzorg je hem goed? Dan straalt hij. Vergeet je hem? 
             </Text>
             <Text
               style={{
@@ -236,7 +279,7 @@ export default function DogFeature() {
             marginRight: 10,
           }}
         >
-          Druk op de knop hieronder en ontmoet Cooper! 
+          Druk op de knop hieronder en ontmoet {dogName || "nog geen naam"}! 
         </Text>
         <Link
           style={{
@@ -249,7 +292,7 @@ export default function DogFeature() {
             borderRadius: 15,
             textAlign: "center",
           }}
-          href="/arLoader"
+          href={`/arLoader?petId=${petId}`}
         >
           MAAK KENNIS MET JE NIEUWE VRIENDJE
         </Link>
