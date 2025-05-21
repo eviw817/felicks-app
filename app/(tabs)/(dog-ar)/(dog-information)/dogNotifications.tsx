@@ -1,82 +1,201 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import {
   ScrollView,
   View,
   Text,
-  TouchableOpacity,
   Switch,
+  TouchableOpacity,
   Animated,
   Easing,
+  Alert,
 } from "react-native";
-import { useRouter } from "expo-router";
+import { useRouter, useLocalSearchParams } from "expo-router";
 import AntDesign from "@expo/vector-icons/AntDesign";
-import { Link } from "expo-router";
+import { supabase } from "../../../../lib/supabase";
 
-export default function DogNotifications() {
+export default function UserPermissions() {
   const router = useRouter();
 
-  // For Sound toggle
-  const [isSoundEnabled, setIsSoundEnabled] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [fetchError, setFetchError] = useState("");
+
+  const [isSoundEnabled, setIsSoundEnabled] = useState(true);
+  const [isCameraEnabled, setIsCameraEnabled] = useState(true);
+  const [isNotificationEnabled, setIsNotificationEnabled] = useState(true);
+
   const soundAnim = useRef(new Animated.Value(1)).current;
-  const toggleSoundSwitch = () => {
-    Animated.sequence([
-      Animated.timing(soundAnim, {
-        toValue: 0.8,
-        duration: 100,
-        easing: Easing.inOut(Easing.ease),
-        useNativeDriver: true,
-      }),
-      Animated.timing(soundAnim, {
-        toValue: 1,
-        duration: 100,
-        easing: Easing.inOut(Easing.ease),
-        useNativeDriver: true,
-      }),
-    ]).start();
-    setIsSoundEnabled((previousState) => !previousState);
-  };
-
-  // For Camera toggle
-  const [isCameraEnabled, setIsCameraEnabled] = useState(false);
   const cameraAnim = useRef(new Animated.Value(1)).current;
-  const toggleCameraSwitch = () => {
+  const notificationAnim = useRef(new Animated.Value(1)).current;
+
+  const { petId } = useLocalSearchParams();
+
+  const [dogName, setDogName] = React.useState("");
+
+  React.useEffect(() => {
+    console.log("DogInformation petId:", petId); // <-- Debug: log petId here
+
+    if (petId && typeof petId === "string" && petId.length > 0) {
+      const fetchDogName = async () => {
+        setLoading(true);
+        setFetchError("");
+
+        const { data, error } = await supabase
+          .from("ar_dog")
+          .select("name")
+          .eq("id", petId)
+          .single();
+
+        console.log("Supabase fetch result:", { data, error }); // <-- Debug: log result
+
+        if (error) {
+          console.log("Error fetching dog name:", error.message);
+          setFetchError(error.message);
+          setDogName("");
+        } else {
+          setDogName(data?.name || "");
+        }
+
+        setLoading(false);
+      };
+
+      fetchDogName();
+    } else {
+      // If petId is invalid or missing
+      setLoading(false);
+      setFetchError("Ongeldig of ontbrekend petId.");
+    }
+  }, [petId]);
+
+  // Animate toggle press
+  const animateToggle = (anim: Animated.Value) => {
     Animated.sequence([
-      Animated.timing(cameraAnim, {
+      Animated.timing(anim, {
         toValue: 0.8,
         duration: 100,
         easing: Easing.inOut(Easing.ease),
         useNativeDriver: true,
       }),
-      Animated.timing(cameraAnim, {
+      Animated.timing(anim, {
         toValue: 1,
         duration: 100,
         easing: Easing.inOut(Easing.ease),
         useNativeDriver: true,
       }),
     ]).start();
-    setIsCameraEnabled((previousState) => !previousState);
   };
 
-  // For Notification toggle
-  const [isNotificationEnabled, setIsNotificationEnabled] = useState(false);
-  const notificationAnim = useRef(new Animated.Value(1)).current;
+  // Toggle handlers
+  const toggleSoundSwitch = () => {
+    animateToggle(soundAnim);
+    setIsSoundEnabled((prev) => !prev);
+  };
+  const toggleCameraSwitch = () => {
+    animateToggle(cameraAnim);
+    setIsCameraEnabled((prev) => !prev);
+  };
   const toggleNotificationSwitch = () => {
-    Animated.sequence([
-      Animated.timing(notificationAnim, {
-        toValue: 0.8,
-        duration: 100,
-        easing: Easing.inOut(Easing.ease),
-        useNativeDriver: true,
-      }),
-      Animated.timing(notificationAnim, {
-        toValue: 1,
-        duration: 100,
-        easing: Easing.inOut(Easing.ease),
-        useNativeDriver: true,
-      }),
-    ]).start();
-    setIsNotificationEnabled((previousState) => !previousState);
+    animateToggle(notificationAnim);
+    setIsNotificationEnabled((prev) => !prev);
+  };
+
+  // Load user settings on mount
+  useEffect(() => {
+    const fetchSettings = async () => {
+      setLoading(true);
+      setFetchError("");
+
+      const {
+        data: { user },
+        error: userError,
+      } = await supabase.auth.getUser();
+
+      if (userError || !user) {
+        setFetchError("Failed to get user info.");
+        setLoading(false);
+        return;
+      }
+
+      try {
+        const { data, error } = await supabase
+          .from("user_settings")
+          .select("push_notifications, sound_permission, camera_permission")
+          .eq("user_id", user.id)
+          .single();
+
+        if (error && error.code !== "PGRST116") {
+          // PGRST116 = no rows found
+          setFetchError(error.message);
+        } else {
+          // If data is missing, default to true
+          setIsNotificationEnabled(
+            data?.push_notifications !== null && data?.push_notifications !== undefined
+              ? data.push_notifications
+              : true
+          );
+          setIsSoundEnabled(
+            data?.sound_permission !== null && data?.sound_permission !== undefined
+              ? data.sound_permission
+              : true
+          );
+          setIsCameraEnabled(
+            data?.camera_permission !== null && data?.camera_permission !== undefined
+              ? data.camera_permission
+              : true
+          );
+        }
+      } catch (e) {
+        setFetchError("Error loading settings");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchSettings();
+  }, []);
+
+  // Save settings
+  const handleSave = async () => {
+    setLoading(true);
+    setFetchError("");
+
+    const {
+      data: { user },
+      error: userError,
+    } = await supabase.auth.getUser();
+
+    if (userError || !user) {
+      setFetchError("Failed to get user info.");
+      setLoading(false);
+      return;
+    }
+
+    const settingsPayload = {
+      user_id: user.id,
+      push_notifications: isNotificationEnabled,
+      sound_permission: isSoundEnabled,
+      camera_permission: isCameraEnabled,
+    };
+
+    try {
+      // Upsert: Insert or update the user settings
+      const { error } = await supabase
+        .from("user_settings")
+        .upsert(settingsPayload, { onConflict: "user_id" });
+
+      if (error) {
+        setFetchError(error.message);
+        Alert.alert("Error", "Failed to save settings.");
+      } else {
+        // Navigate forward on success
+        router.push(`/dogFeaturesInfo?petId=${petId}`); // replace with your next screen route
+      }
+    } catch (e) {
+      setFetchError("Error saving settings");
+      Alert.alert("Error", "Something went wrong while saving.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -137,7 +256,7 @@ export default function DogNotifications() {
             paddingRight: 40,
           }}
         >
-          Zo kunnen we jou helpen goed voor Cooper te zorgen!
+          Zo kunnen we jou helpen goed voor {dogName || "nog geen naam"} te zorgen!
         </Text>
         <Text
           style={{
@@ -178,7 +297,7 @@ export default function DogNotifications() {
               lineHeight: 32,
             }}
           >
-            Cooper tot leven brengen in AR
+            {dogName || "nog geen naam"} tot leven brengen in AR
           </Text>
         </View>
         <View
@@ -238,7 +357,7 @@ export default function DogNotifications() {
               lineHeight: 32,
             }}
           >
-             Je waarschuwen als Cooper honger heeft, wil spelen of naar buiten moet
+             Je waarschuwen als {dogName || "nog geen naam"} honger heeft, wil spelen of naar buiten moet
           </Text>
         </View>
 
@@ -252,7 +371,7 @@ export default function DogNotifications() {
             paddingTop: 12,
           }}
         >
-          Klaar om Cooper de beste zorg te geven? Zet de schuifjes aan en druk
+          Klaar om {dogName || "nog geen naam"} de beste zorg te geven? Zet de schuifjes aan en druk
           op 'Opslaan' om verder te gaan!
         </Text>
         <Text
@@ -266,102 +385,118 @@ export default function DogNotifications() {
         >
           Toestemming
         </Text>
+
+        {fetchError ? (
+          <Text
+            style={{
+              color: "red",
+              fontFamily: "Nunito",
+              paddingHorizontal: 20,
+              paddingBottom: 20,
+              fontSize: 14,
+            }}
+          >
+            {fetchError}
+          </Text>
+        ) : null}
+
         <View
           style={{
             flexDirection: "row",
             justifyContent: "space-between",
+            paddingHorizontal: 20,
           }}
         >
           <Text
             style={{
               fontFamily: "Nunito",
-              fontWeight: "normal",
               fontSize: 16,
-              padding: 20,
-              paddingVertical: 8,
+              paddingVertical: 12,
             }}
           >
             Geluid
           </Text>
-          <Switch
-            style={{
-              marginRight: 30,
-            }}
-            trackColor={{ false: "#cac5c5", true: "#97b8a5" }}
-            thumbColor={isSoundEnabled ? "#ececeb" : "#ececeb"}
-            onValueChange={toggleSoundSwitch}
-            value={isSoundEnabled}
-          />
+          <Animated.View style={{ transform: [{ scale: soundAnim }] }}>
+            <Switch
+              trackColor={{ false: "#cac5c5", true: "#97b8a5" }}
+              thumbColor={isSoundEnabled ? "#ececeb" : "#ececeb"}
+              onValueChange={toggleSoundSwitch}
+              value={isSoundEnabled}
+              disabled={loading}
+            />
+          </Animated.View>
         </View>
+
         <View
           style={{
             flexDirection: "row",
             justifyContent: "space-between",
+            paddingHorizontal: 20,
           }}
         >
           <Text
             style={{
               fontFamily: "Nunito",
-              fontWeight: "normal",
               fontSize: 16,
-              padding: 20,
-              paddingVertical: 8,
+              paddingVertical: 12,
             }}
           >
             Camera
           </Text>
-          <Switch
-            style={{
-              marginRight: 30,
-            }}
-            trackColor={{ false: "#cac5c5", true: "#97b8a5" }}
-            thumbColor={isCameraEnabled ? "#ececeb" : "#ececeb"}
-            onValueChange={toggleCameraSwitch}
-            value={isCameraEnabled}
-          />
+          <Animated.View style={{ transform: [{ scale: cameraAnim }] }}>
+            <Switch
+              trackColor={{ false: "#cac5c5", true: "#97b8a5" }}
+              thumbColor={isCameraEnabled ? "#ececeb" : "#ececeb"}
+              onValueChange={toggleCameraSwitch}
+              value={isCameraEnabled}
+              disabled={loading}
+            />
+          </Animated.View>
         </View>
+
         <View
           style={{
             flexDirection: "row",
             justifyContent: "space-between",
+            paddingHorizontal: 20,
           }}
         >
           <Text
             style={{
               fontFamily: "Nunito",
-              fontWeight: "normal",
               fontSize: 16,
-              padding: 20,
-              paddingVertical: 8,
+              paddingVertical: 12,
             }}
           >
             Meldingen
           </Text>
-          <Switch
-            style={{
-              marginRight: 30,
-            }}
-            trackColor={{ false: "#cac5c5", true: "#97b8a5" }}
-            thumbColor={isNotificationEnabled ? "#ececeb" : "#ececeb"}
-            onValueChange={toggleNotificationSwitch}
-            value={isNotificationEnabled}
-          />
+          <Animated.View style={{ transform: [{ scale: notificationAnim }] }}>
+            <Switch
+              trackColor={{ false: "#cac5c5", true: "#97b8a5" }}
+              thumbColor={isNotificationEnabled ? "#ececeb" : "#ececeb"}
+              onValueChange={toggleNotificationSwitch}
+              value={isNotificationEnabled}
+              disabled={loading}
+            />
+          </Animated.View>
         </View>
-        <Link
+
+        <TouchableOpacity
           style={{
-            padding: 12,
-            margin: 20,
-            marginRight: 40,
-            paddingHorizontal: 20,
             backgroundColor: "#97B8A5",
-            fontWeight: "bold",
+            margin: 20,
             borderRadius: 15,
-            textAlign: "center",
+            paddingVertical: 12,
+            paddingHorizontal: 20,
+            alignItems: "center",
           }}
-          href="/dogFeaturesInfo"
+          onPress={handleSave}
+          disabled={loading}
         >
-          OPSLAAN
-        </Link>
+          <Text style={{ color: "black", fontWeight: "bold", fontSize: 16 }}>
+            OPSLAAN
+          </Text>
+        </TouchableOpacity>
       </ScrollView>
     </SafeAreaView>
   );
