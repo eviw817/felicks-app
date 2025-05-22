@@ -32,8 +32,8 @@ const RadioButton: React.FC<RadioButtonProps> = ({
 
 function LivingSituationScreen1() {
   const [fontsLoaded] = useFonts({
-    nunitoBold: require("../../../../assets/fonts/nunito/Nunito-Bold.ttf"),
-    nunitoRegular: require("../../../../assets/fonts/nunito/Nunito-Regular.ttf"),
+    NunitoBold: require("@/assets/fonts/Nunito/NunitoBold.ttf"),
+    NunitoRegular: require("@/assets/fonts/Nunito/NunitoRegular.ttf"),
   });
 
   const router = useRouter();

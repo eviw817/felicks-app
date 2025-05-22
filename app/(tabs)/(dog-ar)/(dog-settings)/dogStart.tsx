@@ -2,8 +2,17 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { View, Text, Image, ScrollView } from "react-native";
 import { Link } from "expo-router";
 import NavBar from "@/components/NavigationBar";
+import { useFonts } from 'expo-font';
 
 export default function DogStart() {
+  const [fontsLoaded] = useFonts({
+    'SireniaSemiBold': require("@/assets/fonts/Sirenia/SireniaSemiBold.ttf"),
+  });
+
+  if (!fontsLoaded) {
+    return <View />;
+  }
+
   return (
     <SafeAreaView
       style={{
@@ -24,14 +33,13 @@ export default function DogStart() {
       >
         <Text
           style={{
-            fontFamily: "Nunito",
-            fontWeight: "bold",
+            fontFamily: 'SireniaSemiBold',
             fontSize: 24,
             padding: 20,
             textAlign: "center",
           }}
         >
-          Virtuele hond
+          Welkom bij de virtuele hond
         </Text>
         <Text
           style={{

@@ -137,17 +137,12 @@ export default function DogBreed() {
             style={{ height: 56, width: "100%" }}
           >
             <Picker.Item label="Selecteer een optie" value={null} />
-            <Picker.Item
-              label="Engelse cocker spaniël"
-              value="engelse cocker spaniël"
-            />
+            {/* <Picker.Item label="Engelse cocker spaniël" value="engelse cocker spaniël" />
             <Picker.Item label="Golden retriever" value="golden retriever" />
-            <Picker.Item
-              label="Witte zwitserse herder"
-              value="witte zwitserse herder"
-            />
+            <Picker.Item label="Witte zwitserse herder" value="witte zwitserse herder" />
             <Picker.Item label="Border collie" value="border collie" />
-            <Picker.Item label="Jack russel" value="jack russel" />
+            <Picker.Item label="Jack russel" value="jack russel" /> */}
+            <Picker.Item label="Labrador" value="labrador" />
           </Picker>
         </View>
         <TouchableOpacity

@@ -14,32 +14,60 @@ export default function BaseText({ variant = 'text', style, ...rest }: BaseTextP
  
   const [fontsLoaded] = useFonts({
 
-    'Nunito-Regular':            require('../assets/fonts/nunito/Nunito-Regular.ttf'),
-    'Nunito-Italic':             require('../assets/fonts/nunito/Nunito-Italic.ttf'),
+    // Nunito fonts
+    'NunitoBlack': require('@/assets/fonts/Nunito/NunitoBlack.ttf'),
+    'NunitoBlackItalic': require('@/assets/fonts/Nunito/NunitoBlackItalic.ttf'),
 
-    'Nunito-Light':              require('../assets/fonts/nunito/Nunito-Light.ttf'),
-    'Nunito-LightItalic':        require('../assets/fonts/nunito/Nunito-LightItalic.ttf'),
+    'NunitoBold': require('@/assets/fonts/Nunito/NunitoBold.ttf'),
+    'NunitoBoldItalic': require('@/assets/fonts/Nunito/NunitoBoldItalic.ttf'),
 
-    'Nunito-Medium':             require('../assets/fonts/nunito/Nunito-Medium.ttf'),
-    'Nunito-MediumItalic':       require('../assets/fonts/nunito/Nunito-MediumItalic.ttf'),
+    'NunitoExtraBold': require('@/assets/fonts/Nunito/NunitoExtraBold.ttf'),
+    'NunitoExtraBoldItalic': require('@/assets/fonts/Nunito/NunitoExtraBoldItalic.ttf'),
 
-    'Nunito-SemiBold':           require('../assets/fonts/nunito/Nunito-SemiBold.ttf'),
-    'Nunito-SemiBoldItalic':     require('../assets/fonts/nunito/Nunito-SemiBoldItalic.ttf'),
+    'NunitoExtraLight': require('@/assets/fonts/Nunito/NunitoExtraLight.ttf'),
+    'NunitoExtraLightItalic': require('@/assets/fonts/Nunito/NunitoExtraLightItalic.ttf'),
 
-    'Nunito-Bold':               require('../assets/fonts/nunito/Nunito-Bold.ttf'),
-    'Nunito-BoldItalic':         require('../assets/fonts/nunito/Nunito-BoldItalic.ttf'),
+    'NunitoItalic': require('@/assets/fonts/Nunito/NunitoItalic.ttf'),
 
-    'Nunito-ExtraLight':         require('../assets/fonts/nunito/Nunito-ExtraLight.ttf'),
-    'Nunito-ExtraLightItalic':   require('../assets/fonts/nunito/Nunito-ExtraLightItalic.ttf'),
+    'NunitoLight': require('@/assets/fonts/Nunito/NunitoLight.ttf'),
+    'NunitoLightItalic': require('@/assets/fonts/Nunito/NunitoLightItalic.ttf'),
 
-    'Nunito-ExtraBold':          require('../assets/fonts/nunito/Nunito-ExtraBold.ttf'),
-    'Nunito-ExtraBoldItalic':    require('../assets/fonts/nunito/Nunito-ExtraBoldItalic.ttf'),
+    'NunitoMedium': require('@/assets/fonts/Nunito/NunitoMedium.ttf'),
+    'NunitoMediumItalic': require('@/assets/fonts/Nunito/NunitoMediumItalic.ttf'),
 
-    'Sirenia-Medium':            require('../assets/fonts/Sirenia/Sirenia_medium.ttf'),
-    'Sirenia-Regular':           require('../assets/fonts/Sirenia/Sirenia_regular.ttf'),
-    'Sirenia-SemiBold':            require('../assets/fonts/Sirenia/Sirenia_SemiBold.ttf'),
+    'NunitoRegular': require('@/assets/fonts/Nunito/NunitoRegular.ttf'),
 
+    'NunitoSemiBold': require('@/assets/fonts/Nunito/NunitoSemiBold.ttf'),
+    'NunitoSemiBoldItalic': require('@/assets/fonts/Nunito/NunitoSemiBoldItalic.ttf'),
 
+    // Sirenia fonts
+    'SireniaBlack':  require('@/assets/fonts/Sirenia/SireniaBlack.ttf'),
+    'SireniaBlackItalic': require('@/assets/fonts/Sirenia/SireniaBlackItalic.ttf'),
+
+    'SireniaBold': require('@/assets/fonts/Sirenia/SireniaBold.ttf'),
+    'SireniaBoldItalic': require('@/assets/fonts/Sirenia/SireniaBoldItalic.ttf'),
+
+    'SireniaExtraLight': require('@/assets/fonts/Sirenia/SireniaExtraLight.ttf'),
+    'SireniaExtraLightItalic': require('@/assets/fonts/Sirenia/SireniaExtraLightItalic.ttf'),
+
+    'SireniaItalic': require('@/assets/fonts/Sirenia/SireniaItalic.ttf'),
+
+    'SireniaLight': require('@/assets/fonts/Sirenia/SireniaLight.ttf'),
+    'SireniaLightItalic': require('@/assets/fonts/Sirenia/SireniaLightItalic.ttf'),
+
+    'SireniaMedium': require('@/assets/fonts/Sirenia/SireniaMedium.ttf'),
+    'SireniaMediumItalic': require('@/assets/fonts/Sirenia/SireniaMediumItalic.ttf'),
+
+    'SireniaRegular': require('@/assets/fonts/Sirenia/SireniaRegular.ttf'),
+
+    'SireniaSemiBold': require('@/assets/fonts/Sirenia/SireniaSemiBold.ttf'),
+    'SireniaSemiBoldItalic': require('@/assets/fonts/Sirenia/SireniaSemiBoldItalic.ttf'),
+
+    'SireniaThin': require('@/assets/fonts/Sirenia/SireniaThin.ttf'),
+    'SireniaThinItalic': require('@/assets/fonts/Sirenia/SireniaThinItalic.ttf'),
+
+    // SpaceMono
+    'SpaceMonoRegular': require('@/assets/fonts/SpaceMonoRegular.ttf'),
   })
 
 

@@ -6,8 +6,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 import BaseText from "@/components/BaseText";
 
-
 import { useRouter, Link } from "expo-router";
+import NavBar from "@/components/NavigationBar";
 
 export default function QuizIndex() {
   const router = useRouter();
@@ -42,7 +42,6 @@ export default function QuizIndex() {
         href="../quizVragen">
         <Text style={styles.continueText}>DOORGAAN</Text>
       </Link>
-
 
     </View>
   );

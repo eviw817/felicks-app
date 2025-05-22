@@ -13,8 +13,8 @@ import { faArrowLeft } from '@fortawesome/free-solid-svg-icons'
 import { useRouter } from 'expo-router'
 
 import BaseText from '@/components/BaseText'
-import { supabase } from '../../../../lib/supabaseClient'
-
+import { supabase } from '@/lib/supabaseClient'
+import NavBar from "@/components/NavigationBar";
 
 
 type DBQuizRow = {

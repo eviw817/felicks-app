@@ -10,8 +10,7 @@ import {
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import BaseText from "@/components/BaseText";
-
-
+import NavBar from "@/components/NavigationBar";
 
 const STRAPI_BASE_URL = "https://landingspagina-felicks.onrender.com";
 
@@ -89,6 +88,7 @@ export default function Artikel() {
    
             <BaseText style={styles.summary}>{summary}</BaseText>
             <BaseText style={styles.body}>{descText}</BaseText>
+            {/* nav */}
         </ScrollView>
     );
 }
