@@ -179,7 +179,7 @@ const ProfileEditScreen = () => {
     }, [session]);
     
        const goToSettings = () => {
-        router.push('../settings');
+        router.push('/settings');
       };
     
 
@@ -193,7 +193,7 @@ const ProfileEditScreen = () => {
       <ScrollView contentContainerStyle={{ flexGrow: 1, paddingBottom: 100}}>
       <SafeAreaView  style={styles.container} >
          <View style={styles.header}>
-         <TouchableOpacity onPress={() => router.push("../profile")} style={styles.backButton}>
+         <TouchableOpacity onPress={() => router.push("/profile")} style={styles.backButton}>
          <FontAwesomeIcon icon={faArrowLeft} size={30} color={'#183A36'} style={styles.backButton} />
         </TouchableOpacity>
           <Text style={styles.title}>Profiel bewerken</Text>
