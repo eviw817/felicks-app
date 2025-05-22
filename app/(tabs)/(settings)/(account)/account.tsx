@@ -1,9 +1,10 @@
 import React, { useState }from "react";
-import { View, Text, TouchableOpacity, StyleSheet, Alert} from "react-native";
+import { View, Text, TouchableOpacity, StyleSheet, Alert, SafeAreaView} from "react-native";
 import { useRouter } from "expo-router";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
-import { supabase } from "../../../../lib/supabase";
+import { supabase } from "@/lib/supabase";
+import NavBar from "@/components/NavigationBar";
 
 const DeleteScreen = () => {
     const router = useRouter();
@@ -60,7 +61,7 @@ const DeleteScreen = () => {
 
       
     return (
-        <View style={styles.container}>
+        <SafeAreaView style={styles.container}>
             {/* Header met terugknop */}
             <View style={styles.header}>
                 <TouchableOpacity onPress={() => router.push("../settings")}>
@@ -82,7 +83,17 @@ const DeleteScreen = () => {
             <TouchableOpacity style={styles.nobutton} onPress={handleDeleteAccount}>
                 <Text style={styles.buttonText}>JA</Text>
             </TouchableOpacity>
-        </View>
+            {/* Fixed navbar onderaan scherm */}
+            <View
+                style={{
+                    position: "absolute",
+                    bottom: 0,
+                    left: 0,
+                    right: 0,
+                }}>
+                <NavBar />
+            </View>
+        </SafeAreaView>
     );
 };
 

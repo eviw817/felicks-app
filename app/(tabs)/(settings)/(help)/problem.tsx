@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { View, Text, TouchableOpacity, StyleSheet, TextInput, Alert, SafeAreaView } from "react-native";
 import { useRouter } from "expo-router";
-import { supabase } from "../../../../lib/supabase";
+import { supabase } from "@/lib/supabase";
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import NavBar from "@/components/NavigationBar";
