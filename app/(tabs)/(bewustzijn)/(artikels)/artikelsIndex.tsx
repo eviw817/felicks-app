@@ -11,9 +11,11 @@ import {
   TextInput,
   Image,
   ActivityIndicator,
+  SafeAreaView
 } from 'react-native'
 import { Ionicons } from '@expo/vector-icons'
 import BaseText from "@/components/BaseText";
+import NavBar from "@/components/NavigationBar";
 
 const STRAPI_BASE_URL = 'https://landingspagina-felicks.onrender.com'
 
@@ -62,7 +64,7 @@ export default function ArtikelsIndex() {
   })
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       {/* Topbar */}
       <View style={styles.topbar}>
         <Pressable
@@ -127,7 +129,17 @@ export default function ArtikelsIndex() {
           })
         )}
       </ScrollView>
-    </View>
+      {/* Fixed navbar onderaan scherm */}
+      <View
+        style={{
+          position: "absolute",
+          bottom: 0,
+          left: 0,
+          right: 0,
+        }}>
+        <NavBar />
+      </View>
+    </SafeAreaView>
   )
 }
 
@@ -155,9 +167,10 @@ const styles = StyleSheet.create({
   header: {
     flex: 1,
     fontSize: 24,
-    fontFamily: "Sirenia-Medium",
+    fontFamily: "SireniaMedium",
     color: "#183A36",
     textAlign: "center",
+    textTransform: 'capitalize',
   },
   search: {
     backgroundColor: '#fff',
@@ -166,7 +179,7 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     fontSize: 14,
     marginBottom: 24,
-    fontFamily: 'Nunito-Regular',
+    fontFamily: 'NunitoRegular',
     borderColor: '#ccc',
     borderWidth: 1,
     color: '#183A36',
@@ -174,7 +187,7 @@ const styles = StyleSheet.create({
   noResults: {
     textAlign: 'center',
     marginTop: 50,
-    fontFamily: 'Nunito-Regular',
+    fontFamily: 'NunitoRegular',
     color: '#183A36',
   },
   card: {
@@ -190,7 +203,7 @@ const styles = StyleSheet.create({
     right: 32,                  
     backgroundColor: '#F18B7E',
     color: '#183A36',
-    fontFamily: 'Nunito-SemiBold',
+    fontFamily: 'NunitoSemiBold',
     paddingHorizontal: 8,
     paddingVertical: 4,
     borderRadius: 12,
@@ -211,14 +224,14 @@ const styles = StyleSheet.create({
   
   title: {
     fontSize: 20,
-    fontFamily: 'Sirenia-SemiBold',
+    fontFamily: 'SireniaSemiBold',
     marginTop: 4,
     marginBottom: 4,
     color: '#183A36',
   },
   summary: {
     fontSize: 14,
-    fontFamily: 'Nunito-Regular',
+    fontFamily: 'NunitoRegular',
     color: '#183A36',
   },
 })

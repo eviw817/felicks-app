@@ -1,17 +1,17 @@
 import React from "react";
-import { View, Text, TouchableOpacity, StyleSheet, ScrollView, Image } from "react-native";
+import { View, Text, TouchableOpacity, StyleSheet, ScrollView, Image, SafeAreaView } from "react-native";
 import { useFonts } from 'expo-font';
 import { useRouter } from "expo-router"; 
-import BaseText from "@/components/BaseText";
+import NavBar from "@/components/NavigationBar";
 
 export default function BewustzijnScreen() {
   const router = useRouter();
 
   const [fontsLoaded] = useFonts({
-    "Nunito-Regular": require("../../../assets/fonts/nunito/Nunito-Regular.ttf"),
-    "Nunito-SemiBold": require("../../../assets/fonts/nunito/Nunito-SemiBold.ttf"),
-    "Nunito-Bold": require("../../../assets/fonts/nunito/Nunito-Bold.ttf"),
-    'Sirenia-Medium': require("../../../assets/fonts/Sirenia/Sirenia_medium.ttf"),
+    "NunitoRegular": require("@/assets/fonts/Nunito/NunitoRegular.ttf"),
+    "NunitoSemiBold": require("@/assets/fonts/Nunito/NunitoSemiBold.ttf"),
+    "NunitoBold": require("@/assets/fonts/Nunito/NunitoBold.ttf"),
+    'SireniaMedium': require("@/assets/fonts/Sirenia/SireniaMedium.ttf"),
   });
 
   if (!fontsLoaded) {
@@ -19,48 +19,75 @@ export default function BewustzijnScreen() {
   }
 
   const topics = [
-    { title: "VOEDING", image: require("../../../assets/images/voeding.png"), categorie: "voeding" },
-    { title: "VEILIGHEID", image: require("../../../assets/images/veiligheid.png"), categorie: "veiligheid" },
-    { title: "TRAINING", image: require("../../../assets/images/training.png"), categorie: "training" },
-    { title: "VERZORGING", image: require("../../../assets/images/verzorging.png"), categorie: "verzorging" },
-    { title: "ACTIVITEIT", image: require("../../../assets/images/activiteit.png"), categorie: "activiteit" },
+    { title: "VOEDING", image: require("@/assets/images/voeding.png"), categorie: "voeding" },
+    { title: "VEILIGHEID", image: require("@/assets/images/veiligheid.png"), categorie: "veiligheid" },
+    { title: "TRAINING", image: require("@/assets/images/training.png"), categorie: "training" },
+    { title: "VERZORGING", image: require("@/assets/images/verzorging.png"), categorie: "verzorging" },
+    { title: "ACTIVITEIT", image: require("@/assets/images/activiteit.png"), categorie: "activiteit" },
   ];
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Bewustzijn</Text>
-      <Text style={styles.subtitle}>Doe de quiz van de week</Text>
+    <View style={{ flex: 1, backgroundColor: "#FFFDF9" }}>
+      <SafeAreaView style={{ flex: 1 }}>
+        <ScrollView
+          contentContainerStyle={{
+            padding: 16,
+            gap: 25,
+            paddingBottom: 120, // extra space for navbar
+            backgroundColor: "#FFFDF9",
+          }}
+          showsVerticalScrollIndicator={false}
+        >
+          <Text style={{
+            fontSize: 24,
+            fontFamily: 'SireniaSemiBold',
+            marginTop: 75,
+            textAlign: "center",
+            color: "#183A36",
+          }}>Bewustzijn</Text>
+          <Text style={styles.subtitle}>Doe de quiz van de week</Text>
 
-      <TouchableOpacity style={styles.quizButton} onPress={() => router.push("/quizIndex")}>
-        <Text style={styles.quizButtonText}>QUIZ VAN DE WEEK</Text>
-      </TouchableOpacity>
-
-      <Text style={styles.learnMore}>Leer meer bij over:</Text>
-
-      <ScrollView contentContainerStyle={styles.buttonContainer}>
-        {topics.map((item, index) => (
-          <TouchableOpacity
-            key={index}
-            style={styles.infoButton}
-            onPress={() =>
-              router.push({
-                pathname: "/artikelsIndex",
-                params: { categorie: item.categorie },
-              })
-            }
-            
-          >
-            <View style={styles.infoContent}>
-              <Image source={item.image} style={styles.infoImage} />
-              <Text style={styles.infoButtonText}>{item.title}</Text>
-            </View>
+          <TouchableOpacity style={styles.quizButton} onPress={() => router.push("/quizIndex")}>
+            <Text style={styles.quizButtonText}>QUIZ VAN DE WEEK</Text>
           </TouchableOpacity>
-        ))}
-      </ScrollView>
+
+          <Text style={styles.learnMore}>Leer meer bij over:</Text>
+
+          <View style={styles.buttonContainer}>
+            {topics.map((item, index) => (
+              <TouchableOpacity
+                key={index}
+                style={styles.infoButton}
+                onPress={() =>
+                  router.push({
+                    pathname: "/artikelsIndex",
+                    params: { categorie: item.categorie },
+                  })
+                }
+              >
+                <View style={styles.infoContent}>
+                  <Image source={item.image} style={styles.infoImage} />
+                  <Text style={styles.infoButtonText}>{item.title}</Text>
+                </View>
+              </TouchableOpacity>
+            ))}
+          </View>
+        </ScrollView>
+        {/* Fixed navbar onderaan scherm */}
+        <View
+          style={{
+            position: "absolute",
+            bottom: 0,
+            left: 0,
+            right: 0,
+          }}
+        >
+          <NavBar />
+        </View>
+      </SafeAreaView>
     </View>
   );
 }
-
 
 const styles = StyleSheet.create({
   container: {
@@ -69,18 +96,19 @@ const styles = StyleSheet.create({
     padding: 16,
     gap: 25,
     color: "#183A36",
+    paddingBottom: 80,
   },
 
   title: {
     fontSize: 24,
-    fontFamily: 'Sirenia-Medium',
+    fontFamily: 'SireniaMedium',
     marginTop: 75,
     textAlign: "center",
   },
 
   subtitle: {
     fontSize: 18,
-    fontFamily: 'Nunito-SemiBold',
+    fontFamily: 'NunitoSemiBold',
     textAlign: "left",
   },
 
@@ -94,7 +122,7 @@ const styles = StyleSheet.create({
   },
 
   quizButtonText: {
-    fontFamily: 'Nunito-Bold',
+    fontFamily: 'NunitoBold',
     fontSize: 14,
     color: "#FFFDF9",
   },
@@ -102,7 +130,7 @@ const styles = StyleSheet.create({
   learnMore: {
     marginBottom: -13,
     fontSize: 18,
-    fontFamily: 'Nunito-SemiBold',
+    fontFamily: 'NunitoSemiBold',
   },
 
   buttonContainer: {
@@ -132,7 +160,7 @@ const styles = StyleSheet.create({
   },
 
   infoButtonText: {
-    fontFamily: 'Nunito-SemiBold',
+    fontFamily: 'NunitoBold',
     fontSize: 14,
   },
 });

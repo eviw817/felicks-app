@@ -13,8 +13,7 @@ import { faArrowLeft } from '@fortawesome/free-solid-svg-icons'
 import { useRouter } from 'expo-router'
 
 import BaseText from '@/components/BaseText'
-import { supabase } from '../../../../lib/supabaseClient'
-
+import { supabase } from '@/lib/supabaseClient'
 
 
 type DBQuizRow = {
@@ -278,7 +277,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 24,
-    fontFamily: 'Sirenia-Medium',
+    fontFamily: 'SireniaMedium',
     marginTop: 40,
     textAlign: "center",
   },
@@ -321,7 +320,7 @@ const styles = StyleSheet.create({
 
   optionText: {
     fontSize: 14,          
-    fontFamily: 'Nunito-Regular',
+    fontFamily: 'NunitoRegular',
   },
   continueButton: {
     marginTop: 32,
@@ -333,7 +332,7 @@ const styles = StyleSheet.create({
   },
   continueText: {
     fontSize: 14,
-    fontFamily: 'Nunito-Bold',
+    fontFamily: 'NunitoBold',
   },
 
   feedbackContainer: {

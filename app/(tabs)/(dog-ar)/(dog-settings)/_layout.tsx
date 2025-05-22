@@ -1,6 +1,6 @@
 import { Stack } from "expo-router";
 
-export default function HomepageLayout() {
+export default function DemoLayout() {
   return (
     <Stack
       screenOptions={{
@@ -14,7 +14,9 @@ export default function HomepageLayout() {
         },
       }}
     >
-      <Stack.Screen name="homepage" options={{ title: "Homepage" }} />
+      <Stack.Screen name="dogStart" options={{ title: "Start Dog Settings" }} />
+      <Stack.Screen name="dogBreed" options={{ title: "Choose Dog Breed" }} />
+      <Stack.Screen name="dogName" options={{ title: "Choose Dog Name" }} />
     </Stack>
   );
 }

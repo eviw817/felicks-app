@@ -6,8 +6,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 import BaseText from "@/components/BaseText";
 
-
 import { useRouter, Link } from "expo-router";
+import NavBar from "@/components/NavigationBar";
 
 export default function QuizIndex() {
   const router = useRouter();
@@ -43,7 +43,6 @@ export default function QuizIndex() {
         <Text style={styles.continueText}>DOORGAAN</Text>
       </Link>
 
-
     </View>
   );
 }
@@ -69,21 +68,21 @@ const styles = StyleSheet.create({
 
   title: {
     fontSize: 24,
-    fontFamily: 'Sirenia-Medium',
+    fontFamily: 'SireniaMedium',
     marginTop: 75,
     textAlign: "center",
   },
 
   question: {
     fontSize: 18,
-    fontFamily: 'Nunito-SemiBold',
+    fontFamily: 'NunitoSemiBold',
     marginBottom: 10,
     marginTop: 50,
   },
 
   description: {
     fontSize: 16,
-    fontFamily: 'Nunito-Regular',
+    fontFamily: 'NunitoRegular',
     marginBottom: 20,
   },
 
@@ -97,7 +96,7 @@ const styles = StyleSheet.create({
   },
 
   continueText: {
-    fontFamily: 'Nunito-Bold',
+    fontFamily: 'NunitoExtraBold',
     fontSize: 14,
     textAlign: "center",
   },

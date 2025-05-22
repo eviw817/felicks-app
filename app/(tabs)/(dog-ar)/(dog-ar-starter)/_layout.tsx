@@ -1,6 +1,6 @@
 import { Stack } from "expo-router";
 
-export default function HomepageLayout() {
+export default function DemoLayout() {
   return (
     <Stack
       screenOptions={{
@@ -14,7 +14,8 @@ export default function HomepageLayout() {
         },
       }}
     >
-      <Stack.Screen name="homepage" options={{ title: "Homepage" }} />
+      <Stack.Screen name="arLoader" options={{ title: "AR Loader" }} />
+      <Stack.Screen name="arStart" options={{ title: "AR start" }} />
     </Stack>
   );
 }
