@@ -5,7 +5,7 @@ type BeagleObjectProps = {} & Omit<Viro3DObject["props"], "source" | "type">;
 export const BeagleObject = ({ ...rest }: BeagleObjectProps) => {
   return (
     <Viro3DObject
-      source={require("../../../assets/glb/Beagle.glb")}
+      source={require("@/assets/glb/Beagle.glb")}
       type="GLB"
       {...rest}
     />

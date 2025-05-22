@@ -68,21 +68,21 @@ const styles = StyleSheet.create({
 
   title: {
     fontSize: 24,
-    fontFamily: 'Sirenia-Medium',
+    fontFamily: 'SireniaMedium',
     marginTop: 75,
     textAlign: "center",
   },
 
   question: {
     fontSize: 18,
-    fontFamily: 'Nunito-SemiBold',
+    fontFamily: 'NunitoSemiBold',
     marginBottom: 10,
     marginTop: 50,
   },
 
   description: {
     fontSize: 16,
-    fontFamily: 'Nunito-Regular',
+    fontFamily: 'NunitoRegular',
     marginBottom: 20,
   },
 
@@ -96,7 +96,7 @@ const styles = StyleSheet.create({
   },
 
   continueText: {
-    fontFamily: 'Nunito-Bold',
+    fontFamily: 'NunitoExtraBold',
     fontSize: 14,
     textAlign: "center",
   },

@@ -10,7 +10,6 @@ import {
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import BaseText from "@/components/BaseText";
-import NavBar from "@/components/NavigationBar";
 
 const STRAPI_BASE_URL = "https://landingspagina-felicks.onrender.com";
 
@@ -114,14 +113,14 @@ const styles = StyleSheet.create({
       header: {
         flex: 1,
         fontSize: 24,
-        fontFamily: "Sirenia-Medium",
+        fontFamily: "SireniaMedium",
         color: "#183A36",
         textAlign: "center",
       },
       badge: {
         alignSelf: "flex-start",
         backgroundColor: "#F18B7E",
-        fontFamily: "Nunito-SemiBold",
+        fontFamily: "NunitoSemiBold",
         fontSize: 12,
         paddingHorizontal: 10,
         paddingVertical: 4,
@@ -130,14 +129,14 @@ const styles = StyleSheet.create({
         
       },
       summary: {
-        fontFamily: "Nunito-MediumItalic",
+        fontFamily: "NunitoMediumItalic",
         fontSize: 14,
         color: "#183A36",
         marginBottom: 20,
         maxWidth: "95%",
       },
       body: {
-        fontFamily: "Nunito-Regular",
+        fontFamily: "NunitoRegular",
         fontSize: 14,
         color: "#183A36",
         marginTop: 24,
@@ -150,7 +149,7 @@ const styles = StyleSheet.create({
         backgroundColor: "#FFFDF9",
       },
       error: {
-        fontFamily: "Nunito-Regular",
+        fontFamily: "NunitoRegular",
         color: "#183A36",
         fontSize: 16,
       },

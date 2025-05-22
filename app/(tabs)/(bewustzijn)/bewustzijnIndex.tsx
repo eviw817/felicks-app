@@ -33,14 +33,14 @@ export default function BewustzijnScreen() {
           contentContainerStyle={{
             padding: 16,
             gap: 25,
-            paddingBottom: 100, // extra space for navbar
+            paddingBottom: 120, // extra space for navbar
             backgroundColor: "#FFFDF9",
           }}
           showsVerticalScrollIndicator={false}
         >
           <Text style={{
             fontSize: 24,
-            fontFamily: 'Sirenia-SemiBold',
+            fontFamily: 'SireniaSemiBold',
             marginTop: 75,
             textAlign: "center",
             color: "#183A36",
@@ -101,14 +101,14 @@ const styles = StyleSheet.create({
 
   title: {
     fontSize: 24,
-    fontFamily: 'Sirenia-Medium',
+    fontFamily: 'SireniaMedium',
     marginTop: 75,
     textAlign: "center",
   },
 
   subtitle: {
     fontSize: 18,
-    fontFamily: 'Nunito-SemiBold',
+    fontFamily: 'NunitoSemiBold',
     textAlign: "left",
   },
 
@@ -122,7 +122,7 @@ const styles = StyleSheet.create({
   },
 
   quizButtonText: {
-    fontFamily: 'Nunito-Bold',
+    fontFamily: 'NunitoBold',
     fontSize: 14,
     color: "#FFFDF9",
   },
@@ -130,7 +130,7 @@ const styles = StyleSheet.create({
   learnMore: {
     marginBottom: -13,
     fontSize: 18,
-    fontFamily: 'Nunito-SemiBold',
+    fontFamily: 'NunitoSemiBold',
   },
 
   buttonContainer: {
@@ -160,7 +160,7 @@ const styles = StyleSheet.create({
   },
 
   infoButtonText: {
-    fontFamily: 'Nunito-SemiBold',
+    fontFamily: 'NunitoBold',
     fontSize: 14,
   },
 });
