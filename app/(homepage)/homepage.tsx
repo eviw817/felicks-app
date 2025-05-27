@@ -6,11 +6,11 @@ import {
   SafeAreaView,
   Text,
   View,
-  ActivityIndicator,
   TouchableOpacity,
   Alert,
   Image,
 } from "react-native";
+import { useFonts } from "expo-font";
 import { Session } from "@supabase/supabase-js";
 import { supabase } from "@/lib/supabase";
 import { useRouter, Link } from "expo-router";
@@ -24,6 +24,11 @@ export default function HomepageScreen() {
   const [matchedDogs, setMatchedDogs] = useState<any[]>([]);
   const [likedDogIds, setLikedDogIds] = useState<string[]>([]);
   const router = useRouter();
+
+  const [fontsLoaded] = useFonts({
+    "Nunito-Regular": require("@/assets/fonts/nunito/Nunito-Regular.ttf"),
+    "Nunito-Bold": require("@/assets/fonts/nunito/Nunito-Bold.ttf"),
+  });
 
   useEffect(() => {
     const fetchData = async () => {
@@ -71,15 +76,12 @@ export default function HomepageScreen() {
     fetchData();
   }, []);
 
-  const getAgeCategory = (birthdate: string): string => {
+  const getAgeInYears = (birthdate: string): number => {
     const birth = new Date(birthdate);
     const now = new Date();
-    const age =
-      (now.getTime() - birth.getTime()) / (1000 * 60 * 60 * 24 * 365.25);
-    if (age < 1) return "Puppy";
-    if (age < 3) return "Jonge hond";
-    if (age < 8) return "Volwassen hond";
-    return "Senior";
+    return Math.floor(
+      (now.getTime() - birth.getTime()) / (1000 * 60 * 60 * 24 * 365.25)
+    );
   };
 
   const toggleLike = async (dogId: string) => {
@@ -109,40 +111,28 @@ export default function HomepageScreen() {
     }
   };
 
-  const getAgeInYears = (birthdate: string): number => {
-    const birth = new Date(birthdate);
-    const now = new Date();
-    return Math.floor(
-      (now.getTime() - birth.getTime()) / (1000 * 60 * 60 * 24 * 365.25)
-    );
-  };
+  if (!fontsLoaded) return null;
 
   return (
-    <SafeAreaView
-      style={{
-        flex: 1,
-        backgroundColor: "#97B8A5",
-        position: "relative",
-      }}
-    >
+    <SafeAreaView style={{ flex: 1, backgroundColor: "#cadace" }}>
+      <View style={{ position: "absolute", top: 70, right: 30 }}>
+        <Link href="/">
+          <FontAwesome name="envelope-o" size={28} color="#183A36" />
+        </Link>
+      </View>
       <View style={{ alignItems: "center" }}>
         <Text
           style={{
-            fontFamily: "Sirenia",
-            fontWeight: "semibold",
+            fontFamily: "Nunito-Bold",
             fontSize: 24,
             padding: 20,
             marginTop: 50,
             marginBottom: 30,
+            color: "#183A36",
           }}
         >
           Welkom {firstname || "Gast"}!
         </Text>
-      </View>
-      <View style={{ position: "absolute", top: 70, right: 30 }}>
-        <Link href="/">
-          <FontAwesome name="envelope-o" size={30} color="#183A36" />
-        </Link>
       </View>
 
       <ScrollView
@@ -154,22 +144,35 @@ export default function HomepageScreen() {
           padding: 20,
         }}
       >
-        {/* Quiz */}
         <View>
           <Text
             style={{
-              fontFamily: "Nunito",
-              fontWeight: "bold",
+              fontFamily: "Nunito-Bold",
               fontSize: 20,
               marginBottom: 10,
+              color: "#183A36",
             }}
           >
             Quiz van de week
           </Text>
-          <Text style={{ fontSize: 16, marginBottom: 6 }}>
+          <Text
+            style={{
+              fontFamily: "Nunito-Regular",
+              fontSize: 16,
+              marginBottom: 6,
+              color: "#183A36",
+            }}
+          >
             Ben jij klaar voor een hond? Doe de test!
           </Text>
-          <Text style={{ fontSize: 16, marginBottom: 12 }}>
+          <Text
+            style={{
+              fontFamily: "Nunito-Regular",
+              fontSize: 16,
+              marginBottom: 12,
+              color: "#183A36",
+            }}
+          >
             Doe nog snel de quiz van deze week, voor je informatie misloopt.
           </Text>
           <TouchableOpacity
@@ -181,12 +184,11 @@ export default function HomepageScreen() {
               marginBottom: 20,
             }}
             onPress={() => router.push("/")}
-            // router.push("/quizIndex")}
           >
             <Text
               style={{
                 color: "#FFFDF9",
-                fontWeight: "bold",
+                fontFamily: "Nunito-Bold",
                 textTransform: "uppercase",
               }}
             >
@@ -195,19 +197,25 @@ export default function HomepageScreen() {
           </TouchableOpacity>
         </View>
 
-        {/* Bewustzijn */}
         <View>
           <Text
             style={{
-              fontFamily: "Nunito",
-              fontWeight: "bold",
+              fontFamily: "Nunito-Bold",
               fontSize: 20,
               marginBottom: 10,
+              color: "#183A36",
             }}
           >
             Bewustzijn
           </Text>
-          <Text style={{ fontSize: 16, marginBottom: 12 }}>
+          <Text
+            style={{
+              fontFamily: "Nunito-Regular",
+              fontSize: 16,
+              marginBottom: 12,
+              color: "#183A36",
+            }}
+          >
             Denk je eraan een hond te nemen?
           </Text>
           <View
@@ -254,12 +262,11 @@ export default function HomepageScreen() {
               marginBottom: 20,
             }}
             onPress={() => router.push("/")}
-            // router.push("/artikelsIndex")}
           >
             <Text
               style={{
                 color: "#183A36",
-                fontWeight: "bold",
+                fontFamily: "Nunito-Bold",
                 textTransform: "uppercase",
               }}
             >
@@ -268,24 +275,57 @@ export default function HomepageScreen() {
           </TouchableOpacity>
         </View>
 
-        {/* Matches */}
         <View>
-          <Text style={{ fontSize: 20, fontWeight: "bold", marginBottom: 10 }}>
+          <Text
+            style={{
+              fontFamily: "Nunito-Bold",
+              fontSize: 20,
+              marginBottom: 10,
+              color: "#183A36",
+            }}
+          >
             Deze honden passen bij jouw profiel:
           </Text>
           {matchedDogs.length === 0 ? (
-            <Text style={{ fontSize: 16, marginBottom: 10, color: "#183A36" }}>
-              Geen matches gevonden.
-            </Text>
+            <>
+              <Text
+                style={{
+                  fontFamily: "Nunito-Regular",
+                  fontSize: 16,
+                  marginBottom: 10,
+                  color: "#183A36",
+                }}
+              >
+                Geen matches gevonden.
+              </Text>
+              <TouchableOpacity
+                style={{
+                  backgroundColor: "#97B8A5",
+                  padding: 12,
+                  borderRadius: 15,
+                  alignItems: "center",
+                  marginBottom: 20,
+                  marginTop: 10,
+                }}
+                onPress={() =>
+                  router.push("/(adoption_personality)/personality_traits")
+                }
+              >
+                <Text
+                  style={{
+                    color: "#FFFDF9",
+                    fontFamily: "Nunito-Bold",
+                    textTransform: "uppercase",
+                  }}
+                >
+                  Vul je adoptieprofiel in
+                </Text>
+              </TouchableOpacity>
+            </>
           ) : (
             matchedDogs.map((dog) => (
-              <TouchableOpacity
+              <View
                 key={dog.id}
-                onPress={() =>
-                  router.push(
-                    `/(adoption_personality)/dog-detail/${dog.id}` as any
-                  )
-                }
                 style={{
                   flexDirection: "row",
                   backgroundColor: "#FDE4D2",
@@ -296,98 +336,105 @@ export default function HomepageScreen() {
                   position: "relative",
                 }}
               >
-                <View
-                  style={{
-                    width: 90,
-                    backgroundColor: "#FFFDF9",
-                    borderRadius: 10,
-                    marginRight: 12,
-                    padding: 10,
-                    justifyContent: "center",
-                    alignItems: "center",
-                    alignSelf: "stretch",
-                  }}
+                <TouchableOpacity
+                  onPress={() =>
+                    router.push(`/(adoption_personality)/dog-detail/${dog.id}`)
+                  }
+                  style={{ flexDirection: "row", flex: 1 }}
                 >
-                  <Image
-                    source={require("@/assets/images/logo_felicks.png")}
+                  <View
                     style={{
-                      width: 75,
-                      height: 75,
-                      resizeMode: "contain",
-                    }}
-                  />
-                </View>
-
-                <View style={{ flex: 1 }}>
-                  <Text
-                    style={{
-                      fontSize: 18,
-                      fontWeight: "bold",
-                      marginBottom: 4,
+                      width: 90,
+                      backgroundColor: "#FFFDF9",
+                      borderRadius: 10,
+                      marginRight: 12,
+                      padding: 10,
+                      justifyContent: "center",
+                      alignItems: "center",
+                      alignSelf: "stretch",
                     }}
                   >
-                    {dog.name}
-                  </Text>
-                  <Text style={{ fontSize: 14, marginBottom: 2 }}>
-                    <Text style={{ fontWeight: "600" }}>Geboren op: </Text>
-                    {new Date(dog.birthdate).toLocaleDateString("nl-BE")} –{" "}
-                    {getAgeInYears(dog.birthdate)} jaar
-                  </Text>
-                  <Text style={{ fontSize: 14, marginBottom: 2 }}>
-                    <Text style={{ fontWeight: "600" }}>Ras: </Text>
-                    {dog.breed}
-                  </Text>
-                  <Text style={{ fontSize: 14, marginBottom: 2 }}>
-                    <Text style={{ fontWeight: "600" }}>Geslacht: </Text>
-                    {dog.gender === "male" ? "Reu" : "Teef"}
-                  </Text>
-                  <Text style={{ fontSize: 14 }}>
-                    <Text style={{ fontWeight: "600" }}>Asiel: </Text>
-                    {dog.shelter}
-                  </Text>
-                </View>
+                    <Image
+                      source={require("@/assets/images/logo_felicks.png")}
+                      style={{ width: 75, height: 75, resizeMode: "contain" }}
+                    />
+                  </View>
 
-                <TouchableOpacity
-                  onPress={() => toggleLike(dog.id)}
-                  style={{ position: "absolute", top: 10, right: 12 }}
-                >
-                  <Ionicons
-                    name={
-                      likedDogIds.includes(dog.id) ? "heart" : "heart-outline"
-                    }
-                    size={22}
-                    color={likedDogIds.includes(dog.id) ? "#C5533F" : "#183A36"}
-                  />
+                  <View style={{ flex: 1 }}>
+                    <Text
+                      style={{
+                        fontFamily: "Nunito-Bold",
+                        fontSize: 18,
+                        marginBottom: 4,
+                        color: "#183A36",
+                      }}
+                    >
+                      {dog.name}
+                    </Text>
+                    <Text
+                      style={{
+                        fontFamily: "Nunito-Regular",
+                        fontSize: 14,
+                        marginBottom: 2,
+                        color: "#183A36",
+                      }}
+                    >
+                      <Text style={{ fontWeight: "600" }}>Geboren op: </Text>
+                      {new Date(dog.birthdate).toLocaleDateString(
+                        "nl-BE"
+                      )} – {getAgeInYears(dog.birthdate)} jaar
+                    </Text>
+                    <Text
+                      style={{
+                        fontFamily: "Nunito-Regular",
+                        fontSize: 14,
+                        marginBottom: 2,
+                        color: "#183A36",
+                      }}
+                    >
+                      <Text style={{ fontWeight: "600" }}>Ras: </Text>
+                      {dog.breed}
+                    </Text>
+                    <Text
+                      style={{
+                        fontFamily: "Nunito-Regular",
+                        fontSize: 14,
+                        marginBottom: 2,
+                        color: "#183A36",
+                      }}
+                    >
+                      <Text style={{ fontWeight: "600" }}>Geslacht: </Text>
+                      {dog.gender === "male" ? "Reu" : "Teef"}
+                    </Text>
+                    <Text
+                      style={{
+                        fontFamily: "Nunito-Regular",
+                        fontSize: 14,
+                        color: "#183A36",
+                      }}
+                    >
+                      <Text style={{ fontWeight: "600" }}>Asiel: </Text>
+                      {dog.shelter}
+                    </Text>
+                  </View>
                 </TouchableOpacity>
-              </TouchableOpacity>
+
+                <View style={{ position: "absolute", top: 10, right: 12 }}>
+                  <TouchableOpacity onPress={() => toggleLike(dog.id)}>
+                    <Ionicons
+                      name={
+                        likedDogIds.includes(dog.id) ? "heart" : "heart-outline"
+                      }
+                      size={22}
+                      color="#183A36"
+                    />
+                  </TouchableOpacity>
+                </View>
+              </View>
             ))
           )}
         </View>
-
-        <TouchableOpacity
-          style={{
-            backgroundColor: "#97B8A5",
-            padding: 12,
-            borderRadius: 15,
-            alignItems: "center",
-            marginBottom: 20,
-          }}
-          onPress={() =>
-            router.push("/(adoption_personality)/personality_traits")
-          }
-        >
-          <Text
-            style={{
-              color: "#183A36",
-              fontWeight: "bold",
-              textTransform: "uppercase",
-            }}
-          >
-            Vul je adoptieprofiel in
-          </Text>
-        </TouchableOpacity>
       </ScrollView>
-
       <NavBar />
     </SafeAreaView>
   );
