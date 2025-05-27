@@ -12,7 +12,11 @@ const tabs = [
   },
   { name: "virtuele-hond", label: "Virtuele\nhond", icon: "paw" },
   { name: "bewustzijn", label: "Bewustzijn", icon: "bulb" },
-  { name: "profiel", label: "Profiel", icon: "person" },
+  {
+    name: "(profile)/profile",
+    label: "Profiel",
+    icon: "person",
+  },
 ];
 
 export default function NavBar() {

@@ -15,12 +15,16 @@ import { useFonts } from "expo-font";
 import { Ionicons } from "@expo/vector-icons";
 
 // ✅ Herbruikbare radiobutton component
-const RadioButton: React.FC<{ selected: boolean; onPress: () => void }> = ({
-  selected,
-  onPress,
-}) => (
-  <TouchableOpacity style={styles.radioOuter} onPress={onPress}>
-    {selected && <View style={styles.radioInner} />}
+const RadioButtonOption: React.FC<{
+  selected: boolean;
+  label: string;
+  onPress: () => void;
+}> = ({ selected, label, onPress }) => (
+  <TouchableOpacity style={styles.radioRow} onPress={onPress}>
+    <View style={styles.radioOuter}>
+      {selected && <View style={styles.radioInner} />}
+    </View>
+    <Text style={styles.answerText}>{label}</Text>
   </TouchableOpacity>
 );
 
@@ -33,7 +37,6 @@ export default function LivingSituation() {
     homeFrequency: "",
   });
 
-  // ✅ Font laden
   const [fontsLoaded] = useFonts({
     "Nunito-Regular": require("../../assets/fonts/nunito/Nunito-Regular.ttf"),
     "Nunito-Bold": require("../../assets/fonts/nunito/Nunito-Bold.ttf"),
@@ -41,37 +44,21 @@ export default function LivingSituation() {
 
   useEffect(() => {
     (async () => {
-      // ✅ Haal de gebruiker op
       const { data: userData, error: userError } =
         await supabase.auth.getUser();
 
-      if (userError || !userData?.user?.id) {
-        console.error("❌ Geen gebruiker gevonden:", userError?.message);
-        return;
-      }
+      if (userError || !userData?.user?.id) return;
 
       const uid = userData.user.id;
       setUserId(uid);
-      console.log("✅ Supabase user ID:", uid);
 
-      // ✅ Haal bestaande ingevulde antwoorden op (indien aanwezig)
-      const { data: existingProfile, error: fetchError } = await supabase
+      const { data: existingProfile } = await supabase
         .from("adoption_profiles")
         .select("living_situation, home_frequency")
         .eq("user_id", uid)
         .single();
 
-      if (fetchError) {
-        if (fetchError.code !== "PGRST116") {
-          console.error(
-            "❌ Fout bij ophalen bestaande antwoorden:",
-            fetchError.message
-          );
-        } else {
-          console.log("ℹ️ Geen bestaand profiel gevonden.");
-        }
-      } else if (existingProfile) {
-        console.log("✅ Bestaande antwoorden geladen:", existingProfile);
+      if (existingProfile) {
         setAnswers({
           livingSituation: existingProfile.living_situation || "",
           homeFrequency: existingProfile.home_frequency || "",
@@ -82,43 +69,24 @@ export default function LivingSituation() {
 
   if (!fontsLoaded) return null;
 
-  // ✅ Bijwerken van antwoord + opslaan in DB
   const handleAnswer = async (
     question: "livingSituation" | "homeFrequency",
     value: string
   ) => {
-    // Update lokale state
     const newAnswers = { ...answers, [question]: value };
     setAnswers(newAnswers);
 
-    console.log("🟡 Antwoord aangepast:", question, "→", value);
-    console.log("📦 Huidige answer state:", newAnswers);
+    if (!userId) return;
 
-    // Controleer of userId beschikbaar is
-    if (!userId) {
-      console.error("❌ userId is niet beschikbaar");
-      return;
-    }
-
-    // Bouw payload met actuele waarden
     const payload = {
       user_id: userId,
       living_situation: newAnswers.livingSituation,
       home_frequency: newAnswers.homeFrequency,
     };
 
-    console.log("📤 Payload voor Supabase upsert:", payload);
-
-    // ✅ Supabase upsert (insert of update bij bestaande user_id)
-    const { error } = await supabase
-      .from("adoption_profiles")
-      .upsert([payload], { onConflict: "user_id" }); // moet array zijn
-
-    if (error) {
-      console.error("❌ DB save error:", error.message);
-    } else {
-      console.log("✅ Payload opgeslagen in DB");
-    }
+    await supabase.from("adoption_profiles").upsert([payload], {
+      onConflict: "user_id",
+    });
   };
 
   const canNext =
@@ -157,45 +125,38 @@ export default function LivingSituation() {
 
   return (
     <SafeAreaView style={styles.container}>
-      {/* Terugknop */}
       <TouchableOpacity style={styles.back} onPress={() => router.back()}>
         <Ionicons name="arrow-back" size={24} color="#183A36" />
       </TouchableOpacity>
 
       <Text style={styles.title}>Woonsituatie</Text>
 
-      {/* voortgangsbalk */}
       <View style={styles.progressBar}>
         <View style={styles.progressFill1} />
       </View>
 
-      {/* Vraag 1 */}
       <Text style={styles.question}>Waar woon je?</Text>
       {livingOptions.map((opt) => (
-        <View key={opt.value} style={styles.radioRow}>
-          <RadioButton
-            selected={answers.livingSituation === opt.value}
-            onPress={() => handleAnswer("livingSituation", opt.value)}
-          />
-          <Text style={styles.answerText}>{opt.label}</Text>
-        </View>
+        <RadioButtonOption
+          key={opt.value}
+          label={opt.label}
+          selected={answers.livingSituation === opt.value}
+          onPress={() => handleAnswer("livingSituation", opt.value)}
+        />
       ))}
 
-      {/* Vraag 2 */}
       <Text style={[styles.question, { marginTop: 32 }]}>
         Hoe vaak ben je thuis?
       </Text>
       {homeOptions.map((opt) => (
-        <View key={opt.value} style={styles.radioRow}>
-          <RadioButton
-            selected={answers.homeFrequency === opt.value}
-            onPress={() => handleAnswer("homeFrequency", opt.value)}
-          />
-          <Text style={styles.answerText}>{opt.label}</Text>
-        </View>
+        <RadioButtonOption
+          key={opt.value}
+          label={opt.label}
+          selected={answers.homeFrequency === opt.value}
+          onPress={() => handleAnswer("homeFrequency", opt.value)}
+        />
       ))}
 
-      {/* Volgende knop */}
       <TouchableOpacity
         style={[styles.button, !canNext && styles.buttonDisabled]}
         onPress={() => router.push("/experience_size")}
@@ -207,7 +168,6 @@ export default function LivingSituation() {
   );
 }
 
-// ✅ Styling
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -236,8 +196,6 @@ const styles = StyleSheet.create({
     width: "14.28%",
     height: "100%",
     backgroundColor: "#FFD87E",
-    borderTopRightRadius: 3,
-    borderBottomRightRadius: 3,
   },
   question: {
     fontFamily: "Nunito-Bold",
@@ -261,9 +219,9 @@ const styles = StyleSheet.create({
     marginRight: 12,
   },
   radioInner: {
-    width: 12,
-    height: 12,
-    borderRadius: 6,
+    width: 20,
+    height: 20,
+    borderRadius: 10,
     backgroundColor: "#97B8A5",
   },
   answerText: {

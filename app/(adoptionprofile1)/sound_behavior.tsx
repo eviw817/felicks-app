@@ -14,13 +14,11 @@ import { supabase } from "../../lib/supabase";
 import { useFonts } from "expo-font";
 import { Ionicons } from "@expo/vector-icons";
 
-const RadioButton: React.FC<{ selected: boolean; onPress: () => void }> = ({
-  selected,
-  onPress,
-}) => (
-  <TouchableOpacity style={styles.radioOuter} onPress={onPress}>
+// Alleen visuele radiobutton
+const RadioButton: React.FC<{ selected: boolean }> = ({ selected }) => (
+  <View style={styles.radioOuter}>
     {selected && <View style={styles.radioInner} />}
-  </TouchableOpacity>
+  </View>
 );
 
 export default function SoundBehavior() {
@@ -38,7 +36,6 @@ export default function SoundBehavior() {
 
   useEffect(() => {
     (async () => {
-      const { data: session } = await supabase.auth.getSession();
       const {
         data: { user },
       } = await supabase.auth.getUser();
@@ -58,7 +55,6 @@ export default function SoundBehavior() {
             error.message
           );
         } else if (data) {
-          console.log("✅ Bestaande antwoorden:", data);
           setAnswers({
             barking: data.barking || "",
             training: data.training || "",
@@ -131,26 +127,28 @@ export default function SoundBehavior() {
 
       <Text style={styles.question}>Hoeveel mag je hond blaffen?</Text>
       {barkingOptions.map((opt) => (
-        <View key={opt.value} style={styles.radioRow}>
-          <RadioButton
-            selected={answers.barking === opt.value}
-            onPress={() => handleAnswer("barking", opt.value)}
-          />
+        <TouchableOpacity
+          key={opt.value}
+          style={styles.radioRow}
+          onPress={() => handleAnswer("barking", opt.value)}
+        >
+          <RadioButton selected={answers.barking === opt.value} />
           <Text style={styles.answerText}>{opt.label}</Text>
-        </View>
+        </TouchableOpacity>
       ))}
 
       <Text style={[styles.question, { marginTop: 32 }]}>
         Hoe belangrijk is training voor jou?
       </Text>
       {trainingOptions.map((opt) => (
-        <View key={opt.value} style={styles.radioRow}>
-          <RadioButton
-            selected={answers.training === opt.value}
-            onPress={() => handleAnswer("training", opt.value)}
-          />
+        <TouchableOpacity
+          key={opt.value}
+          style={styles.radioRow}
+          onPress={() => handleAnswer("training", opt.value)}
+        >
+          <RadioButton selected={answers.training === opt.value} />
           <Text style={styles.answerText}>{opt.label}</Text>
-        </View>
+        </TouchableOpacity>
       ))}
 
       <TouchableOpacity
@@ -217,9 +215,9 @@ const styles = StyleSheet.create({
     marginRight: 12,
   },
   radioInner: {
-    width: 12,
-    height: 12,
-    borderRadius: 6,
+    width: 20,
+    height: 20,
+    borderRadius: 10,
     backgroundColor: "#97B8A5",
   },
   answerText: {

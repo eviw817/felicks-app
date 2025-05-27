@@ -14,13 +14,11 @@ import { supabase } from "../../lib/supabase";
 import { useFonts } from "expo-font";
 import { Ionicons } from "@expo/vector-icons";
 
-const RadioButton: React.FC<{ selected: boolean; onPress: () => void }> = ({
-  selected,
-  onPress,
-}) => (
-  <TouchableOpacity style={styles.radioOuter} onPress={onPress}>
+// Enkel visueel icoon
+const RadioButton: React.FC<{ selected: boolean }> = ({ selected }) => (
+  <View style={styles.radioOuter}>
     {selected && <View style={styles.radioInner} />}
-  </TouchableOpacity>
+  </View>
 );
 
 export default function ActivityPersonality() {
@@ -45,7 +43,6 @@ export default function ActivityPersonality() {
 
       setUserId(user.id);
 
-      // ✅ Ophalen van bestaande antwoorden
       const { data, error } = await supabase
         .from("adoption_profiles")
         .select("activity_level, personality")
@@ -76,7 +73,7 @@ export default function ActivityPersonality() {
 
     if (!userId) return;
 
-    const payload: Record<string, any> = {
+    const payload = {
       user_id: userId,
       activity_level: newAnswers.activity,
       personality: newAnswers.personality,
@@ -133,26 +130,28 @@ export default function ActivityPersonality() {
 
       <Text style={styles.question}>Hoe actief ben je?</Text>
       {activityOptions.map((opt) => (
-        <View key={opt.value} style={styles.radioRow}>
-          <RadioButton
-            selected={answers.activity === opt.value}
-            onPress={() => handleAnswer("activity", opt.value)}
-          />
+        <TouchableOpacity
+          key={opt.value}
+          style={styles.radioRow}
+          onPress={() => handleAnswer("activity", opt.value)}
+        >
+          <RadioButton selected={answers.activity === opt.value} />
           <Text style={styles.answerText}>{opt.label}</Text>
-        </View>
+        </TouchableOpacity>
       ))}
 
       <Text style={[styles.question, { marginTop: 32 }]}>
         Wat zoek je in een hond?
       </Text>
       {personalityOptions.map((opt) => (
-        <View key={opt.value} style={styles.radioRow}>
-          <RadioButton
-            selected={answers.personality === opt.value}
-            onPress={() => handleAnswer("personality", opt.value)}
-          />
+        <TouchableOpacity
+          key={opt.value}
+          style={styles.radioRow}
+          onPress={() => handleAnswer("personality", opt.value)}
+        >
+          <RadioButton selected={answers.personality === opt.value} />
           <Text style={styles.answerText}>{opt.label}</Text>
-        </View>
+        </TouchableOpacity>
       ))}
 
       <TouchableOpacity
@@ -219,9 +218,9 @@ const styles = StyleSheet.create({
     marginRight: 12,
   },
   radioInner: {
-    width: 12,
-    height: 12,
-    borderRadius: 6,
+    width: 20,
+    height: 20,
+    borderRadius: 10,
     backgroundColor: "#97B8A5",
   },
   answerText: {

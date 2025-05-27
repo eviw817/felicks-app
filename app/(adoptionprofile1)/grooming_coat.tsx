@@ -14,13 +14,11 @@ import { supabase } from "../../lib/supabase";
 import { useFonts } from "expo-font";
 import { Ionicons } from "@expo/vector-icons";
 
-const RadioButton: React.FC<{ selected: boolean; onPress: () => void }> = ({
-  selected,
-  onPress,
-}) => (
-  <TouchableOpacity style={styles.radioOuter} onPress={onPress}>
+// Alleen visuele radiobutton
+const RadioButton: React.FC<{ selected: boolean }> = ({ selected }) => (
+  <View style={styles.radioOuter}>
     {selected && <View style={styles.radioInner} />}
-  </TouchableOpacity>
+  </View>
 );
 
 export default function GroomingCoat() {
@@ -36,7 +34,6 @@ export default function GroomingCoat() {
     "Nunito-Bold": require("../../assets/fonts/nunito/Nunito-Bold.ttf"),
   });
 
-  // ✅ Ophalen van bestaande antwoorden
   useEffect(() => {
     (async () => {
       const {
@@ -45,7 +42,6 @@ export default function GroomingCoat() {
       if (user) {
         setUserId(user.id);
 
-        // Ophalen bestaande antwoorden
         const { data, error } = await supabase
           .from("adoption_profiles")
           .select("grooming, shedding")
@@ -69,7 +65,6 @@ export default function GroomingCoat() {
 
   if (!fontsLoaded) return null;
 
-  // ✅ Bijwerken van antwoord in state + Supabase
   const handleAnswer = async (
     question: "grooming" | "shedding",
     value: string
@@ -125,26 +120,28 @@ export default function GroomingCoat() {
 
       <Text style={styles.question}>Hoeveel verzorging wil je geven?</Text>
       {groomingOptions.map((opt) => (
-        <View key={opt.value} style={styles.radioRow}>
-          <RadioButton
-            selected={answers.grooming === opt.value}
-            onPress={() => handleAnswer("grooming", opt.value)}
-          />
+        <TouchableOpacity
+          key={opt.value}
+          style={styles.radioRow}
+          onPress={() => handleAnswer("grooming", opt.value)}
+        >
+          <RadioButton selected={answers.grooming === opt.value} />
           <Text style={styles.answerText}>{opt.label}</Text>
-        </View>
+        </TouchableOpacity>
       ))}
 
       <Text style={[styles.question, { marginTop: 32 }]}>
         Wat vind je van hondenhaar in huis?
       </Text>
       {sheddingOptions.map((opt) => (
-        <View key={opt.value} style={styles.radioRow}>
-          <RadioButton
-            selected={answers.shedding === opt.value}
-            onPress={() => handleAnswer("shedding", opt.value)}
-          />
+        <TouchableOpacity
+          key={opt.value}
+          style={styles.radioRow}
+          onPress={() => handleAnswer("shedding", opt.value)}
+        >
+          <RadioButton selected={answers.shedding === opt.value} />
           <Text style={styles.answerText}>{opt.label}</Text>
-        </View>
+        </TouchableOpacity>
       ))}
 
       <TouchableOpacity
@@ -211,9 +208,9 @@ const styles = StyleSheet.create({
     marginRight: 12,
   },
   radioInner: {
-    width: 12,
-    height: 12,
-    borderRadius: 6,
+    width: 20,
+    height: 20,
+    borderRadius: 10,
     backgroundColor: "#97B8A5",
   },
   answerText: {

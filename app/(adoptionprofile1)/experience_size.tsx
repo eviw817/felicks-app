@@ -14,13 +14,10 @@ import { supabase } from "../../lib/supabase";
 import { useFonts } from "expo-font";
 import { Ionicons } from "@expo/vector-icons";
 
-const RadioButton: React.FC<{ selected: boolean; onPress: () => void }> = ({
-  selected,
-  onPress,
-}) => (
-  <TouchableOpacity style={styles.radioOuter} onPress={onPress}>
+const RadioButton: React.FC<{ selected: boolean }> = ({ selected }) => (
+  <View style={styles.radioOuter}>
     {selected && <View style={styles.radioInner} />}
-  </TouchableOpacity>
+  </View>
 );
 
 export default function ExperienceSize() {
@@ -36,7 +33,6 @@ export default function ExperienceSize() {
     "Nunito-Bold": require("../../assets/fonts/nunito/Nunito-Bold.ttf"),
   });
 
-  // ✅ Haal Supabase user ID op
   useEffect(() => {
     (async () => {
       const { data: session } = await supabase.auth.getSession();
@@ -67,7 +63,6 @@ export default function ExperienceSize() {
     })();
   }, []);
 
-  // ✅ Als fonts nog niet geladen zijn, toon niets
   if (!fontsLoaded) return null;
 
   const handleAnswer = async (
@@ -76,9 +71,6 @@ export default function ExperienceSize() {
   ) => {
     const newAnswers = { ...answers, [question]: value };
     setAnswers(newAnswers);
-
-    console.log("🟡 Antwoord aangepast:", question, "→", value);
-    console.log("📦 Huidige answer state:", newAnswers);
 
     if (!userId || typeof userId !== "string") {
       console.error("❌ Ongeldige userId:", userId);
@@ -91,14 +83,11 @@ export default function ExperienceSize() {
       preferred_size: newAnswers.preferredSize,
     };
 
-    console.log("📤 Payload voor Supabase upsert:", payload);
-
     const { error } = await supabase
       .from("adoption_profiles")
       .upsert([payload], { onConflict: "user_id" });
 
     if (error) console.error("❌ DB save error:", error.message);
-    else console.log("✅ Antwoorden opgeslagen:", payload);
   };
 
   const canNext = answers.experience !== "" && answers.preferredSize !== "";
@@ -137,26 +126,28 @@ export default function ExperienceSize() {
 
       <Text style={styles.question}>Hoeveel ervaring heb je met honden?</Text>
       {experienceOptions.map((opt) => (
-        <View key={opt.value} style={styles.radioRow}>
-          <RadioButton
-            selected={answers.experience === opt.value}
-            onPress={() => handleAnswer("experience", opt.value)}
-          />
+        <TouchableOpacity
+          key={opt.value}
+          style={styles.radioRow}
+          onPress={() => handleAnswer("experience", opt.value)}
+        >
+          <RadioButton selected={answers.experience === opt.value} />
           <Text style={styles.answerText}>{opt.label}</Text>
-        </View>
+        </TouchableOpacity>
       ))}
 
       <Text style={[styles.question, { marginTop: 32 }]}>
         Hoe groot mag je hond zijn?
       </Text>
       {sizeOptions.map((opt) => (
-        <View key={opt.value} style={styles.radioRow}>
-          <RadioButton
-            selected={answers.preferredSize === opt.value}
-            onPress={() => handleAnswer("preferredSize", opt.value)}
-          />
+        <TouchableOpacity
+          key={opt.value}
+          style={styles.radioRow}
+          onPress={() => handleAnswer("preferredSize", opt.value)}
+        >
+          <RadioButton selected={answers.preferredSize === opt.value} />
           <Text style={styles.answerText}>{opt.label}</Text>
-        </View>
+        </TouchableOpacity>
       ))}
 
       <TouchableOpacity
@@ -195,7 +186,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   progressFill2: {
-    width: "28.56%", // 2/7 stappen
+    width: "28.56%",
     height: "100%",
     backgroundColor: "#FFD87E",
     borderTopRightRadius: 3,
@@ -223,9 +214,9 @@ const styles = StyleSheet.create({
     marginRight: 12,
   },
   radioInner: {
-    width: 12,
-    height: 12,
-    borderRadius: 6,
+    width: 20,
+    height: 20,
+    borderRadius: 10,
     backgroundColor: "#97B8A5",
   },
   answerText: {

@@ -14,13 +14,11 @@ import { supabase } from "../../lib/supabase";
 import { useFonts } from "expo-font";
 import { Ionicons } from "@expo/vector-icons";
 
-const RadioButton: React.FC<{ selected: boolean; onPress: () => void }> = ({
-  selected,
-  onPress,
-}) => (
-  <TouchableOpacity style={styles.radioOuter} onPress={onPress}>
+// Alleen visuele radiobutton
+const RadioButton: React.FC<{ selected: boolean }> = ({ selected }) => (
+  <View style={styles.radioOuter}>
     {selected && <View style={styles.radioInner} />}
-  </TouchableOpacity>
+  </View>
 );
 
 export default function FamilyEnvironment() {
@@ -46,7 +44,6 @@ export default function FamilyEnvironment() {
       const userId = user.id;
       setUserId(userId);
 
-      // ✅ Ophalen van bestaande antwoorden
       const { data, error } = await supabase
         .from("adoption_profiles")
         .select("has_children, has_pets")
@@ -72,7 +69,7 @@ export default function FamilyEnvironment() {
     setAnswers(newAnswers);
     if (!userId) return;
 
-    const payload: Record<string, any> = {
+    const payload = {
       user_id: userId,
       has_children: newAnswers.children,
       has_pets: newAnswers.otherPets,
@@ -112,26 +109,28 @@ export default function FamilyEnvironment() {
 
       <Text style={styles.question}>Woon je samen met kinderen?</Text>
       {childrenOptions.map((opt) => (
-        <View key={opt.value} style={styles.radioRow}>
-          <RadioButton
-            selected={answers.children === opt.value}
-            onPress={() => handleAnswer("children", opt.value)}
-          />
+        <TouchableOpacity
+          key={opt.value}
+          style={styles.radioRow}
+          onPress={() => handleAnswer("children", opt.value)}
+        >
+          <RadioButton selected={answers.children === opt.value} />
           <Text style={styles.answerText}>{opt.label}</Text>
-        </View>
+        </TouchableOpacity>
       ))}
 
       <Text style={[styles.question, { marginTop: 32 }]}>
         Heb je al andere huisdieren?
       </Text>
       {otherPetsOptions.map((opt) => (
-        <View key={opt.value} style={styles.radioRow}>
-          <RadioButton
-            selected={answers.otherPets === opt.value}
-            onPress={() => handleAnswer("otherPets", opt.value)}
-          />
+        <TouchableOpacity
+          key={opt.value}
+          style={styles.radioRow}
+          onPress={() => handleAnswer("otherPets", opt.value)}
+        >
+          <RadioButton selected={answers.otherPets === opt.value} />
           <Text style={styles.answerText}>{opt.label}</Text>
-        </View>
+        </TouchableOpacity>
       ))}
 
       <TouchableOpacity
@@ -198,9 +197,9 @@ const styles = StyleSheet.create({
     marginRight: 12,
   },
   radioInner: {
-    width: 12,
-    height: 12,
-    borderRadius: 6,
+    width: 20,
+    height: 20,
+    borderRadius: 10,
     backgroundColor: "#97B8A5",
   },
   answerText: {
