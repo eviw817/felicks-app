@@ -14,16 +14,10 @@ import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import { supabase } from "../../lib/supabase";
 
-const RadioButton = ({
-  selected,
-  onPress,
-}: {
-  selected: boolean;
-  onPress: () => void;
-}) => (
-  <TouchableOpacity style={styles.radioOuter} onPress={onPress}>
+const RadioButton = ({ selected }: { selected: boolean }) => (
+  <View style={styles.radioOuter}>
     {selected && <View style={styles.radioInner} />}
-  </TouchableOpacity>
+  </View>
 );
 
 export default function Energy() {
@@ -74,7 +68,7 @@ export default function Energy() {
     if (error) {
       Alert.alert("Fout", "Kon voorkeuren niet opslaan.");
     } else {
-      router.push("/matching"); // Volgende stap in flow
+      router.push("/matching");
     }
   };
 
@@ -93,11 +87,13 @@ export default function Energy() {
 
   return (
     <SafeAreaView style={styles.container}>
-      <TouchableOpacity style={styles.back} onPress={() => router.back()}>
-        <Ionicons name="arrow-back" size={24} color="#183A36" />
-      </TouchableOpacity>
-
-      <Text style={styles.title}>Training en energie</Text>
+      <View style={styles.header}>
+        <TouchableOpacity onPress={() => router.back()}>
+          <Ionicons name="arrow-back" size={24} color="#183A36" />
+        </TouchableOpacity>
+        <Text style={styles.title}>Training en energie</Text>
+        <View style={{ width: 24 }} />
+      </View>
 
       <View style={styles.progressBar}>
         <View style={[styles.progressFill, { width: "62.5%" }]} />
@@ -107,13 +103,15 @@ export default function Energy() {
         Hoe belangrijk is het voor u dat de hond getraind is?
       </Text>
       {trainingOptions.map((opt) => (
-        <View key={opt.value} style={styles.radioRow}>
-          <RadioButton
-            selected={trainingImportance === opt.value}
-            onPress={() => setTrainingImportance(opt.value)}
-          />
+        <TouchableOpacity
+          key={opt.value}
+          style={styles.radioRow}
+          onPress={() => setTrainingImportance(opt.value)}
+          activeOpacity={0.8}
+        >
+          <RadioButton selected={trainingImportance === opt.value} />
           <Text style={styles.answerText}>{opt.label}</Text>
-        </View>
+        </TouchableOpacity>
       ))}
 
       <Text style={[styles.question, { marginTop: 32 }]}>
@@ -121,13 +119,15 @@ export default function Energy() {
         activiteiten, of eentje die liever binnen ontspant?
       </Text>
       {energyOptions.map((opt) => (
-        <View key={opt.value} style={styles.radioRow}>
-          <RadioButton
-            selected={energyPreference === opt.value}
-            onPress={() => setEnergyPreference(opt.value)}
-          />
+        <TouchableOpacity
+          key={opt.value}
+          style={styles.radioRow}
+          onPress={() => setEnergyPreference(opt.value)}
+          activeOpacity={0.8}
+        >
+          <RadioButton selected={energyPreference === opt.value} />
           <Text style={styles.answerText}>{opt.label}</Text>
-        </View>
+        </TouchableOpacity>
       ))}
 
       <TouchableOpacity
@@ -148,13 +148,17 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingTop: Platform.OS === "ios" ? 20 : 50,
   },
-  back: { paddingBottom: 8 },
+  header: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    marginBottom: 10,
+  },
   title: {
     fontSize: 20,
-    fontWeight: "bold",
+    fontFamily: "Sirenia-Regular",
     color: "#183A36",
-    textAlign: "left",
-    marginBottom: 10,
+    textAlign: "center",
   },
   progressBar: {
     width: "100%",
@@ -192,9 +196,9 @@ const styles = StyleSheet.create({
     marginRight: 12,
   },
   radioInner: {
-    width: 12,
-    height: 12,
-    borderRadius: 6,
+    width: 20,
+    height: 20,
+    borderRadius: 10,
     backgroundColor: "#97B8A5",
   },
   answerText: {
@@ -213,7 +217,7 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     fontSize: 16,
-    color: "#FFFDF9",
+    color: "#183A36",
     fontWeight: "bold",
   },
 });

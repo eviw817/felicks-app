@@ -14,16 +14,10 @@ import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import { supabase } from "../../lib/supabase";
 
-const Checkbox = ({
-  selected,
-  onPress,
-}: {
-  selected: boolean;
-  onPress: () => void;
-}) => (
-  <TouchableOpacity style={styles.radioOuter} onPress={onPress}>
+const Checkbox = ({ selected }: { selected: boolean }) => (
+  <View style={styles.radioOuter}>
     {selected && <View style={styles.radioInner} />}
-  </TouchableOpacity>
+  </View>
 );
 
 export default function PersonalityTraits() {
@@ -73,7 +67,7 @@ export default function PersonalityTraits() {
     if (error) {
       Alert.alert("Fout", "Kon voorkeur niet opslaan.");
     } else {
-      router.push("/dog_age"); // Volgende scherm
+      router.push("/dog_age");
     }
   };
 
@@ -91,11 +85,13 @@ export default function PersonalityTraits() {
 
   return (
     <SafeAreaView style={styles.container}>
-      <TouchableOpacity style={styles.back} onPress={() => router.back()}>
-        <Ionicons name="arrow-back" size={24} color="#183A36" />
-      </TouchableOpacity>
-
-      <Text style={styles.title}>Algemene persoonlijkheid</Text>
+      <View style={styles.headerContainer}>
+        <TouchableOpacity onPress={() => router.back()}>
+          <Ionicons name="arrow-back" size={24} color="#183A36" />
+        </TouchableOpacity>
+        <Text style={styles.centeredTitle}>Algemene persoonlijkheid</Text>
+        <View style={{ width: 24 }} />
+      </View>
 
       <View style={styles.progressBar}>
         <View style={[styles.progressFill, { width: "12.5%" }]} />
@@ -106,13 +102,15 @@ export default function PersonalityTraits() {
       </Text>
 
       {options.map((trait) => (
-        <View key={trait} style={styles.radioRow}>
-          <Checkbox
-            selected={selectedTraits.includes(trait)}
-            onPress={() => toggleTrait(trait)}
-          />
+        <TouchableOpacity
+          key={trait}
+          style={styles.radioRow}
+          onPress={() => toggleTrait(trait)}
+          activeOpacity={0.8}
+        >
+          <Checkbox selected={selectedTraits.includes(trait)} />
           <Text style={styles.answerText}>{trait}</Text>
-        </View>
+        </TouchableOpacity>
       ))}
 
       <TouchableOpacity
@@ -136,13 +134,21 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingTop: Platform.OS === "ios" ? 20 : 50,
   },
-  back: { paddingBottom: 8 },
-  title: {
+  headerContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    marginBottom: 16,
+    position: "relative",
+  },
+  centeredTitle: {
+    position: "absolute",
+    left: 0,
+    right: 0,
+    textAlign: "center",
     fontSize: 20,
-    fontWeight: "bold",
+    fontFamily: "Sirenia-Regular",
     color: "#183A36",
-    textAlign: "left",
-    marginBottom: 10,
   },
   progressBar: {
     width: "100%",
@@ -180,9 +186,9 @@ const styles = StyleSheet.create({
     marginRight: 12,
   },
   radioInner: {
-    width: 12,
-    height: 12,
-    borderRadius: 6,
+    width: 20,
+    height: 20,
+    borderRadius: 10,
     backgroundColor: "#97B8A5",
   },
   answerText: {

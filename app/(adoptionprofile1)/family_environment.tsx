@@ -169,7 +169,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 8,
   },
   headerTitle: {
-    fontFamily: "Nunito-Bold",
+    fontFamily: "Sirenia-Regular",
     fontSize: 20,
     color: "#183A36",
     textAlign: "center",

@@ -14,16 +14,10 @@ import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import { supabase } from "../../lib/supabase";
 
-const RadioButton = ({
-  selected,
-  onPress,
-}: {
-  selected: boolean;
-  onPress: () => void;
-}) => (
-  <TouchableOpacity style={styles.radioOuter} onPress={onPress}>
+const RadioButton = ({ selected }: { selected: boolean }) => (
+  <View style={styles.radioOuter}>
     {selected && <View style={styles.radioInner} />}
-  </TouchableOpacity>
+  </View>
 );
 
 export default function TrainingLevel() {
@@ -60,9 +54,7 @@ export default function TrainingLevel() {
         user_id: userId,
         training_level: trainingLevel,
       },
-      {
-        onConflict: "user_id",
-      }
+      { onConflict: "user_id" }
     );
 
     if (error) {
@@ -83,11 +75,13 @@ export default function TrainingLevel() {
 
   return (
     <SafeAreaView style={styles.container}>
-      <TouchableOpacity style={styles.back} onPress={() => router.back()}>
-        <Ionicons name="arrow-back" size={24} color="#183A36" />
-      </TouchableOpacity>
-
-      <Text style={styles.title}>Training</Text>
+      <View style={styles.header}>
+        <TouchableOpacity onPress={() => router.back()}>
+          <Ionicons name="arrow-back" size={24} color="#183A36" />
+        </TouchableOpacity>
+        <Text style={styles.title}>Training</Text>
+        <View style={{ width: 24 }} />
+      </View>
 
       <View style={styles.progressBar}>
         <View style={[styles.progressFill, { width: "37.5%" }]} />
@@ -98,13 +92,15 @@ export default function TrainingLevel() {
       </Text>
 
       {options.map((opt) => (
-        <View key={opt.value} style={styles.radioRow}>
-          <RadioButton
-            selected={trainingLevel === opt.value}
-            onPress={() => setTrainingLevel(opt.value)}
-          />
+        <TouchableOpacity
+          key={opt.value}
+          style={styles.radioRow}
+          onPress={() => setTrainingLevel(opt.value)}
+          activeOpacity={0.8}
+        >
+          <RadioButton selected={trainingLevel === opt.value} />
           <Text style={styles.answerText}>{opt.label}</Text>
-        </View>
+        </TouchableOpacity>
       ))}
 
       <TouchableOpacity
@@ -125,13 +121,17 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingTop: Platform.OS === "ios" ? 20 : 50,
   },
-  back: { paddingBottom: 8 },
+  header: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    marginBottom: 10,
+  },
   title: {
     fontSize: 20,
-    fontWeight: "bold",
+    fontFamily: "Sirenia-Regular",
     color: "#183A36",
-    textAlign: "left",
-    marginBottom: 10,
+    textAlign: "center",
   },
   progressBar: {
     width: "100%",
@@ -169,9 +169,9 @@ const styles = StyleSheet.create({
     marginRight: 12,
   },
   radioInner: {
-    width: 12,
-    height: 12,
-    borderRadius: 6,
+    width: 20,
+    height: 20,
+    borderRadius: 10,
     backgroundColor: "#97B8A5",
   },
   answerText: {
@@ -190,7 +190,7 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     fontSize: 16,
-    color: "#FFFDF9",
+    color: "#183A36",
     fontWeight: "bold",
   },
 });

@@ -38,8 +38,10 @@ export default function LivingSituation() {
   });
 
   const [fontsLoaded] = useFonts({
-    "Nunito-Regular": require("../../assets/fonts/nunito/Nunito-Regular.ttf"),
-    "Nunito-Bold": require("../../assets/fonts/nunito/Nunito-Bold.ttf"),
+    "Nunito-Regular": require("@/assets/fonts/nunito/Nunito-Regular.ttf"),
+    "Nunito-Medium": require("@/assets/fonts/nunito/Nunito-Medium.ttf"),
+    "Nunito-Bold": require("@/assets/fonts/nunito/Nunito-Bold.ttf"),
+    "Sirenia-Regular": require("@/assets/fonts/Sirenia/SireniaRegular.ttf"),
   });
 
   useEffect(() => {
@@ -196,7 +198,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 8,
   },
   headerTitle: {
-    fontFamily: "Nunito-Bold",
+    fontFamily: "Sirenia-Regular",
     fontSize: 20,
     color: "#183A36",
     textAlign: "center",

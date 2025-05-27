@@ -14,16 +14,10 @@ import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import { supabase } from "../../lib/supabase";
 
-const RadioButton = ({
-  selected,
-  onPress,
-}: {
-  selected: boolean;
-  onPress: () => void;
-}) => (
-  <TouchableOpacity style={styles.radioOuter} onPress={onPress}>
+const RadioButton = ({ selected }: { selected: boolean }) => (
+  <View style={styles.radioOuter}>
     {selected && <View style={styles.radioInner} />}
-  </TouchableOpacity>
+  </View>
 );
 
 export default function Interaction() {
@@ -71,7 +65,7 @@ export default function Interaction() {
     if (error) {
       Alert.alert("Fout", "Kon voorkeuren niet opslaan.");
     } else {
-      router.push("/energy"); // volgende scherm
+      router.push("/energy");
     }
   };
 
@@ -90,11 +84,13 @@ export default function Interaction() {
 
   return (
     <SafeAreaView style={styles.container}>
-      <TouchableOpacity style={styles.back} onPress={() => router.back()}>
-        <Ionicons name="arrow-back" size={24} color="#183A36" />
-      </TouchableOpacity>
-
-      <Text style={styles.title}>Interactie</Text>
+      <View style={styles.header}>
+        <TouchableOpacity onPress={() => router.back()}>
+          <Ionicons name="arrow-back" size={24} color="#183A36" />
+        </TouchableOpacity>
+        <Text style={styles.title}>Interactie</Text>
+        <View style={{ width: 24 }} />
+      </View>
 
       <View style={styles.progressBar}>
         <View style={[styles.progressFill, { width: "50%" }]} />
@@ -104,26 +100,30 @@ export default function Interaction() {
         Hoe moet de interactie zijn tegenover kinderen?
       </Text>
       {interactionOptionsChildren.map((opt) => (
-        <View key={opt.value} style={styles.radioRow}>
-          <RadioButton
-            selected={childInteraction === opt.value}
-            onPress={() => setChildInteraction(opt.value)}
-          />
+        <TouchableOpacity
+          key={opt.value}
+          style={styles.radioRow}
+          onPress={() => setChildInteraction(opt.value)}
+          activeOpacity={0.8}
+        >
+          <RadioButton selected={childInteraction === opt.value} />
           <Text style={styles.answerText}>{opt.label}</Text>
-        </View>
+        </TouchableOpacity>
       ))}
 
       <Text style={[styles.question, { marginTop: 32 }]}>
         Hoe moet de interactie zijn tegenover andere honden?
       </Text>
       {interactionOptionsDogs.map((opt) => (
-        <View key={opt.value} style={styles.radioRow}>
-          <RadioButton
-            selected={dogInteraction === opt.value}
-            onPress={() => setDogInteraction(opt.value)}
-          />
+        <TouchableOpacity
+          key={opt.value}
+          style={styles.radioRow}
+          onPress={() => setDogInteraction(opt.value)}
+          activeOpacity={0.8}
+        >
+          <RadioButton selected={dogInteraction === opt.value} />
           <Text style={styles.answerText}>{opt.label}</Text>
-        </View>
+        </TouchableOpacity>
       ))}
 
       <TouchableOpacity
@@ -144,13 +144,17 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingTop: Platform.OS === "ios" ? 20 : 50,
   },
-  back: { paddingBottom: 8 },
+  header: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    marginBottom: 10,
+  },
   title: {
     fontSize: 20,
-    fontWeight: "bold",
+    fontFamily: "Sirenia-Regular",
     color: "#183A36",
-    textAlign: "left",
-    marginBottom: 10,
+    textAlign: "center",
   },
   progressBar: {
     width: "100%",
@@ -188,9 +192,9 @@ const styles = StyleSheet.create({
     marginRight: 12,
   },
   radioInner: {
-    width: 12,
-    height: 12,
-    borderRadius: 6,
+    width: 20,
+    height: 20,
+    borderRadius: 10,
     backgroundColor: "#97B8A5",
   },
   answerText: {

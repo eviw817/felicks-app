@@ -235,12 +235,19 @@ export default function AdoptieprofielResults() {
 
   return (
     <SafeAreaView style={styles.container}>
-      <TouchableOpacity style={styles.back} onPress={() => router.back()}>
-        <Ionicons name="arrow-back" size={24} color="#183A36" />
-      </TouchableOpacity>
+      <View style={styles.header}>
+        <View style={styles.headerSide}>
+          <TouchableOpacity onPress={() => router.back()}>
+            <Ionicons name="arrow-back" size={24} color="#183A36" />
+          </TouchableOpacity>
+        </View>
+        <View style={styles.headerCenter}>
+          <Text style={styles.title}>🎯 Topmatches</Text>
+        </View>
+        <View style={styles.headerSide} />
+      </View>
 
-      <ScrollView contentContainerStyle={{ paddingBottom: 80, paddingTop: 70 }}>
-        <Text style={styles.title}>🎯 Topmatches</Text>
+      <ScrollView contentContainerStyle={{ paddingBottom: 80 }}>
         {topMatches.length === 0 ? (
           <Text style={styles.empty}>Geen topmatches gevonden</Text>
         ) : (
@@ -269,11 +276,27 @@ export default function AdoptieprofielResults() {
 
 const styles = StyleSheet.create({
   container: { flex: 1, padding: 20, backgroundColor: "#fff" },
+  header: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    marginTop: 50,
+    marginBottom: 16,
+  },
+  headerSide: {
+    width: 40,
+    alignItems: "flex-start",
+  },
+  headerCenter: {
+    flex: 1,
+    alignItems: "center",
+  },
   title: {
-    fontSize: 22,
-    fontWeight: "bold",
-    marginBottom: 12,
+    fontFamily: "Sirenia-Regular",
+    fontSize: 20,
     color: "#183A36",
+    textAlign: "center",
+    marginBottom: 10,
   },
   name: { fontSize: 16, fontWeight: "600", color: "#183A36" },
   score: { fontSize: 14, color: "#97B8A5" },
@@ -284,23 +307,23 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   button: {
-    marginTop: 32,
+    marginTop: 40,
     backgroundColor: "#97B8A5",
-    padding: 14,
+    paddingVertical: 14,
+    paddingHorizontal: 24,
     borderRadius: 25,
     alignItems: "center",
   },
-  buttonText: { color: "#fff", fontWeight: "bold", fontSize: 16 },
+  buttonText: {
+    fontFamily: "Nunito-Bold",
+    fontSize: 16,
+    color: "#183A36",
+    textTransform: "uppercase",
+  },
   empty: {
     fontSize: 14,
     textAlign: "center",
     color: "#888",
     marginVertical: 12,
-  },
-  back: {
-    position: "absolute",
-    top: 50,
-    left: 20,
-    zIndex: 10,
   },
 });

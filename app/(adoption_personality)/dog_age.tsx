@@ -14,16 +14,10 @@ import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import { supabase } from "../../lib/supabase";
 
-const RadioButton = ({
-  selected,
-  onPress,
-}: {
-  selected: boolean;
-  onPress: () => void;
-}) => (
-  <TouchableOpacity style={styles.radioOuter} onPress={onPress}>
+const RadioButton = ({ selected }: { selected: boolean }) => (
+  <View style={styles.radioOuter}>
     {selected && <View style={styles.radioInner} />}
-  </TouchableOpacity>
+  </View>
 );
 
 export default function DogAge() {
@@ -47,7 +41,7 @@ export default function DogAge() {
         .eq("user_id", user.id)
         .single();
 
-      if (data && data.preferred_age) {
+      if (data?.preferred_age) {
         setPreferredAge(data.preferred_age);
       }
     })();
@@ -67,7 +61,7 @@ export default function DogAge() {
     if (error) {
       Alert.alert("Fout", "Kon voorkeur niet opslaan.");
     } else {
-      router.push("/training_level"); // Volgende stap in flow
+      router.push("/training_level");
     }
   };
 
@@ -81,11 +75,13 @@ export default function DogAge() {
 
   return (
     <SafeAreaView style={styles.container}>
-      <TouchableOpacity style={styles.back} onPress={() => router.back()}>
-        <Ionicons name="arrow-back" size={24} color="#183A36" />
-      </TouchableOpacity>
-
-      <Text style={styles.title}>Leeftijd</Text>
+      <View style={styles.header}>
+        <TouchableOpacity onPress={() => router.back()}>
+          <Ionicons name="arrow-back" size={24} color="#183A36" />
+        </TouchableOpacity>
+        <Text style={styles.title}>Leeftijd</Text>
+        <View style={{ width: 24 }} />
+      </View>
 
       <View style={styles.progressBar}>
         <View style={[styles.progressFill, { width: "25%" }]} />
@@ -94,13 +90,15 @@ export default function DogAge() {
       <Text style={styles.question}>Welke leeftijd heeft je ideale hond?</Text>
 
       {options.map((opt) => (
-        <View key={opt.value} style={styles.radioRow}>
-          <RadioButton
-            selected={preferredAge === opt.value}
-            onPress={() => setPreferredAge(opt.value)}
-          />
+        <TouchableOpacity
+          key={opt.value}
+          style={styles.radioRow}
+          onPress={() => setPreferredAge(opt.value)}
+          activeOpacity={0.8}
+        >
+          <RadioButton selected={preferredAge === opt.value} />
           <Text style={styles.answerText}>{opt.label}</Text>
-        </View>
+        </TouchableOpacity>
       ))}
 
       <TouchableOpacity
@@ -121,13 +119,17 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingTop: Platform.OS === "ios" ? 20 : 50,
   },
-  back: { paddingBottom: 8 },
+  header: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    marginBottom: 10,
+  },
   title: {
     fontSize: 20,
-    fontWeight: "bold",
+    fontFamily: "Sirenia-Regular",
     color: "#183A36",
-    textAlign: "left",
-    marginBottom: 10,
+    textAlign: "center",
   },
   progressBar: {
     width: "100%",
@@ -165,9 +167,9 @@ const styles = StyleSheet.create({
     marginRight: 12,
   },
   radioInner: {
-    width: 12,
-    height: 12,
-    borderRadius: 6,
+    width: 20,
+    height: 20,
+    borderRadius: 10,
     backgroundColor: "#97B8A5",
   },
   answerText: {
