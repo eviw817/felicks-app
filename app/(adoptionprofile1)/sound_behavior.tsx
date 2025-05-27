@@ -14,7 +14,6 @@ import { supabase } from "../../lib/supabase";
 import { useFonts } from "expo-font";
 import { Ionicons } from "@expo/vector-icons";
 
-// Alleen visuele radiobutton
 const RadioButton: React.FC<{ selected: boolean }> = ({ selected }) => (
   <View style={styles.radioOuter}>
     {selected && <View style={styles.radioInner} />}
@@ -116,11 +115,16 @@ export default function SoundBehavior() {
 
   return (
     <SafeAreaView style={styles.container}>
-      <TouchableOpacity style={styles.back} onPress={() => router.back()}>
-        <Ionicons name="arrow-back" size={24} color="#183A36" />
-      </TouchableOpacity>
+      <View style={styles.headerContainer}>
+        <TouchableOpacity
+          style={styles.backButton}
+          onPress={() => router.back()}
+        >
+          <Ionicons name="arrow-back" size={24} color="#183A36" />
+        </TouchableOpacity>
+        <Text style={styles.headerTitle}>Geluid & gedrag</Text>
+      </View>
 
-      <Text style={styles.title}>Geluid & gedrag</Text>
       <View style={styles.progressBar}>
         <View style={styles.progressFill5} />
       </View>
@@ -169,13 +173,26 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingTop: Platform.OS === "ios" ? 20 : 50,
   },
-  back: { paddingVertical: 8 },
-  title: {
+  headerContainer: {
+    position: "relative",
+    justifyContent: "center",
+    alignItems: "center",
+    height: 40,
+    marginBottom: 16,
+  },
+  backButton: {
+    position: "absolute",
+    left: 0,
+    top: 0,
+    bottom: 0,
+    justifyContent: "center",
+    paddingHorizontal: 8,
+  },
+  headerTitle: {
     fontFamily: "Nunito-Bold",
     fontSize: 20,
     color: "#183A36",
     textAlign: "center",
-    marginBottom: 16,
   },
   progressBar: {
     width: "100%",

@@ -55,10 +55,7 @@ export default function ExperienceSize() {
       }
 
       if (error) {
-        console.warn(
-          "⚠️ Geen bestaande antwoorden gevonden of andere fout:",
-          error.message
-        );
+        console.warn("⚠️ Geen bestaande antwoorden gevonden:", error.message);
       }
     })();
   }, []);
@@ -72,12 +69,9 @@ export default function ExperienceSize() {
     const newAnswers = { ...answers, [question]: value };
     setAnswers(newAnswers);
 
-    if (!userId || typeof userId !== "string") {
-      console.error("❌ Ongeldige userId:", userId);
-      return;
-    }
+    if (!userId) return;
 
-    const payload: Record<string, any> = {
+    const payload = {
       user_id: userId,
       experience_level: newAnswers.experience,
       preferred_size: newAnswers.preferredSize,
@@ -115,11 +109,17 @@ export default function ExperienceSize() {
 
   return (
     <SafeAreaView style={styles.container}>
-      <TouchableOpacity style={styles.back} onPress={() => router.back()}>
-        <Ionicons name="arrow-back" size={24} color="#183A36" />
-      </TouchableOpacity>
+      {/* Header met terugknop én titel gecentreerd */}
+      <View style={styles.headerContainer}>
+        <TouchableOpacity
+          style={styles.backButton}
+          onPress={() => router.back()}
+        >
+          <Ionicons name="arrow-back" size={24} color="#183A36" />
+        </TouchableOpacity>
+        <Text style={styles.headerTitle}>Ervaring & grootte</Text>
+      </View>
 
-      <Text style={styles.title}>Ervaring & grootte</Text>
       <View style={styles.progressBar}>
         <View style={styles.progressFill2} />
       </View>
@@ -168,13 +168,26 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingTop: Platform.OS === "ios" ? 20 : 50,
   },
-  back: { paddingVertical: 8 },
-  title: {
+  headerContainer: {
+    position: "relative",
+    justifyContent: "center",
+    alignItems: "center",
+    height: 40,
+    marginBottom: 16,
+  },
+  backButton: {
+    position: "absolute",
+    left: 0,
+    top: 0,
+    bottom: 0,
+    justifyContent: "center",
+    paddingHorizontal: 8,
+  },
+  headerTitle: {
     fontFamily: "Nunito-Bold",
     fontSize: 20,
     color: "#183A36",
     textAlign: "center",
-    marginBottom: 16,
   },
   progressBar: {
     width: "100%",
