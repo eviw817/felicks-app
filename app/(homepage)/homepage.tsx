@@ -27,7 +27,9 @@ export default function HomepageScreen() {
 
   const [fontsLoaded] = useFonts({
     "Nunito-Regular": require("@/assets/fonts/nunito/Nunito-Regular.ttf"),
+    "Nunito-Medium": require("@/assets/fonts/nunito/Nunito-Medium.ttf"),
     "Nunito-Bold": require("@/assets/fonts/nunito/Nunito-Bold.ttf"),
+    "Sirenia-Regular": require("@/assets/fonts/Sirenia/SireniaRegular.ttf"),
   });
 
   useEffect(() => {
@@ -123,7 +125,7 @@ export default function HomepageScreen() {
       <View style={{ alignItems: "center" }}>
         <Text
           style={{
-            fontFamily: "Nunito-Bold",
+            fontFamily: "Sirenia-Regular",
             fontSize: 24,
             padding: 20,
             marginTop: 50,
@@ -240,17 +242,22 @@ export default function HomepageScreen() {
             />
             <View style={{ flex: 1 }}>
               <Text
-                style={{ fontWeight: "bold", fontSize: 16, marginBottom: 6 }}
+                style={{
+                  fontWeight: "bold",
+                  fontSize: 16,
+                  marginBottom: 6,
+                  color: "#183A36",
+                }}
               >
                 EHBO voor honden: wat moet je weten?
               </Text>
-              <Text style={{ fontSize: 12 }}>
+              <Text style={{ fontSize: 12, color: "#183A36" }}>
                 Je hond kan gewond raken of ziek worden. Met een paar
                 EHBO-vaardigheden ben jij de redder in nood!
               </Text>
             </View>
           </View>
-          <Text style={{ fontSize: 14, marginBottom: 10 }}>
+          <Text style={{ fontSize: 14, marginBottom: 10, color: "#183A36" }}>
             Lees eerst wat je moet weten over hondenbezit.
           </Text>
           <TouchableOpacity
@@ -313,7 +320,7 @@ export default function HomepageScreen() {
               >
                 <Text
                   style={{
-                    color: "#FFFDF9",
+                    color: "#183A36",
                     fontFamily: "Nunito-Bold",
                     textTransform: "uppercase",
                   }}
@@ -379,10 +386,16 @@ export default function HomepageScreen() {
                         color: "#183A36",
                       }}
                     >
-                      <Text style={{ fontWeight: "600" }}>Geboren op: </Text>
-                      {new Date(dog.birthdate).toLocaleDateString(
-                        "nl-BE"
-                      )} – {getAgeInYears(dog.birthdate)} jaar
+                      <Text
+                        style={{
+                          fontFamily: "Nunito-Medium",
+                          color: "#183A36",
+                        }}
+                      >
+                        Geboren op:{" "}
+                      </Text>
+                      {new Date(dog.birthdate).toLocaleDateString("nl-BE")} –{" "}
+                      {getAgeInYears(dog.birthdate)} jaar
                     </Text>
                     <Text
                       style={{
@@ -392,7 +405,14 @@ export default function HomepageScreen() {
                         color: "#183A36",
                       }}
                     >
-                      <Text style={{ fontWeight: "600" }}>Ras: </Text>
+                      <Text
+                        style={{
+                          fontFamily: "Nunito-Medium",
+                          color: "#183A36",
+                        }}
+                      >
+                        Ras:{" "}
+                      </Text>
                       {dog.breed}
                     </Text>
                     <Text
@@ -403,7 +423,14 @@ export default function HomepageScreen() {
                         color: "#183A36",
                       }}
                     >
-                      <Text style={{ fontWeight: "600" }}>Geslacht: </Text>
+                      <Text
+                        style={{
+                          fontFamily: "Nunito-Medium",
+                          color: "#183A36",
+                        }}
+                      >
+                        Geslacht:{" "}
+                      </Text>
                       {dog.gender === "male" ? "Reu" : "Teef"}
                     </Text>
                     <Text
@@ -413,7 +440,14 @@ export default function HomepageScreen() {
                         color: "#183A36",
                       }}
                     >
-                      <Text style={{ fontWeight: "600" }}>Asiel: </Text>
+                      <Text
+                        style={{
+                          fontFamily: "Nunito-Medium",
+                          color: "#183A36",
+                        }}
+                      >
+                        Asiel:{" "}
+                      </Text>
                       {dog.shelter}
                     </Text>
                   </View>
