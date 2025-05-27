@@ -15,12 +15,14 @@ import { Session } from "@supabase/supabase-js";
 import { supabase } from "@/lib/supabase";
 import { useRouter, Link } from "expo-router";
 import NavBar from "@/components/NavigationBar";
+import { Ionicons, FontAwesome } from "@expo/vector-icons";
 
 export default function HomepageScreen() {
   const [session, setSession] = useState<Session | null>(null);
   const [firstname, setFirstname] = useState("Gast");
   const [loading, setLoading] = useState(true);
   const [matchedDogs, setMatchedDogs] = useState<any[]>([]);
+  const [likedDogIds, setLikedDogIds] = useState<string[]>([]);
   const router = useRouter();
 
   useEffect(() => {
@@ -56,6 +58,13 @@ export default function HomepageScreen() {
 
       const dogs = matches?.map((m) => m.adoption_dogs).filter(Boolean) || [];
       setMatchedDogs(dogs);
+
+      const { data: liked } = await supabase
+        .from("liked_dogs")
+        .select("dog_id")
+        .eq("user_id", session.user.id);
+
+      setLikedDogIds(liked?.map((l) => l.dog_id) || []);
       setLoading(false);
     };
 
@@ -73,142 +82,201 @@ export default function HomepageScreen() {
     return "Senior";
   };
 
-  if (loading) {
-    return (
-      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-        <ActivityIndicator size="large" color="#183A36" />
-      </View>
+  const toggleLike = async (dogId: string) => {
+    const userId = session?.user?.id;
+    if (!userId) return;
+
+    const alreadyLiked = likedDogIds.includes(dogId);
+
+    if (alreadyLiked) {
+      const { error } = await supabase
+        .from("liked_dogs")
+        .delete()
+        .match({ user_id: userId, dog_id: dogId });
+
+      if (!error) {
+        setLikedDogIds((prev) => prev.filter((id) => id !== dogId));
+      }
+    } else {
+      const { error } = await supabase.from("liked_dogs").insert({
+        user_id: userId,
+        dog_id: dogId,
+      });
+
+      if (!error) {
+        setLikedDogIds((prev) => [...prev, dogId]);
+      }
+    }
+  };
+
+  const getAgeInYears = (birthdate: string): number => {
+    const birth = new Date(birthdate);
+    const now = new Date();
+    return Math.floor(
+      (now.getTime() - birth.getTime()) / (1000 * 60 * 60 * 24 * 365.25)
     );
-  }
+  };
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: "#FFFDF9" }}>
-      <ScrollView contentContainerStyle={{ paddingBottom: 100 }}>
+    <SafeAreaView
+      style={{
+        flex: 1,
+        backgroundColor: "#97B8A5",
+        position: "relative",
+      }}
+    >
+      <View style={{ alignItems: "center" }}>
         <Text
           style={{
             fontFamily: "Sirenia",
             fontWeight: "semibold",
             fontSize: 24,
-            textAlign: "center",
             padding: 20,
+            marginTop: 50,
+            marginBottom: 30,
           }}
         >
-          Welkom {firstname}!
+          Welkom {firstname || "Gast"}!
         </Text>
+      </View>
+      <View style={{ position: "absolute", top: 70, right: 30 }}>
+        <Link href="/">
+          <FontAwesome name="envelope-o" size={30} color="#183A36" />
+        </Link>
+      </View>
 
-        {/* Quiz van de week */}
-        <View style={{ paddingHorizontal: 20 }}>
-          <Text style={{ fontSize: 20, fontWeight: "bold", marginBottom: 6 }}>
-            Quiz van de week
-          </Text>
-          <Text style={{ fontSize: 16 }}>
-            Ben jij klaar voor een hond? Doe de test!
-          </Text>
-          <Text style={{ fontSize: 14, marginVertical: 8 }}>
-            Doe nog snel de quiz van deze week, voor je informatie misloopt.
-          </Text>
-          <Link
-            href="/(adoption_personality)/personality_traits"
+      <ScrollView
+        contentContainerStyle={{ flexGrow: 1, paddingBottom: 30 }}
+        style={{
+          backgroundColor: "#FFFDF9",
+          borderTopLeftRadius: 20,
+          borderTopRightRadius: 20,
+          padding: 20,
+        }}
+      >
+        {/* Quiz */}
+        <View>
+          <Text
             style={{
-              backgroundColor: "#F18B7E",
-              color: "#FFFDF9",
-              padding: 12,
-              borderRadius: 15,
-              textAlign: "center",
+              fontFamily: "Nunito",
               fontWeight: "bold",
-              marginVertical: 10,
+              fontSize: 20,
+              marginBottom: 10,
             }}
           >
-            START DE QUIZ
-          </Link>
+            Quiz van de week
+          </Text>
+          <Text style={{ fontSize: 16, marginBottom: 6 }}>
+            Ben jij klaar voor een hond? Doe de test!
+          </Text>
+          <Text style={{ fontSize: 16, marginBottom: 12 }}>
+            Doe nog snel de quiz van deze week, voor je informatie misloopt.
+          </Text>
+          <TouchableOpacity
+            style={{
+              backgroundColor: "#F18B7E",
+              padding: 12,
+              borderRadius: 15,
+              alignItems: "center",
+              marginBottom: 20,
+            }}
+            onPress={() => router.push("/")}
+            // router.push("/quizIndex")}
+          >
+            <Text
+              style={{
+                color: "#FFFDF9",
+                fontWeight: "bold",
+                textTransform: "uppercase",
+              }}
+            >
+              start de quiz
+            </Text>
+          </TouchableOpacity>
         </View>
 
         {/* Bewustzijn */}
-        <View style={{ paddingHorizontal: 20, marginTop: 20 }}>
-          <Text style={{ fontSize: 20, fontWeight: "bold", marginBottom: 6 }}>
+        <View>
+          <Text
+            style={{
+              fontFamily: "Nunito",
+              fontWeight: "bold",
+              fontSize: 20,
+              marginBottom: 10,
+            }}
+          >
             Bewustzijn
           </Text>
-          <Text style={{ fontSize: 16, marginBottom: 4 }}>
+          <Text style={{ fontSize: 16, marginBottom: 12 }}>
             Denk je eraan een hond te nemen?
           </Text>
-
           <View
             style={{
               flexDirection: "row",
-              alignItems: "center",
-              gap: 12,
-              marginVertical: 10,
+              alignItems: "flex-start",
+              marginBottom: 12,
             }}
           >
             <Image
-              source={{
-                uri: "https://letsgokids.co.nz/wp-content/uploads/2024/03/Pet-First-Aid-Kits-3.jpg",
-              }}
               style={{
                 width: 120,
                 height: 120,
                 borderRadius: 15,
-                borderColor: "#97B8A5",
                 borderWidth: 1,
+                borderColor: "#97B8A5",
+                marginRight: 12,
+              }}
+              source={{
+                uri: "https://letsgokids.co.nz/wp-content/uploads/2024/03/Pet-First-Aid-Kits-3.jpg",
               }}
             />
             <View style={{ flex: 1 }}>
-              <Text style={{ fontWeight: "bold" }}>
+              <Text
+                style={{ fontWeight: "bold", fontSize: 16, marginBottom: 6 }}
+              >
                 EHBO voor honden: wat moet je weten?
               </Text>
-              <Text style={{ fontSize: 13 }}>
+              <Text style={{ fontSize: 12 }}>
                 Je hond kan gewond raken of ziek worden. Met een paar
                 EHBO-vaardigheden ben jij de redder in nood!
               </Text>
             </View>
           </View>
-
-          <Text style={{ fontSize: 14, marginBottom: 4 }}>
+          <Text style={{ fontSize: 14, marginBottom: 10 }}>
             Lees eerst wat je moet weten over hondenbezit.
           </Text>
-
-          <Link
-            href="/"
+          <TouchableOpacity
             style={{
               backgroundColor: "#FFD87E",
               padding: 12,
               borderRadius: 15,
-              textAlign: "center",
-              fontWeight: "bold",
-              marginTop: 10,
-              display: "flex",
+              alignItems: "center",
+              marginBottom: 20,
             }}
+            onPress={() => router.push("/")}
+            // router.push("/artikelsIndex")}
           >
-            LEES MEER TIPS
-          </Link>
+            <Text
+              style={{
+                color: "#183A36",
+                fontWeight: "bold",
+                textTransform: "uppercase",
+              }}
+            >
+              Lees meer tips
+            </Text>
+          </TouchableOpacity>
         </View>
 
-        {/* Profiel-matches */}
-        <View style={{ paddingHorizontal: 20, marginTop: 30 }}>
+        {/* Matches */}
+        <View>
           <Text style={{ fontSize: 20, fontWeight: "bold", marginBottom: 10 }}>
             Deze honden passen bij jouw profiel:
           </Text>
-
           {matchedDogs.length === 0 ? (
-            <>
-              <Text style={{ fontSize: 16 }}>
-                Je hebt nog geen profiel ingevuld of er zijn geen matches.
-              </Text>
-              <Link
-                href="/(adoption_personality)/personality_traits"
-                style={{
-                  backgroundColor: "#F18B7E",
-                  padding: 12,
-                  borderRadius: 15,
-                  color: "#FFFDF9",
-                  marginTop: 10,
-                  textAlign: "center",
-                  fontWeight: "bold",
-                }}
-              >
-                Vul je profiel in
-              </Link>
-            </>
+            <Text style={{ fontSize: 16, marginBottom: 10, color: "#183A36" }}>
+              Geen matches gevonden.
+            </Text>
           ) : (
             matchedDogs.map((dog) => (
               <TouchableOpacity
@@ -219,29 +287,105 @@ export default function HomepageScreen() {
                   )
                 }
                 style={{
-                  flexDirection: "column",
+                  flexDirection: "row",
                   backgroundColor: "#FDE4D2",
-                  marginVertical: 8,
                   borderRadius: 15,
                   padding: 12,
+                  marginBottom: 16,
+                  alignItems: "center",
+                  position: "relative",
                 }}
               >
-                <Text
+                <View
                   style={{
-                    fontWeight: "bold",
-                    fontSize: 18,
-                    marginBottom: 4,
+                    width: 90,
+                    backgroundColor: "#FFFDF9",
+                    borderRadius: 10,
+                    marginRight: 12,
+                    padding: 10,
+                    justifyContent: "center",
+                    alignItems: "center",
+                    alignSelf: "stretch",
                   }}
                 >
-                  {dog.name}
-                </Text>
-                <Text>Ras: {dog.breed}</Text>
-                <Text>Leeftijd: {getAgeCategory(dog.birthdate)}</Text>
-                <Text>Asiel: {dog.shelter}</Text>
+                  <Image
+                    source={require("@/assets/images/logo_felicks.png")}
+                    style={{
+                      width: 75,
+                      height: 75,
+                      resizeMode: "contain",
+                    }}
+                  />
+                </View>
+
+                <View style={{ flex: 1 }}>
+                  <Text
+                    style={{
+                      fontSize: 18,
+                      fontWeight: "bold",
+                      marginBottom: 4,
+                    }}
+                  >
+                    {dog.name}
+                  </Text>
+                  <Text style={{ fontSize: 14, marginBottom: 2 }}>
+                    <Text style={{ fontWeight: "600" }}>Geboren op: </Text>
+                    {new Date(dog.birthdate).toLocaleDateString("nl-BE")} –{" "}
+                    {getAgeInYears(dog.birthdate)} jaar
+                  </Text>
+                  <Text style={{ fontSize: 14, marginBottom: 2 }}>
+                    <Text style={{ fontWeight: "600" }}>Ras: </Text>
+                    {dog.breed}
+                  </Text>
+                  <Text style={{ fontSize: 14, marginBottom: 2 }}>
+                    <Text style={{ fontWeight: "600" }}>Geslacht: </Text>
+                    {dog.gender === "male" ? "Reu" : "Teef"}
+                  </Text>
+                  <Text style={{ fontSize: 14 }}>
+                    <Text style={{ fontWeight: "600" }}>Asiel: </Text>
+                    {dog.shelter}
+                  </Text>
+                </View>
+
+                <TouchableOpacity
+                  onPress={() => toggleLike(dog.id)}
+                  style={{ position: "absolute", top: 10, right: 12 }}
+                >
+                  <Ionicons
+                    name={
+                      likedDogIds.includes(dog.id) ? "heart" : "heart-outline"
+                    }
+                    size={22}
+                    color={likedDogIds.includes(dog.id) ? "#C5533F" : "#183A36"}
+                  />
+                </TouchableOpacity>
               </TouchableOpacity>
             ))
           )}
         </View>
+
+        <TouchableOpacity
+          style={{
+            backgroundColor: "#97B8A5",
+            padding: 12,
+            borderRadius: 15,
+            alignItems: "center",
+            marginBottom: 20,
+          }}
+          onPress={() =>
+            router.push("/(adoption_personality)/personality_traits")
+          }
+        >
+          <Text
+            style={{
+              color: "#183A36",
+              fontWeight: "bold",
+              textTransform: "uppercase",
+            }}
+          >
+            Vul je adoptieprofiel in
+          </Text>
+        </TouchableOpacity>
       </ScrollView>
 
       <NavBar />
