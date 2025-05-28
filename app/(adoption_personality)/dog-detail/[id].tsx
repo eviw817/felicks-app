@@ -26,30 +26,44 @@ export default function DogDetail() {
         .select("*")
         .eq("id", id)
         .single();
+
+      console.log("🐶 Gevonden hond:", data);
+      console.log("🖼️ Images:", data?.images);
+
       setDog(data);
     })();
   }, [id]);
 
   if (!dog) return null;
 
+  let imageList: string[] = [];
+  try {
+    imageList =
+      typeof dog.images === "string" ? JSON.parse(dog.images) : dog.images;
+  } catch (e) {
+    console.error("❌ Fout bij parsen van images:", e);
+  }
+
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView>
-        <TouchableOpacity onPress={() => router.back()}>
-          <Ionicons name="arrow-back" size={24} color="#183A36" />
-        </TouchableOpacity>
+        <View style={styles.headerRow}>
+          <TouchableOpacity onPress={() => router.back()} style={styles.back}>
+            <Ionicons name="arrow-back" size={24} color="#183A36" />
+          </TouchableOpacity>
+          <Text style={styles.title}>{dog.name}</Text>
+        </View>
 
-        {/* Profielfoto hond */}
-        {dog.images?.length > 0 && (
+        {imageList && imageList.length > 0 && (
           <Image
-            source={{ uri: dog.images[0] }}
+            source={{
+              uri: `https://vgbuoxdfrbzqbqltcelz.supabase.co/storage/v1/object/public/${imageList[0]}`,
+            }}
             style={styles.avatar}
             resizeMode="cover"
           />
         )}
 
-        {/* Naam en iconen */}
-        <Text style={styles.name}>{dog.name}</Text>
         <View style={styles.iconRow}>
           <IconTag label={dog.size} icon="resize-outline" />
           <IconTag label={dog.activity_level} icon="walk-outline" />
@@ -61,7 +75,6 @@ export default function DogDetail() {
           )}
         </View>
 
-        {/* Kerninfo */}
         <View style={styles.section}>
           <Text style={styles.subtitle}>Info</Text>
           <Text style={styles.detail}>Ras: {dog.breed}</Text>
@@ -71,13 +84,11 @@ export default function DogDetail() {
           <Text style={styles.detail}>Asiel: {dog.shelter}</Text>
         </View>
 
-        {/* Beschrijving */}
         <View style={styles.section}>
           <Text style={styles.subtitle}>Beschrijving</Text>
           <Text style={styles.desc}>{dog.description}</Text>
         </View>
 
-        {/* Eigenschappen */}
         <View style={styles.section}>
           <Text style={styles.subtitle}>Eigenschappen</Text>
           {renderAttribute(
@@ -95,7 +106,22 @@ export default function DogDetail() {
           {renderAttribute("Hypoallergeen", dog.hypoallergenic)}
         </View>
 
-        {/* Adopteerknop */}
+        {imageList && imageList.length > 0 && (
+          <View style={styles.gallerySection}>
+            <Text style={styles.subtitle}>Foto's</Text>
+            {imageList.map((path, index) => (
+              <Image
+                key={index}
+                source={{
+                  uri: `https://vgbuoxdfrbzqbqltcelz.supabase.co/storage/v1/object/public/${path}`,
+                }}
+                style={styles.galleryImage}
+                resizeMode="cover"
+              />
+            ))}
+          </View>
+        )}
+
         <TouchableOpacity style={styles.adoptButton}>
           <Text style={styles.adoptButtonText}>Contacteer het asiel</Text>
         </TouchableOpacity>
@@ -104,7 +130,6 @@ export default function DogDetail() {
   );
 }
 
-// ✅ Herbruikbaar mini-label met icoon
 function IconTag({ label, icon }: { label: string; icon: any }) {
   return (
     <View style={styles.iconTag}>
@@ -114,7 +139,6 @@ function IconTag({ label, icon }: { label: string; icon: any }) {
   );
 }
 
-// ✅ Rij voor eigenschappen
 function renderAttribute(label: string, value: boolean) {
   return (
     <View style={styles.attrRow}>
@@ -133,6 +157,24 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#FFFDF9",
     padding: 16,
+    paddingTop: 50,
+    paddingBottom: 50,
+  },
+  headerRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    marginBottom: 12,
+  },
+  back: {
+    position: "absolute",
+    left: 0,
+  },
+  title: {
+    fontSize: 24,
+    fontFamily: "Sirenia-Regular",
+    color: "#183A36",
+    textAlign: "center",
   },
   avatar: {
     width: 120,
@@ -140,13 +182,6 @@ const styles = StyleSheet.create({
     borderRadius: 60,
     alignSelf: "center",
     marginVertical: 12,
-  },
-  name: {
-    fontSize: 28,
-    fontWeight: "bold",
-    color: "#183A36",
-    textAlign: "center",
-    marginBottom: 8,
   },
   iconRow: {
     flexDirection: "row",
@@ -158,7 +193,7 @@ const styles = StyleSheet.create({
   iconTag: {
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: "#F0F5F4",
+    backgroundColor: "#FDE4D2",
     borderRadius: 16,
     paddingHorizontal: 10,
     paddingVertical: 4,
@@ -200,15 +235,30 @@ const styles = StyleSheet.create({
     color: "#183A36",
   },
   adoptButton: {
-    marginTop: 20,
     backgroundColor: "#97B8A5",
-    paddingVertical: 14,
+    paddingVertical: 16,
+    paddingHorizontal: 24,
     borderRadius: 25,
     alignItems: "center",
+    justifyContent: "center",
+    minHeight: 48,
+    marginBottom: 24,
   },
   adoptButtonText: {
     fontSize: 16,
-    color: "#FFFDF9",
+    color: "#183A36",
     fontWeight: "bold",
+    textTransform: "uppercase",
+    textAlign: "center",
+  },
+  gallerySection: {
+    marginTop: 12,
+    gap: 12,
+  },
+  galleryImage: {
+    width: "100%",
+    aspectRatio: 1.2,
+    borderRadius: 0,
+    marginBottom: 10,
   },
 });

@@ -113,10 +113,6 @@ export default function Matching() {
           const match_score =
             total === 0 ? 0 : Math.round((score / total) * 100);
 
-          // Debug output
-          console.log(`Matchscore ${dog.name}:`, match_score);
-
-          // Upsert match naar adoption_matches
           const { error } = await supabase.from("adoption_matches").upsert(
             {
               user_id: user.id,
@@ -138,8 +134,6 @@ export default function Matching() {
       );
 
       const filtered = scored.filter((match) => match.score >= 50);
-      console.log("🐾 MATCHED DOGS:", filtered);
-
       setMatches(filtered.sort((a, b) => b.score - a.score));
       setLoading(false);
     })();
@@ -166,19 +160,15 @@ export default function Matching() {
 
   return (
     <SafeAreaView style={styles.container}>
-      <TouchableOpacity
-        style={styles.back}
-        onPress={() => router.push("/homepage")}
-      >
-        <Ionicons name="home-outline" size={24} color="#183A36" />
-      </TouchableOpacity>
-
-      <Text style={styles.title}>Jouw matches</Text>
+      <View style={styles.headerRow}>
+        <TouchableOpacity style={styles.back} onPress={() => router.back()}>
+          <Ionicons name="arrow-back" size={24} color="#183A36" />
+        </TouchableOpacity>
+        <Text style={styles.title}>Jouw matches</Text>
+      </View>
 
       {matches.length === 0 ? (
-        <Text style={{ fontSize: 16, textAlign: "center" }}>
-          Geen geschikte matches gevonden.
-        </Text>
+        <Text style={styles.noMatches}>Geen geschikte matches gevonden.</Text>
       ) : (
         <FlatList
           data={matches}
@@ -198,6 +188,15 @@ export default function Matching() {
           )}
         />
       )}
+
+      <View style={styles.homeButtonWrapper}>
+        <TouchableOpacity
+          style={styles.homeButton}
+          onPress={() => router.push("/homepage")}
+        >
+          <Text style={styles.homeButtonText}>Ga naar home</Text>
+        </TouchableOpacity>
+      </View>
     </SafeAreaView>
   );
 }
@@ -209,17 +208,28 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingTop: 50,
   },
+  headerRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    marginBottom: 16,
+  },
   back: {
-    marginBottom: 12,
+    position: "absolute",
+    left: 0,
   },
   title: {
     fontSize: 22,
-    fontWeight: "bold",
+    fontFamily: "Sirenia-Regular",
     color: "#183A36",
-    marginBottom: 16,
+  },
+  noMatches: {
+    fontSize: 16,
+    textAlign: "center",
+    color: "#183A36",
   },
   card: {
-    backgroundColor: "#F8F8F8",
+    backgroundColor: "#E2F0E7",
     borderRadius: 12,
     padding: 16,
     marginBottom: 12,
@@ -232,5 +242,21 @@ const styles = StyleSheet.create({
   score: {
     fontSize: 16,
     color: "#97B8A5",
+  },
+  homeButtonWrapper: {
+    marginTop: 20,
+    marginBottom: 24,
+  },
+  homeButton: {
+    backgroundColor: "#97B8A5",
+    paddingVertical: 14,
+    borderRadius: 25,
+    alignItems: "center",
+  },
+  homeButtonText: {
+    fontSize: 16,
+    color: "#183A36",
+    fontWeight: "bold",
+    textTransform: "uppercase",
   },
 });
