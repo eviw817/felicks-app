@@ -12,6 +12,7 @@ import { useRouter, Link } from "expo-router";
 import { supabase } from "../../../../lib/supabase";
 import { AppStateStatus } from "react-native";
 import { Session } from "@supabase/supabase-js";
+import { Ionicons } from "@expo/vector-icons";
 
 const LoginScreen = () => {
   const router = useRouter();
@@ -21,6 +22,7 @@ const LoginScreen = () => {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [session, setSession] = useState<Session | null>(null);
+  const [showPassword, setShowPassword] = useState(false);
 
   // Functie om te controleren of er tekst is ingevoerd
   const isEmailFilled = email.trim() !== "";
@@ -129,21 +131,35 @@ const LoginScreen = () => {
 
       {/* Wachtwoord input */}
       <Text style={styles.label}>Wachtwoord</Text>
-      <TextInput
-        style={[
-          styles.input,
-          passwordFocus || isPasswordFilled
-            ? styles.focusedInput
-            : styles.unfocusedInput,
-        ]}
-        placeholder="Wachtwoord"
-        placeholderTextColor="rgba(151, 184, 165, 0.5)"
-        secureTextEntry
-        onFocus={() => setPasswordFocus(true)}
-        onBlur={() => setPasswordFocus(false)}
-        onChangeText={setPassword}
-        value={password}
-      />
+      <View style={styles.passwordContainer}>
+        <TextInput
+          style={[
+            styles.input,
+            passwordFocus || isPasswordFilled
+              ? styles.focusedInput
+              : styles.unfocusedInput,
+            { paddingRight: 40 }, // ruimte voor het oogje
+          ]}
+          placeholder="Wachtwoord"
+          placeholderTextColor="rgba(151, 184, 165, 0.5)"
+          secureTextEntry={!showPassword}
+          onFocus={() => setPasswordFocus(true)}
+          onBlur={() => setPasswordFocus(false)}
+          onChangeText={setPassword}
+          value={password}
+        />
+        <TouchableOpacity
+          style={styles.eyeIcon}
+          onPress={() => setShowPassword((prev) => !prev)}
+        >
+          <Ionicons
+            name={showPassword ? "eye-off-outline" : "eye-outline"}
+            size={28}
+            color="#183A36"
+          />
+        </TouchableOpacity>
+      </View>
+
 
       {/* Wachtwoord vergeten */}
       <View style={styles.forgotPasswordContainer}>
@@ -251,6 +267,17 @@ const styles = StyleSheet.create({
   registerLink: {
     fontWeight: "bold",
   },
+  passwordContainer: {
+  width: "100%",
+  marginBottom: -3,
+  position: "relative",
+},
+eyeIcon: {
+  position: "absolute",
+  right: 10,
+  top: 12,
+},
+
 });
 
 export default LoginScreen;
