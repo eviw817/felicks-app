@@ -1,128 +1,59 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import { useRouter } from "expo-router";
 import {
   SafeAreaView,
-  View,
   Text,
   StyleSheet,
+  View,
+  ScrollView,
   TouchableOpacity,
   Platform,
-  Alert,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import { useRouter } from "expo-router";
-import { supabase } from "../../lib/supabase";
 
-const Checkbox = ({ selected }: { selected: boolean }) => (
-  <View style={styles.radioOuter}>
-    {selected && <View style={styles.radioInner} />}
-  </View>
-);
-
-export default function PersonalityTraits() {
+export default function AdoptieIntro() {
   const router = useRouter();
-  const [userId, setUserId] = useState<string | null>(null);
-  const [selectedTraits, setSelectedTraits] = useState<string[]>([]);
-
-  useEffect(() => {
-    (async () => {
-      const {
-        data: { user },
-        error,
-      } = await supabase.auth.getUser();
-      if (error || !user) return;
-
-      setUserId(user.id);
-
-      const { data } = await supabase
-        .from("adoption_dog_preferences")
-        .select("personality_traits")
-        .eq("user_id", user.id)
-        .single();
-
-      if (data && Array.isArray(data.personality_traits)) {
-        setSelectedTraits(data.personality_traits);
-      }
-    })();
-  }, []);
-
-  const toggleTrait = (trait: string) => {
-    setSelectedTraits((prev) =>
-      prev.includes(trait) ? prev.filter((t) => t !== trait) : [...prev, trait]
-    );
-  };
-
-  const handleAnswer = async () => {
-    if (!userId) return;
-
-    const { error } = await supabase.from("adoption_dog_preferences").upsert(
-      {
-        user_id: userId,
-        personality_traits: selectedTraits,
-      },
-      { onConflict: "user_id" }
-    );
-
-    if (error) {
-      Alert.alert("Fout", "Kon voorkeur niet opslaan.");
-    } else {
-      router.push("/dog_age");
-    }
-  };
-
-  const options = [
-    "Lief en aanhankelijk",
-    "Speels en energiek",
-    "Rustig en kalm",
-    "Intelligent en trainbaar",
-    "Sociaal en vriendelijk",
-    "Waaks en beschermend",
-    "Zachtaardig met kinderen",
-    "Onafhankelijk",
-    "Aanpasbaar",
-  ];
 
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.headerContainer}>
-        <TouchableOpacity onPress={() => router.back()}>
-          <Ionicons name="arrow-back" size={24} color="#183A36" />
-        </TouchableOpacity>
-        <Text style={styles.centeredTitle}>Algemene persoonlijkheid</Text>
-        <View style={{ width: 24 }} />
-      </View>
+      <ScrollView contentContainerStyle={styles.scrollContent}>
+        <View style={styles.headerRow}>
+          <TouchableOpacity onPress={() => router.back()} style={styles.back}>
+            <Ionicons name="arrow-back" size={24} color="#183A36" />
+          </TouchableOpacity>
+          <View style={styles.titleWrapper}>
+            <Text style={styles.title}>Adoptie</Text>
+          </View>
+        </View>
 
-      <View style={styles.progressBar}>
-        <View style={[styles.progressFill, { width: "12.5%" }]} />
-      </View>
+        <Text style={styles.subtitle}>Welkom op de adoptiepagina</Text>
 
-      <Text style={styles.question}>
-        Welke eigenschappen zoek je in een hond?
-      </Text>
+        <Text style={styles.paragraph}>
+          Wat fijn dat je geïnteresseerd bent in het adopteren van een hond!
+          Hier vind je alle informatie die je nodig hebt om jouw nieuwe maatje
+          te vinden.
+        </Text>
+        <Text style={styles.paragraph}>
+          We begeleiden je stap voor stap in het proces en helpen je om een hond
+          te kiezen die perfect past bij jouw levensstijl en voorkeuren.
+        </Text>
+        <Text style={styles.paragraph}>
+          Zodra je jouw ideale hond hebt gevonden, kun je een aanvraag indienen.
+          Wij zorgen ervoor dat je aanvraag bij het juiste asiel terechtkomt.
+        </Text>
+        <Text style={styles.paragraph}>
+          Samen maken we een verschil en geven we deze honden een tweede kans op
+          liefde en een thuis!
+        </Text>
 
-      {options.map((trait) => (
         <TouchableOpacity
-          key={trait}
-          style={styles.radioRow}
-          onPress={() => toggleTrait(trait)}
-          activeOpacity={0.8}
+          style={styles.button}
+          onPress={() => router.push("/(adoption)/missing_adoption_profile")}
         >
-          <Checkbox selected={selectedTraits.includes(trait)} />
-          <Text style={styles.answerText}>{trait}</Text>
+          <Text style={styles.buttonText}>DOORGAAN</Text>
         </TouchableOpacity>
-      ))}
-
-      <TouchableOpacity
-        style={[
-          styles.button,
-          selectedTraits.length === 0 && styles.buttonDisabled,
-        ]}
-        onPress={handleAnswer}
-        disabled={selectedTraits.length === 0}
-      >
-        <Text style={styles.buttonText}>VOLGENDE</Text>
-      </TouchableOpacity>
+      </ScrollView>
     </SafeAreaView>
   );
 }
@@ -131,83 +62,55 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#FFFDF9",
-    paddingHorizontal: 16,
-    paddingTop: Platform.OS === "ios" ? 20 : 50,
+    paddingTop: Platform.OS === "ios" ? 60 : 40,
   },
-  headerContainer: {
+  scrollContent: {
+    padding: 20,
+    flexGrow: 1,
+  },
+  headerRow: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    marginBottom: 16,
-    position: "relative",
+    marginBottom: 10,
   },
-  centeredTitle: {
-    position: "absolute",
-    left: 0,
-    right: 0,
-    textAlign: "center",
-    fontSize: 20,
+  back: {
+    padding: 4,
+  },
+  titleWrapper: {
+    flex: 1,
+    alignItems: "center",
+    marginRight: 28, // ruimte zodat de pijl links niet het centreren verstoort
+  },
+  title: {
+    fontSize: 24,
+    color: "#183A36",
     fontFamily: "Sirenia-Regular",
-    color: "#183A36",
   },
-  progressBar: {
-    width: "100%",
-    height: 6,
-    backgroundColor: "#F8F8F8",
-    borderRadius: 3,
-    overflow: "hidden",
-    marginBottom: 24,
-    borderColor: "#FFD87E",
-    borderWidth: 1,
-  },
-  progressFill: {
-    height: "100%",
-    backgroundColor: "#FFD87E",
-  },
-  question: {
-    fontSize: 18,
-    fontWeight: "bold",
+  subtitle: {
+    fontSize: 17,
+    fontWeight: "600",
     color: "#183A36",
     marginBottom: 16,
   },
-  radioRow: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginBottom: 12,
-  },
-  radioOuter: {
-    width: 22,
-    height: 22,
-    borderRadius: 11,
-    borderWidth: 2,
-    borderColor: "#97B8A5",
-    justifyContent: "center",
-    alignItems: "center",
-    marginRight: 12,
-  },
-  radioInner: {
-    width: 20,
-    height: 20,
-    borderRadius: 10,
-    backgroundColor: "#97B8A5",
-  },
-  answerText: {
-    fontSize: 16,
+  paragraph: {
+    fontSize: 15,
     color: "#183A36",
+    lineHeight: 22,
+    marginBottom: 14,
   },
   button: {
-    marginTop: 40,
     backgroundColor: "#97B8A5",
     paddingVertical: 14,
     borderRadius: 25,
     alignItems: "center",
-  },
-  buttonDisabled: {
-    opacity: 0.5,
+    marginTop: 24,
+    marginBottom: 30,
   },
   buttonText: {
-    fontSize: 16,
     color: "#183A36",
+    fontSize: 15,
     fontWeight: "bold",
+    textTransform: "uppercase",
   },
 });

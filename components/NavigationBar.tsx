@@ -6,7 +6,7 @@ import { Ionicons } from "@expo/vector-icons";
 const tabs = [
   { name: "homepage", label: "Home", icon: "home" },
   {
-    name: "(adoption_personality)/personality_traits",
+    name: "(adoption)/adoption_intro",
     label: "Adoptie",
     icon: "list",
   },
