@@ -84,7 +84,7 @@ const NewPasswordScreen = () => {
       Alert.alert("Fout", "Refresh token niet gevonden!");
       return;
     }
-    supabase.auth.setSession({ access_token: storedAccessToken, refresh_token: storedRefreshToken });
+    await supabase.auth.setSession({ access_token: storedAccessToken, refresh_token: storedRefreshToken });
   
     setLoading(true);
   
