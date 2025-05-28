@@ -352,19 +352,37 @@ export default function HomepageScreen() {
                   <View
                     style={{
                       width: 90,
+                      height: 90,
                       backgroundColor: "#FFFDF9",
                       borderRadius: 10,
                       marginRight: 12,
-                      padding: 10,
-                      justifyContent: "center",
+                      justifyContent: "center", // logo mooi centreren
                       alignItems: "center",
-                      alignSelf: "stretch",
+                      overflow: "hidden",
                     }}
                   >
-                    <Image
-                      source={require("@/assets/images/logo_felicks.png")}
-                      style={{ width: 75, height: 75, resizeMode: "contain" }}
-                    />
+                    {dog.images?.length ? (
+                      <Image
+                        source={{
+                          uri: `https://vgbuoxdfrbzqbqltcelz.supabase.co/storage/v1/object/public/${dog.images[0]}`,
+                        }}
+                        resizeMode="cover"
+                        style={{
+                          width: "100%",
+                          height: "100%",
+                        }}
+                      />
+                    ) : (
+                      <Image
+                        source={require("@/assets/images/logo_felicks.png")}
+                        resizeMode="contain"
+                        style={{
+                          width: 50,
+                          height: 50,
+                          borderRadius: 8,
+                        }}
+                      />
+                    )}
                   </View>
 
                   <View style={{ flex: 1 }}>
