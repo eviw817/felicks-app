@@ -11,6 +11,7 @@ import {
   TouchableOpacity,
   ActivityIndicator,
 } from "react-native";
+import { Ionicons } from "@expo/vector-icons";
 import { supabase } from "../../../lib/supabase";
 
 export default function BreedDetail() {
@@ -50,7 +51,15 @@ export default function BreedDetail() {
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView contentContainerStyle={{ paddingBottom: 32 }}>
-        <Text style={styles.title}>{breed.name}</Text>
+        <View style={styles.headerContainer}>
+          <TouchableOpacity
+            style={styles.backButton}
+            onPress={() => router.back()}
+          >
+            <Ionicons name="arrow-back" size={24} color="#183A36" />
+          </TouchableOpacity>
+          <Text style={styles.headerTitle}>{breed.name}</Text>
+        </View>
 
         <Text style={styles.label}>🐾 Karakter</Text>
         <Text style={styles.text}>{breed.character}</Text>
@@ -80,8 +89,40 @@ export default function BreedDetail() {
         <Text style={styles.label}>🔍 Profielvergelijking</Text>
         <Text style={styles.text}>{breed.profile_match_summary}</Text>
 
-        <TouchableOpacity style={styles.button} onPress={() => router.back()}>
-          <Text style={styles.buttonText}>← Terug</Text>
+        <TouchableOpacity
+          style={styles.backButton}
+          onPress={() => router.push("/")}
+        >
+          <Ionicons
+            name="arrow-back"
+            size={20}
+            color="#fff"
+            style={{ marginRight: 8 }}
+          />
+          <Text style={styles.buttonText}>Terug naar home</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={{
+            backgroundColor: "#97B8A5",
+            padding: 12,
+            borderRadius: 15,
+            alignItems: "center",
+            marginBottom: 20,
+            marginTop: 10,
+          }}
+          onPress={() => router.push("/(homepage)/homepage")}
+        >
+          <Text
+            style={{
+              color: "#183A36",
+              fontFamily: "Nunito-Bold",
+              textTransform: "uppercase",
+              fontWeight: "bold",
+            }}
+          >
+            naar home
+          </Text>
         </TouchableOpacity>
       </ScrollView>
     </SafeAreaView>
@@ -90,11 +131,27 @@ export default function BreedDetail() {
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: "#F8F8F8", padding: 16 },
-  title: {
-    fontSize: 24,
-    fontWeight: "bold",
+  headerContainer: {
+    position: "relative",
+    justifyContent: "center",
+    alignItems: "center",
+    height: 40,
+    marginBottom: 16,
+    marginTop: 25,
+  },
+  backButton: {
+    position: "absolute",
+    left: 0,
+    top: 0,
+    bottom: 0,
+    justifyContent: "center",
+    paddingHorizontal: 8,
+  },
+  headerTitle: {
+    fontFamily: "Sirenia-Regular",
+    fontSize: 20,
     color: "#183A36",
-    marginBottom: 12,
+    textAlign: "center",
   },
   label: {
     fontSize: 16,
@@ -108,12 +165,9 @@ const styles = StyleSheet.create({
     color: "#333",
     marginBottom: 4,
   },
-  button: {
-    marginTop: 30,
-    backgroundColor: "#97B8A5",
-    padding: 14,
-    borderRadius: 25,
-    alignItems: "center",
+  buttonText: {
+    color: "#fff",
+    fontWeight: "bold",
+    fontSize: 16,
   },
-  buttonText: { color: "#fff", fontWeight: "bold", fontSize: 16 },
 });
