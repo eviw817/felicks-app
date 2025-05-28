@@ -258,5 +258,7 @@ const styles = StyleSheet.create({
     color: "#183A36",
     fontWeight: "bold",
     textTransform: "uppercase",
+    textAlign: "center", // zorgt dat het netjes binnen de knop blijft
+    paddingHorizontal: 12, // optioneel voor extra ruimte rondom
   },
 });
