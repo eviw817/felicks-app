@@ -8,6 +8,7 @@ import { Session } from "@supabase/supabase-js";
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 import { faGear } from '@fortawesome/free-solid-svg-icons';
 import Avatar from "../../../components/Avatar";
+import NavBar from "@/components/NavigationBar";
 
 const ProfileScreen = () => {
       const router = useRouter();
@@ -72,7 +73,7 @@ const ProfileScreen = () => {
       }, []);
 
       const goToSettings = () => {
-        router.push('../settings');
+        router.push('/settings');
       };
     
 
@@ -128,6 +129,17 @@ const ProfileScreen = () => {
             vragenlijst in te vullen. Zo kunnen we een perfecte match voor je vinden!
           </Text>
         </View>
+         {/* Fixed navbar onderaan scherm */}
+              <View
+                style={{
+                  position: "absolute",
+                  bottom: 0,
+                  left: 0,
+                  right: 0,
+                }}
+              >
+                <NavBar />
+              </View>
       </View>
     );
   };

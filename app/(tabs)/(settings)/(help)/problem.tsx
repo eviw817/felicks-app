@@ -4,6 +4,7 @@ import { useRouter } from "expo-router";
 import { supabase } from "../../../../lib/supabase";
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
+import NavBar from "@/components/NavigationBar";
 
 const ProbleemScreen = () => {
   const router = useRouter();
@@ -52,7 +53,7 @@ const ProbleemScreen = () => {
         }
       
         setProbleem("");
-        router.push("../sendProblem");
+        router.push("/sendProblem");
       } catch (error) {
         console.log("Error message:", error);  
         Alert.alert("Fout", "Er is een fout opgetreden bij het verzenden van het probleem.");
@@ -64,7 +65,7 @@ const ProbleemScreen = () => {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <TouchableOpacity onPress={() => router.push("../help")} style={styles.backButton}>
+        <TouchableOpacity onPress={() => router.push("/help")} style={styles.backButton}>
           <FontAwesomeIcon icon={faArrowLeft} size={30} color={'#183A36'} style={styles.backButton} />
         </TouchableOpacity>
         <Text style={styles.title}>Probleem rapporteren</Text>
@@ -86,6 +87,17 @@ const ProbleemScreen = () => {
       >
         <Text style={styles.submitText}>{loading ? 'VERZENDEN...' : 'VERSTUUR'}</Text>
       </TouchableOpacity>
+      {/* Fixed navbar onderaan scherm */}
+      <View
+              style={{
+              position: "absolute",
+              bottom: 0,
+              left: 0,
+              right: 0,
+              }}
+          >
+              <NavBar />
+      </View>
     </View>
   );
 };

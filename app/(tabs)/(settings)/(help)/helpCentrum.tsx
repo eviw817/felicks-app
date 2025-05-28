@@ -5,6 +5,7 @@ import { supabase } from "../../../../lib/supabase";
 import { Session } from "@supabase/supabase-js"; 
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
+import NavBar from "@/components/NavigationBar";
 
 const HelpCentrumScreen = () => {
   const router = useRouter();
@@ -88,6 +89,17 @@ const HelpCentrumScreen = () => {
       >
         <Text style={styles.submitText}>{loading ? 'VERZENDEN...' : 'VERSTUUR'}</Text>
       </TouchableOpacity>
+      {/* Fixed navbar onderaan scherm */}
+      <View
+            style={{
+              position: "absolute",
+              bottom: 0,
+              left: 0,
+              right: 0,
+            }}
+          >
+            <NavBar />
+      </View>
     </View>
   );
 };

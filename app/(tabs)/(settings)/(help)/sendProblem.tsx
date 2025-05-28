@@ -5,7 +5,7 @@ import { useRouter } from "expo-router";
 // import { Session } from "@supabase/supabase-js";
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 import { faArrowLeft} from "@fortawesome/free-solid-svg-icons";
-
+import NavBar from "@/components/NavigationBar";
 
 const SendProblemScreen = () => {
       const router = useRouter();
@@ -16,11 +16,21 @@ const SendProblemScreen = () => {
              <Text style={styles.subtitle}>We sturen je antwoord zo snel mogelijk via mail. De mail kan altijd in je spam terecht komen,
                 gelieve ook deze te controleren. 
             </Text>
-            <TouchableOpacity style={styles.submitButton} onPress={() => router.push("../help")} >
+            <TouchableOpacity style={styles.submitButton} onPress={() => router.push("/help")} >
                 <Text style={styles.submitText}>TERUG</Text>
             </TouchableOpacity>
-          
-      </View>
+          {/* Fixed navbar onderaan scherm */}
+            <View
+                    style={{
+                    position: "absolute",
+                    bottom: 0,
+                    left: 0,
+                    right: 0,
+                    }}
+                >
+                    <NavBar />
+            </View>
+    </View>
     );
    
   };

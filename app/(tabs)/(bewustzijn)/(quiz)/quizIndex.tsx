@@ -42,7 +42,17 @@ export default function QuizIndex() {
         href="../quizVragen">
         <Text style={styles.continueText}>DOORGAAN</Text>
       </Link>
-
+        {/* Fixed navbar onderaan scherm */}
+            <View
+                    style={{
+                    position: "absolute",
+                    bottom: 0,
+                    left: 0,
+                    right: 0,
+                    }}
+                >
+                    <NavBar />
+            </View>
     </View>
   );
 }

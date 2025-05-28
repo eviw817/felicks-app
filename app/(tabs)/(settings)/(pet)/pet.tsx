@@ -4,6 +4,7 @@ import { Picker } from "@react-native-picker/picker";
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import { useRouter } from "expo-router";
+import NavBar from "@/components/NavigationBar";
 
 const EditPetScreen = () => {
   const [petName, setPetName] = useState("");
@@ -15,7 +16,7 @@ const EditPetScreen = () => {
   return (
     <View style={styles.container}>
         <View style={styles.header}>
-                    <TouchableOpacity onPress={() => router.push("../settings")} style={styles.backButton}>
+                    <TouchableOpacity onPress={() => router.push("/settings")} style={styles.backButton}>
                         <FontAwesomeIcon icon={faArrowLeft} size={30} color={'#183A36'} style={styles.backButton} />
                     </TouchableOpacity>
                     <Text style={styles.title}>Huisdier aanpassen</Text>
@@ -42,17 +43,26 @@ const EditPetScreen = () => {
         itemStyle={styles.pickerItem}
         onValueChange={(itemValue) => setBreed(itemValue)}
       >
-        <Picker.Item label="Golden retriever" value="Golden retriever" />
         <Picker.Item label="Labrador" value="Labrador" />
-        <Picker.Item label="Beagle" value="Beagle" />
       </Picker>
       </View>
-      <TouchableOpacity style={styles.saveButton} onPress={() => router.push("../settings")}>
+      <TouchableOpacity style={styles.saveButton} onPress={() => router.push("/settings")}>
         <Text style={styles.saveButtonText}>OPSLAAN</Text>
       </TouchableOpacity>
-      <TouchableOpacity onPress={() => router.push("../removePet")}>
+      <TouchableOpacity onPress={() => router.push("/removePet")}>
         <Text style={styles.deleteText}>Huisdier verwijderen</Text>
       </TouchableOpacity>
+      {/* Fixed navbar onderaan scherm */}
+      <View
+              style={{
+              position: "absolute",
+              bottom: 0,
+              left: 0,
+              right: 0,
+              }}
+          >
+              <NavBar />
+      </View>
     </View>
   );
 };

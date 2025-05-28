@@ -5,6 +5,7 @@ import { useRouter } from "expo-router";
 // import { Session } from "@supabase/supabase-js";
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 import { faArrowLeft, faChevronRight } from "@fortawesome/free-solid-svg-icons";
+import NavBar from "@/components/NavigationBar";
 
 
 const HelpScreen = () => {
@@ -13,26 +14,37 @@ const HelpScreen = () => {
     return (
         <View style={styles.container} >
             <View style={styles.header}>
-                <TouchableOpacity onPress={() => router.push("../settings")} style={styles.backButton}>
+                <TouchableOpacity onPress={() => router.push("/settings")} style={styles.backButton}>
                     <FontAwesomeIcon icon={faArrowLeft} size={30} color={'#183A36'} style={styles.backButton} />
                 </TouchableOpacity>
                 <Text style={styles.title}>Hulp</Text>
             </View>
 
             <View style={styles.menu}>
-                <TouchableOpacity style={styles.menuItem} onPress={() => router.push("../problem")}>
+                <TouchableOpacity style={styles.menuItem} onPress={() => router.push("/problem")}>
                     <View style={styles.leftSection}>
                         <Text style={styles.menuText}>Probleem rapporteren</Text>
                     </View>
                     <FontAwesomeIcon icon={faChevronRight} size={25} color="#183A36" />
                 </TouchableOpacity>
 
-                <TouchableOpacity style={styles.menuItem} onPress={() => router.push("../helpCentrum")}>
+                <TouchableOpacity style={styles.menuItem} onPress={() => router.push("/helpCentrum")}>
                     <View style={styles.leftSection}>
                         <Text style={styles.menuText}>Helpcentrum</Text>
                     </View>
                     <FontAwesomeIcon icon={faChevronRight} size={25} color="#183A36" />
                 </TouchableOpacity>
+            </View>
+            {/* Fixed navbar onderaan scherm */}
+            <View
+                    style={{
+                    position: "absolute",
+                    bottom: 0,
+                    left: 0,
+                    right: 0,
+                    }}
+                >
+                    <NavBar />
             </View>
       </View>
     );
