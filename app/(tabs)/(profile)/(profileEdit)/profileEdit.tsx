@@ -334,7 +334,7 @@ const ProfileEditScreen = () => {
                 style={styles.buttons} 
                 onPress={() => {
                   setModalVisible(false);
-                  router.push("../forget_password");
+                  router.push("/forgetPassword");
                 }}
               >
                 <Text style={styles.buttonText}>Ja</Text>

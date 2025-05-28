@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { View, Text, StyleSheet, TouchableOpacity, TextInput, Alert } from "react-native";
 import { useRouter } from "expo-router";  
-import { supabase } from "../../../../../lib/supabase"; 
+import { supabase } from "../../../../../lib/supabase";
 
 const ForgetPasswordScreen = () => {
   const router = useRouter();
@@ -21,13 +21,13 @@ const ForgetPasswordScreen = () => {
     setLoading(true);
 
     const { error } = await supabase.auth.resetPasswordForEmail(email, {
-      redirectTo: '/newPassword',
+      redirectTo: 'com.anonymous.felicksapp://newPassword'
     });
 
     if (error) {
       Alert.alert("Fout", "Deze e-mail is niet geregistreerd.");
     } else {
-      router.push("../notification_email");
+      router.push("/notificationEmail");
     }
 
     setLoading(false);

@@ -25,7 +25,7 @@ const NotficationEmailScreen = () => {
 
       router.replace(`/newPassword`);
     } else {
-      Alert.alert("Fout", "Tokens ontbreken in de link.");
+      //Alert.alert("Fout", "Tokens ontbreken in de link.");
     }
   } catch (error) {
     console.error("Fout bij URL verwerking:", error);
