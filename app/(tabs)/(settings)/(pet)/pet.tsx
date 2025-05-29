@@ -54,7 +54,7 @@ const EditPetScreen = () => {
         itemStyle={styles.pickerItem}
         onValueChange={(itemValue) => setBreed(itemValue)}
       >
-        <Picker.Item label="Golden retriever" value="Golden retriever" />
+        <Picker.Item label="Labrador" value="Labrador" />
       </Picker>
       </View>
       <TouchableOpacity style={styles.saveButton} onPress={() => router.push("/settings")}>
