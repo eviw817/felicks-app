@@ -1,5 +1,5 @@
 import { BeagleScene } from "@/components/augumented-dog/scenes/BeagleScene";
-import { ViroARSceneNavigator } from "@reactvision/react-viro";
+// import { ViroARSceneNavigator } from "@reactvision/react-viro"; // TIJDELIJK UIT
 import { SafeAreaView, View, Text, TouchableOpacity } from "react-native";
 import { useState, useEffect } from "react";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
@@ -7,31 +7,38 @@ import { supabase } from "@/lib/supabase";
 import { useLocalSearchParams } from "expo-router";
 import NavBar from "@/components/NavigationBar";
 
+// ✅ Typefix
+type DogStatus = {
+  id: string;
+  user_id: string;
+  breed: string;
+  name: string;
+  is_eating: boolean;
+  is_playing: boolean;
+  is_running: boolean;
+  is_toilet: boolean;
+};
+
 const AugumentedDog = () => {
   const { petId } = useLocalSearchParams();
 
-  const [status, setStatus] = useState<null | {
-    id: string;
-    user_id: string;
-    breed: string;
-    name: string;
-    is_eating: boolean;
-    is_playing: boolean;
-    is_running: boolean;
-    is_toilet: boolean;
-  }>(null);
-
+  const [status, setStatus] = useState<DogStatus | null>(null);
   const [loading, setLoading] = useState(true);
-  const [lastToggledField, setLastToggledField] = useState<
-    null | keyof typeof defaultStatus
-  >(null);
 
-  const defaultStatus = {
+  // ✅ defaultStatus getypt om later te gebruiken als type-inferentie
+  const defaultStatus: Pick<
+    DogStatus,
+    "is_eating" | "is_playing" | "is_running" | "is_toilet"
+  > = {
     is_eating: false,
     is_playing: false,
     is_running: false,
     is_toilet: false,
   };
+
+  const [lastToggledField, setLastToggledField] = useState<
+    null | keyof typeof defaultStatus
+  >(null);
 
   useEffect(() => {
     if (!petId || typeof petId !== "string") {
@@ -52,7 +59,7 @@ const AugumentedDog = () => {
       } else if (!data) {
         console.warn("⚠️ No dog found for this petId:", petId);
       } else {
-        setStatus(data);
+        setStatus(data as DogStatus);
       }
       setLoading(false);
     };
@@ -65,7 +72,6 @@ const AugumentedDog = () => {
 
     const newValue = !status[field];
 
-    // Update local state
     setStatus((prev) => {
       if (!prev) return prev;
       return { ...prev, [field]: newValue };
@@ -73,7 +79,6 @@ const AugumentedDog = () => {
 
     setLastToggledField(field);
 
-    // Update Supabase
     const { error } = await supabase
       .from("ar_dog")
       .update({ [field]: newValue })
@@ -81,7 +86,6 @@ const AugumentedDog = () => {
 
     if (error) {
       console.error("❌ Failed to update status:", error);
-      // Revert state
       setStatus((prev) => {
         if (!prev) return prev;
         return { ...prev, [field]: !newValue };
@@ -136,7 +140,6 @@ const AugumentedDog = () => {
 
     const messagesMap = getStatusMessages(dogName);
 
-    // If a field was toggled last, show only that message
     if (lastToggledField) {
       return [
         messagesMap[lastToggledField][
@@ -145,7 +148,6 @@ const AugumentedDog = () => {
       ];
     }
 
-    // Otherwise, show the first message in priority order
     const firstField = fieldPriority[0];
     return [messagesMap[firstField][status[firstField] ? "true" : "false"]];
   };
@@ -159,16 +161,22 @@ const AugumentedDog = () => {
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
-      <ViroARSceneNavigator
-        autofocus={true}
-        initialScene={{
-          scene: () => <BeagleScene />,
-        }}
-        style={{ flex: 1 }}
-      >
-        <BeagleScene style={{ width: "100%", height: 1000 }} />
-      </ViroARSceneNavigator>
+      {/* AR tijdelijk uitgeschakeld */}
+      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+        <Text
+          style={{
+            fontSize: 18,
+            color: "#183A36",
+            padding: 20,
+            textAlign: "center",
+          }}
+        >
+          De AR-weergave van je hond is tijdelijk uitgeschakeld tijdens
+          development. Activeer dit later opnieuw om AR-functies te testen.
+        </Text>
+      </View>
 
+      {/* Meldingen (tekstballonnen bovenaan) */}
       <View
         style={{
           position: "absolute",
@@ -204,6 +212,7 @@ const AugumentedDog = () => {
         ))}
       </View>
 
+      {/* Knoppen */}
       <View
         style={{
           position: "absolute",
@@ -241,7 +250,8 @@ const AugumentedDog = () => {
           </TouchableOpacity>
         ))}
       </View>
-      {/* Fixed navbar onderaan scherm */}
+
+      {/* Navigatiebalk */}
       <View
         style={{
           position: "absolute",

@@ -12,6 +12,8 @@ export default function DogInformation() {
 
   const { petId } = useLocalSearchParams();
 
+
+
   const [dogName, setDogName] = React.useState("");
   const [dogBreed, setDogBreed] = React.useState("");
   const [loading, setLoading] = React.useState(true);
