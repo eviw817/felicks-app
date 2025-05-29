@@ -17,7 +17,7 @@ import { useRouter, Link } from "expo-router";
 import { Picker } from "@react-native-picker/picker";
 import { AppStateStatus } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-
+import BaseText from "@/components/BaseText";
 
 // Tells Supabase Auth to continuously refresh the session automatically if
 // the app is in the foreground. When this is added, you will continue to receive
@@ -230,7 +230,7 @@ export default function Registeren() {
         <Auth key={session.user.id} session={session} />
       ) : (
         <>
-          <Text style={styles.title}>Registreren</Text>
+          <BaseText style={styles.title}>Registreren</BaseText>
 
           {/* Voornaam input */}
           <Text style={styles.label}>Voornaam</Text>
@@ -405,12 +405,10 @@ const styles = StyleSheet.create({
     backgroundColor: "#FFFDF9",
   },
   title: {
-    fontSize: 23,
-    fontWeight: "bold",
-    color: "#183A36",
+    fontSize: 28,
+    fontFamily: 'SireniaMedium',
     marginBottom: 60,
-    alignSelf: "center",      
-    textAlign: "center", 
+    textAlign: "center",
   },
   text: {
     fontSize: 20,
@@ -493,9 +491,9 @@ const styles = StyleSheet.create({
     textAlign: "center", 
   },
     passwordContainer: {
-  width: "100%",
-  marginBottom: -3,
-  position: "relative",
+      width: "100%",
+      marginBottom: 25,
+      position: "relative",
 },
 eyeIcon: {
   position: "absolute",

@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, Alert } from "react-native";
 import { useRouter } from "expo-router";  
 import * as Linking from 'expo-linking';
 import * as SecureStore from 'expo-secure-store';
+import BaseText from "@/components/BaseText";
 
 const NotficationEmailScreen = () => {
     const router = useRouter();
@@ -69,7 +70,7 @@ const NotficationEmailScreen = () => {
   
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Wachtwoord vergeten</Text>
+      <BaseText style={styles.title}>Verzonden e-mail</BaseText>
 
       {/* E-mail input */}
       <Text style={styles.subtitle}>Er is een e-mail verzonden naar de e-mail adres. 
@@ -88,9 +89,9 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFDF9',
   },
   title: {
-    fontSize: 23,
-    fontWeight: "bold",
-    color: '#183A36',
+     fontSize: 28,
+    fontFamily: 'SireniaMedium',
+    textAlign: "center",
     marginBottom: 60,
   },
   subtitle: {

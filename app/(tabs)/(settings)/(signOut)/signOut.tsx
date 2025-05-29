@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import { supabase } from "../../../../lib/supabase";
 import NavBar from "@/components/NavigationBar";
+import BaseText from "@/components/BaseText";
 
 const signOutScreen = () => {
     const router = useRouter();
@@ -26,7 +27,7 @@ const signOutScreen = () => {
                 <TouchableOpacity onPress={() => router.push("/settings")}>
                     <FontAwesomeIcon icon={faArrowLeft} size={30} color="#183A36" />
                 </TouchableOpacity>
-                <Text style={styles.title}>Afmelden</Text>
+                <BaseText style={styles.title}>Afmelden</BaseText>
             </View>
 
             {/* Tekst */}
@@ -71,15 +72,13 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         alignItems: "center",
         width: "100%",
-        paddingVertical: 30,
+        paddingVertical: 0,
     },
     title: {
         flex: 1, 
-        fontSize: 23,
-        fontWeight: "bold",
-        color: '#183A36',
+        fontSize: 28,
+        fontFamily: 'SireniaMedium',
         textAlign: "center",
-        alignSelf: "center",
         marginRight: 50, 
     },
     goodbyeText: {

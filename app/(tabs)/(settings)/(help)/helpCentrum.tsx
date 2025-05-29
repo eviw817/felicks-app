@@ -6,6 +6,7 @@ import { Session } from "@supabase/supabase-js";
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import NavBar from "@/components/NavigationBar";
+import BaseText from "@/components/BaseText";
 
 const HelpCentrumScreen = () => {
   const router = useRouter();
@@ -69,7 +70,7 @@ const HelpCentrumScreen = () => {
         <TouchableOpacity onPress={() => router.push("../help")} style={styles.backButton}>
           <FontAwesomeIcon icon={faArrowLeft} size={30} color={'#183A36'} />
         </TouchableOpacity>
-        <Text style={styles.title}>Helpcentrum</Text>
+        <BaseText style={styles.title}>Helpcentrum</BaseText>
       </View>
 
       <Text style={styles.subtitle}>Waar kunnen wij u mee helpen?</Text>
@@ -123,11 +124,10 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   title: {
-    fontSize: 23,
-    fontWeight: "bold",
-    color: '#183A36',
-    marginBottom: 20,
-    textAlign: "center",
+         fontSize: 28,
+        fontFamily: 'SireniaMedium',
+        textAlign: "center",
+        marginBottom: 20,
   },
   subtitle: {
     fontSize: 23,

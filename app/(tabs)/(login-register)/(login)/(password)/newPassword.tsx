@@ -5,6 +5,7 @@ import { supabase } from "../../../../../lib/supabase";
 import * as Linking from "expo-linking";
 import * as SecureStore from 'expo-secure-store';
 import { Ionicons } from "@expo/vector-icons";
+import BaseText from "@/components/BaseText";
 
 const NewPasswordScreen = () => {
   const router = useRouter();
@@ -114,7 +115,7 @@ const NewPasswordScreen = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Reset wachtwoord</Text>
+      <BaseText style={styles.title}>Reset wachtwoord</BaseText>
 
     <Text style={styles.label}>Nieuw wachtwoord</Text>
       <View style={styles.passwordContainer}>
@@ -173,10 +174,10 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFDF9',
   },
   title: {
-    fontSize: 23,
-    fontWeight: "bold",
-    color: '#183A36',
+   fontSize: 28,
+    fontFamily: 'SireniaMedium',
     marginBottom: 60,
+    textAlign: "center",
   },
   text: {
     fontSize: 20,

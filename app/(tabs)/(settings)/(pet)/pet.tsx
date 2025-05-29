@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import { useRouter } from "expo-router";
 import NavBar from "@/components/NavigationBar";
+import BaseText from "@/components/BaseText";
 
 const EditPetScreen = () => {
   const [petName, setPetName] = useState("");
@@ -19,9 +20,19 @@ const EditPetScreen = () => {
                     <TouchableOpacity onPress={() => router.push("/settings")} style={styles.backButton}>
                         <FontAwesomeIcon icon={faArrowLeft} size={30} color={'#183A36'} style={styles.backButton} />
                     </TouchableOpacity>
-                    <Text style={styles.title}>Huisdier aanpassen</Text>
+                    <BaseText style={styles.title}>Huisdier aanpassen</BaseText>
                 </View>
-      <Image source={{ uri: "https://via.placeholder.com/150" }} style={styles.image} />
+      <Image
+                  source={require("@/assets/images/ARDog.png")}
+                  style={{
+                    alignSelf: "center",
+                    marginTop: 20,
+                    marginBottom: 20,
+                    width: 150,
+                    height: 150,
+                    borderRadius: 90,
+                  }}
+                />
       <Text style={styles.label}>Naam</Text>
       <TextInput
         style={[
@@ -43,7 +54,7 @@ const EditPetScreen = () => {
         itemStyle={styles.pickerItem}
         onValueChange={(itemValue) => setBreed(itemValue)}
       >
-        <Picker.Item label="Labrador" value="Labrador" />
+        <Picker.Item label="Golden retriever" value="Golden retriever" />
       </Picker>
       </View>
       <TouchableOpacity style={styles.saveButton} onPress={() => router.push("/settings")}>
@@ -85,11 +96,11 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
   },
 title: {
-    fontSize: 23,
-    fontWeight: "bold",
-    color: '#183A36',
-    marginBottom: 20,
+    fontSize: 28,
+    fontFamily: 'SireniaMedium',
     textAlign: "center",
+    marginBottom: 20,
+
 },
   image: {
     width: 110,

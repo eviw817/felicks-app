@@ -119,9 +119,8 @@ const styles = StyleSheet.create({
     },
     title: {
         flex: 1, 
-        fontSize: 23,
-        fontWeight: "bold",
-        color: '#183A36',
+         fontSize: 28,
+        fontFamily: 'SireniaMedium',
         textAlign: "center",
         alignSelf: "center",
         marginRight: 50, 

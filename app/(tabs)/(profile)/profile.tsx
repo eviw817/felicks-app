@@ -9,6 +9,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 import { faGear } from '@fortawesome/free-solid-svg-icons';
 import Avatar from "../../../components/Avatar";
 import NavBar from "@/components/NavigationBar";
+import BaseText from "@/components/BaseText";
+import { Ionicons } from "@expo/vector-icons";
 
 const ProfileScreen = () => {
       const router = useRouter();
@@ -80,9 +82,9 @@ const ProfileScreen = () => {
     return (
       <View style={styles.container}>
          <View style={styles.header}>
-        <Text style={styles.title}>Profiel</Text>
+        <BaseText style={styles.title}>Profiel</BaseText>
        <TouchableOpacity onPress={goToSettings} style={styles.settingsicon}>
-         <FontAwesomeIcon icon={faGear} size={28} color={'#183A36'}  />
+          <Ionicons name="settings-outline" size={32} color="#183A36" />
        </TouchableOpacity>
         </View>
   
@@ -101,7 +103,7 @@ const ProfileScreen = () => {
       
       {/* De bewerk-knop onder de tekst */}
       <Link style={styles.editButton}
-        href="../profileEdit">
+        href="/profileEdit">
         <Text style={styles.editButtonText}>BEWERKEN</Text>
       </Link>
     </View>
@@ -154,11 +156,11 @@ const ProfileScreen = () => {
         fontFamily: 'Nunito'
     },
     title: {
-        fontSize: 23,
-        fontWeight: "bold",
-        color: '#183A36',
-        marginBottom: 30,
+        fontSize: 28,
+        fontFamily: 'SireniaMedium',
         textAlign: "center",
+        marginBottom: 30,
+
     },
     header: {
         flexDirection: "row",
@@ -212,7 +214,7 @@ const ProfileScreen = () => {
         marginTop: 25,
         paddingVertical: 10, 
         paddingHorizontal: 90, 
-        borderRadius: 15 
+        borderRadius: 20 
     },
     editButtonText: { 
         color: '#183A36',

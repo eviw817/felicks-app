@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import { useRouter } from "expo-router";
 import NavBar from "@/components/NavigationBar";
+import BaseText from "@/components/BaseText";
 
 const Remove2PetScreen = () => {
   const [petName, setPetName] = useState("");;
@@ -15,7 +16,7 @@ const Remove2PetScreen = () => {
             <TouchableOpacity onPress={() => router.push("/settings")} style={styles.backButton}>
                 <FontAwesomeIcon icon={faArrowLeft} size={30} color={'#183A36'} style={styles.backButton} />
             </TouchableOpacity>
-            <Text style={styles.title}>Huisdier verwijderen</Text>
+            <BaseText style={styles.title}>Huisdier verwijderen</BaseText>
         </View>
       <Image source={{ uri: "https://via.placeholder.com/150" }} style={styles.image} />
       <Text style={styles.label}>Ben je zeker dat je je huisdiertje wilt verwijderen?</Text>
@@ -58,11 +59,11 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
   },
 title: {
-    fontSize: 23,
-    fontWeight: "bold",
-    color: '#183A36',
-    marginBottom: 20,
+     fontSize: 28,
+    fontFamily: 'SireniaMedium',
     textAlign: "center",
+    marginBottom: 20,
+
 },
   image: {
     width: 110,

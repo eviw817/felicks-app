@@ -12,6 +12,8 @@ import { faGear } from '@fortawesome/free-solid-svg-icons';
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 import Avatar from "../../../../components/Avatar";
 import NavBar from "@/components/NavigationBar";
+import BaseText from "@/components/BaseText";
+import { Ionicons } from "@expo/vector-icons";
 
 const ProfileEditScreen = () => {
     const router = useRouter();
@@ -195,9 +197,9 @@ const ProfileEditScreen = () => {
          <TouchableOpacity onPress={() => router.push("/profile")} style={styles.backButton}>
          <FontAwesomeIcon icon={faArrowLeft} size={30} color={'#183A36'} style={styles.backButton} />
         </TouchableOpacity>
-          <Text style={styles.title}>Profiel bewerken</Text>
+          <BaseText style={styles.title}>Profiel bewerken</BaseText>
             <TouchableOpacity onPress={goToSettings} style={styles.settingsicon}>
-              <FontAwesomeIcon icon={faGear} size={28} color={'#183A36'}  />
+               <Ionicons name="settings-outline" size={32} color="#183A36" />
             </TouchableOpacity>
         </View>
   
@@ -385,11 +387,10 @@ const ProfileEditScreen = () => {
         paddingBottom: 70, // Extra padding om ruimte te maken voor de navbar
     },
     title: {
-        fontSize: 23,
-        fontWeight: "bold",
-        color: '#183A36',
-        marginBottom: 20,
+         fontSize: 28,
+        fontFamily: 'SireniaMedium',
         textAlign: "center",
+        marginBottom: 20,
     },
     backButton: {
       position: "absolute",

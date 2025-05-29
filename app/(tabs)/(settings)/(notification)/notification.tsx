@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import { supabase } from "../../../../lib/supabase";
 import NavBar from "@/components/NavigationBar";
+import BaseText from "@/components/BaseText";
 
 const NotificatiesScreen = () => {
     const router = useRouter();
@@ -143,7 +144,7 @@ useEffect(() => {
                 <TouchableOpacity onPress={() => router.push("/settings")}>
                     <FontAwesomeIcon icon={faArrowLeft} size={30} color="#183A36" />
                 </TouchableOpacity>
-                <Text style={styles.title}>Meldingen en toestemmingen</Text>
+                <BaseText style={styles.title}>Meldingen en toestemmingen</BaseText>
             </View>
 
             {/* Meldingen */}
@@ -228,10 +229,10 @@ const styles = StyleSheet.create({
         marginBottom: 20,
     },
     title: {
-        fontSize: 23,
-        fontWeight: "bold",
-        color: "#183A36",
+        fontSize: 26,
+        fontFamily: 'SireniaMedium',
         textAlign: "center",
+
         marginLeft: 15, 
     },
     sectionTitle: {

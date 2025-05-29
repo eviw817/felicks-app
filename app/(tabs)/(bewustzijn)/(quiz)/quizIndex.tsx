@@ -44,14 +44,14 @@ export default function QuizIndex() {
       </Link>
         {/* Fixed navbar onderaan scherm */}
             <View
-                    style={{
-                    position: "absolute",
-                    bottom: 0,
-                    left: 0,
-                    right: 0,
-                    }}
-                >
-                    <NavBar />
+                style={{
+                position: "absolute",
+                bottom: 0,
+                left: 0,
+                right: 0,
+                }}
+            >
+                <NavBar />
             </View>
     </View>
   );
@@ -77,9 +77,9 @@ const styles = StyleSheet.create({
   },
 
   title: {
-    fontSize: 24,
+    fontSize: 28,
     fontFamily: 'SireniaMedium',
-    marginTop: 75,
+    marginBottom: 60,
     textAlign: "center",
   },
 

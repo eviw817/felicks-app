@@ -13,6 +13,7 @@ import { supabase } from "../../../../lib/supabase";
 import { AppStateStatus } from "react-native";
 import { Session } from "@supabase/supabase-js";
 import { Ionicons } from "@expo/vector-icons";
+import BaseText from "@/components/BaseText";
 
 const LoginScreen = () => {
   const router = useRouter();
@@ -109,7 +110,7 @@ const LoginScreen = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Inloggen</Text>
+      <BaseText style={styles.title}>Inloggen</BaseText>
 
       {/* E-mail input */}
       <Text style={styles.label}>E-mail</Text>
@@ -200,10 +201,10 @@ const styles = StyleSheet.create({
     backgroundColor: "#FFFDF9",
   },
   title: {
-    fontSize: 23,
-    fontWeight: "bold",
-    color: "#183A36",
+    fontSize: 28,
+    fontFamily: 'SireniaMedium',
     marginBottom: 60,
+    textAlign: "center",
   },
   text: {
     fontSize: 20,
