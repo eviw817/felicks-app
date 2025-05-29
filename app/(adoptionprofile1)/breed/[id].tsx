@@ -90,19 +90,6 @@ export default function BreedDetail() {
         <Text style={styles.text}>{breed.profile_match_summary}</Text>
 
         <TouchableOpacity
-          style={styles.backButton}
-          onPress={() => router.push("/")}
-        >
-          <Ionicons
-            name="arrow-back"
-            size={20}
-            color="#fff"
-            style={{ marginRight: 8 }}
-          />
-          <Text style={styles.buttonText}>Terug naar home</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity
           style={{
             backgroundColor: "#97B8A5",
             padding: 12,

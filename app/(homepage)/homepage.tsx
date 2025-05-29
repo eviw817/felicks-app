@@ -351,8 +351,8 @@ export default function HomepageScreen() {
                 >
                   <View
                     style={{
-                      width: 90,
-                      height: 90,
+                      width: 110,
+                      height: 110,
                       backgroundColor: "#FFFDF9",
                       borderRadius: 10,
                       marginRight: 12,
