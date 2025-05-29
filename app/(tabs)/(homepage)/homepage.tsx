@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import {
   ScrollView,
   SafeAreaView,
@@ -7,7 +7,6 @@ import {
   ActivityIndicator,
   Alert,
   Image,
-  Button,
 } from "react-native";
 import { supabase } from "@/lib/supabase";
 import { Session } from "@supabase/supabase-js";
@@ -15,33 +14,53 @@ import { FontAwesome } from "@expo/vector-icons";
 import { TouchableOpacity } from "react-native";
 import { Link } from "expo-router";
 import NavBar from "@/components/NavigationBar";
+import { useFocusEffect } from '@react-navigation/native';
 
 export default function HomepageScreen() {
-  const [firstname, setFirstname] = useState<string>(""); // State to store firstname
+  const [firstname, setFirstname] = useState<string>("");
   const [session, setSession] = useState<Session | null>(null);
-  const [loading, setLoading] = useState<boolean>(true); // Loading state for the initial session
+  const [loading, setLoading] = useState<boolean>(true);
+  const [unreadCount, setUnreadCount] = useState<number>(0);
+  const [isFilled, setIsFilled] = useState<boolean>(false);
 
-  const [isFilled, setIsFilled] = useState<boolean>(false); // Start with the heart being outlined
-  const handleHeartClick = () => {
-    const newState = !isFilled;
-    setIsFilled(newState); // Update the heart state in UI
+  const handleHeartClick = () => setIsFilled(!isFilled);
 
-    // In a real app, you'd update the database here
-  };
+  const fetchUnreadNotifications = useCallback(async () => {
+    const { data: { user } } = await supabase.auth.getUser();
+    const { data: dog } = await supabase
+      .from("ar_dog")
+      .select("id")
+      .eq("user_id", user?.id)
+      .single();
 
-  // Fetch session on mount and listen for changes to the session
+    if (dog) {
+      const { data, error } = await supabase
+        .from("notifications")
+        .select("id")
+        .eq("pet_id", dog.id)
+        .eq("is_read", false);
+
+      if (!error && data) {
+        setUnreadCount(data.length);
+      }
+    }
+  }, []);
+
+  useFocusEffect(
+    useCallback(() => {
+      fetchUnreadNotifications();
+    }, [fetchUnreadNotifications])
+  );
+
   useEffect(() => {
     const fetchSession = async () => {
-      const {
-        data: { session },
-      } = await supabase.auth.getSession(); // Destructure session directly
+      const { data: { session } } = await supabase.auth.getSession();
       setSession(session);
       setLoading(false);
     };
 
     fetchSession();
 
-    // Listen to auth state changes (e.g., login/logout)
     const { data: authListener } = supabase.auth.onAuthStateChange(
       (_, session) => {
         setSession(session);
@@ -49,13 +68,9 @@ export default function HomepageScreen() {
       }
     );
 
-    // Clean up the listener on unmount
-    return () => {
-      authListener?.subscription?.unsubscribe();
-    };
+    return () => authListener?.subscription?.unsubscribe();
   }, []);
 
-  // Fetch firstname from Supabase when session is available
   useEffect(() => {
     if (session?.user) {
       const getFirstname = async () => {
@@ -67,80 +82,61 @@ export default function HomepageScreen() {
             .single();
 
           if (error) throw error;
-
           setFirstname(data?.firstname || "Guest");
         } catch (error: any) {
-          // Explicitly cast the error to 'any' here
-          Alert.alert(
-            "Error",
-            error.message || "An error occurred while fetching the profile"
-          );
+          Alert.alert("Error", error.message || "Kon profiel niet laden");
         }
       };
-
       getFirstname();
     } else {
       setFirstname("Guest");
     }
-  }, [session]); // Trigger when the session changes
+  }, [session]);
 
   if (loading) {
     return (
-      <View
-        style={{
-          flex: 1,
-          justifyContent: "center",
-          alignItems: "center",
-          backgroundColor: "#FFFDF9",
-        }}
-      >
+      <View style={{ flex: 1, justifyContent: "center", alignItems: "center", backgroundColor: "#FFFDF9" }}>
         <ActivityIndicator size="large" color="#183A36" />
       </View>
     );
   }
 
   return (
-    <SafeAreaView
-      style={{
-        flex: 1,
-        backgroundColor: "#97B8A5",
-        position: "relative",
-        paddingBottom: 80,
-      }}
-    >
-      <View
-        style={{
-          alignItems: "center",
-        }}
-      >
-        <Text
-          style={{
-            fontFamily: "Sirenia",
-            fontWeight: "semibold",
-            fontSize: 24,
-            padding: 20,
-            marginTop: 50,
-            marginBottom: 30,
-          }}
-        >
+    <SafeAreaView style={{ flex: 1, backgroundColor: "#97B8A5", position: "relative", paddingBottom: 80 }}>
+      <View style={{ alignItems: "center" }}>
+        <Text style={{ fontFamily: "Sirenia", fontWeight: "semibold", fontSize: 24, padding: 20, marginTop: 50, marginBottom: 30 }}>
           Welkom {firstname || "guest"}!
         </Text>
       </View>
-      <View
-        style={{
-          position: "absolute",
-          top: 70,
-          right: 30,
-        }}
-      >
+
+      <View style={{ position: "absolute", top: 70, right: 30 }}>
         <Link href="/notifications_home">
-          <FontAwesome
-            name="envelope-o"
-            size={30} // Icon size
-            color="#183A36" // Icon color
-          />
+          <View style={{ position: "relative" }}>
+            <FontAwesome name="envelope-o" size={30} color="#183A36" />
+            {unreadCount > 0 && (
+              <View style={{
+                position: "absolute",
+                top: -6,
+                right: -6,
+                backgroundColor: "#F18B7E",
+                borderRadius: 10,
+                paddingHorizontal: 5,
+                minWidth: 20,
+                height: 20,
+                alignItems: "center",
+                justifyContent: "center"
+              }}>
+                <Text style={{ color: "#183A36", fontSize: 12, fontWeight: "bold" }}>
+                  {unreadCount}
+                </Text>
+              </View>
+            )}
+          </View>
         </Link>
       </View>
+
+   
+
       <ScrollView
         contentContainerStyle={{ flexGrow: 1, paddingBottom: 80 }}
         style={{
