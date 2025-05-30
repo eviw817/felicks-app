@@ -10,13 +10,9 @@ const tabs = [
     label: "Adoptie",
     icon: "list",
   },
-  { name: "virtuele-hond", label: "Virtuele\nhond", icon: "paw" },
-  { name: "bewustzijn", label: "Bewustzijn", icon: "bulb" },
-  {
-    name: "(profile)/profile",
-    label: "Profiel",
-    icon: "person",
-  },
+  { name: "dogStart", label: "Virtuele\nhond", icon: "paw" },
+  { name: "bewustzijnIndex", label: "Bewustzijn", icon: "bulb" },
+  { name: "profile", label: "Profiel", icon: "person" },
 ];
 
 export default function NavBar() {
@@ -34,18 +30,11 @@ export default function NavBar() {
             onPress={() => router.push(("/" + tab.name) as any)}
           >
             <Ionicons
-              name={isActive ? tab.icon : (`${tab.icon}-outline` as any)}
+            name={isActive ? tab.icon : (`${tab.icon}-outline` as any)}
               size={32}
               color={isActive ? "#FDE4D2" : "#FFFDF9"}
             />
-            <Text
-              style={{
-                color: isActive ? "#FDE4D2" : "#FFFDF9",
-                textAlign: "center",
-                fontSize: 14,
-                fontFamily: "Nunito",
-              }}
-            >
+            <Text style={{ color: isActive ? "#FDE4D2" : "#FFFDF9", textAlign: "center", fontSize: 14,   fontFamily: "Nunito", }}>
               {tab.label}
             </Text>
           </TouchableOpacity>
@@ -68,3 +57,4 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
 });
+

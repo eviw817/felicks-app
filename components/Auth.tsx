@@ -86,6 +86,35 @@ export default function Auth({ session }: { session: Session }) {
     }
   }
 
+// Function to fetch the user's firstname from Supabase
+const getFirstname = async () => {
+  try {
+    if (!session?.user) throw new Error("No user session");
+
+    const { data, error } = await supabase
+      .from("profiles")
+      .select("firstname")
+      .eq("id", session.user.id) // Ensure we're fetching based on the logged-in user's ID
+      .single();
+
+    if (error) throw error;
+
+    setFirstname(data?.firstname || "Guest"); // Set to 'Guest' if no firstname found
+  } catch (error) {
+    const err = error as Error; // Typecast the error to an instance of Error
+    Alert.alert("Error", err.message || "An error occurred while fetching the profile");
+  }
+};
+
+// Fetch the firstname when the session is available
+useEffect(() => {
+  console.log("Session:", session); // Log session to see if it's populated
+  if (session) {
+    getFirstname();
+  }
+}, [session]);
+
+
   // async function signInWithEmail() {
   //   setLoading(true)
   //   const { error } = await supabase.auth.signInWithPassword({
