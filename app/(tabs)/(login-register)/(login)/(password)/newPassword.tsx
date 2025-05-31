@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, StyleSheet, TouchableOpacity, TextInput, Alert } from "react-native";
 import { useRouter, useLocalSearchParams } from "expo-router";
-import { supabase } from "../../../../../lib/supabase";
+import { supabase } from "@/lib/supabase";
 import * as Linking from "expo-linking";
 import * as SecureStore from 'expo-secure-store';
 
@@ -228,4 +228,3 @@ const styles = StyleSheet.create({
 });
 
 export default NewPasswordScreen;
->>>>>>>> origin/main:app/(tabs)/(login-register)/(login)/(password)/newPassword.tsx

@@ -1,26 +1,26 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, TouchableOpacity, StyleSheet, Alert } from "react-native";
+import { View, Text, TouchableOpacity, StyleSheet, Alert, SafeAreaView } from "react-native";
 import { useRouter } from "expo-router";
 // import { supabase } from "../../lib/supabase";
 // import { Session } from "@supabase/supabase-js";
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 import { faArrowLeft, faBell, faPaw, faCircleInfo, faChevronRight } from "@fortawesome/free-solid-svg-icons";
-
+import NavBar from "@/components/NavigationBar";
 
 const SettingsScreen = () => {
       const router = useRouter();
   
     return (
-        <View style={styles.container} >
+        <SafeAreaView style={styles.container} >
             <View style={styles.header}>
-                <TouchableOpacity onPress={() => router.push("../profile")} style={styles.backButton}>
+                <TouchableOpacity onPress={() => router.push("/profile")} style={styles.backButton}>
                     <FontAwesomeIcon icon={faArrowLeft} size={30} color={'#183A36'} style={styles.backButton} />
                 </TouchableOpacity>
                 <Text style={styles.title}>Instellingen</Text>
             </View>
 
             <View style={styles.menu}>
-                <TouchableOpacity style={styles.menuItem} onPress={() => router.push("../help")}>
+                <TouchableOpacity style={styles.menuItem} onPress={() => router.push("/help")}>
                     <View style={styles.leftSection}>
                         <FontAwesomeIcon icon={faCircleInfo} size={30} color="#183A36" />
                         <Text style={styles.menuText}>Hulp</Text>
@@ -28,7 +28,7 @@ const SettingsScreen = () => {
                     <FontAwesomeIcon icon={faChevronRight} size={25} color="#183A36" />
                 </TouchableOpacity>
 
-                <TouchableOpacity style={styles.menuItem} onPress={() => router.push("../notification")}>
+                <TouchableOpacity style={styles.menuItem} onPress={() => router.push("/notification")}>
                     <View style={styles.leftSection}>
                         <FontAwesomeIcon icon={faBell} size={30} color="#183A36" />
                         <Text style={styles.menuText}>Meldingen</Text>
@@ -36,7 +36,7 @@ const SettingsScreen = () => {
                     <FontAwesomeIcon icon={faChevronRight} size={25} color="#183A36" />
                 </TouchableOpacity>
 
-                <TouchableOpacity style={styles.menuItem} onPress={() => router.push("../pet")}>
+                <TouchableOpacity style={styles.menuItem} onPress={() => router.push("/pet")}>
                     <View style={styles.leftSection}>
                         <FontAwesomeIcon icon={faPaw} size={30} color="#183A36" />
                         <Text style={styles.menuText}>Pas je huisdier aan</Text>
@@ -48,14 +48,24 @@ const SettingsScreen = () => {
 
             {/* Afmelden & Account verwijderen */}
             <View style={styles.logoutSection}>
-                <TouchableOpacity onPress={() => router.push("../signOut")}>
+                <TouchableOpacity onPress={() => router.push("/signOut")}>
                     <Text style={styles.logoutText}>Afmelden</Text>
                 </TouchableOpacity>
-                <TouchableOpacity  onPress={() => router.push("../account")}>
+                <TouchableOpacity  onPress={() => router.push("/account")}>
                     <Text style={styles.deleteText}>Account verwijderen</Text>
                 </TouchableOpacity>
             </View>
-      </View>
+        {/* Fixed navbar onderaan scherm */}
+        <View
+            style={{
+                position: "absolute",
+                bottom: 0,
+                left: 0,
+                right: 0,
+            }}>
+            <NavBar />
+        </View>
+      </SafeAreaView>
     );
    
   };
@@ -63,7 +73,7 @@ const SettingsScreen = () => {
   const styles = StyleSheet.create({
      container: { 
         flex: 1,
-        paddingTop: 100,
+        paddingTop: 60,
         alignItems: 'center',
         padding: 20,
         backgroundColor: '#FFFDF9',

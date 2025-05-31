@@ -1,9 +1,10 @@
 import React, { useState } from "react";
-import { View, Text, TextInput, TouchableOpacity, Image, StyleSheet } from "react-native";
+import { View, Text, TextInput, TouchableOpacity, Image, StyleSheet, SafeAreaView, ScrollView } from "react-native";
 import { Picker } from "@react-native-picker/picker";
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import { useRouter } from "expo-router";
+import NavBar from "@/components/NavigationBar";
 
 const EditPetScreen = () => {
   const [petName, setPetName] = useState("");
@@ -13,7 +14,8 @@ const EditPetScreen = () => {
   const router = useRouter();
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
+      <ScrollView contentContainerStyle={{ flexGrow: 1, paddingBottom: 100, alignItems: "center", paddingTop: 60, padding: 20, }}>
         <View style={styles.header}>
                     <TouchableOpacity onPress={() => router.push("../settings")} style={styles.backButton}>
                         <FontAwesomeIcon icon={faArrowLeft} size={30} color={'#183A36'} style={styles.backButton} />
@@ -53,18 +55,26 @@ const EditPetScreen = () => {
       <TouchableOpacity onPress={() => router.push("../removePet")}>
         <Text style={styles.deleteText}>Huisdier verwijderen</Text>
       </TouchableOpacity>
-    </View>
+      </ScrollView>
+      {/* Fixed navbar onderaan scherm */}
+      <View
+        style={{
+          position: "absolute",
+          bottom: 0,
+          left: 0,
+          right: 0,
+        }}>
+        <NavBar />
+      </View>
+    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: 100,
     backgroundColor: "#FFFDF9",
-    padding: 20,
     alignItems: "center",
-
   },
   header: {
     flexDirection: "row",

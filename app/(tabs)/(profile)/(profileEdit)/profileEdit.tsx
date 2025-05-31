@@ -11,6 +11,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 import { faGear } from '@fortawesome/free-solid-svg-icons';
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 import Avatar from "../../../../components/Avatar";
+import NavBar from "@/components/NavigationBar";
 
 const ProfileEditScreen = () => {
     const router = useRouter();
@@ -178,20 +179,21 @@ const ProfileEditScreen = () => {
     }, [session]);
     
        const goToSettings = () => {
-        router.push('../settings');
+        router.push('/settings');
       };
     
 
     
     return (
+      <SafeAreaView style={{ flex: 1 }}>
       <KeyboardAvoidingView 
       style={{ flex: 1 }} 
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
     >
-      <ScrollView contentContainerStyle={{ flexGrow: 1, paddingBottom: 50}}>
+      <ScrollView contentContainerStyle={{ flexGrow: 1, paddingBottom: 100}}>
       <SafeAreaView  style={styles.container} >
          <View style={styles.header}>
-         <TouchableOpacity onPress={() => router.push("../profile")} style={styles.backButton}>
+         <TouchableOpacity onPress={() => router.push("/profile")} style={styles.backButton}>
          <FontAwesomeIcon icon={faArrowLeft} size={30} color={'#183A36'} style={styles.backButton} />
         </TouchableOpacity>
           <Text style={styles.title}>Profiel bewerken</Text>
@@ -358,6 +360,17 @@ const ProfileEditScreen = () => {
   </SafeAreaView>
   </ScrollView>
   </KeyboardAvoidingView>
+  {/* Fixed navbar onderaan scherm */}
+  <View
+    style={{
+      position: "absolute",
+      bottom: 0,
+      left: 0,
+      right: 0,
+    }}>
+    <NavBar />
+  </View>
+  </SafeAreaView>
     );
   };
 
@@ -365,7 +378,7 @@ const ProfileEditScreen = () => {
   const styles = StyleSheet.create({
     container: { 
         flex: 1,
-        paddingTop: 100,
+        paddingTop: 60,
         alignItems: 'center',
         padding: 20,
         backgroundColor: '#FFFDF9',

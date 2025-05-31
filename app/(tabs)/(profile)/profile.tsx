@@ -1,13 +1,14 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { useFocusEffect } from "@react-navigation/native";
 
-import { View, Text, TouchableOpacity, StyleSheet, Alert } from "react-native";
+import { View, Text, TouchableOpacity, StyleSheet, Alert, SafeAreaView, ScrollView } from "react-native";
 import { useRouter, Link } from "expo-router";
-import { supabase } from "../../../lib/supabase";
+import { supabase } from "@/lib/supabase";
 import { Session } from "@supabase/supabase-js";
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 import { faGear } from '@fortawesome/free-solid-svg-icons';
-import Avatar from "../../../components/Avatar";
+import Avatar from "@/components/Avatar";
+import NavBar from "@/components/NavigationBar";
 
 const ProfileScreen = () => {
       const router = useRouter();
@@ -72,72 +73,83 @@ const ProfileScreen = () => {
       }, []);
 
       const goToSettings = () => {
-        router.push('../settings');
+        router.push('/settings');
       };
     
 
     return (
-      <View style={styles.container}>
-         <View style={styles.header}>
-        <Text style={styles.title}>Profiel</Text>
-       <TouchableOpacity onPress={goToSettings} style={styles.settingsicon}>
-         <FontAwesomeIcon icon={faGear} size={28} color={'#183A36'}  />
-       </TouchableOpacity>
-        </View>
-  
-        {/* Profielsectie */}
-     <View style={styles.profileSection}>
-     <View style={styles.profileInfoContainer}>
-    <Avatar size={100} url={avatarUrl} onUpload={(url) => setAvatarUrl(url)} showUploadButton={false} />
+      <SafeAreaView style={styles.container}>
+        <ScrollView 
+        contentContainerStyle={{ flexGrow: 1, paddingBottom: 100, paddingTop: 60, padding: 20, }}>
+          <View style={styles.header}>
+          <Text style={styles.title}>Profiel</Text>
+        <TouchableOpacity onPress={goToSettings} style={styles.settingsicon}>
+          <FontAwesomeIcon icon={faGear} size={28} color={'#183A36'}  />
+        </TouchableOpacity>
+          </View>
+    
+          {/* Profielsectie */}
+      <View style={styles.profileSection}>
+      <View style={styles.profileInfoContainer}>
+      <Avatar size={100} url={avatarUrl} onUpload={(url) => setAvatarUrl(url)} showUploadButton={false} />
 
-      <View style={styles.profileInfo}>
-        <Text style={styles.profileName}>{`${firstname} ${lastname}`}</Text>
-        <Text style={styles.textprofileEmail}>E-mail</Text>
-        <Text style={styles.profileEmail}>{email}</Text>
-      </View>
-    </View>
-
-      
-      {/* De bewerk-knop onder de tekst */}
-      <Link style={styles.editButton}
-        href="../profileEdit">
-        <Text style={styles.editButtonText}>BEWERKEN</Text>
-      </Link>
-    </View>
-  
-        {/* Info Secties */}
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Jouw favoriete hond(en)</Text>
-          <Text style={styles.sectionText}>
-            Als je een hond liket dan kan je deze hier terugvinden.
-          </Text>
-        </View>
-  
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Formulier in behandeling</Text>
-          <Text style={styles.sectionText}>
-            Wanneer u een aanvraag doet, wordt je formulier doorgestuurd naar het asiel, je kan de
-            status hiervan bij je profiel vinden.
-          </Text>
-        </View>
-  
-        <View style={styles.section}>
-          <Text style={styles.sectionSubtile}>Deze honden passen bij jou profiel:</Text>
-          <Text style={styles.sectionText}>
-            Om te bepalen welke hond(en) het beste bij jou passen, vragen we je om eerst de
-            vragenlijst in te vullen. Zo kunnen we een perfecte match voor je vinden!
-          </Text>
+        <View style={styles.profileInfo}>
+          <Text style={styles.profileName}>{`${firstname} ${lastname}`}</Text>
+          <Text style={styles.textprofileEmail}>E-mail</Text>
+          <Text style={styles.profileEmail}>{email}</Text>
         </View>
       </View>
+
+        
+        {/* De bewerk-knop onder de tekst */}
+        <Link style={styles.editButton}
+          href="/profileEdit">
+          <Text style={styles.editButtonText}>BEWERKEN</Text>
+        </Link>
+      </View>
+    
+          {/* Info Secties */}
+          <View style={styles.section}>
+            <Text style={styles.sectionTitle}>Jouw favoriete hond(en)</Text>
+            <Text style={styles.sectionText}>
+              Als je een hond liket dan kan je deze hier terugvinden.
+            </Text>
+          </View>
+    
+          <View style={styles.section}>
+            <Text style={styles.sectionTitle}>Formulier in behandeling</Text>
+            <Text style={styles.sectionText}>
+              Wanneer u een aanvraag doet, wordt je formulier doorgestuurd naar het asiel, je kan de
+              status hiervan bij je profiel vinden.
+            </Text>
+          </View>
+    
+          <View style={styles.section}>
+            <Text style={styles.sectionSubtile}>Deze honden passen bij jou profiel:</Text>
+            <Text style={styles.sectionText}>
+              Om te bepalen welke hond(en) het beste bij jou passen, vragen we je om eerst de
+              vragenlijst in te vullen. Zo kunnen we een perfecte match voor je vinden!
+            </Text>
+          </View>
+        </ScrollView>
+        {/* Fixed navbar onderaan scherm */}
+        <View
+          style={{
+            position: "absolute",
+            bottom: 0,
+            left: 0,
+            right: 0,
+          }}>
+          <NavBar />
+        </View>
+      </SafeAreaView>
     );
   };
 
   const styles = StyleSheet.create({
     container: { 
         flex: 1,
-        paddingTop: 100,
         alignItems: 'center',
-        padding: 20,
         backgroundColor: '#FFFDF9',
         fontFamily: 'Nunito'
     },
