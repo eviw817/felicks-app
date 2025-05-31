@@ -8,15 +8,19 @@ import {
   Switch,
   Animated,
   Easing,
+  Pressable
 } from "react-native";
 import { useRouter, useLocalSearchParams } from "expo-router";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import { Link } from "expo-router";
 import { supabase } from "@/lib/supabase"; // adjust if your path is different
 import NavBar from "@/components/NavigationBar";
+import { useNavigation } from '@react-navigation/native'
+import { Ionicons } from '@expo/vector-icons'
 
 export default function DogFeature() {
   const router = useRouter();
+  const navigation = useNavigation()
 
   const { petId } = useLocalSearchParams();
 
@@ -75,16 +79,16 @@ export default function DogFeature() {
           justifyContent: "flex-start",
         }}
       >
-        <TouchableOpacity
-          style={{
-            position: "absolute",
-            top: 64,
-            left: 20,
-          }}
-          onPress={() => router.back()}
-        >
-          <AntDesign name="arrowleft" size={24} color="black" />
-        </TouchableOpacity>
+        <Pressable
+            onPress={() => navigation.goBack()}
+            style={{
+              position: "absolute",
+              top: 68,
+              left: 40,
+            }}
+          >
+            <Ionicons name="arrow-back" size={24} color="#183A36" />
+          </Pressable>
         <Text
           style={{
             fontFamily: "Nunito",

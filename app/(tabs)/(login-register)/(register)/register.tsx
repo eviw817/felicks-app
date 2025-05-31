@@ -208,7 +208,7 @@ export default function Registeren() {
       setYear("2000");
 
       // Redirect to adoptionProfileStart page
-      router.push("/adoptionProfileStart");
+      router.push("/homepage");
     }
 
     setLoading(false);

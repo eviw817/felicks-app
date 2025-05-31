@@ -5,11 +5,14 @@ import {
   Text,
   TouchableOpacity,
   Alert,
+  Pressable
 } from "react-native";
 import { useRouter, Link } from "expo-router";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import { Picker } from "@react-native-picker/picker";
 import NavBar from "@/components/NavigationBar";
+import { useNavigation } from '@react-navigation/native'
+import { Ionicons } from '@expo/vector-icons'
 
 import { supabase } from "@/lib/supabase"; // adjust path if needed
 import { useEffect } from "react";
@@ -17,6 +20,7 @@ import { useEffect } from "react";
 export default function DogBreed() {
   const router = useRouter();
   const [dogBreed, setdogBreed] = useState<string | null>(null);
+    const navigation = useNavigation()
 
   const handleBreedSubmit = async () => {
     if (!dogBreed) return;
@@ -98,23 +102,27 @@ export default function DogBreed() {
     <SafeAreaView
       style={{ flex: 1, alignItems: "center", backgroundColor: "#FFFDF9" }}
     >
-      <TouchableOpacity
-        style={{ position: "absolute", top: 68, left: 40 }}
-        onPress={() => router.back()}
-      >
-        <AntDesign name="arrowleft" size={24} color="black" />
-      </TouchableOpacity>
-      <View style={{ marginTop: 62, width: "100%", paddingHorizontal: 20 }}>
-        <Text
-          style={{
-            fontFamily: "Nunito",
-            fontWeight: "bold",
-            fontSize: 24,
-            textAlign: "center",
-          }}
-        >
-          Virtuele hond
-        </Text>
+        <Pressable
+            onPress={() => navigation.goBack()}
+            style={{
+              position: "absolute",
+              top: 68,
+              left: 40,
+            }}
+          >
+            <Ionicons name="arrow-back" size={24} color="#183A36" />
+          </Pressable>
+        <View style={{ marginTop: 62, width: "100%", paddingHorizontal: 20 }}>
+          <Text
+            style={{
+              fontFamily: "Nunito",
+              fontWeight: "bold",
+              fontSize: 24,
+              textAlign: "center",
+            }}
+          >
+            Virtuele hond
+          </Text>
         <Text style={{ fontFamily: "Nunito", fontSize: 16, marginTop: 20 }}>
           Denk aan jouw favoriete hond...
         </Text>
