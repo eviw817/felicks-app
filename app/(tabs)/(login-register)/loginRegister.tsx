@@ -1,6 +1,13 @@
 import React, { useEffect } from "react";
 import { useRouter, Link } from "expo-router";
-import { View, Text, StyleSheet, TouchableOpacity, Image, SafeAreaView } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  Image,
+  SafeAreaView,
+} from "react-native";
 
 function LoginRegisterScreen() {
   const router = useRouter();
@@ -18,14 +25,10 @@ function LoginRegisterScreen() {
         Ontdek of een hond bij jouw levensstijl past. Felicks helpt je met het
         maken van een weloverwogen keuze!
       </Text>
-      <Link 
-      style={styles.button} 
-      href="/login">
+      <Link style={styles.button} href="/login">
         <Text style={styles.buttonText}>Inloggen</Text>
       </Link>
-      <Link 
-      style={styles.button} 
-      href="/register">
+      <Link style={styles.button} href="/register">
         <Text style={styles.buttonText}>Registeren</Text>
       </Link>
     </SafeAreaView>
