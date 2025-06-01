@@ -52,7 +52,7 @@ export default function NotificationsScreen() {
         return;
       }
 
-      // 2) Haal hond op (zonder expliciete generics; TS infereert Dog)
+    
       const { data: dog, error: dogError } = await supabase
         .from("ar_dog")
         .select("id, name")
@@ -68,7 +68,7 @@ export default function NotificationsScreen() {
       setDogName(dog.name);
       setDogId(dog.id);
 
-      // 3) Haal meldingen op (zonder expliciete generics; TS infereert Notification)
+     
       const { data: rawNotifications, error: notifError } = await supabase
         .from("notifications")
         .select("id, title, description, icon_type, is_read, created_at, category")
@@ -84,7 +84,7 @@ export default function NotificationsScreen() {
         return;
       }
 
-      // 4) Vervang {name} in title & description met hondnaam
+
       const personalized = rawNotifications.map((notif) => ({
         ...notif,
         title: notif.title.replace("{name}", dog.name),
@@ -105,7 +105,7 @@ export default function NotificationsScreen() {
       .eq("id", id);
 
     if (error) {
-      console.error("❌ Failed to update notification:", error.message);
+      console.error("Failed to update notification:", error.message);
     } else {
       setNotifications((prev) =>
         prev.map((n) => (n.id === id ? { ...n, is_read: true } : n))
@@ -165,7 +165,7 @@ export default function NotificationsScreen() {
                   alignItems: "center",
                 }}
                 onPress={async () => {
-                  // Als je wilt afvinken bij klik, haal de commentaar weg:
+                  // Als je wilt afvinken bij klik (ongelezen), haal de commentaar weg:
                   // await markAsRead(notif.id);
 
                   if (!dogId) {

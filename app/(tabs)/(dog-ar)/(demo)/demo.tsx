@@ -16,9 +16,7 @@ import NavBar from "@/components/NavigationBar";
 // import { ViroARSceneNavigator } from "@reactvision/react-viro";
 
 
-// ────────────── Types ──────────────
 
-// Hondstatus‐type (ar_dog‐tabel)
 type DogStatus = {
   id: string;
   user_id: string;
@@ -30,7 +28,7 @@ type DogStatus = {
   is_toilet: boolean;
 };
 
-// Meldingstype (notifications‐tabel)
+
 type NotificationSummary = {
   id: string;
   summary: string; // {name} al vervangen
@@ -83,7 +81,7 @@ const AugmentedDog: React.FC = () => {
     },
   });
 
-  // (6) Prioriteit: volgorde voor status‐berichten als er geen melding is
+  
   const fieldPriority: (keyof typeof defaultStatus)[] = [
     "is_eating",
     "is_playing",
@@ -99,14 +97,14 @@ const AugmentedDog: React.FC = () => {
       .eq("id", id);
 
     if (error) {
-      console.error("❌ Kon melding niet als gelezen markeren:", error.message);
+      console.error("Kon melding niet als gelezen markeren:", error.message);
     }
   };
 
-  // ────────────── useEffect: hondstatus + alle ongelezen meldingen ophalen ──────────────
+
   useEffect(() => {
     if (!petId) {
-      console.warn("❌ petId ontbreekt!");
+      console.warn("petId ontbreekt!");
       setLoading(false);
       return;
     }
@@ -114,7 +112,7 @@ const AugmentedDog: React.FC = () => {
     const fetchStatusEnNotifications = async () => {
       setLoading(true);
 
-      // ── (A) Hondstatus ophalen ─────────────────────────────────
+
       const { data: dogData, error: statusError } = await supabase
         .from("ar_dog")
         .select("*")
@@ -123,7 +121,7 @@ const AugmentedDog: React.FC = () => {
 
       if (statusError || !dogData) {
         console.error(
-          "❌ Fout bij ophalen hondstatus:",
+          "Fout bij ophalen hondstatus:",
           statusError?.message || "geen data"
         );
         setLoading(false);
@@ -132,24 +130,21 @@ const AugmentedDog: React.FC = () => {
       setStatus(dogData as DogStatus);
       const dogName = dogData.name || "je hond";
 
-      // ── (B) ALLE ongelezen meldingen ophalen, van oud → nieuw ──────
       const { data: notifData, error: notifError } = await supabase
         .from("notifications")
-        // vraag nu category op, zodat we exact weten wat voor type melding het is
         .select("id, summary, category, is_read, created_at")
         .eq("pet_id", petId)
         .eq("is_read", false)
         .order("created_at", { ascending: true });
 
       if (notifError) {
-        console.error("❌ Fout bij ophalen meldingen:", notifError.message);
+        console.error("Fout bij ophalen meldingen:", notifError.message);
         setNotificationsList([]);
         setLoading(false);
         return;
       }
 
       if (notifData && notifData.length > 0) {
-        // (B1) Vervang {name} door hondnaam in de summary
         const filledList: NotificationSummary[] = notifData.map((raw) => ({
           id: raw.id,
           summary: raw.summary.replace(/\{name\}/g, dogName),
@@ -158,8 +153,7 @@ const AugmentedDog: React.FC = () => {
           created_at: raw.created_at,
         }));
 
-        // (B2) Als we vanuit NotificationsScreen met één specifieke notificationId gekomen zijn,
-        // bepaal dan de juiste start‐index. Anders index = 0 (oudste)
+  
         let startIndex = 0;
         if (notificationId) {
           const idx = filledList.findIndex((n) => n.id === notificationId);
@@ -181,7 +175,7 @@ const AugmentedDog: React.FC = () => {
     fetchStatusEnNotifications();
   }, [petId, notificationId]);
 
-  // ────────────── Bepaal welke tekstballon we tonen ──────────────
+ 
   const getCurrentMessages = (): string[] => {
     // 1) Staat er nog minstens één ongelezen melding? Toon precies die ene
     if (
@@ -206,30 +200,25 @@ const AugmentedDog: React.FC = () => {
     return [];
   };
 
-  // ────────────── Functie: togglet hondstatus én (alleen bij corrécte actie) melding lezen ──────────────
+
   const toggleStatus = async (field: keyof typeof defaultStatus) => {
     if (!status) return;
-
-    // (1) Bereken de nieuwe waarde (false→true of true→false)
     const newValue = !status[field];
-
-    // (2) Optimistisch UI‐update: zet de knop tijdelijk om
     setStatus((prev) => (prev ? { ...prev, [field]: newValue } : prev));
 
-    // (3) Schrijf toggle naar Supabase
     const { error: updateError } = await supabase
       .from("ar_dog")
       .update({ [field]: newValue })
       .eq("id", status.id);
 
     if (updateError) {
-      console.error("❌ Kon hondstatus niet updaten:", updateError.message);
-      // Rollback in UI als het faalt
+      console.error("Kon hondstatus niet updaten:", updateError.message);
+ 
       setStatus((prev) => (prev ? { ...prev, [field]: !newValue } : prev));
       return;
     }
 
-    // (4) Alleen als we van false → true gaan (newValue === true) én er is een melding in beeld,
+    // Alleen als we van false → true gaan (newValue === true) én er is een melding in beeld,
     //     checken we of field === huidigeMelding.category om hem dan écht als gelezen te markeren.
     if (newValue) {
       if (
@@ -239,7 +228,6 @@ const AugmentedDog: React.FC = () => {
         const huidigeMelding = notificationsList[currentIndex];
 
         if (field === huidigeMelding.category) {
-          // (5) Markeer de melding als gelezen
           await markNotificationAsRead(huidigeMelding.id);
 
           // (6) Schuif door naar de volgende melding (of leeg de lijst als dit de laatste was)
@@ -249,13 +237,12 @@ const AugmentedDog: React.FC = () => {
             setNotificationsList([]);
           }
         }
-        // Als category mismatch, doen we niets; de melding blijft ongelezen.
+        // Als category niet klopt, doen we niets; de melding blijft ongelezen.
       }
     }
-    // (7) Bij true→false (newValue === false) gebeurt er niets: melding en UI blijven zoals ze waren.
   };
 
-  // ────────────── Renderen ──────────────
+
   if (loading || !status) {
     return (
       <SafeAreaView style={{ flex: 1, backgroundColor: "#FFFDF9" }}>
@@ -268,7 +255,7 @@ const AugmentedDog: React.FC = () => {
           }}
         >
           <ActivityIndicator size="large" color="#97B8A5" />
-          <Text style={{ marginTop: 10 }}>⏳ Loading…</Text>
+          <Text style={{ marginTop: 10 }}> Loading…</Text>
         </View>
       </SafeAreaView>
     );
