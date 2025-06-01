@@ -11,10 +11,9 @@ import { supabase } from "@/lib/supabase";
 import { useLocalSearchParams } from "expo-router";
 import NavBar from "@/components/NavigationBar";
 
-// ────────────── (Originele AR-imports, nu uitgeschakeld) ──────────────
-// import { BeagleScene } from "@/components/augumented-dog/scenes/BeagleScene";
-// import { ViroARSceneNavigator } from "@reactvision/react-viro";
-
+// ────────────── AR-componenten ──────────────
+import { BeagleScene } from "@/components/augumented-dog/scenes/BeagleScene";
+import { ViroARSceneNavigator } from "@reactvision/react-viro";
 
 
 type DogStatus = {
@@ -28,33 +27,27 @@ type DogStatus = {
   is_toilet: boolean;
 };
 
-
 type NotificationSummary = {
   id: string;
-  summary: string; // {name} al vervangen
+  summary: string;
   category: "is_eating" | "is_playing" | "is_running" | "is_toilet";
   is_read: boolean;
   created_at: string;
 };
 
 const AugmentedDog: React.FC = () => {
-  // (1) Haal petId én notificationId uit URL (expo-router)
   const { petId, notificationId } = useLocalSearchParams<{
     petId: string;
     notificationId?: string;
   }>();
 
-  // (2) State: hondstatus + loader
   const [status, setStatus] = useState<DogStatus | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
-
-  // (3) State: ongelezen meldingen en index
   const [notificationsList, setNotificationsList] = useState<
     NotificationSummary[]
   >([]);
   const [currentIndex, setCurrentIndex] = useState<number>(0);
 
-  // (4) Default‐waarden voor hondstatus‐velden
   const defaultStatus: Pick<
     DogStatus,
     "is_eating" | "is_playing" | "is_running" | "is_toilet"
@@ -65,7 +58,6 @@ const AugmentedDog: React.FC = () => {
     is_toilet: false,
   };
 
-  // (5) Helper: status‐berichten per veld (met hondnaam)
   const getStatusMessages = (dogName: string) => ({
     is_eating: {
       true: `${dogName} heeft flink zijn eten opgegeten!`,
@@ -81,7 +73,6 @@ const AugmentedDog: React.FC = () => {
     },
   });
 
-  
   const fieldPriority: (keyof typeof defaultStatus)[] = [
     "is_eating",
     "is_playing",
@@ -89,7 +80,6 @@ const AugmentedDog: React.FC = () => {
     "is_toilet",
   ];
 
-  // Helper om melding in DB op gelezen te zetten
   const markNotificationAsRead = async (id: string) => {
     const { error } = await supabase
       .from("notifications")
@@ -101,7 +91,6 @@ const AugmentedDog: React.FC = () => {
     }
   };
 
-
   useEffect(() => {
     if (!petId) {
       console.warn("petId ontbreekt!");
@@ -111,7 +100,6 @@ const AugmentedDog: React.FC = () => {
 
     const fetchStatusEnNotifications = async () => {
       setLoading(true);
-
 
       const { data: dogData, error: statusError } = await supabase
         .from("ar_dog")
@@ -153,7 +141,6 @@ const AugmentedDog: React.FC = () => {
           created_at: raw.created_at,
         }));
 
-  
         let startIndex = 0;
         if (notificationId) {
           const idx = filledList.findIndex((n) => n.id === notificationId);
@@ -175,9 +162,7 @@ const AugmentedDog: React.FC = () => {
     fetchStatusEnNotifications();
   }, [petId, notificationId]);
 
- 
   const getCurrentMessages = (): string[] => {
-    // 1) Staat er nog minstens één ongelezen melding? Toon precies die ene
     if (
       notificationsList.length > 0 &&
       currentIndex < notificationsList.length
@@ -185,7 +170,6 @@ const AugmentedDog: React.FC = () => {
       return [notificationsList[currentIndex].summary];
     }
 
-    // 2) Anders: toon hondstatus (in volgorde van fieldPriority)
     if (status) {
       const dogName = status.name || "je hond";
       const statusMessagesMap = getStatusMessages(dogName);
@@ -196,10 +180,8 @@ const AugmentedDog: React.FC = () => {
       }
     }
 
-    // 3) Anders: geen ballon
     return [];
   };
-
 
   const toggleStatus = async (field: keyof typeof defaultStatus) => {
     if (!status) return;
@@ -213,13 +195,10 @@ const AugmentedDog: React.FC = () => {
 
     if (updateError) {
       console.error("Kon hondstatus niet updaten:", updateError.message);
- 
       setStatus((prev) => (prev ? { ...prev, [field]: !newValue } : prev));
       return;
     }
 
-    // Alleen als we van false → true gaan (newValue === true) én er is een melding in beeld,
-    //     checken we of field === huidigeMelding.category om hem dan écht als gelezen te markeren.
     if (newValue) {
       if (
         notificationsList.length > 0 &&
@@ -230,18 +209,15 @@ const AugmentedDog: React.FC = () => {
         if (field === huidigeMelding.category) {
           await markNotificationAsRead(huidigeMelding.id);
 
-          // (6) Schuif door naar de volgende melding (of leeg de lijst als dit de laatste was)
           const volgende = currentIndex + 1;
           setCurrentIndex(volgende);
           if (volgende >= notificationsList.length) {
             setNotificationsList([]);
           }
         }
-        // Als category niet klopt, doen we niets; de melding blijft ongelezen.
       }
     }
   };
-
 
   if (loading || !status) {
     return (
@@ -265,46 +241,15 @@ const AugmentedDog: React.FC = () => {
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "#FFFDF9" }}>
-      {/* ─── Originele AR‐component (uitgeschakeld in commentaar) ─── */}
-      {/*
-      <View style={{ flex: 1 }}>
-        <BeagleScene petId={petId} />
-      </View>
-      */}
-      {/*
+      {/* ─── AR-component ingeschakeld ─── */}
       <View style={{ flex: 1 }}>
         <ViroARSceneNavigator
-          initialScene={{ scene: BeagleScene }}
+          initialScene={{ scene: () => <BeagleScene /> }}
           style={{ flex: 1 }}
         />
       </View>
-      */}
-      {/* ────────────────────────────────────────────────────────────── */}
 
-      {/* ─── Placeholder als indicatie dat AR uitstaat (ongeveer zoals je eerder had) ─── */}
-      <View
-        style={{
-          flex: 1,
-          justifyContent: "center",
-          alignItems: "center",
-          padding: 20,
-        }}
-      >
-        <Text
-          style={{
-            fontSize: 18,
-            color: "#183A36",
-            textAlign: "center",
-            lineHeight: 24,
-          }}
-        >
-          De AR‐weergave van je hond is tijdelijk uitgeschakeld tijdens
-          development. Activeer dit later opnieuw om AR‐functies te testen.
-        </Text>
-      </View>
-      {/* ────────────────────────────────────────────────────────────── */}
-
-      {/* ─── Tekstballon (één melding óf hondstatus) ─── */}
+      {/* ─── Tekstballon ─── */}
       <View
         style={{
           position: "absolute",
@@ -338,7 +283,7 @@ const AugmentedDog: React.FC = () => {
         ))}
       </View>
 
-      {/* ─── Vier icon‐buttons voor hondstatus ─── */}
+      {/* ─── Buttons ─── */}
       <View
         style={{
           position: "absolute",
@@ -384,7 +329,7 @@ const AugmentedDog: React.FC = () => {
         ))}
       </View>
 
-      {/* ─── NavBar onderaan ─── */}
+      {/* ─── NavBar ─── */}
       <View
         style={{
           position: "absolute",
