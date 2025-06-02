@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
   Alert,
   Image,
-  Button,
+  ActivityIndicator,
 } from "react-native";
 import { useFonts } from "expo-font";
 import { Session } from "@supabase/supabase-js";
@@ -16,12 +16,13 @@ import { useRouter, Link } from "expo-router";
 import NavBar from "@/components/NavigationBar";
 import { Ionicons, FontAwesome } from "@expo/vector-icons";
 import { useFocusEffect } from '@react-navigation/native';
+import BaseText from "@/components/BaseText";
 
 export default function HomepageScreen() {
 
   const [session, setSession] = useState<Session | null>(null);
   const [firstname, setFirstname] = useState("Gast");
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState<boolean>(true);
   const [matchedDogs, setMatchedDogs] = useState<any[]>([]);
   const [likedDogIds, setLikedDogIds] = useState<string[]>([]);
   const router = useRouter();
@@ -119,6 +120,36 @@ export default function HomepageScreen() {
     );
   };
 
+  useEffect(() => {
+    if (session?.user) {
+      const getFirstname = async () => {
+        try {
+          const { data, error } = await supabase
+            .from("profiles")
+            .select("firstname")
+            .eq("id", session.user.id)
+            .single();
+
+          if (error) throw error;
+          setFirstname(data?.firstname || "Guest");
+        } catch (error: any) {
+          Alert.alert("Error", error.message || "Kon profiel niet laden");
+        }
+      };
+      getFirstname();
+    } else {
+      setFirstname("Guest");
+    }
+  }, [session]);
+
+  if (loading) {
+    return (
+      <View style={{ flex: 1, justifyContent: "center", alignItems: "center", backgroundColor: "#FFFDF9" }}>
+        <ActivityIndicator size="large" color="#183A36" />
+      </View>
+    );
+  };
+
   const toggleLike = async (dogId: string) => {
     const userId = session?.user?.id;
     if (!userId) return;
@@ -152,7 +183,7 @@ export default function HomepageScreen() {
     <SafeAreaView
       style={{
         flex: 1,
-        backgroundColor: "#97B8A5",
+        backgroundColor: "#cbdacf",
         position: "relative",
         paddingBottom: 80,
       }}
@@ -162,7 +193,7 @@ export default function HomepageScreen() {
           alignItems: "center",
         }}
       >
-        <Text
+        <BaseText
           style={{
             fontFamily: "SireniaSemiBold",
             fontSize: 24,
@@ -172,7 +203,7 @@ export default function HomepageScreen() {
           }}
         >
           Welkom {firstname || "guest"}!
-        </Text>
+        </BaseText>
       </View>
       <View
         style={{
@@ -195,7 +226,6 @@ export default function HomepageScreen() {
           backgroundColor: "#FFFDF9",
           borderTopLeftRadius: 20,
           borderTopRightRadius: 20,
-          padding: 20,
           maxWidth: "100%",
           paddingVertical: 20,
         }}
@@ -208,6 +238,7 @@ export default function HomepageScreen() {
               padding: 20,
               paddingRight: 40,
               marginRight: 10,
+              color: "#183A36",
             }}
           >
             Quiz van de week
@@ -219,6 +250,7 @@ export default function HomepageScreen() {
               paddingLeft: 20,
               paddingRight: 40,
               paddingBottom: 20,
+              color: "#183A36",
             }}
           >
             Ben jij klaar voor een hond? Doe de test!
@@ -229,6 +261,7 @@ export default function HomepageScreen() {
               fontSize: 16,
               paddingLeft: 20,
               paddingRight: 40,
+              color: "#183A36",
             }}
           >
             Doe nog snel de quiz van deze week, voor je informatie misloopt.
@@ -239,11 +272,18 @@ export default function HomepageScreen() {
               padding: 12,
               margin: 20,
               paddingHorizontal: 20,
+              paddingVertical: 15,
               backgroundColor: "#F18B7E",
               fontWeight: "bold",
+              fontSize: 15,
               borderRadius: 15,
               textAlign: "center",
               color: "#FFFDF9",
+              width: "90%",
+              alignItems: "center",
+              shadowOffset: { width: 0, height: 2 },
+              shadowOpacity: 0.1,
+              shadowRadius: 4,
             }}
           >
             START DE QUIZ
@@ -257,6 +297,7 @@ export default function HomepageScreen() {
               fontSize: 20,
               padding: 20,
               marginRight: 10,
+              color: "#183A36",
             }}
           >
             Bewustzijn
@@ -268,6 +309,7 @@ export default function HomepageScreen() {
               paddingLeft: 20,
               paddingRight: 40,
               paddingBottom: 20,
+              color: "#183A36",
             }}
           >
             Denk je eraan een hond te nemen?
@@ -302,6 +344,7 @@ export default function HomepageScreen() {
                   paddingLeft: 20,
                   paddingRight: 150,
                   paddingBottom: 8,
+                  color: "#183A36",
                 }}
               >
                 EHBO voor honden: wat moet je weten?
@@ -311,7 +354,8 @@ export default function HomepageScreen() {
                   fontFamily: "NunitoRegular",
                   fontSize: 12,
                   paddingLeft: 20,
-                  paddingRight: 140,
+                  paddingRight: 160,
+                  color: "#183A36",
                 }}
               >
                 Je hond kan gewond raken of ziek worden. Met een paar
@@ -324,6 +368,8 @@ export default function HomepageScreen() {
               fontFamily: "NunitoRegular",
               fontSize: 14,
               paddingLeft: 20,
+              color: "#183A36",
+              marginTop: 10,
             }}
           >
             Lees eerst wat je moet weten over hondenbezit.
@@ -331,13 +377,21 @@ export default function HomepageScreen() {
           <Link
             href="/artikelsIndex"
             style={{
-              padding: 12,
+             padding: 12,
               margin: 20,
               paddingHorizontal: 20,
+              paddingVertical: 15,
               backgroundColor: "#FFD87E",
               fontWeight: "bold",
+              fontSize: 15,
               borderRadius: 15,
               textAlign: "center",
+              color: "#183A36",
+              width: "90%",
+              alignItems: "center",
+              shadowOffset: { width: 0, height: 2 },
+              shadowOpacity: 0.1,
+              shadowRadius: 4,
             }}
           >
             LEES MEER TIPS
@@ -349,6 +403,7 @@ export default function HomepageScreen() {
               fontFamily: "Nunito-Bold",
               fontSize: 20,
               marginBottom: 10,
+              padding: 20,
               color: "#183A36",
             }}
           >
@@ -374,13 +429,16 @@ export default function HomepageScreen() {
                   alignItems: "center",
                   marginBottom: 20,
                   marginTop: 10,
+                  flexDirection: "row",
+                  gap: 4,
+                  
                 }}
                 onPress={() => router.push("/homepage")}
               >
                 <Text
                   style={{
                     color: "#183A36",
-                    fontFamily: "Nunito-Bold",
+                    fontFamily: "NunitoBold",
                     textTransform: "uppercase",
                   }}
                 >

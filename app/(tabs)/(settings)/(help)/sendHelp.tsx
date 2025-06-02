@@ -75,6 +75,7 @@ const SendHelpScreen = () => {
         fontWeight: 'bold',
     },
     
+    
   });
   
   export default SendHelpScreen;

@@ -3,6 +3,7 @@ import { View, Text, TouchableOpacity, StyleSheet, Switch, Alert, SafeAreaView }
 import { useRouter } from "expo-router";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
+import BaseText from "@/components/BaseText";
 import { supabase } from "@/lib/supabase";
 import NavBar from "@/components/NavigationBar";
 
@@ -140,10 +141,10 @@ useEffect(() => {
         <SafeAreaView style={styles.container}>
             {/* Header */}
             <View style={styles.header}>
-                <TouchableOpacity onPress={() => router.push("../settings")}>
+                <TouchableOpacity onPress={() => router.push("/settings")}>
                     <FontAwesomeIcon icon={faArrowLeft} size={30} color="#183A36" />
                 </TouchableOpacity>
-                <Text style={styles.title}>Meldingen en toestemmingen</Text>
+                <BaseText style={styles.title}>Meldingen en toestemmingen</BaseText>
             </View>
 
             {/* Meldingen */}
@@ -226,11 +227,11 @@ const styles = StyleSheet.create({
         marginBottom: 20,
     },
     title: {
-        fontSize: 23,
-        fontWeight: "bold",
-        color: "#183A36",
-        flex: 1,
-        textAlign: "center", 
+        fontSize: 26,
+        fontFamily: 'SireniaMedium',
+        textAlign: "center",
+
+        marginLeft: 15, 
     },
     sectionTitle: {
         fontSize: 16,

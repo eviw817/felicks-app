@@ -3,6 +3,7 @@ import { View, Text, TouchableOpacity, StyleSheet, ScrollView, Image, SafeAreaVi
 import { useFonts } from 'expo-font';
 import { useRouter } from "expo-router"; 
 import NavBar from "@/components/NavigationBar";
+import BaseText from "@/components/BaseText";
 
 export default function BewustzijnScreen() {
   const router = useRouter();
@@ -35,16 +36,16 @@ export default function BewustzijnScreen() {
             gap: 25,
             paddingBottom: 120, // extra space for navbar
             backgroundColor: "#FFFDF9",
+            paddingTop: 100,
           }}
           showsVerticalScrollIndicator={false}
         >
-          <Text style={{
-            fontSize: 24,
-            fontFamily: 'SireniaSemiBold',
-            marginTop: 75,
-            textAlign: "center",
-            color: "#183A36",
-          }}>Bewustzijn</Text>
+          <BaseText style={{
+             fontSize: 28,
+              fontFamily: 'SireniaMedium',
+              textAlign: "center",
+              marginBottom: 20,
+          }}>Bewustzijn</BaseText>
           <Text style={styles.subtitle}>Doe de quiz van de week</Text>
 
           <TouchableOpacity style={styles.quizButton} onPress={() => router.push("/quizIndex")}>
@@ -97,13 +98,15 @@ const styles = StyleSheet.create({
     gap: 25,
     color: "#183A36",
     paddingBottom: 80,
+    
   },
 
   title: {
-    fontSize: 24,
+     fontSize: 28,
     fontFamily: 'SireniaMedium',
-    marginTop: 75,
     textAlign: "center",
+    marginBottom: 20,
+    
   },
 
   subtitle: {
@@ -114,10 +117,13 @@ const styles = StyleSheet.create({
 
   quizButton: {
     backgroundColor: "#F18B7E",
-    paddingVertical: 12,
-    paddingHorizontal: 25,
-    borderRadius: 15,
+    paddingVertical: 15,
+    borderRadius: 20,
+    width: "97%",
     alignItems: "center",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
     
   },
 
@@ -134,14 +140,21 @@ const styles = StyleSheet.create({
   },
 
   buttonContainer: {
-    width: "100%",
+    paddingVertical: 15,
+    borderRadius: 20,
+    width: "97%",
+    alignItems: "center",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
     gap: 2,
+    marginTop: -10,
   },
 
   infoButton: {
     backgroundColor: "#FFD87E",
     paddingVertical: 15,
-    borderRadius: 15,
+    borderRadius: 20,
     marginVertical: 5,
     width: "100%",
     paddingHorizontal: 10,
@@ -162,5 +175,6 @@ const styles = StyleSheet.create({
   infoButtonText: {
     fontFamily: 'NunitoBold',
     fontSize: 14,
+     color: "#183A36",
   },
 });

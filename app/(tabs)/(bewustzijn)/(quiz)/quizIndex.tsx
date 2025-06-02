@@ -15,18 +15,12 @@ export default function QuizIndex() {
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity
-        onPress={() => router.replace("../bewustzijnIndex")}
-        style={styles.backButton}
-        hitSlop={{ top: 20, bottom: 20, left: 20, right: 20 }} // //aangepast zodat het klikbare gebied rond pijl groter is 
-      >
-        
-        <FontAwesomeIcon icon={faArrowLeft} size={24} color="#183A36" />
-
-      </TouchableOpacity>
-
-      <BaseText style={styles.title}>Bewustzijn</BaseText>
-
+        <View style={styles.header}>
+                 <TouchableOpacity onPress={() => router.push("/bewustzijnIndex")} style={styles.backButton}>
+                 <FontAwesomeIcon icon={faArrowLeft} size={30} color={'#183A36'} style={styles.backButton} />
+                </TouchableOpacity>
+                  <BaseText style={styles.title}>Bewustzijn quiz</BaseText>
+</View>
       <Text style={styles.question}>
         Wat is het doel van deze quiz?
       </Text>
@@ -43,7 +37,17 @@ export default function QuizIndex() {
         href="../quizVragen">
         <Text style={styles.continueText}>DOORGAAN</Text>
       </Link>
-
+        {/* Fixed navbar onderaan scherm */}
+            <View
+                style={{
+                position: "absolute",
+                bottom: 0,
+                left: 0,
+                right: 0,
+                }}
+            >
+                <NavBar />
+            </View>
     </View>
   );
 }
@@ -55,50 +59,59 @@ const styles = StyleSheet.create({
     padding: 16,
     color: "#183A36",
     textAlign: "left",
-  },
-
-  backButton: { //aangepast zodat het klikbare gebied rond pijl groter is 
-    position: "absolute",
-    top: 84,
-    left: 20,
-    zIndex: 10,
-    padding: 10,
-    backgroundColor: "#FFFDF9",
-    borderRadius: 20,
+     paddingTop: 100,
   },
 
   title: {
-    fontSize: 24,
-    fontFamily: 'SireniaMedium',
-    marginTop: 75,
-    textAlign: "center",
-  },
-
+         fontSize: 28,
+        fontFamily: 'SireniaMedium',
+        textAlign: "center",
+        marginBottom: 20,
+    },
+    backButton: {
+      position: "absolute",
+      left: 5,
+      top:7,
+    },
   question: {
     fontSize: 18,
     fontFamily: 'NunitoSemiBold',
     marginBottom: 10,
     marginTop: 50,
+     color: "#183A36",
   },
 
   description: {
     fontSize: 16,
     fontFamily: 'NunitoRegular',
     marginBottom: 20,
+     color: "#183A36",
   },
 
   continueButton: {
-    backgroundColor: "#97B8A5",
-    paddingVertical: 12,
-    paddingHorizontal: 25,
-    borderRadius: 15,
+     backgroundColor: "#97B8A5",
+    paddingVertical: 15,
+    borderRadius: 20,
+    marginTop: 30,
+    width: "97%",
     alignItems: "center",
-    marginTop: 20,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
   },
 
   continueText: {
     fontFamily: 'NunitoExtraBold',
     fontSize: 14,
     textAlign: "center",
+     color: "#183A36",
   },
+   header: {
+        flexDirection: "row",
+        alignItems: "center",
+        justifyContent: "center", 
+        width: "100%",
+        position: "relative", 
+        paddingVertical: 10,
+      },
 });
