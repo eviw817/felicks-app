@@ -4,7 +4,6 @@ import React, { useEffect, useState } from "react";
 import {
   SafeAreaView,
   View,
-  Text,
   StyleSheet,
   TouchableOpacity,
   Platform,
@@ -13,6 +12,7 @@ import {
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import { supabase } from "../../lib/supabase";
+import BaseText from "@/components/BaseText";
 
 const RadioButton = ({ selected }: { selected: boolean }) => (
   <View style={styles.radioOuter}>
@@ -79,7 +79,9 @@ export default function DogAge() {
         <TouchableOpacity onPress={() => router.back()}>
           <Ionicons name="arrow-back" size={24} color="#183A36" />
         </TouchableOpacity>
-        <Text style={styles.title}>Leeftijd</Text>
+        <BaseText variant="title" style={styles.title}>
+          Leeftijd
+        </BaseText>
         <View style={{ width: 24 }} />
       </View>
 
@@ -87,7 +89,9 @@ export default function DogAge() {
         <View style={[styles.progressFill, { width: "25%" }]} />
       </View>
 
-      <Text style={styles.question}>Welke leeftijd heeft je ideale hond?</Text>
+      <BaseText style={styles.question}>
+        Welke leeftijd heeft je ideale hond?
+      </BaseText>
 
       {options.map((opt) => (
         <TouchableOpacity
@@ -97,7 +101,7 @@ export default function DogAge() {
           activeOpacity={0.8}
         >
           <RadioButton selected={preferredAge === opt.value} />
-          <Text style={styles.answerText}>{opt.label}</Text>
+          <BaseText>{opt.label}</BaseText>
         </TouchableOpacity>
       ))}
 
@@ -106,7 +110,7 @@ export default function DogAge() {
         onPress={handleAnswer}
         disabled={!preferredAge}
       >
-        <Text style={styles.buttonText}>VOLGENDE</Text>
+        <BaseText variant="button">VOLGENDE</BaseText>
       </TouchableOpacity>
     </SafeAreaView>
   );
@@ -127,8 +131,6 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 20,
-    fontFamily: "Sirenia-Regular",
-    color: "#183A36",
     textAlign: "center",
   },
   progressBar: {
@@ -147,8 +149,6 @@ const styles = StyleSheet.create({
   },
   question: {
     fontSize: 18,
-    fontWeight: "bold",
-    color: "#183A36",
     marginBottom: 16,
   },
   radioRow: {
@@ -172,10 +172,6 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     backgroundColor: "#97B8A5",
   },
-  answerText: {
-    fontSize: 16,
-    color: "#183A36",
-  },
   button: {
     marginTop: 40,
     backgroundColor: "#97B8A5",
@@ -185,10 +181,5 @@ const styles = StyleSheet.create({
   },
   buttonDisabled: {
     opacity: 0.5,
-  },
-  buttonText: {
-    fontSize: 16,
-    color: "#183A36",
-    fontWeight: "bold",
   },
 });

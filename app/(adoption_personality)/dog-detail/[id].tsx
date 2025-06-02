@@ -4,7 +4,6 @@ import { useLocalSearchParams, useRouter } from "expo-router";
 import { useEffect, useState } from "react";
 import {
   SafeAreaView,
-  Text,
   StyleSheet,
   View,
   ScrollView,
@@ -13,144 +12,7 @@ import {
 } from "react-native";
 import { supabase } from "../../../lib/supabase";
 import { Ionicons } from "@expo/vector-icons";
-
-export default function DogDetail() {
-  const { id } = useLocalSearchParams();
-  const router = useRouter();
-  const [dog, setDog] = useState<any>(null);
-
-  useEffect(() => {
-    (async () => {
-      const { data } = await supabase
-        .from("adoption_dogs")
-        .select("*")
-        .eq("id", id)
-        .single();
-
-      console.log("🐶 Gevonden hond:", data);
-      console.log("🖼️ Images:", data?.images);
-
-      setDog(data);
-    })();
-  }, [id]);
-
-  if (!dog) return null;
-
-  let imageList: string[] = [];
-  try {
-    imageList =
-      typeof dog.images === "string" ? JSON.parse(dog.images) : dog.images;
-  } catch (e) {
-    console.error("❌ Fout bij parsen van images:", e);
-  }
-
-  return (
-    <SafeAreaView style={styles.container}>
-      <ScrollView>
-        <View style={styles.headerRow}>
-          <TouchableOpacity onPress={() => router.back()} style={styles.back}>
-            <Ionicons name="arrow-back" size={24} color="#183A36" />
-          </TouchableOpacity>
-          <Text style={styles.title}>{dog.name}</Text>
-        </View>
-
-        {imageList && imageList.length > 0 && (
-          <Image
-            source={{
-              uri: `https://vgbuoxdfrbzqbqltcelz.supabase.co/storage/v1/object/public/${imageList[0]}`,
-            }}
-            style={styles.avatar}
-            resizeMode="cover"
-          />
-        )}
-
-        <View style={styles.iconRow}>
-          <IconTag label={dog.size} icon="resize-outline" />
-          <IconTag label={dog.activity_level} icon="walk-outline" />
-          {dog.house_trained && (
-            <IconTag label="Zindelijk" icon="home-outline" />
-          )}
-          {dog.social_with_dogs && (
-            <IconTag label="Sociaal" icon="paw-outline" />
-          )}
-        </View>
-
-        <View style={styles.section}>
-          <Text style={styles.subtitle}>Info</Text>
-          <Text style={styles.detail}>Ras: {dog.breed}</Text>
-          <Text style={styles.detail}>
-            Geboortedatum: {new Date(dog.birthdate).toLocaleDateString("nl-BE")}
-          </Text>
-          <Text style={styles.detail}>Asiel: {dog.shelter}</Text>
-        </View>
-
-        <View style={styles.section}>
-          <Text style={styles.subtitle}>Beschrijving</Text>
-          <Text style={styles.desc}>{dog.description}</Text>
-        </View>
-
-        <View style={styles.section}>
-          <Text style={styles.subtitle}>Eigenschappen</Text>
-          {renderAttribute(
-            "Kindvriendelijk < 6 jaar",
-            dog.child_friendly_under_6
-          )}
-          {renderAttribute(
-            "Kindvriendelijk > 6 jaar",
-            dog.child_friendly_over_6
-          )}
-          {renderAttribute("Zindelijk", dog.house_trained)}
-          {renderAttribute("Sociaal met honden", dog.social_with_dogs)}
-          {renderAttribute("Sociaal met katten", dog.social_with_cats)}
-          {renderAttribute("Kan mee in de auto", dog.can_be_transported_in_car)}
-          {renderAttribute("Hypoallergeen", dog.hypoallergenic)}
-        </View>
-
-        {imageList && imageList.length > 0 && (
-          <View style={styles.gallerySection}>
-            <Text style={styles.subtitle}>Foto's</Text>
-            {imageList.map((path, index) => (
-              <Image
-                key={index}
-                source={{
-                  uri: `https://vgbuoxdfrbzqbqltcelz.supabase.co/storage/v1/object/public/${path}`,
-                }}
-                style={styles.galleryImage}
-                resizeMode="cover"
-              />
-            ))}
-          </View>
-        )}
-
-        <TouchableOpacity style={styles.adoptButton}>
-          <Text style={styles.adoptButtonText}>Contacteer het asiel</Text>
-        </TouchableOpacity>
-      </ScrollView>
-    </SafeAreaView>
-  );
-}
-
-function IconTag({ label, icon }: { label: string; icon: any }) {
-  return (
-    <View style={styles.iconTag}>
-      <Ionicons name={icon} size={18} color="#183A36" />
-      <Text style={styles.iconTagText}>{label}</Text>
-    </View>
-  );
-}
-
-function renderAttribute(label: string, value: boolean) {
-  return (
-    <View style={styles.attrRow}>
-      <Text style={styles.attrLabel}>{label}</Text>
-      <Ionicons
-        name={value ? "checkmark-circle" : "close-circle"}
-        size={20}
-        color={value ? "#6AB04C" : "#D64545"}
-      />
-    </View>
-  );
-}
+import BaseText from "@/components/BaseText";
 
 const styles = StyleSheet.create({
   container: {
@@ -172,8 +34,6 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 24,
-    fontFamily: "Sirenia-Regular",
-    color: "#183A36",
     textAlign: "center",
   },
   avatar: {
@@ -209,8 +69,6 @@ const styles = StyleSheet.create({
   },
   subtitle: {
     fontSize: 18,
-    fontWeight: "bold",
-    color: "#183A36",
     marginBottom: 6,
   },
   detail: {
@@ -244,13 +102,6 @@ const styles = StyleSheet.create({
     minHeight: 48,
     marginBottom: 24,
   },
-  adoptButtonText: {
-    fontSize: 16,
-    color: "#183A36",
-    fontWeight: "bold",
-    textTransform: "uppercase",
-    textAlign: "center",
-  },
   gallerySection: {
     marginTop: 12,
     gap: 12,
@@ -262,3 +113,140 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
 });
+
+function IconTag({ label, icon }: { label: string; icon: any }) {
+  return (
+    <View style={styles.iconTag}>
+      <Ionicons name={icon} size={18} color="#183A36" />
+      <BaseText style={styles.iconTagText}>{label}</BaseText>
+    </View>
+  );
+}
+
+function renderAttribute(label: string, value: boolean) {
+  return (
+    <View style={styles.attrRow}>
+      <BaseText style={styles.attrLabel}>{label}</BaseText>
+      <Ionicons
+        name={value ? "checkmark-circle" : "close-circle"}
+        size={20}
+        color={value ? "#6AB04C" : "#D64545"}
+      />
+    </View>
+  );
+}
+
+export default function DogDetail() {
+  const { id } = useLocalSearchParams();
+  const router = useRouter();
+  const [dog, setDog] = useState<any>(null);
+
+  useEffect(() => {
+    (async () => {
+      const { data } = await supabase
+        .from("adoption_dogs")
+        .select("*")
+        .eq("id", id)
+        .single();
+
+      setDog(data);
+    })();
+  }, [id]);
+
+  if (!dog) return null;
+
+  let imageList: string[] = [];
+  try {
+    imageList =
+      typeof dog.images === "string" ? JSON.parse(dog.images) : dog.images;
+  } catch (e) {
+    console.error("Fout bij parsen van images:", e);
+  }
+
+  return (
+    <SafeAreaView style={styles.container}>
+      <ScrollView>
+        <View style={styles.headerRow}>
+          <TouchableOpacity onPress={() => router.back()} style={styles.back}>
+            <Ionicons name="arrow-back" size={24} color="#183A36" />
+          </TouchableOpacity>
+          <BaseText variant="title" style={styles.title}>
+            {dog.name}
+          </BaseText>
+        </View>
+
+        {imageList?.length > 0 && (
+          <Image
+            source={{
+              uri: `https://vgbuoxdfrbzqbqltcelz.supabase.co/storage/v1/object/public/${imageList[0]}`,
+            }}
+            style={styles.avatar}
+            resizeMode="cover"
+          />
+        )}
+
+        <View style={styles.iconRow}>
+          <IconTag label={dog.size} icon="resize-outline" />
+          <IconTag label={dog.activity_level} icon="walk-outline" />
+          {dog.house_trained && (
+            <IconTag label="Zindelijk" icon="home-outline" />
+          )}
+          {dog.social_with_dogs && (
+            <IconTag label="Sociaal" icon="paw-outline" />
+          )}
+        </View>
+
+        <View style={styles.section}>
+          <BaseText style={styles.subtitle}>Info</BaseText>
+          <BaseText style={styles.detail}>Ras: {dog.breed}</BaseText>
+          <BaseText style={styles.detail}>
+            Geboortedatum: {new Date(dog.birthdate).toLocaleDateString("nl-BE")}
+          </BaseText>
+          <BaseText style={styles.detail}>Asiel: {dog.shelter}</BaseText>
+        </View>
+
+        <View style={styles.section}>
+          <BaseText style={styles.subtitle}>Beschrijving</BaseText>
+          <BaseText style={styles.desc}>{dog.description}</BaseText>
+        </View>
+
+        <View style={styles.section}>
+          <BaseText style={styles.subtitle}>Eigenschappen</BaseText>
+          {renderAttribute(
+            "Kindvriendelijk < 6 jaar",
+            dog.child_friendly_under_6
+          )}
+          {renderAttribute(
+            "Kindvriendelijk > 6 jaar",
+            dog.child_friendly_over_6
+          )}
+          {renderAttribute("Zindelijk", dog.house_trained)}
+          {renderAttribute("Sociaal met honden", dog.social_with_dogs)}
+          {renderAttribute("Sociaal met katten", dog.social_with_cats)}
+          {renderAttribute("Kan mee in de auto", dog.can_be_transported_in_car)}
+          {renderAttribute("Hypoallergeen", dog.hypoallergenic)}
+        </View>
+
+        {imageList?.length > 0 && (
+          <View style={styles.gallerySection}>
+            <BaseText style={styles.subtitle}>Foto's</BaseText>
+            {imageList.map((path, index) => (
+              <Image
+                key={index}
+                source={{
+                  uri: `https://vgbuoxdfrbzqbqltcelz.supabase.co/storage/v1/object/public/${path}`,
+                }}
+                style={styles.galleryImage}
+                resizeMode="cover"
+              />
+            ))}
+          </View>
+        )}
+
+        <TouchableOpacity style={styles.adoptButton}>
+          <BaseText variant="button">Contacteer het asiel</BaseText>
+        </TouchableOpacity>
+      </ScrollView>
+    </SafeAreaView>
+  );
+}

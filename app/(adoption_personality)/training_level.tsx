@@ -4,7 +4,6 @@ import React, { useEffect, useState } from "react";
 import {
   SafeAreaView,
   View,
-  Text,
   StyleSheet,
   TouchableOpacity,
   Platform,
@@ -13,6 +12,7 @@ import {
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import { supabase } from "../../lib/supabase";
+import BaseText from "@/components/BaseText";
 
 const RadioButton = ({ selected }: { selected: boolean }) => (
   <View style={styles.radioOuter}>
@@ -79,7 +79,9 @@ export default function TrainingLevel() {
         <TouchableOpacity onPress={() => router.back()}>
           <Ionicons name="arrow-back" size={24} color="#183A36" />
         </TouchableOpacity>
-        <Text style={styles.title}>Training</Text>
+        <BaseText style={styles.title} variant="title">
+          Training
+        </BaseText>
         <View style={{ width: 24 }} />
       </View>
 
@@ -87,9 +89,9 @@ export default function TrainingLevel() {
         <View style={[styles.progressFill, { width: "37.5%" }]} />
       </View>
 
-      <Text style={styles.question}>
+      <BaseText style={styles.question}>
         In hoeverre moet de hond getraind zijn?
-      </Text>
+      </BaseText>
 
       {options.map((opt) => (
         <TouchableOpacity
@@ -99,7 +101,7 @@ export default function TrainingLevel() {
           activeOpacity={0.8}
         >
           <RadioButton selected={trainingLevel === opt.value} />
-          <Text style={styles.answerText}>{opt.label}</Text>
+          <BaseText style={styles.answerText}>{opt.label}</BaseText>
         </TouchableOpacity>
       ))}
 
@@ -108,7 +110,7 @@ export default function TrainingLevel() {
         onPress={handleAnswer}
         disabled={!trainingLevel}
       >
-        <Text style={styles.buttonText}>VOLGENDE</Text>
+        <BaseText style={styles.buttonText}>VOLGENDE</BaseText>
       </TouchableOpacity>
     </SafeAreaView>
   );

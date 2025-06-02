@@ -3,7 +3,6 @@
 import { useRouter } from "expo-router";
 import {
   SafeAreaView,
-  Text,
   StyleSheet,
   View,
   ScrollView,
@@ -11,6 +10,7 @@ import {
   Platform,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
+import BaseText from "@/components/BaseText";
 
 export default function AdoptieIntro() {
   const router = useRouter();
@@ -22,34 +22,36 @@ export default function AdoptieIntro() {
           <TouchableOpacity onPress={() => router.back()} style={styles.back}>
             <Ionicons name="arrow-back" size={24} color="#183A36" />
           </TouchableOpacity>
-          <Text style={styles.title}>Adoptie</Text>
+          <BaseText style={styles.title} variant="title">
+            Adoptie
+          </BaseText>
         </View>
 
-        <Text style={styles.subtitle}>Welkom op de adoptiepagina</Text>
+        <BaseText style={styles.subtitle}>Welkom op de adoptiepagina</BaseText>
 
-        <Text style={styles.paragraph}>
+        <BaseText style={styles.paragraph}>
           Wat fijn dat je geïnteresseerd bent in het adopteren van een hond!
           Hier vind je alle informatie die je nodig hebt om jouw nieuwe maatje
           te vinden.
-        </Text>
-        <Text style={styles.paragraph}>
+        </BaseText>
+        <BaseText style={styles.paragraph}>
           We begeleiden je stap voor stap in het proces en helpen je om een hond
           te kiezen die perfect past bij jouw levensstijl en voorkeuren.
-        </Text>
-        <Text style={styles.paragraph}>
+        </BaseText>
+        <BaseText style={styles.paragraph}>
           Zodra je jouw ideale hond hebt gevonden, kun je een aanvraag indienen.
           Wij zorgen ervoor dat je aanvraag bij het juiste asiel terechtkomt.
-        </Text>
-        <Text style={styles.paragraph}>
+        </BaseText>
+        <BaseText style={styles.paragraph}>
           Samen maken we een verschil en geven we deze honden een tweede kans op
           liefde en een thuis!
-        </Text>
+        </BaseText>
 
         <TouchableOpacity
           style={styles.button}
           onPress={() => router.push("/(adoption)/missing_adoption_profile")}
         >
-          <Text style={styles.buttonText}>DOORGAAN</Text>
+          <BaseText style={styles.buttonText}>DOORGAAN</BaseText>
         </TouchableOpacity>
       </ScrollView>
     </SafeAreaView>

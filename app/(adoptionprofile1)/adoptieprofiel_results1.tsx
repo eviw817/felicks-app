@@ -4,7 +4,6 @@ import React, { useEffect, useState } from "react";
 import {
   SafeAreaView,
   View,
-  Text,
   StyleSheet,
   TouchableOpacity,
   ActivityIndicator,
@@ -13,6 +12,7 @@ import {
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import { supabase } from "../../lib/supabase";
+import BaseText from "@/components/BaseText";
 
 interface Prefs {
   living_situation: string;
@@ -220,8 +220,10 @@ export default function AdoptieprofielResults() {
         } as any)
       }
     >
-      <Text style={styles.name}>{item.breed.name}</Text>
-      <Text style={styles.score}>{Math.round(item.score * 100)}% match</Text>
+      <BaseText style={styles.name}>{item.breed.name}</BaseText>
+      <BaseText style={styles.score}>
+        {Math.round(item.score * 100)}% match
+      </BaseText>
     </TouchableOpacity>
   );
 
@@ -242,23 +244,23 @@ export default function AdoptieprofielResults() {
           </TouchableOpacity>
         </View>
         <View style={styles.headerCenter}>
-          <Text style={styles.title}>🎯 Topmatches</Text>
+          <BaseText style={styles.title}>🎯 Topmatches</BaseText>
         </View>
         <View style={styles.headerSide} />
       </View>
 
       <ScrollView contentContainerStyle={{ paddingBottom: 80 }}>
         {topMatches.length === 0 ? (
-          <Text style={styles.empty}>Geen topmatches gevonden</Text>
+          <BaseText style={styles.empty}>Geen topmatches gevonden</BaseText>
         ) : (
           topMatches.map(renderBreed)
         )}
 
-        <Text style={[styles.title, { marginTop: 32 }]}>
+        <BaseText style={[styles.title, { marginTop: 32 }]}>
           💡 Andere mogelijke matches
-        </Text>
+        </BaseText>
         {otherMatches.length === 0 ? (
-          <Text style={styles.empty}>Geen andere matches gevonden</Text>
+          <BaseText style={styles.empty}>Geen andere matches gevonden</BaseText>
         ) : (
           otherMatches.map(renderBreed)
         )}
@@ -267,7 +269,7 @@ export default function AdoptieprofielResults() {
           onPress={() => router.push("/homepage")}
           style={styles.button}
         >
-          <Text style={styles.buttonText}>Naar Home</Text>
+          <BaseText style={styles.buttonText}>Naar Home</BaseText>
         </TouchableOpacity>
       </ScrollView>
     </SafeAreaView>

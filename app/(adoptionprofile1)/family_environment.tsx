@@ -1,18 +1,15 @@
-"use client";
-
 import React, { useState, useEffect } from "react";
 import {
   SafeAreaView,
   View,
-  Text,
   StyleSheet,
   TouchableOpacity,
   Platform,
 } from "react-native";
 import { useRouter } from "expo-router";
 import { supabase } from "../../lib/supabase";
-import { useFonts } from "expo-font";
 import { Ionicons } from "@expo/vector-icons";
+import BaseText from "@/components/BaseText";
 
 const RadioButton: React.FC<{ selected: boolean }> = ({ selected }) => (
   <View style={styles.radioOuter}>
@@ -28,11 +25,6 @@ export default function FamilyEnvironment() {
     otherPets: "",
   });
 
-  const [fontsLoaded] = useFonts({
-    "Nunito-Regular": require("../../assets/fonts/nunito/Nunito-Regular.ttf"),
-    "Nunito-Bold": require("../../assets/fonts/nunito/Nunito-Bold.ttf"),
-  });
-
   useEffect(() => {
     (async () => {
       const {
@@ -41,7 +33,7 @@ export default function FamilyEnvironment() {
       if (!user) return;
       setUserId(user.id);
 
-      const { data, error } = await supabase
+      const { data } = await supabase
         .from("adoption_profiles")
         .select("has_children, has_pets")
         .eq("user_id", user.id)
@@ -55,8 +47,6 @@ export default function FamilyEnvironment() {
       }
     })();
   }, []);
-
-  if (!fontsLoaded) return null;
 
   const handleAnswer = async (
     question: "children" | "otherPets",
@@ -102,14 +92,16 @@ export default function FamilyEnvironment() {
         >
           <Ionicons name="arrow-back" size={24} color="#183A36" />
         </TouchableOpacity>
-        <Text style={styles.headerTitle}>Gezin & omgeving</Text>
+        <BaseText style={styles.headerTitle} variant="title">
+          Gezin & omgeving
+        </BaseText>
       </View>
 
       <View style={styles.progressBar}>
         <View style={styles.progressFill3} />
       </View>
 
-      <Text style={styles.question}>Woon je samen met kinderen?</Text>
+      <BaseText style={styles.question}>Woon je samen met kinderen?</BaseText>
       {childrenOptions.map((opt) => (
         <TouchableOpacity
           key={opt.value}
@@ -117,13 +109,13 @@ export default function FamilyEnvironment() {
           onPress={() => handleAnswer("children", opt.value)}
         >
           <RadioButton selected={answers.children === opt.value} />
-          <Text style={styles.answerText}>{opt.label}</Text>
+          <BaseText style={styles.answerText}>{opt.label}</BaseText>
         </TouchableOpacity>
       ))}
 
-      <Text style={[styles.question, { marginTop: 32 }]}>
+      <BaseText style={[styles.question, { marginTop: 32 }]}>
         Heb je al andere huisdieren?
-      </Text>
+      </BaseText>
       {otherPetsOptions.map((opt) => (
         <TouchableOpacity
           key={opt.value}
@@ -131,7 +123,7 @@ export default function FamilyEnvironment() {
           onPress={() => handleAnswer("otherPets", opt.value)}
         >
           <RadioButton selected={answers.otherPets === opt.value} />
-          <Text style={styles.answerText}>{opt.label}</Text>
+          <BaseText style={styles.answerText}>{opt.label}</BaseText>
         </TouchableOpacity>
       ))}
 
@@ -140,7 +132,7 @@ export default function FamilyEnvironment() {
         onPress={() => router.push("/activity_personality")}
         disabled={!canNext}
       >
-        <Text style={styles.buttonText}>VOLGENDE</Text>
+        <BaseText style={styles.buttonText}>VOLGENDE</BaseText>
       </TouchableOpacity>
     </SafeAreaView>
   );

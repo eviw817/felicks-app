@@ -4,12 +4,12 @@ import { useRouter } from "expo-router";
 import {
   SafeAreaView,
   View,
-  Text,
   TouchableOpacity,
   StyleSheet,
   Platform,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
+import BaseText from "@/components/BaseText";
 
 export default function AdoptionChoice() {
   const router = useRouter();
@@ -20,13 +20,15 @@ export default function AdoptionChoice() {
         <TouchableOpacity onPress={() => router.back()} style={styles.back}>
           <Ionicons name="arrow-back" size={24} color="#183A36" />
         </TouchableOpacity>
-        <Text style={styles.title}>Adoptie</Text>
+        <BaseText style={styles.title} variant="title">
+          Adoptie
+        </BaseText>
       </View>
 
-      <Text style={styles.question}>
+      <BaseText style={styles.question}>
         Wil je een hond die meer op jouw persoonlijkheid gebaseerd is of ga je
         liever voor een bepaald ras?
-      </Text>
+      </BaseText>
 
       <TouchableOpacity
         style={styles.optionButton}
@@ -34,14 +36,14 @@ export default function AdoptionChoice() {
           router.push("/(adoption_personality)/personality_traits")
         }
       >
-        <Text style={styles.optionText}>PERSOONLIJKHEID</Text>
+        <BaseText style={styles.optionText}>PERSOONLIJKHEID</BaseText>
       </TouchableOpacity>
 
       <TouchableOpacity
         style={styles.optionButton}
         onPress={() => router.push("/(adoptionprofile1)/livingsituation")}
       >
-        <Text style={styles.optionText}>RAS</Text>
+        <BaseText style={styles.optionText}>RAS</BaseText>
       </TouchableOpacity>
     </SafeAreaView>
   );

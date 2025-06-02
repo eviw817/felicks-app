@@ -4,12 +4,12 @@ import { useRouter } from "expo-router";
 import {
   SafeAreaView,
   View,
-  Text,
   TouchableOpacity,
   StyleSheet,
   Platform,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
+import BaseText from "@/components/BaseText";
 
 export default function MissingAdoptionProfile() {
   const router = useRouter();
@@ -20,20 +20,22 @@ export default function MissingAdoptionProfile() {
         <TouchableOpacity onPress={() => router.back()} style={styles.back}>
           <Ionicons name="arrow-back" size={24} color="#183A36" />
         </TouchableOpacity>
-        <Text style={styles.title}>Adoptie</Text>
+        <BaseText style={styles.title} variant="title">
+          Adoptie
+        </BaseText>
       </View>
 
-      <Text style={styles.text}>
+      <BaseText style={styles.text}>
         Je had nog geen adoptieprofiel opgezet bij het registreren van jouw
         account. Voordat je naar de adoptiepagina gaat moet je deze eerst
         invullen.
-      </Text>
+      </BaseText>
 
       <TouchableOpacity
         style={styles.button}
         onPress={() => router.push("/(adoption)/adoption_choice")}
       >
-        <Text style={styles.buttonText}>GA NAAR ADOPTIEPROFIEL</Text>
+        <BaseText style={styles.buttonText}>GA NAAR ADOPTIEPROFIEL</BaseText>
       </TouchableOpacity>
     </SafeAreaView>
   );

@@ -4,7 +4,6 @@ import { useLocalSearchParams, useRouter } from "expo-router";
 import { useEffect, useState } from "react";
 import {
   SafeAreaView,
-  Text,
   StyleSheet,
   View,
   ScrollView,
@@ -13,6 +12,7 @@ import {
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { supabase } from "../../../lib/supabase";
+import BaseText from "@/components/BaseText";
 
 export default function BreedDetail() {
   const { id } = useLocalSearchParams();
@@ -58,58 +58,44 @@ export default function BreedDetail() {
           >
             <Ionicons name="arrow-back" size={24} color="#183A36" />
           </TouchableOpacity>
-          <Text style={styles.headerTitle}>{breed.name}</Text>
+          <BaseText style={styles.headerTitle} variant="title">
+            {breed.name}
+          </BaseText>
         </View>
 
-        <Text style={styles.label}>🐾 Karakter</Text>
-        <Text style={styles.text}>{breed.character}</Text>
+        <BaseText style={styles.label}>🐾 Karakter</BaseText>
+        <BaseText style={styles.text}>{breed.character}</BaseText>
 
-        <Text style={styles.label}>⚠️ Aandachtspunten</Text>
+        <BaseText style={styles.label}>⚠️ Aandachtspunten</BaseText>
         {breed.attention_points?.map((point: string, index: number) => (
-          <Text key={index} style={styles.text}>
+          <BaseText key={index} style={styles.text}>
             • {point}
-          </Text>
+          </BaseText>
         ))}
 
-        <Text style={styles.label}>🧍 Geschikte eigenaar</Text>
-        <Text style={styles.text}>{breed.suitable_owner}</Text>
+        <BaseText style={styles.label}>🧍 Geschikte eigenaar</BaseText>
+        <BaseText style={styles.text}>{breed.suitable_owner}</BaseText>
 
-        <Text style={styles.label}>🩺 Gezondheid</Text>
-        <Text style={styles.text}>{breed.health}</Text>
+        <BaseText style={styles.label}>🩺 Gezondheid</BaseText>
+        <BaseText style={styles.text}>{breed.health}</BaseText>
 
-        <Text style={styles.label}>🛁 Verzorging</Text>
-        <Text style={styles.text}>{breed.care}</Text>
+        <BaseText style={styles.label}>🛁 Verzorging</BaseText>
+        <BaseText style={styles.text}>{breed.care}</BaseText>
 
-        <Text style={styles.label}>👶 Kinderen</Text>
-        <Text style={styles.text}>{breed.children_info}</Text>
+        <BaseText style={styles.label}>👶 Kinderen</BaseText>
+        <BaseText style={styles.text}>{breed.children_info}</BaseText>
 
-        <Text style={styles.label}>🐕 Andere dieren</Text>
-        <Text style={styles.text}>{breed.pets_info}</Text>
+        <BaseText style={styles.label}>🐕 Andere dieren</BaseText>
+        <BaseText style={styles.text}>{breed.pets_info}</BaseText>
 
-        <Text style={styles.label}>🔍 Profielvergelijking</Text>
-        <Text style={styles.text}>{breed.profile_match_summary}</Text>
+        <BaseText style={styles.label}>🔍 Profielvergelijking</BaseText>
+        <BaseText style={styles.text}>{breed.profile_match_summary}</BaseText>
 
         <TouchableOpacity
-          style={{
-            backgroundColor: "#97B8A5",
-            padding: 12,
-            borderRadius: 15,
-            alignItems: "center",
-            marginBottom: 20,
-            marginTop: 10,
-          }}
+          style={styles.button}
           onPress={() => router.push("/(homepage)/homepage")}
         >
-          <Text
-            style={{
-              color: "#183A36",
-              fontFamily: "Nunito-Bold",
-              textTransform: "uppercase",
-              fontWeight: "bold",
-            }}
-          >
-            naar home
-          </Text>
+          <BaseText style={styles.buttonText}>NAAR HOME</BaseText>
         </TouchableOpacity>
       </ScrollView>
     </SafeAreaView>
@@ -152,9 +138,18 @@ const styles = StyleSheet.create({
     color: "#333",
     marginBottom: 4,
   },
+  button: {
+    backgroundColor: "#97B8A5",
+    padding: 12,
+    borderRadius: 15,
+    alignItems: "center",
+    marginBottom: 20,
+    marginTop: 10,
+  },
   buttonText: {
-    color: "#fff",
+    color: "#183A36",
+    fontFamily: "Nunito-Bold",
+    textTransform: "uppercase",
     fontWeight: "bold",
-    fontSize: 16,
   },
 });

@@ -4,7 +4,6 @@ import React, { useEffect, useState } from "react";
 import {
   SafeAreaView,
   View,
-  Text,
   StyleSheet,
   TouchableOpacity,
   Platform,
@@ -13,6 +12,7 @@ import {
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import { supabase } from "../../lib/supabase";
+import BaseText from "@/components/BaseText";
 
 const Checkbox = ({ selected }: { selected: boolean }) => (
   <View style={styles.radioOuter}>
@@ -89,16 +89,18 @@ export default function PersonalityTraits() {
         <TouchableOpacity onPress={() => router.back()} style={styles.back}>
           <Ionicons name="arrow-back" size={24} color="#183A36" />
         </TouchableOpacity>
-        <Text style={styles.title}>Adoptie</Text>
+        <BaseText style={styles.title} variant="title">
+          Adoptie
+        </BaseText>
       </View>
 
       <View style={styles.progressBar}>
         <View style={[styles.progressFill, { width: "12.5%" }]} />
       </View>
 
-      <Text style={styles.question}>
+      <BaseText style={styles.question}>
         Welke eigenschappen zoek je in een hond?
-      </Text>
+      </BaseText>
 
       {options.map((trait) => (
         <TouchableOpacity
@@ -108,7 +110,7 @@ export default function PersonalityTraits() {
           activeOpacity={0.8}
         >
           <Checkbox selected={selectedTraits.includes(trait)} />
-          <Text style={styles.answerText}>{trait}</Text>
+          <BaseText style={styles.answerText}>{trait}</BaseText>
         </TouchableOpacity>
       ))}
 
@@ -120,7 +122,7 @@ export default function PersonalityTraits() {
         onPress={handleAnswer}
         disabled={selectedTraits.length === 0}
       >
-        <Text style={styles.buttonText}>VOLGENDE</Text>
+        <BaseText style={styles.buttonText}>VOLGENDE</BaseText>
       </TouchableOpacity>
     </SafeAreaView>
   );

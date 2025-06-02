@@ -4,15 +4,14 @@ import React, { useState, useEffect } from "react";
 import {
   SafeAreaView,
   View,
-  Text,
   StyleSheet,
   TouchableOpacity,
   Platform,
 } from "react-native";
 import { useRouter } from "expo-router";
 import { supabase } from "../../lib/supabase";
-import { useFonts } from "expo-font";
 import { Ionicons } from "@expo/vector-icons";
+import BaseText from "@/components/BaseText";
 
 const RadioButton: React.FC<{ selected: boolean }> = ({ selected }) => (
   <View style={styles.radioOuter}>
@@ -20,17 +19,12 @@ const RadioButton: React.FC<{ selected: boolean }> = ({ selected }) => (
   </View>
 );
 
-export default function SoundBehavior() {
+export default function GroomingCoat() {
   const router = useRouter();
   const [userId, setUserId] = useState<string | null>(null);
   const [answers, setAnswers] = useState({
-    barking: "",
-    training: "",
-  });
-
-  const [fontsLoaded] = useFonts({
-    "Nunito-Regular": require("../../assets/fonts/nunito/Nunito-Regular.ttf"),
-    "Nunito-Bold": require("../../assets/fonts/nunito/Nunito-Bold.ttf"),
+    grooming: "",
+    shedding: "",
   });
 
   useEffect(() => {
@@ -38,13 +32,12 @@ export default function SoundBehavior() {
       const {
         data: { user },
       } = await supabase.auth.getUser();
-
       if (user) {
         setUserId(user.id);
 
         const { data, error } = await supabase
           .from("adoption_profiles")
-          .select("barking, training")
+          .select("grooming, shedding")
           .eq("user_id", user.id)
           .single();
 
@@ -55,29 +48,27 @@ export default function SoundBehavior() {
           );
         } else if (data) {
           setAnswers({
-            barking: data.barking || "",
-            training: data.training || "",
+            grooming: data.grooming || "",
+            shedding: data.shedding || "",
           });
         }
       }
     })();
   }, []);
 
-  if (!fontsLoaded) return null;
-
   const handleAnswer = async (
-    question: "barking" | "training",
+    question: "grooming" | "shedding",
     value: string
   ) => {
-    const updatedAnswers = { ...answers, [question]: value };
-    setAnswers(updatedAnswers);
+    const newAnswers = { ...answers, [question]: value };
+    setAnswers(newAnswers);
 
     if (!userId) return;
 
     const payload = {
       user_id: userId,
-      barking: updatedAnswers.barking,
-      training: updatedAnswers.training,
+      grooming: newAnswers.grooming,
+      shedding: newAnswers.shedding,
     };
 
     const { error } = await supabase
@@ -85,32 +76,26 @@ export default function SoundBehavior() {
       .upsert(payload, { onConflict: "user_id" });
 
     if (error) console.error("❌ DB save error:", error.message);
-    else console.log("✅ Antwoorden opgeslagen:", payload);
   };
 
-  const canNext = answers.barking !== "" && answers.training !== "";
+  const canNext = answers.grooming !== "" && answers.shedding !== "";
 
-  const barkingOptions = [
-    { label: "Liever zo stil mogelijk", value: "quiet" },
-    { label: "Een beetje blaffen hoort erbij", value: "some" },
-    { label: "Een praatgrage hond is geen probleem", value: "talkative" },
+  const groomingOptions = [
+    {
+      label: "Zo weinig mogelijk – ik hou het graag praktisch",
+      value: "minimal",
+    },
+    { label: "Af en toe borstelen? Dat hoort erbij", value: "occasional" },
+    { label: "Dagelijks borstelen is voor mij qualitytime", value: "daily" },
   ];
 
-  const trainingOptions = [
+  const sheddingOptions = [
+    { label: "Ik hou m’n huis graag netjes en haarvrij", value: "no_hair" },
     {
-      label:
-        "Heel belangrijk – ik wil een hond die snel leert en goed luistert",
-      value: "very",
+      label: "Een beetje haar? Daar lig ik niet van wakker",
+      value: "some_hair",
     },
-    {
-      label: "Belangrijk, maar het hoeft geen perfect gehoorzame hond te zijn",
-      value: "moderate",
-    },
-    {
-      label:
-        "Niet zo belangrijk – ik heb geduld en waardeer een zelfstandige hond",
-      value: "independent",
-    },
+    { label: "Ik accepteer dat het erbij hoort", value: "accept_hair" },
   ];
 
   return (
@@ -122,45 +107,49 @@ export default function SoundBehavior() {
         >
           <Ionicons name="arrow-back" size={24} color="#183A36" />
         </TouchableOpacity>
-        <Text style={styles.headerTitle}>Geluid & gedrag</Text>
+        <BaseText style={styles.headerTitle} variant="title">
+          Verzorging & vacht
+        </BaseText>
       </View>
 
       <View style={styles.progressBar}>
-        <View style={styles.progressFill5} />
+        <View style={styles.progressFill6} />
       </View>
 
-      <Text style={styles.question}>Hoeveel mag je hond blaffen?</Text>
-      {barkingOptions.map((opt) => (
+      <BaseText style={styles.question}>
+        Hoeveel verzorging wil je geven?
+      </BaseText>
+      {groomingOptions.map((opt) => (
         <TouchableOpacity
           key={opt.value}
           style={styles.radioRow}
-          onPress={() => handleAnswer("barking", opt.value)}
+          onPress={() => handleAnswer("grooming", opt.value)}
         >
-          <RadioButton selected={answers.barking === opt.value} />
-          <Text style={styles.answerText}>{opt.label}</Text>
+          <RadioButton selected={answers.grooming === opt.value} />
+          <BaseText style={styles.answerText}>{opt.label}</BaseText>
         </TouchableOpacity>
       ))}
 
-      <Text style={[styles.question, { marginTop: 32 }]}>
-        Hoe belangrijk is training voor jou?
-      </Text>
-      {trainingOptions.map((opt) => (
+      <BaseText style={[styles.question, { marginTop: 32 }]}>
+        Wat vind je van hondenhaar in huis?
+      </BaseText>
+      {sheddingOptions.map((opt) => (
         <TouchableOpacity
           key={opt.value}
           style={styles.radioRow}
-          onPress={() => handleAnswer("training", opt.value)}
+          onPress={() => handleAnswer("shedding", opt.value)}
         >
-          <RadioButton selected={answers.training === opt.value} />
-          <Text style={styles.answerText}>{opt.label}</Text>
+          <RadioButton selected={answers.shedding === opt.value} />
+          <BaseText style={styles.answerText}>{opt.label}</BaseText>
         </TouchableOpacity>
       ))}
 
       <TouchableOpacity
         style={[styles.button, !canNext && styles.buttonDisabled]}
-        onPress={() => router.push("/grooming_coat")}
+        onPress={() => router.push("/adoptieprofiel_results1")}
         disabled={!canNext}
       >
-        <Text style={styles.buttonText}>VOLGENDE</Text>
+        <BaseText style={styles.buttonText}>VOLGENDE</BaseText>
       </TouchableOpacity>
     </SafeAreaView>
   );
@@ -203,8 +192,8 @@ const styles = StyleSheet.create({
     overflow: "hidden",
     marginBottom: 20,
   },
-  progressFill5: {
-    width: "71.42%",
+  progressFill6: {
+    width: "85.71%",
     height: "100%",
     backgroundColor: "#FFD87E",
     borderTopRightRadius: 3,

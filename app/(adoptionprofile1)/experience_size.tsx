@@ -1,18 +1,15 @@
-"use client";
-
 import React, { useState, useEffect } from "react";
 import {
   SafeAreaView,
   View,
-  Text,
   StyleSheet,
   TouchableOpacity,
   Platform,
 } from "react-native";
 import { useRouter } from "expo-router";
 import { supabase } from "../../lib/supabase";
-import { useFonts } from "expo-font";
 import { Ionicons } from "@expo/vector-icons";
+import BaseText from "@/components/BaseText";
 
 const RadioButton: React.FC<{ selected: boolean }> = ({ selected }) => (
   <View style={styles.radioOuter}>
@@ -26,11 +23,6 @@ export default function ExperienceSize() {
   const [answers, setAnswers] = useState({
     experience: "",
     preferredSize: "",
-  });
-
-  const [fontsLoaded] = useFonts({
-    "Nunito-Regular": require("../../assets/fonts/nunito/Nunito-Regular.ttf"),
-    "Nunito-Bold": require("../../assets/fonts/nunito/Nunito-Bold.ttf"),
   });
 
   useEffect(() => {
@@ -59,8 +51,6 @@ export default function ExperienceSize() {
       }
     })();
   }, []);
-
-  if (!fontsLoaded) return null;
 
   const handleAnswer = async (
     question: "experience" | "preferredSize",
@@ -109,7 +99,6 @@ export default function ExperienceSize() {
 
   return (
     <SafeAreaView style={styles.container}>
-      {/* Header met terugknop én titel gecentreerd */}
       <View style={styles.headerContainer}>
         <TouchableOpacity
           style={styles.backButton}
@@ -117,14 +106,18 @@ export default function ExperienceSize() {
         >
           <Ionicons name="arrow-back" size={24} color="#183A36" />
         </TouchableOpacity>
-        <Text style={styles.headerTitle}>Ervaring & grootte</Text>
+        <BaseText style={styles.headerTitle} variant="title">
+          Ervaring & grootte
+        </BaseText>
       </View>
 
       <View style={styles.progressBar}>
         <View style={styles.progressFill2} />
       </View>
 
-      <Text style={styles.question}>Hoeveel ervaring heb je met honden?</Text>
+      <BaseText style={styles.question}>
+        Hoeveel ervaring heb je met honden?
+      </BaseText>
       {experienceOptions.map((opt) => (
         <TouchableOpacity
           key={opt.value}
@@ -132,13 +125,13 @@ export default function ExperienceSize() {
           onPress={() => handleAnswer("experience", opt.value)}
         >
           <RadioButton selected={answers.experience === opt.value} />
-          <Text style={styles.answerText}>{opt.label}</Text>
+          <BaseText style={styles.answerText}>{opt.label}</BaseText>
         </TouchableOpacity>
       ))}
 
-      <Text style={[styles.question, { marginTop: 32 }]}>
+      <BaseText style={[styles.question, { marginTop: 32 }]}>
         Hoe groot mag je hond zijn?
-      </Text>
+      </BaseText>
       {sizeOptions.map((opt) => (
         <TouchableOpacity
           key={opt.value}
@@ -146,7 +139,7 @@ export default function ExperienceSize() {
           onPress={() => handleAnswer("preferredSize", opt.value)}
         >
           <RadioButton selected={answers.preferredSize === opt.value} />
-          <Text style={styles.answerText}>{opt.label}</Text>
+          <BaseText style={styles.answerText}>{opt.label}</BaseText>
         </TouchableOpacity>
       ))}
 
@@ -155,7 +148,7 @@ export default function ExperienceSize() {
         onPress={() => router.push("/family_environment")}
         disabled={!canNext}
       >
-        <Text style={styles.buttonText}>VOLGENDE</Text>
+        <BaseText style={styles.buttonText}>VOLGENDE</BaseText>
       </TouchableOpacity>
     </SafeAreaView>
   );

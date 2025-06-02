@@ -4,7 +4,6 @@ import React, { useEffect, useState } from "react";
 import {
   SafeAreaView,
   View,
-  Text,
   StyleSheet,
   FlatList,
   TouchableOpacity,
@@ -14,6 +13,7 @@ import {
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import { supabase } from "../../lib/supabase";
+import BaseText from "@/components/BaseText";
 
 interface Dog {
   id: string;
@@ -164,11 +164,13 @@ export default function Matching() {
         <TouchableOpacity style={styles.back} onPress={() => router.back()}>
           <Ionicons name="arrow-back" size={24} color="#183A36" />
         </TouchableOpacity>
-        <Text style={styles.title}>Jouw matches</Text>
+        <BaseText variant="title">Jouw matches</BaseText>
       </View>
 
       {matches.length === 0 ? (
-        <Text style={styles.noMatches}>Geen geschikte matches gevonden.</Text>
+        <BaseText style={styles.noMatches}>
+          Geen geschikte matches gevonden.
+        </BaseText>
       ) : (
         <FlatList
           data={matches}
@@ -182,8 +184,8 @@ export default function Matching() {
                 )
               }
             >
-              <Text style={styles.name}>{item.dog.name}</Text>
-              <Text style={styles.score}>{item.score}% match</Text>
+              <BaseText style={styles.name}>{item.dog.name}</BaseText>
+              <BaseText style={styles.score}>{item.score}% match</BaseText>
             </TouchableOpacity>
           )}
         />
@@ -194,7 +196,7 @@ export default function Matching() {
           style={styles.homeButton}
           onPress={() => router.push("/homepage")}
         >
-          <Text style={styles.homeButtonText}>Ga naar home</Text>
+          <BaseText style={styles.homeButtonText}>Ga naar home</BaseText>
         </TouchableOpacity>
       </View>
     </SafeAreaView>
@@ -258,7 +260,7 @@ const styles = StyleSheet.create({
     color: "#183A36",
     fontWeight: "bold",
     textTransform: "uppercase",
-    textAlign: "center", // zorgt dat het netjes binnen de knop blijft
-    paddingHorizontal: 12, // optioneel voor extra ruimte rondom
+    textAlign: "center",
+    paddingHorizontal: 12,
   },
 });
