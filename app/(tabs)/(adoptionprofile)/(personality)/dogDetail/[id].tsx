@@ -10,7 +10,7 @@ import {
   Image,
   TouchableOpacity,
 } from "react-native";
-import { supabase } from "../../../lib/supabase";
+import { supabase } from "../../../../../lib/supabase";
 import { Ionicons } from "@expo/vector-icons";
 import BaseText from "@/components/BaseText";
 

@@ -215,7 +215,7 @@ export default function AdoptieprofielResults() {
       style={styles.card}
       onPress={() =>
         router.push({
-          pathname: "/(adoptionprofile1)/breed/[id]",
+          pathname: "(adoptionprofile)/(breed)/breedDetail/[id].tsx",
           params: { id: item.breed.id.toString() },
         } as any)
       }

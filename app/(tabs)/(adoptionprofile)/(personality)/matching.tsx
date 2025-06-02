@@ -1,18 +1,18 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   SafeAreaView,
   View,
   StyleSheet,
-  FlatList,
   TouchableOpacity,
+  FlatList,
   ActivityIndicator,
-  Alert,
+  Platform,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
-import { supabase } from "../../lib/supabase";
+import { supabase } from "../../../../lib/supabase";
 import BaseText from "@/components/BaseText";
 
 interface Dog {
@@ -179,9 +179,11 @@ export default function Matching() {
             <TouchableOpacity
               style={styles.card}
               onPress={() =>
-                router.push(
-                  `/(adoption_personality)/dog-detail/${item.dog.id}` as any
-                )
+                router.push({
+                  pathname:
+                    "/(tabs)/(adoptionprofile)/(personality)/dogDetail/[id]",
+                  params: { id: item.dog.id },
+                })
               }
             >
               <BaseText style={styles.name}>{item.dog.name}</BaseText>
@@ -208,7 +210,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#FFFDF9",
     paddingHorizontal: 16,
-    paddingTop: 50,
+    paddingTop: Platform.OS === "ios" ? 20 : 50,
   },
   headerRow: {
     flexDirection: "row",
@@ -219,11 +221,6 @@ const styles = StyleSheet.create({
   back: {
     position: "absolute",
     left: 0,
-  },
-  title: {
-    fontSize: 22,
-    fontFamily: "Sirenia-Regular",
-    color: "#183A36",
   },
   noMatches: {
     fontSize: 16,
