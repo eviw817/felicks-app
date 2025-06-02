@@ -5,9 +5,9 @@ import {
   SafeAreaView,
   View,
   Text,
-  TouchableOpacity,
   StyleSheet,
   Platform,
+  TouchableOpacity,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 
@@ -31,7 +31,7 @@ export default function MissingAdoptionProfile() {
 
       <TouchableOpacity
         style={styles.button}
-        onPress={() => router.push("/(adoption)/adoption_choice")}
+        onPress={() => router.push("/adoptionChoice")}
       >
         <Text style={styles.buttonText}>GA NAAR ADOPTIEPROFIEL</Text>
       </TouchableOpacity>

@@ -160,7 +160,7 @@ export default function ActivityPersonality() {
 
       <TouchableOpacity
         style={[styles.button, !canNext && styles.buttonDisabled]}
-        onPress={() => router.push("/sound_behavior")}
+        onPress={() => router.push("/soundBehavior")}
         disabled={!canNext}
       >
         <Text style={styles.buttonText}>VOLGENDE</Text>

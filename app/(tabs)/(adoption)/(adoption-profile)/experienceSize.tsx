@@ -153,7 +153,7 @@ export default function ExperienceSize() {
 
       <TouchableOpacity
         style={[styles.button, !canNext && styles.buttonDisabled]}
-        onPress={() => router.push("/family_environment")}
+        onPress={() => router.push("/familyEnvironment")}
         disabled={!canNext}
       >
         <Text style={styles.buttonText}>VOLGENDE</Text>

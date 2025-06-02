@@ -178,7 +178,7 @@ export default function Matching() {
               style={styles.card}
               onPress={() =>
                 router.push(
-                  `/(adoption_personality)/dog-detail/${item.dog.id}` as any
+                  `/dog-detail/${item.dog.id}` as any
                 )
               }
             >

@@ -68,7 +68,7 @@ export default function Energy() {
     if (error) {
       Alert.alert("Fout", "Kon voorkeuren niet opslaan.");
     } else {
-      router.push("./matching");
+      router.push("/matching");
     }
   };
 

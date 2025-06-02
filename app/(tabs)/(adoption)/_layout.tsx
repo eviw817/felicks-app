@@ -13,9 +13,9 @@ export default function ProfileLayout() {
           fontWeight: 'bold',
         },
       }}>
-      <Stack.Screen name="adoptieIndex" options={{ title: "Adoptie Index" }} />
+      <Stack.Screen name="adoptionIndex" options={{ title: "Adoptie Index" }} />
       <Stack.Screen name="missingAdoptionProfile" options={{ title: "Missing Adoption Profile" }} />
-      <Stack.Screen name="AdoptionChoice" options={{ title: "Adoption Choice" }} />
+      <Stack.Screen name="adoptionChoice" options={{ title: "Adoption Choice" }} />
     </Stack>
   );
 }

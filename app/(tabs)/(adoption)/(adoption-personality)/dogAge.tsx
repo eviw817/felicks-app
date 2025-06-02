@@ -12,7 +12,7 @@ import {
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
-import { supabase } from "../../../../lib/supabase";
+import { supabase } from "@/lib/supabase";
 
 const RadioButton = ({ selected }: { selected: boolean }) => (
   <View style={styles.radioOuter}>
@@ -61,7 +61,7 @@ export default function DogAge() {
     if (error) {
       Alert.alert("Fout", "Kon voorkeur niet opslaan.");
     } else {
-      router.push("/training_level");
+      router.push("/trainingLevel");
     }
   };
 

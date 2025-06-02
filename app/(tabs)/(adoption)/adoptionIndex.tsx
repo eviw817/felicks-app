@@ -47,7 +47,7 @@ export default function AdoptieIntro() {
 
         <TouchableOpacity
           style={styles.button}
-          onPress={() => router.push("/(adoption)/missing_adoption_profile")}
+          onPress={() => router.push("/missingAdoptionProfile")}
         >
           <Text style={styles.buttonText}>DOORGAAN</Text>
         </TouchableOpacity>

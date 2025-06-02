@@ -157,7 +157,7 @@ export default function SoundBehavior() {
 
       <TouchableOpacity
         style={[styles.button, !canNext && styles.buttonDisabled]}
-        onPress={() => router.push("/grooming_coat")}
+        onPress={() => router.push("/groomingCoat")}
         disabled={!canNext}
       >
         <Text style={styles.buttonText}>VOLGENDE</Text>

@@ -152,7 +152,7 @@ export default function GroomingCoat() {
 
       <TouchableOpacity
         style={[styles.button, !canNext && styles.buttonDisabled]}
-        onPress={() => router.push("/adoptieprofiel_results1")}
+        onPress={() => router.push("/adoptionProfileResults")}
         disabled={!canNext}
       >
         <Text style={styles.buttonText}>VOLGENDE</Text>

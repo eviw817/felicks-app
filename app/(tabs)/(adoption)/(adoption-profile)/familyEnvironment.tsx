@@ -138,7 +138,7 @@ export default function FamilyEnvironment() {
 
       <TouchableOpacity
         style={[styles.button, !canNext && styles.buttonDisabled]}
-        onPress={() => router.push("/activity_personality")}
+        onPress={() => router.push("/activityPersonality")}
         disabled={!canNext}
       >
         <Text style={styles.buttonText}>VOLGENDE</Text>

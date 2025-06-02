@@ -31,7 +31,7 @@ export default function AdoptionChoice() {
       <TouchableOpacity
         style={styles.optionButton}
         onPress={() =>
-          router.push("/(adoption_personality)/personality_traits")
+          router.push("/personalityTraits")
         }
       >
         <Text style={styles.optionText}>PERSOONLIJKHEID</Text>
@@ -39,7 +39,7 @@ export default function AdoptionChoice() {
 
       <TouchableOpacity
         style={styles.optionButton}
-        onPress={() => router.push("/(adoptionprofile1)/livingsituation")}
+        onPress={() => router.push("/livingSituation")}
       >
         <Text style={styles.optionText}>RAS</Text>
       </TouchableOpacity>
