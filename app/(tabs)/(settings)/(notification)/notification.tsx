@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, TouchableOpacity, StyleSheet, Switch, Alert } from "react-native";
+import { View, Text, TouchableOpacity, StyleSheet, Switch, Alert, SafeAreaView } from "react-native";
 import { useRouter } from "expo-router";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
-import { supabase } from "../../../../lib/supabase";
-import NavBar from "@/components/NavigationBar";
 import BaseText from "@/components/BaseText";
+import { supabase } from "@/lib/supabase";
+import NavBar from "@/components/NavigationBar";
 
 const NotificatiesScreen = () => {
     const router = useRouter();
@@ -138,7 +138,7 @@ useEffect(() => {
 
 
     return (
-        <View style={styles.container}>
+        <SafeAreaView style={styles.container}>
             {/* Header */}
             <View style={styles.header}>
                 <TouchableOpacity onPress={() => router.push("/settings")}>
@@ -197,19 +197,17 @@ useEffect(() => {
             <TouchableOpacity style={styles.button} onPress={saveUserSettings}>
                 <Text style={styles.buttonText}>OPSLAAN</Text>
             </TouchableOpacity>
-
             {/* Fixed navbar onderaan scherm */}
             <View
-                    style={{
+                style={{
                     position: "absolute",
                     bottom: 0,
                     left: 0,
                     right: 0,
-                    }}
-                >
-                    <NavBar />
+                }}>
+                <NavBar />
             </View>
-        </View>
+        </SafeAreaView>
     );
 };
 
@@ -218,7 +216,7 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: "#FFFDF9",
         padding: 20,
-        paddingTop: 100,
+        paddingTop: 60,
     },
     header: {
         flexDirection: "row",

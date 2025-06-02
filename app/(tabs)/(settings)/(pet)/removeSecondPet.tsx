@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, Text, TouchableOpacity, Image, StyleSheet } from "react-native";
+import { View, Text, TouchableOpacity, Image, StyleSheet, SafeAreaView } from "react-native";
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import { useRouter } from "expo-router";
@@ -11,7 +11,7 @@ const Remove2PetScreen = () => {
   const router = useRouter();
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
         <View style={styles.header}>
             <TouchableOpacity onPress={() => router.push("/settings")} style={styles.backButton}>
                 <FontAwesomeIcon icon={faArrowLeft} size={30} color={'#183A36'} style={styles.backButton} />
@@ -28,23 +28,22 @@ const Remove2PetScreen = () => {
       </TouchableOpacity>
       {/* Fixed navbar onderaan scherm */}
       <View
-              style={{
-              position: "absolute",
-              bottom: 0,
-              left: 0,
-              right: 0,
-              }}
-          >
-              <NavBar />
+        style={{
+          position: "absolute",
+          bottom: 0,
+          left: 0,
+          right: 0,
+        }}>
+        <NavBar />
       </View>
-    </View>
+    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: 100,
+    paddingTop: 60,
     backgroundColor: "#FFFDF9",
     padding: 20,
     alignItems: "center",

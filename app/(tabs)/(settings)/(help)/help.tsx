@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, TouchableOpacity, StyleSheet, Alert } from "react-native";
+import { View, Text, TouchableOpacity, StyleSheet, Alert, SafeAreaView } from "react-native";
 import { useRouter } from "expo-router";
 // import { supabase } from "../../lib/supabase";
 // import { Session } from "@supabase/supabase-js";
@@ -12,7 +12,7 @@ const HelpScreen = () => {
       const router = useRouter();
   
     return (
-        <View style={styles.container} >
+        <SafeAreaView style={styles.container} >
             <View style={styles.header}>
                 <TouchableOpacity onPress={() => router.push("/settings")} style={styles.backButton}>
                     <FontAwesomeIcon icon={faArrowLeft} size={30} color={'#183A36'} style={styles.backButton} />
@@ -37,16 +37,15 @@ const HelpScreen = () => {
             </View>
             {/* Fixed navbar onderaan scherm */}
             <View
-                    style={{
+                style={{
                     position: "absolute",
                     bottom: 0,
                     left: 0,
                     right: 0,
-                    }}
-                >
-                    <NavBar />
+                }}>
+                <NavBar />
             </View>
-      </View>
+      </SafeAreaView>
     );
    
   };
@@ -54,7 +53,7 @@ const HelpScreen = () => {
   const styles = StyleSheet.create({
      container: { 
         flex: 1,
-        paddingTop: 100,
+        paddingTop: 60,
         alignItems: 'center',
         padding: 20,
         backgroundColor: '#FFFDF9',

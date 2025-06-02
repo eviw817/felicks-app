@@ -1,11 +1,11 @@
 import React from "react";
-import { View, Text, TouchableOpacity, StyleSheet, Alert } from "react-native";
+import { View, Text, TouchableOpacity, StyleSheet, Alert, SafeAreaView } from "react-native";
 import { useRouter } from "expo-router";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
-import { supabase } from "../../../../lib/supabase";
-import NavBar from "@/components/NavigationBar";
 import BaseText from "@/components/BaseText";
+import { supabase } from "@/lib/supabase";
+import NavBar from "@/components/NavigationBar";
 
 const signOutScreen = () => {
     const router = useRouter();
@@ -21,7 +21,7 @@ const signOutScreen = () => {
     };
 
     return (
-        <View style={styles.container}>
+        <SafeAreaView style={styles.container}>
             {/* Header met terugknop */}
             <View style={styles.header}>
                 <TouchableOpacity onPress={() => router.push("/settings")}>
@@ -43,16 +43,15 @@ const signOutScreen = () => {
             </TouchableOpacity>
             {/* Fixed navbar onderaan scherm */}
             <View
-                    style={{
+                style={{
                     position: "absolute",
                     bottom: 0,
                     left: 0,
                     right: 0,
-                    }}
-                >
-                    <NavBar />
+                }}>
+                <NavBar />
             </View>
-        </View>
+        </SafeAreaView>
     );
 };
 

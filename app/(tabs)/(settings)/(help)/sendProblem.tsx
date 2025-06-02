@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, TouchableOpacity, StyleSheet, TextInput, Alert } from "react-native";
+import { View, Text, TouchableOpacity, StyleSheet, TextInput, Alert, SafeAreaView } from "react-native";
 import { useRouter } from "expo-router";
 // import { supabase } from "../../lib/supabase";
 // import { Session } from "@supabase/supabase-js";
@@ -11,7 +11,7 @@ const SendProblemScreen = () => {
       const router = useRouter();
   
     return (
-        <View style={styles.container} >
+        <SafeAreaView style={styles.container} >
              <Text style={styles.title}>Je probleem is verzonden.</Text>
              <Text style={styles.subtitle}>We sturen je antwoord zo snel mogelijk via mail. De mail kan altijd in je spam terecht komen,
                 gelieve ook deze te controleren. 
@@ -20,17 +20,16 @@ const SendProblemScreen = () => {
                 <Text style={styles.submitText}>TERUG</Text>
             </TouchableOpacity>
           {/* Fixed navbar onderaan scherm */}
-            <View
-                    style={{
-                    position: "absolute",
-                    bottom: 0,
-                    left: 0,
-                    right: 0,
-                    }}
-                >
-                    <NavBar />
-            </View>
-    </View>
+          <View
+            style={{
+              position: "absolute",
+              bottom: 0,
+              left: 0,
+              right: 0,
+              }}>
+            <NavBar />
+          </View>
+      </SafeAreaView>
     );
    
   };

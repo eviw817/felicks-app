@@ -1,13 +1,16 @@
 import { BeagleScene } from "@/components/augumented-dog/scenes/BeagleScene";
 import { ViroARSceneNavigator } from "@reactvision/react-viro";
-import { SafeAreaView, View, Text, TouchableOpacity } from "react-native";
+import { SafeAreaView, View, Text, TouchableOpacity, Pressable } from "react-native";
 import { useState, useEffect } from "react";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import { supabase } from "@/lib/supabase";
 import { useLocalSearchParams } from "expo-router";
 import NavBar from "@/components/NavigationBar";
+import { useNavigation } from '@react-navigation/native'
+import { Ionicons } from '@expo/vector-icons'
 
 const AugumentedDog = () => {
+  const navigation = useNavigation()
   const { petId } = useLocalSearchParams();
 
   const [status, setStatus] = useState<null | {
@@ -168,6 +171,16 @@ const AugumentedDog = () => {
       >
         <BeagleScene style={{ width: "100%", height: 1000 }} />
       </ViroARSceneNavigator>
+      <Pressable
+            onPress={() => navigation.goBack()}
+            style={{
+              position: "absolute",
+              top: 68,
+              left: 40,
+            }}
+          >
+            <Ionicons name="arrow-back" size={24} color="#183A36" />
+          </Pressable>
 
       <View
         style={{

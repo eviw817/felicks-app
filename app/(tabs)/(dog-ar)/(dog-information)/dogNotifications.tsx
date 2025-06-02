@@ -9,14 +9,18 @@ import {
   Animated,
   Easing,
   Alert,
+  Pressable
 } from "react-native";
 import { useRouter, useLocalSearchParams } from "expo-router";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import { supabase } from "@/lib/supabase";
 import NavBar from "@/components/NavigationBar";
+import { useNavigation } from '@react-navigation/native'
+import { Ionicons } from '@expo/vector-icons'
 
 export default function UserPermissions() {
   const router = useRouter();
+  const navigation = useNavigation()
 
   const [loading, setLoading] = useState(true);
   const [fetchError, setFetchError] = useState("");
@@ -219,16 +223,16 @@ export default function UserPermissions() {
           marginRight: 20,
         }}
       >
-        <TouchableOpacity
-          style={{
-            position: "absolute",
-            top: 64,
-            left: 16,
-          }}
-          onPress={() => router.back()}
-        >
-          <AntDesign name="arrowleft" size={24} color="black" />
-        </TouchableOpacity>
+        <Pressable
+            onPress={() => navigation.goBack()}
+            style={{
+              position: "absolute",
+              top: 68,
+              left: 40,
+            }}
+          >
+            <Ionicons name="arrow-back" size={24} color="#183A36" />
+          </Pressable>
         <Text
           style={{
             fontFamily: "Nunito",

@@ -7,6 +7,7 @@ import {
   TextInput,
   Alert,
   ScrollView,
+  Pressable
 } from "react-native";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import AntDesign from "@expo/vector-icons/AntDesign";
@@ -15,6 +16,7 @@ import NavBar from "@/components/NavigationBar";
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 import BaseText from "@/components/BaseText";
+import { useNavigation } from '@react-navigation/native'
 
 export default function DogName() {
   const router = useRouter();
@@ -22,6 +24,7 @@ export default function DogName() {
   const [text, onChangeText] = React.useState("");
   const [dogBreed, setDogBreed] = React.useState<string>("");
   const [dogName, setDogName] = React.useState<string>("");
+  const navigation = useNavigation()
 
   React.useEffect(() => {
     if (petId && typeof petId === "string" && petId.length > 0) {

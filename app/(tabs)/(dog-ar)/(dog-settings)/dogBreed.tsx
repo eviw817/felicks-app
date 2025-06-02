@@ -5,11 +5,14 @@ import {
   Text,
   TouchableOpacity,
   Alert,
+  Pressable
 } from "react-native";
 import { useRouter, Link } from "expo-router";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import { Picker } from "@react-native-picker/picker";
 import NavBar from "@/components/NavigationBar";
+import { useNavigation } from '@react-navigation/native'
+import { Ionicons } from '@expo/vector-icons'
 
 import { supabase } from "@/lib/supabase"; // adjust path if needed
 import { useEffect } from "react";
@@ -20,6 +23,7 @@ import BaseText from "@/components/BaseText";
 export default function DogBreed() {
   const router = useRouter();
   const [dogBreed, setdogBreed] = useState<string | null>(null);
+    const navigation = useNavigation()
 
   const handleBreedSubmit = async () => {
     if (!dogBreed) return;

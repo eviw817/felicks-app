@@ -11,46 +11,27 @@ const NotficationEmailScreen = () => {
     useEffect(() => {
       const handleDeepLink = async (event: { url: string }) => {
         const { url } = event;
-        // console.log("Gevangen URL:", url); // Dit helpt je te debuggen
-    if (url) {
-  try {
-    const parsedUrl = new URL(url);
-    const hashParams = new URLSearchParams(parsedUrl.hash.replace('#', ''));
+          if (url) {
+            try {
+              const parsedUrl = new URL(url);
+              const hashParams = new URLSearchParams(parsedUrl.hash.replace('#', ''));
 
-    const accessToken = hashParams.get('access_token');
-    const refreshToken = hashParams.get('refresh_token');
+              const accessToken = hashParams.get('access_token');
+              const refreshToken = hashParams.get('refresh_token');
 
-    if (accessToken && refreshToken) {
-      await SecureStore.setItemAsync('access_token', accessToken);
-      await SecureStore.setItemAsync('refresh_token', refreshToken);
+              if (accessToken && refreshToken) {
+                await SecureStore.setItemAsync('access_token', accessToken);
+                await SecureStore.setItemAsync('refresh_token', refreshToken);
 
-      router.replace(`/newPassword`);
-    } else {
-     // Alert.alert("Fout", "Tokens ontbreken in de link.");
-    }
-  } catch (error) {
-    console.error("Fout bij URL verwerking:", error);
-    Alert.alert("Fout", "De link is ongeldig.");
-  }
-}
-
-        // if (url) {
-        //   try {
-        //     const parsedUrl = new URL(url);
-        //     const hashParams = new URLSearchParams(parsedUrl.hash.replace('#', '')); // Verwijder de '#'
-        //     const token = hashParams.get('access_token'); // Verkrijg het token uit de URL
-    
-        //     if (url.includes("/newPassword") && token) {
-        //       router.replace(`/newPassword?access_token=${token}`);
-        //     } else {
-        //       Alert.alert("Fout", "Geen geldig token in de deep link.");
-        //     }
-        //   } catch (error) {
-        //     console.error("Fout bij het verwerken van de URL:", error);
-        //     Alert.alert("Fout", "Er is een probleem met de deep link.");
-        //   }
-        // }
-      };
+                router.replace(`/newPassword`);
+             } else {
+               // Alert.alert("Fout", "Tokens ontbreken in de link.");
+             }
+           } catch (error) {
+              console.error("Fout bij URL verwerking:", error);
+              Alert.alert("Fout", "De link is ongeldig.");
+          }
+        }
     
       // Controleer voor een initiële URL wanneer de app wordt geopend via deep link
       Linking.getInitialURL().then(url => {
