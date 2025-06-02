@@ -49,6 +49,11 @@ export default function Index() {
     }
   }, [petId]);
 
+  function capitalizeFirstLetter(text: string) {
+    if (!text) return "";
+    return text.charAt(0).toUpperCase() + text.slice(1);
+  }
+
   useEffect(() => {
     const timer = setTimeout(() => {
       router.replace(`/arStart?petId=${petId}`);
@@ -67,7 +72,7 @@ export default function Index() {
       }}
     >
       <LottieView
-        source={require("../../../../assets/animations/loader.json")}
+        source={require("@/assets/animations/loader.json")}
         autoPlay
         loop
         style={{ width: 200, height: 200 }}
@@ -82,7 +87,7 @@ export default function Index() {
           textAlign: "center",
         }}
       >
-        {dogName || "nog geen naam"} wordt op jouw profiel ontworpen
+        {capitalizeFirstLetter(dogName || "nog geen naam")} wordt op jouw profiel ontworpen
       </Text>
     </SafeAreaView>
   );

@@ -155,7 +155,7 @@ export default function DogInformation() {
               paddingTop: 0,
             }}
           >
-            Neem hem overal mee naartoe en speel met hem alsof hij echt bij je
+            Neem {dogName || "nog geen naam"} overal mee naartoe en speel met {dogName || "nog geen naam"} alsof die echt bij je
             is.
           </Text>
           <Text
@@ -191,7 +191,7 @@ export default function DogInformation() {
               paddingTop: 0,
             }}
           >
-            Hij laat je zien wat er echt bij een huisdier komt kijken:
+            {dogName || "nog geen naam"} laat je zien wat er echt bij een huisdier komt kijken:
           </Text>
           <View
             style={{

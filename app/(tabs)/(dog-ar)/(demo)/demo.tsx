@@ -61,7 +61,7 @@ const AugmentedDog: React.FC = () => {
 
   const getStatusMessages = (dogName: string) => ({
     is_eating: {
-      true: `${dogName} heeft flink zijn eten opgegeten!`,
+      true: `${dogName} heeft flink hun eten opgegeten!`,
     },
     is_playing: {
       true: `${dogName} heeft kunnen spelen!`,
@@ -70,7 +70,7 @@ const AugmentedDog: React.FC = () => {
       true: `${dogName} vond het wandelen heel leuk!`,
     },
     is_toilet: {
-      true: `${dogName} heeft zijn behoefte kunnen doen!`,
+      true: `${dogName} heeft hun behoefte kunnen doen!`,
     },
   });
 

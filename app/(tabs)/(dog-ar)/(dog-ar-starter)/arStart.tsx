@@ -109,7 +109,7 @@ export default function DogInformation() {
               paddingVertical: 0,
             }}
           >
-            Vanaf nu ben jij verantwoordelijk voor zijn zorg en geluk.
+            Vanaf nu ben jij verantwoordelijk voor hun zorg en geluk.
           </Text>
           <Text
             style={{

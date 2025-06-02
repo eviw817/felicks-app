@@ -225,7 +225,7 @@ export default function DogFeature() {
             }}
           >
             {dogName || "nog geen naam"} reageert op jouw aandacht. Verzorg je
-            hem goed? Dan straalt hij. Vergeet je hem?
+            {dogName || "nog geen naam"} goed? Dan straalt die. Vergeet je {dogName || "nog geen naam"}?
           </Text>
           <Text
             style={{
@@ -238,7 +238,7 @@ export default function DogFeature() {
               marginLeft: 20,
             }}
           >
-            Dan wordt hij verdrietig.
+            Dan wordt die verdrietig.
           </Text>
         </View>
         <Text
