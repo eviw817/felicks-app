@@ -20,7 +20,7 @@ const NotficationEmailScreen = () => {
             if (url.includes("newPassword") && token) {
               console.log("Token gevonden:", token);
               router.replace({
-                pathname: "/newpassword",
+                pathname: "/newPassword",
                 params: { access_token: token }
               });
             } else {

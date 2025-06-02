@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from "react";
 import {
   SafeAreaView,
@@ -5,16 +6,21 @@ import {
   Text,
   TouchableOpacity,
   ActivityIndicator,
+  Pressable,
 } from "react-native";
+import { BeagleScene } from "@/components/augumented-dog/scenes/BeagleScene";
+import { ViroARSceneNavigator } from "@reactvision/react-viro";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import { supabase } from "@/lib/supabase";
 import { useLocalSearchParams } from "expo-router";
 import NavBar from "@/components/NavigationBar";
+import { useNavigation } from '@react-navigation/native'
+import { Ionicons } from '@expo/vector-icons'
 
-// ────────────── AR-componenten ──────────────
-import { BeagleScene } from "@/components/augumented-dog/scenes/BeagleScene";
-import { ViroARSceneNavigator } from "@reactvision/react-viro";
 
+
+const navigation = useNavigation()
+const { petId } = useLocalSearchParams();
 
 type DogStatus = {
   id: string;
@@ -240,14 +246,28 @@ const AugmentedDog: React.FC = () => {
   const messagesToShow = getCurrentMessages();
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: "#FFFDF9" }}>
-      {/* ─── AR-component ingeschakeld ─── */}
-      <View style={{ flex: 1 }}>
-        <ViroARSceneNavigator
-          initialScene={{ scene: () => <BeagleScene /> }}
-          style={{ flex: 1 }}
-        />
-      </View>
+
+    <SafeAreaView style={{ flex: 1 }}>
+      <ViroARSceneNavigator
+        autofocus={true}
+        initialScene={{
+          scene: () => <BeagleScene />,
+        }}
+        style={{ flex: 1 }}
+      >
+        <BeagleScene style={{ width: "100%", height: 1000 }} />
+      </ViroARSceneNavigator>
+      <Pressable
+        onPress={() => navigation.goBack()}
+        style={{
+          position: "absolute",
+          top: 68,
+          left: 40,
+        }}
+      >
+        <Ionicons name="arrow-back" size={24} color="#183A36" />
+      </Pressable>
+
 
       {/* ─── Tekstballon ─── */}
       <View

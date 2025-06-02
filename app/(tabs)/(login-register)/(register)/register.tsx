@@ -8,7 +8,7 @@ import {
   TouchableOpacity,
   TextInput,
   SafeAreaView,
-  ScrollView
+  ScrollView,
 } from "react-native";
 import { supabase } from "../../../../lib/supabase";
 import Auth from "../../../../components/Auth";
@@ -148,8 +148,8 @@ export default function Registeren() {
     if (error) {
       console.log("Error signing up:", error);
       Alert.alert(
-      "Fout",
-      "Er is een fout opgetreden bij het registreren. Probeer het opnieuw."
+        "Fout",
+        "Er is een fout opgetreden bij het registreren. Probeer het opnieuw."
       );
       setLoading(false);
       return;
@@ -208,7 +208,7 @@ export default function Registeren() {
       setYear("2000");
 
       // Redirect to adoptionProfileStart page
-      router.push("/adoptionProfileStart");
+      router.push("/homepage");
     }
 
     setLoading(false);
@@ -222,155 +222,152 @@ export default function Registeren() {
         keyboardShouldPersistTaps="handled"
         style={{ width: "100%" }}
       >
-      {session ? (
-        <Auth key={session.user.id} session={session} />
-      ) : (
-        <>
-          <Text style={styles.title}>Registreren</Text>
+        {session ? (
+          <Auth key={session.user.id} session={session} />
+        ) : (
+          <>
+            <Text style={styles.title}>Registreren</Text>
 
-          {/* Voornaam input */}
-          <Text style={styles.label}>Voornaam</Text>
-          <TextInput
-            style={[
-              styles.input,
-              firstnameFocus || isFirstnameFilled
-                ? styles.focusedInput
-                : styles.unfocusedInput,
-            ]}
-            placeholder="Voornaam"
-            placeholderTextColor="rgba(151, 184, 165, 0.5)"
-            keyboardType="default"
-            onFocus={() => setFirstnameFocus(true)}
-            onBlur={() => setFirstnameFocus(false)}
-            onChangeText={setFirstname}
-            value={firstname}
-          />
+            {/* Voornaam input */}
+            <Text style={styles.label}>Voornaam</Text>
+            <TextInput
+              style={[
+                styles.input,
+                firstnameFocus || isFirstnameFilled
+                  ? styles.focusedInput
+                  : styles.unfocusedInput,
+              ]}
+              placeholder="Voornaam"
+              placeholderTextColor="rgba(151, 184, 165, 0.5)"
+              keyboardType="default"
+              onFocus={() => setFirstnameFocus(true)}
+              onBlur={() => setFirstnameFocus(false)}
+              onChangeText={setFirstname}
+              value={firstname}
+            />
 
-          {/* Achternaam input */}
-          <Text style={styles.label}>Achternaam</Text>
-          <TextInput
-            style={[
-              styles.input,
-              lastnameFocus || isLastnameFilled
-                ? styles.focusedInput
-                : styles.unfocusedInput,
-            ]}
-            placeholder="Achternaam"
-            placeholderTextColor="rgba(151, 184, 165, 0.5)"
-            keyboardType="default"
-            onFocus={() => setlastnameFocus(true)}
-            onBlur={() => setlastnameFocus(false)}
-            onChangeText={setLastname}
-            value={lastname}
-          />
+            {/* Achternaam input */}
+            <Text style={styles.label}>Achternaam</Text>
+            <TextInput
+              style={[
+                styles.input,
+                lastnameFocus || isLastnameFilled
+                  ? styles.focusedInput
+                  : styles.unfocusedInput,
+              ]}
+              placeholder="Achternaam"
+              placeholderTextColor="rgba(151, 184, 165, 0.5)"
+              keyboardType="default"
+              onFocus={() => setlastnameFocus(true)}
+              onBlur={() => setlastnameFocus(false)}
+              onChangeText={setLastname}
+              value={lastname}
+            />
 
-          {/* Geboortedatum picker */}
-          <Text style={styles.label}>Geboortedatum</Text>
-          <View style={styles.datePickerContainer}>
-            {/* Dag picker */}
-            <Picker
-              selectedValue={day}
-              style={styles.picker}
-              onValueChange={(itemValue) => setDay(itemValue)}
-            >
-              {[...Array(31)].map((_, index) => (
-                <Picker.Item
-                  key={index}
-                  label={String(index + 1).padStart(2, "0")}
-                  value={String(index + 1).padStart(2, "0")}
-                />
-              ))}
-            </Picker>
-
-            {/* Maand picker */}
-            <Picker
-              selectedValue={month}
-              style={styles.picker}
-              onValueChange={(itemValue) => setMonth(itemValue)}
-            >
-              {[...Array(12)].map((_, index) => (
-                <Picker.Item
-                  key={index}
-                  label={String(index + 1).padStart(2, "0")}
-                  value={String(index + 1).padStart(2, "0")}
-                />
-              ))}
-            </Picker>
-
-            {/* Jaar picker */}
-            <Picker
-              selectedValue={year}
-              style={styles.picker}
-              onValueChange={(itemValue) => setYear(itemValue)}
-            >
-              {[...Array(100)].map((_, index) => {
-                const yearValue = 2023 - index;
-                return (
+            {/* Geboortedatum picker */}
+            <Text style={styles.label}>Geboortedatum</Text>
+            <View style={styles.datePickerContainer}>
+              {/* Dag picker */}
+              <Picker
+                selectedValue={day}
+                style={styles.picker}
+                onValueChange={(itemValue) => setDay(itemValue)}
+              >
+                {[...Array(31)].map((_, index) => (
                   <Picker.Item
                     key={index}
-                    label={String(yearValue)}
-                    value={String(yearValue)}
+                    label={String(index + 1).padStart(2, "0")}
+                    value={String(index + 1).padStart(2, "0")}
                   />
-                );
-              })}
-            </Picker>
-          </View>
+                ))}
+              </Picker>
 
-          {/* E-mail input */}
-          <Text style={styles.label}>E-mail</Text>
-          <TextInput
-            style={[
-              styles.input,
-              emailFocus || isEmailFilled
-                ? styles.focusedInput
-                : styles.unfocusedInput,
-            ]}
-            placeholder="E-mail"
-            placeholderTextColor="rgba(151, 184, 165, 0.5)"
-            keyboardType="email-address"
-            onFocus={() => setEmailFocus(true)}
-            onBlur={() => setEmailFocus(false)}
-            onChangeText={setEmail}
-            value={email}
-          />
+              {/* Maand picker */}
+              <Picker
+                selectedValue={month}
+                style={styles.picker}
+                onValueChange={(itemValue) => setMonth(itemValue)}
+              >
+                {[...Array(12)].map((_, index) => (
+                  <Picker.Item
+                    key={index}
+                    label={String(index + 1).padStart(2, "0")}
+                    value={String(index + 1).padStart(2, "0")}
+                  />
+                ))}
+              </Picker>
 
-          {/* Wachtwoord input */}
-          <Text style={styles.label}>Wachtwoord</Text>
-          <TextInput
-            style={[
-              styles.input,
-              passwordFocus || isPasswordFilled
-                ? styles.focusedInput
-                : styles.unfocusedInput,
-            ]}
-            placeholder="Wachtwoord"
-            placeholderTextColor="rgba(151, 184, 165, 0.5)"
-            secureTextEntry
-            onFocus={() => setPasswordFocus(true)}
-            onBlur={() => setPasswordFocus(false)}
-            onChangeText={setPassword}
-            value={password}
-          />
+              {/* Jaar picker */}
+              <Picker
+                selectedValue={year}
+                style={styles.picker}
+                onValueChange={(itemValue) => setYear(itemValue)}
+              >
+                {[...Array(100)].map((_, index) => {
+                  const yearValue = 2023 - index;
+                  return (
+                    <Picker.Item
+                      key={index}
+                      label={String(yearValue)}
+                      value={String(yearValue)}
+                    />
+                  );
+                })}
+              </Picker>
+            </View>
 
-          <TouchableOpacity
-            style={styles.button}
-            onPress={async () => await signUpWithEmail()}
-          >
-            <Text style={styles.buttonText}>REGISTREER</Text>
-          </TouchableOpacity>
+            {/* E-mail input */}
+            <Text style={styles.label}>E-mail</Text>
+            <TextInput
+              style={[
+                styles.input,
+                emailFocus || isEmailFilled
+                  ? styles.focusedInput
+                  : styles.unfocusedInput,
+              ]}
+              placeholder="E-mail"
+              placeholderTextColor="rgba(151, 184, 165, 0.5)"
+              keyboardType="email-address"
+              onFocus={() => setEmailFocus(true)}
+              onBlur={() => setEmailFocus(false)}
+              onChangeText={setEmail}
+              value={email}
+            />
 
-          {/* Inloggen link */}
-          <Text style={styles.registerText}>
-            Al een account?{" "}
-            <Link
-              style={styles.registerLink}
-              href="/login"
+            {/* Wachtwoord input */}
+            <Text style={styles.label}>Wachtwoord</Text>
+            <TextInput
+              style={[
+                styles.input,
+                passwordFocus || isPasswordFilled
+                  ? styles.focusedInput
+                  : styles.unfocusedInput,
+              ]}
+              placeholder="Wachtwoord"
+              placeholderTextColor="rgba(151, 184, 165, 0.5)"
+              secureTextEntry
+              onFocus={() => setPasswordFocus(true)}
+              onBlur={() => setPasswordFocus(false)}
+              onChangeText={setPassword}
+              value={password}
+            />
+
+            <TouchableOpacity
+              style={styles.button}
+              onPress={async () => await signUpWithEmail()}
             >
-              Inloggen
-            </Link>
-          </Text>
-        </>
-      )}
+              <Text style={styles.buttonText}>REGISTREER</Text>
+            </TouchableOpacity>
+
+            {/* Inloggen link */}
+            <Text style={styles.registerText}>
+              Al een account?{" "}
+              <Link style={styles.registerLink} href="/login">
+                Inloggen
+              </Link>
+            </Text>
+          </>
+        )}
       </ScrollView>
     </SafeAreaView>
   );

@@ -7,11 +7,14 @@ import {
   TextInput,
   Alert,
   ScrollView,
+  Pressable
 } from "react-native";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import { supabase } from "@/lib/supabase"; // adjust if your path is different
 import NavBar from "@/components/NavigationBar";
+import { useNavigation } from '@react-navigation/native'
+import { Ionicons } from '@expo/vector-icons'
 
 export default function DogName() {
   const router = useRouter();
@@ -19,6 +22,7 @@ export default function DogName() {
   const [text, onChangeText] = React.useState("");
   const [dogBreed, setDogBreed] = React.useState<string>("");
   const [dogName, setDogName] = React.useState<string>("");
+  const navigation = useNavigation()
 
   React.useEffect(() => {
     if (petId && typeof petId === "string" && petId.length > 0) {
@@ -82,16 +86,16 @@ export default function DogName() {
         position: "relative",
       }}
     >
-      <TouchableOpacity
-        style={{
-          position: "absolute",
-          top: 68,
-          left: 40,
-        }}
-        onPress={() => router.back()}
-      >
-        <AntDesign name="arrowleft" size={24} color="black" />
-      </TouchableOpacity>
+      <Pressable
+            onPress={() => navigation.goBack()}
+            style={{
+              position: "absolute",
+              top: 68,
+              left: 40,
+            }}
+          >
+            <Ionicons name="arrow-back" size={24} color="#183A36" />
+          </Pressable>
       <ScrollView>
         <View
           style={{

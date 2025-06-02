@@ -1,14 +1,17 @@
 import React from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { View, Text, TouchableOpacity, ScrollView } from "react-native";
+import { View, Text, TouchableOpacity, ScrollView, Pressable } from "react-native";
 import { useRouter, useLocalSearchParams } from "expo-router";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import { Link } from "expo-router";
 import { supabase } from "@/lib/supabase"; // adjust if your path is different
 import NavBar from "@/components/NavigationBar";
+import { useNavigation } from '@react-navigation/native'
+import { Ionicons } from '@expo/vector-icons'
 
 export default function DogInformation() {
   const router = useRouter();
+  const navigation = useNavigation()
   const { petId } = useLocalSearchParams();
 
   const [dogName, setDogName] = React.useState("");
@@ -65,16 +68,16 @@ export default function DogInformation() {
           justifyContent: "flex-start",
         }}
       >
-        <TouchableOpacity
-          style={{
-            position: "absolute",
-            top: 68,
-            left: 40,
-          }}
-          onPress={() => router.back()}
-        >
-          <AntDesign name="arrowleft" size={24} color="black" />
-        </TouchableOpacity>
+        <Pressable
+            onPress={() => navigation.goBack()}
+            style={{
+              position: "absolute",
+              top: 68,
+              left: 40,
+            }}
+          >
+            <Ionicons name="arrow-back" size={24} color="#183A36" />
+          </Pressable>
 
         <View
           style={{
