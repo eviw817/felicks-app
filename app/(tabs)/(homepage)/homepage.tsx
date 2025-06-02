@@ -461,7 +461,7 @@ export default function HomepageScreen() {
                 }}
               >
                 <TouchableOpacity
-                  onPress={() => router.push(`/`)}
+                  onPress={() => router.push("/homepage")}
                   style={{ flexDirection: "row", flex: 1 }}
                 >
                   <View

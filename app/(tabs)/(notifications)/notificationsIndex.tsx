@@ -13,8 +13,7 @@ import { supabase } from "@/lib/supabase";
 import { Session } from '@supabase/supabase-js';
 import { FontAwesome } from "@expo/vector-icons";
 import AntDesign from "@expo/vector-icons/AntDesign";
-import { useRouter } from "expo-router";
-import { Link } from 'expo-router';
+import { useRouter, Link } from "expo-router";
 import NavBar from "@/components/NavigationBar";
 
 type Notification = {
