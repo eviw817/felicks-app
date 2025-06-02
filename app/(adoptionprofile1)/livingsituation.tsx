@@ -10,7 +10,7 @@ import {
   Platform,
 } from "react-native";
 import { useRouter } from "expo-router";
-import { supabase } from "../../lib/supabase";
+import { supabase } from "@/lib/supabase";
 import { useFonts } from "expo-font";
 import { Ionicons } from "@expo/vector-icons";
 
@@ -166,7 +166,7 @@ export default function LivingSituation() {
 
       <TouchableOpacity
         style={[styles.button, !canNext && styles.buttonDisabled]}
-        onPress={() => router.push("/experience_size")}
+        onPress={() => router.push("/experienceSize")}
         disabled={!canNext}
       >
         <Text style={styles.buttonText}>VOLGENDE</Text>
