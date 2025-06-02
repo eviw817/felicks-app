@@ -46,8 +46,8 @@ const NotficationEmailScreen = () => {
       return () => {
         subscription.remove(); // Verwijder de listener wanneer de component wordt ontmanteld
       };
+      };
     }, []);
-    
   
   return (
     <View style={styles.container}>

@@ -1,7 +1,14 @@
+import React, { useEffect, useState } from "react";
+import {
+  SafeAreaView,
+  View,
+  Text,
+  TouchableOpacity,
+  ActivityIndicator,
+  Pressable
+} from "react-native";
 import { BeagleScene } from "@/components/augumented-dog/scenes/BeagleScene";
 import { ViroARSceneNavigator } from "@reactvision/react-viro";
-import { SafeAreaView, View, Text, TouchableOpacity, Pressable } from "react-native";
-import { useState, useEffect } from "react";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import { supabase } from "@/lib/supabase";
 import { useLocalSearchParams } from "expo-router";
@@ -9,121 +16,61 @@ import NavBar from "@/components/NavigationBar";
 import { useNavigation } from '@react-navigation/native'
 import { Ionicons } from '@expo/vector-icons'
 
-const AugumentedDog = () => {
+type DogStatus = {
+  id: string;
+  user_id: string;
+  breed: string;
+  name: string;
+  is_eating: boolean;
+  is_playing: boolean;
+  is_running: boolean;
+  is_toilet: boolean;
+};
+
+type NotificationSummary = {
+  id: string;
+  summary: string;
+  category: "is_eating" | "is_playing" | "is_running" | "is_toilet";
+  is_read: boolean;
+  created_at: string;
+};
+
+const AugmentedDog: React.FC = () => {
   const navigation = useNavigation()
-  const { petId } = useLocalSearchParams();
+  const { petId, notificationId } = useLocalSearchParams<{
+    petId: string;
+    notificationId?: string;
+  }>();
 
-  const [status, setStatus] = useState<null | {
-    id: string;
-    user_id: string;
-    breed: string;
-    name: string;
-    is_eating: boolean;
-    is_playing: boolean;
-    is_running: boolean;
-    is_toilet: boolean;
-  }>(null);
+  const [status, setStatus] = useState<DogStatus | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [notificationsList, setNotificationsList] = useState<
+    NotificationSummary[]
+  >([]);
+  const [currentIndex, setCurrentIndex] = useState<number>(0);
 
-  const [loading, setLoading] = useState(true);
-  const [lastToggledField, setLastToggledField] = useState<
-    null | keyof typeof defaultStatus
-  >(null);
-
-  const defaultStatus = {
+  const defaultStatus: Pick<
+    DogStatus,
+    "is_eating" | "is_playing" | "is_running" | "is_toilet"
+  > = {
     is_eating: false,
     is_playing: false,
     is_running: false,
     is_toilet: false,
   };
 
-  useEffect(() => {
-    if (!petId || typeof petId !== "string") {
-      console.warn("❌ petId is missing or invalid");
-      return;
-    }
-
-    const fetchStatus = async () => {
-      setLoading(true);
-      const { data, error } = await supabase
-        .from("ar_dog")
-        .select("*")
-        .eq("id", petId)
-        .single();
-
-      if (error) {
-        console.error("❌ Error fetching dog status:", error);
-      } else if (!data) {
-        console.warn("⚠️ No dog found for this petId:", petId);
-      } else {
-        setStatus(data);
-      }
-      setLoading(false);
-    };
-
-    fetchStatus();
-  }, [petId]);
-
-  const toggleStatus = async (field: keyof typeof defaultStatus) => {
-    if (!status) return;
-
-    const newValue = !status[field];
-
-    // Update local state
-    setStatus((prev) => {
-      if (!prev) return prev;
-      return { ...prev, [field]: newValue };
-    });
-
-    setLastToggledField(field);
-
-    // Update Supabase
-    const { error } = await supabase
-      .from("ar_dog")
-      .update({ [field]: newValue })
-      .eq("id", status.id);
-
-    if (error) {
-      console.error("❌ Failed to update status:", error);
-      // Revert state
-      setStatus((prev) => {
-        if (!prev) return prev;
-        return { ...prev, [field]: !newValue };
-      });
-    }
-  };
-
-  if (loading || !status) {
-    return (
-      <SafeAreaView>
-        <View style={{ padding: 20 }}>
-          <FontAwesome6 name="hourglass" size={32} />
-          <Text style={{ marginTop: 10 }}>⏳ Loading...</Text>
-          <Text style={{ marginTop: 10 }}>petId: {petId || "undefined"}</Text>
-          <Text>Status: {JSON.stringify(status)}</Text>
-          <Text>Loading: {String(loading)}</Text>
-        </View>
-      </SafeAreaView>
-    );
-  }
-
-  const dogName = status.name || "je hond";
-
   const getStatusMessages = (dogName: string) => ({
     is_eating: {
       true: `${dogName} heeft flink zijn eten opgegeten!`,
-      false: `Na ${dogName} zijn dutje, heeft hij hele grote honger gekregen!`,
     },
     is_playing: {
       true: `${dogName} heeft kunnen spelen!`,
-      false: `${dogName} heeft een tennisbal gevonden en wil spelen!`,
     },
     is_running: {
       true: `${dogName} vond het wandelen heel leuk!`,
-      false: `${dogName} heeft nood aan beweging, maak een wandeling!`,
     },
     is_toilet: {
       true: `${dogName} heeft zijn behoefte kunnen doen!`,
-      false: `${dogName} moet heel dringend naar het toilet, laat hem buiten!`,
     },
   });
 
@@ -134,31 +81,164 @@ const AugumentedDog = () => {
     "is_toilet",
   ];
 
-  const getCurrentMessages = (): string[] => {
-    if (!status) return [];
+  const markNotificationAsRead = async (id: string) => {
+    const { error } = await supabase
+      .from("notifications")
+      .update({ is_read: true })
+      .eq("id", id);
 
-    const messagesMap = getStatusMessages(dogName);
-
-    // If a field was toggled last, show only that message
-    if (lastToggledField) {
-      return [
-        messagesMap[lastToggledField][
-          status[lastToggledField] ? "true" : "false"
-        ],
-      ];
+    if (error) {
+      console.error("Kon melding niet als gelezen markeren:", error.message);
     }
-
-    // Otherwise, show the first message in priority order
-    const firstField = fieldPriority[0];
-    return [messagesMap[firstField][status[firstField] ? "true" : "false"]];
   };
 
-  const buttons: { field: keyof typeof defaultStatus; icon: any }[] = [
-    { field: "is_eating", icon: "bowl-food" },
-    { field: "is_playing", icon: "baseball" },
-    { field: "is_running", icon: "person-running" },
-    { field: "is_toilet", icon: "poop" },
-  ];
+  useEffect(() => {
+    if (!petId) {
+      console.warn("petId ontbreekt!");
+      setLoading(false);
+      return;
+    }
+
+    const fetchStatusEnNotifications = async () => {
+      setLoading(true);
+
+      const { data: dogData, error: statusError } = await supabase
+        .from("ar_dog")
+        .select("*")
+        .eq("id", petId)
+        .single();
+
+      if (statusError || !dogData) {
+        console.error(
+          "Fout bij ophalen hondstatus:",
+          statusError?.message || "geen data"
+        );
+        setLoading(false);
+        return;
+      }
+      setStatus(dogData as DogStatus);
+      const dogName = dogData.name || "je hond";
+
+      const { data: notifData, error: notifError } = await supabase
+        .from("notifications")
+        .select("id, summary, category, is_read, created_at")
+        .eq("pet_id", petId)
+        .eq("is_read", false)
+        .order("created_at", { ascending: true });
+
+      if (notifError) {
+        console.error("Fout bij ophalen meldingen:", notifError.message);
+        setNotificationsList([]);
+        setLoading(false);
+        return;
+      }
+
+      if (notifData && notifData.length > 0) {
+        const filledList: NotificationSummary[] = notifData.map((raw) => ({
+          id: raw.id,
+          summary: raw.summary.replace(/\{name\}/g, dogName),
+          category: raw.category as NotificationSummary["category"],
+          is_read: raw.is_read,
+          created_at: raw.created_at,
+        }));
+
+        let startIndex = 0;
+        if (notificationId) {
+          const idx = filledList.findIndex((n) => n.id === notificationId);
+          if (idx >= 0) {
+            startIndex = idx;
+          }
+        }
+
+        setNotificationsList(filledList);
+        setCurrentIndex(startIndex);
+      } else {
+        setNotificationsList([]);
+        setCurrentIndex(0);
+      }
+
+      setLoading(false);
+    };
+
+    fetchStatusEnNotifications();
+  }, [petId, notificationId]);
+
+  const getCurrentMessages = (): string[] => {
+    if (
+      notificationsList.length > 0 &&
+      currentIndex < notificationsList.length
+    ) {
+      return [notificationsList[currentIndex].summary];
+    }
+
+    if (status) {
+      const dogName = status.name || "je hond";
+      const statusMessagesMap = getStatusMessages(dogName);
+      for (const field of fieldPriority) {
+        if (status[field]) {
+          return [statusMessagesMap[field].true];
+        }
+      }
+    }
+
+    return [];
+  };
+
+  const toggleStatus = async (field: keyof typeof defaultStatus) => {
+    if (!status) return;
+    const newValue = !status[field];
+    setStatus((prev) => (prev ? { ...prev, [field]: newValue } : prev));
+
+    const { error: updateError } = await supabase
+      .from("ar_dog")
+      .update({ [field]: newValue })
+      .eq("id", status.id);
+
+    if (updateError) {
+      console.error("Kon hondstatus niet updaten:", updateError.message);
+      setStatus((prev) => (prev ? { ...prev, [field]: !newValue } : prev));
+      return;
+    }
+
+    if (newValue) {
+      if (
+        notificationsList.length > 0 &&
+        currentIndex < notificationsList.length
+      ) {
+        const huidigeMelding = notificationsList[currentIndex];
+
+        if (field === huidigeMelding.category) {
+          await markNotificationAsRead(huidigeMelding.id);
+
+          const volgende = currentIndex + 1;
+          setCurrentIndex(volgende);
+          if (volgende >= notificationsList.length) {
+            setNotificationsList([]);
+          }
+        }
+      }
+    }
+  };
+
+  if (loading || !status) {
+    return (
+      <SafeAreaView style={{ flex: 1, backgroundColor: "#FFFDF9" }}>
+        <View
+          style={{
+            flex: 1,
+            justifyContent: "center",
+            alignItems: "center",
+            padding: 20,
+          }}
+        >
+          <ActivityIndicator size="large" color="#97B8A5" />
+          <Text style={{ marginTop: 10 }}> Loading…</Text>
+        </View>
+      </SafeAreaView>
+    );
+  }
+
+  const messagesToShow = getCurrentMessages();
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
@@ -182,6 +262,7 @@ const AugumentedDog = () => {
             <Ionicons name="arrow-back" size={24} color="#183A36" />
           </Pressable>
 
+      {/* ─── Tekstballon ─── */}
       <View
         style={{
           position: "absolute",
@@ -192,21 +273,19 @@ const AugumentedDog = () => {
           flexDirection: "row",
           justifyContent: "center",
           alignItems: "center",
-          width: "100%",
           flexWrap: "wrap",
+          width: "100%",
         }}
       >
-        {getCurrentMessages().map((msg, idx) => (
+        {messagesToShow.map((msg, idx) => (
           <Text
             key={idx}
             style={{
               margin: 6,
-              borderRadius: 10,
-              overflow: "hidden",
               backgroundColor: "#FDE4D2",
+              borderRadius: 10,
               padding: 12,
               fontFamily: "Nunito",
-              fontWeight: "normal",
               fontSize: 16,
               color: "#183A36",
               textAlign: "center",
@@ -217,6 +296,7 @@ const AugumentedDog = () => {
         ))}
       </View>
 
+      {/* ─── Buttons ─── */}
       <View
         style={{
           position: "absolute",
@@ -227,11 +307,18 @@ const AugumentedDog = () => {
           flexDirection: "row",
           justifyContent: "center",
           alignItems: "center",
-          width: "100%",
           paddingBottom: 100,
+          width: "100%",
         }}
       >
-        {buttons.map(({ field, icon }, index) => (
+        {(
+          [
+            { field: "is_eating", icon: "bowl-food" },
+            { field: "is_playing", icon: "baseball" },
+            { field: "is_running", icon: "person-running" },
+            { field: "is_toilet", icon: "poop" },
+          ] as { field: keyof typeof defaultStatus; icon: any }[]
+        ).map(({ field, icon }, index) => (
           <TouchableOpacity
             key={index}
             activeOpacity={0.7}
@@ -254,7 +341,8 @@ const AugumentedDog = () => {
           </TouchableOpacity>
         ))}
       </View>
-      {/* Fixed navbar onderaan scherm */}
+
+      {/* ─── NavBar ─── */}
       <View
         style={{
           position: "absolute",
@@ -269,4 +357,4 @@ const AugumentedDog = () => {
   );
 };
 
-export default AugumentedDog;
+export default AugmentedDog;

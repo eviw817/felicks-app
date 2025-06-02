@@ -82,7 +82,7 @@ const ProfileScreen = () => {
     return (
      <SafeAreaView style={styles.container}>
         <ScrollView 
-        contentContainerStyle={{ flexGrow: 1, paddingBottom: 100, paddingTop: 60, padding: 20, }}>
+          contentContainerStyle={{ flexGrow: 1, paddingBottom: 100, paddingTop: 60, padding: 20, }}>
           <View style={styles.header}>
         <BaseText style={styles.title}>Profiel</BaseText>
        <TouchableOpacity onPress={goToSettings} style={styles.settingsicon}>
@@ -131,7 +131,9 @@ const ProfileScreen = () => {
             Om te bepalen welke hond(en) het beste bij jou passen, vragen we je om eerst de
             vragenlijst in te vullen. Zo kunnen we een perfecte match voor je vinden!
           </Text>
+
         </View>
+        </ScrollView>
          {/* Fixed navbar onderaan scherm */}
               <View
                 style={{
@@ -143,44 +145,8 @@ const ProfileScreen = () => {
               >
                 <NavBar />
               </View>
-      </View>
-    
-          {/* Info Secties */}
-          <View style={styles.section}>
-            <Text style={styles.sectionTitle}>Jouw favoriete hond(en)</Text>
-            <Text style={styles.sectionText}>
-              Als je een hond liket dan kan je deze hier terugvinden.
-            </Text>
-          </View>
-    
-          <View style={styles.section}>
-            <Text style={styles.sectionTitle}>Formulier in behandeling</Text>
-            <Text style={styles.sectionText}>
-              Wanneer u een aanvraag doet, wordt je formulier doorgestuurd naar het asiel, je kan de
-              status hiervan bij je profiel vinden.
-            </Text>
-          </View>
-    
-          <View style={styles.section}>
-            <Text style={styles.sectionSubtile}>Deze honden passen bij jou profiel:</Text>
-            <Text style={styles.sectionText}>
-              Om te bepalen welke hond(en) het beste bij jou passen, vragen we je om eerst de
-              vragenlijst in te vullen. Zo kunnen we een perfecte match voor je vinden!
-            </Text>
-          </View>
-        </ScrollView>
-        {/* Fixed navbar onderaan scherm */}
-        <View
-          style={{
-            position: "absolute",
-            bottom: 0,
-            left: 0,
-            right: 0,
-          }}>
-          <NavBar />
-        </View>
-        </ScrollView>
-      </SafeAreaView>
+      
+    </SafeAreaView>
     );
   };
 

@@ -13,7 +13,7 @@ export default function NotificationsLayout() {
           fontWeight: 'bold',
         },
       }}>
-      <Stack.Screen name="notifications_home" options={{ title: "Home notifications" }} />
+      <Stack.Screen name="notificationsIndex" options={{ title: "Home notifications" }} />
     </Stack>
   );
 }
