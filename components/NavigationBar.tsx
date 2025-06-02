@@ -1,4 +1,3 @@
-
 import React from "react";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import { useRouter, usePathname } from "expo-router";
@@ -59,5 +58,3 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
 });
-
->>>>>>> origin/main
