@@ -254,4 +254,3 @@ const styles = StyleSheet.create({
 });
 
 export default LoginScreen;
->>>>>>>> origin/main:app/(tabs)/(login-register)/(login)/login.tsx
