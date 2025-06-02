@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, StyleSheet, TouchableOpacity, TextInput, Alert } from "react-native";
 import { useRouter, useLocalSearchParams } from "expo-router";
-import { supabase } from "../../../../../lib/supabase";
+import { supabase } from "@/lib/supabase";
 import * as Linking from "expo-linking";
 import * as SecureStore from 'expo-secure-store';
+import { Ionicons } from "@expo/vector-icons";
+import BaseText from "@/components/BaseText";
 
 const NewPasswordScreen = () => {
   const router = useRouter();
@@ -20,6 +22,10 @@ const NewPasswordScreen = () => {
 
   const isNieuwPasswordFilled = nieuwpassword.trim() !== '';
   const isHerhaalPasswordFilled = herhaalpassword.trim() !== '';
+
+  const [showPassword, setShowPassword] = useState(false);
+  const [showRepeatPassword, setShowRepeatPassword] = useState(false);
+
   
   useEffect(() => {
     const handleDeepLink = (event: { url: string }) => {
@@ -84,7 +90,7 @@ const NewPasswordScreen = () => {
       Alert.alert("Fout", "Refresh token niet gevonden!");
       return;
     }
-    supabase.auth.setSession({ access_token: storedAccessToken, refresh_token: storedRefreshToken });
+    await supabase.auth.setSession({ access_token: storedAccessToken, refresh_token: storedRefreshToken });
   
     setLoading(true);
   
@@ -109,9 +115,10 @@ const NewPasswordScreen = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Reset wachtwoord</Text>
+      <BaseText style={styles.title}>Reset wachtwoord</BaseText>
 
     <Text style={styles.label}>Nieuw wachtwoord</Text>
+      <View style={styles.passwordContainer}>
       <TextInput
         style={[
           styles.input, 
@@ -119,15 +126,20 @@ const NewPasswordScreen = () => {
         ]}
         placeholder="Nieuw wachtwoord" 
         placeholderTextColor="rgba(151, 184, 165, 0.5)"
-        secureTextEntry 
+        secureTextEntry={!showPassword}
         onFocus={() => setNieuwPasswordFocus(true)} 
         onBlur={() => setNieuwPasswordFocus(false)} 
         onChangeText={setNieuwPassword}
         value={nieuwpassword}
       />
+        <TouchableOpacity onPress={() => setShowPassword(prev => !prev)} style={styles.eyeIcon}>
+          <Ionicons name={showPassword ? "eye-off-outline" : "eye-outline"} size={24} color="#183A36" />
+        </TouchableOpacity>
+      </View>
 
       {/* herhaal wachtwoord input */}
       <Text style={styles.label}>Herhaal nieuw wachtwoord</Text>
+      <View style={styles.passwordContainer}>
       <TextInput
         style={[
           styles.input, 
@@ -135,12 +147,16 @@ const NewPasswordScreen = () => {
         ]}
         placeholder="Herhaal nieuw wachtwoord" 
         placeholderTextColor="rgba(151, 184, 165, 0.5)"
-        secureTextEntry 
+        secureTextEntry={!showRepeatPassword}
         onFocus={() => setHerhaalPasswordFocus(true)} 
         onBlur={() => setHerhaalPasswordFocus(false)} 
         onChangeText={setHerhaalPassword}
         value={herhaalpassword}
       />
+       <TouchableOpacity onPress={() => setShowRepeatPassword(prev => !prev)} style={styles.eyeIcon}>
+    <Ionicons name={showRepeatPassword ? "eye-off-outline" : "eye-outline"} size={24} color="#183A36" />
+  </TouchableOpacity>
+  </View>
 
       <TouchableOpacity style={styles.button} onPress={handleResetPassword} disabled={loading}>
         <Text style={styles.buttonText}>OPSLAAN</Text>
@@ -158,10 +174,10 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFDF9',
   },
   title: {
-    fontSize: 23,
-    fontWeight: "bold",
-    color: '#183A36',
+   fontSize: 28,
+    fontFamily: 'SireniaMedium',
     marginBottom: 60,
+    textAlign: "center",
   },
   text: {
     fontSize: 20,
@@ -225,6 +241,16 @@ const styles = StyleSheet.create({
   registerLink: {
     fontWeight: "bold",
   },
+      passwordContainer: {
+  width: "100%",
+  marginBottom: -3,
+  position: "relative",
+},
+eyeIcon: {
+  position: "absolute",
+  right: 10,
+  top: 12,
+},
 });
 
 export default NewPasswordScreen;

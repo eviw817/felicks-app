@@ -15,6 +15,7 @@ import { TouchableOpacity } from "react-native";
 import { Link } from "expo-router";
 import NavBar from "@/components/NavigationBar";
 import { useFocusEffect } from '@react-navigation/native';
+import BaseText from "@/components/BaseText";
 
 export default function HomepageScreen() {
   const [firstname, setFirstname] = useState<string>("");
@@ -102,11 +103,30 @@ export default function HomepageScreen() {
   }
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: "#97B8A5", position: "relative", paddingBottom: 80 }}>
-      <View style={{ alignItems: "center" }}>
-        <Text style={{ fontFamily: "Sirenia", fontWeight: "semibold", fontSize: 24, padding: 20, marginTop: 50, marginBottom: 30 }}>
+    <SafeAreaView
+      style={{
+        flex: 1,
+        backgroundColor: "#cbdacf",
+        position: "relative",
+        paddingBottom: 80,
+      }}
+    >
+      <View
+        style={{
+          alignItems: "center",
+        }}
+      >
+        <BaseText
+          style={{
+            fontFamily: 'SireniaMedium',
+            fontSize: 28,
+            padding: 20,
+            marginTop: 50,
+            marginBottom: 30,
+          }}
+        >
           Welkom {firstname || "guest"}!
-        </Text>
+        </BaseText>
       </View>
 
       <View style={{ position: "absolute", top: 70, right: 30 }}>
@@ -134,16 +154,12 @@ export default function HomepageScreen() {
           </View>
         </Link>
       </View>
-
-   
-
       <ScrollView
         contentContainerStyle={{ flexGrow: 1, paddingBottom: 80 }}
         style={{
           backgroundColor: "#FFFDF9",
           borderTopLeftRadius: 20,
           borderTopRightRadius: 20,
-          padding: 20,
           maxWidth: "100%",
           paddingVertical: 20,
         }}
@@ -152,11 +168,12 @@ export default function HomepageScreen() {
           <Text
             style={{
               fontFamily: "Nunito",
-              fontWeight: "semibold",
-              fontSize: 20,
+              fontWeight: "bold",
+              fontSize: 18,
               padding: 20,
               paddingRight: 40,
               marginRight: 10,
+              color: "#183A36",
             }}
           >
             Quiz van de week
@@ -169,6 +186,7 @@ export default function HomepageScreen() {
               paddingLeft: 20,
               paddingRight: 40,
               paddingBottom: 20,
+              color: "#183A36",
             }}
           >
             Ben jij klaar voor een hond? Doe de test!
@@ -180,6 +198,7 @@ export default function HomepageScreen() {
               fontSize: 16,
               paddingLeft: 20,
               paddingRight: 40,
+              color: "#183A36",
             }}
           >
             Doe nog snel de quiz van deze week, voor je informatie misloopt.
@@ -190,11 +209,18 @@ export default function HomepageScreen() {
               padding: 12,
               margin: 20,
               paddingHorizontal: 20,
+              paddingVertical: 15,
               backgroundColor: "#F18B7E",
               fontWeight: "bold",
+              fontSize: 15,
               borderRadius: 15,
               textAlign: "center",
               color: "#FFFDF9",
+              width: "90%",
+              alignItems: "center",
+              shadowOffset: { width: 0, height: 2 },
+              shadowOpacity: 0.1,
+              shadowRadius: 4,
             }}
           >
             START DE QUIZ
@@ -205,10 +231,11 @@ export default function HomepageScreen() {
           <Text
             style={{
               fontFamily: "Nunito",
-              fontWeight: "semibold",
-              fontSize: 20,
+              fontWeight: "bold",
+              fontSize: 18,
               padding: 20,
               marginRight: 10,
+              color: "#183A36",
             }}
           >
             Bewustzijn
@@ -221,6 +248,7 @@ export default function HomepageScreen() {
               paddingLeft: 20,
               paddingRight: 40,
               paddingBottom: 20,
+              color: "#183A36",
             }}
           >
             Denk je eraan een hond te nemen?
@@ -251,11 +279,12 @@ export default function HomepageScreen() {
               <Text
                 style={{
                   fontFamily: "Nunito",
-                  fontWeight: "bold",
-                  fontSize: 16,
+                  fontWeight: "semibold",
+                  fontSize: 18,
                   paddingLeft: 20,
                   paddingRight: 150,
                   paddingBottom: 8,
+                  color: "#183A36",
                 }}
               >
                 EHBO voor honden: wat moet je weten?
@@ -264,9 +293,10 @@ export default function HomepageScreen() {
                 style={{
                   fontFamily: "Nunito",
                   fontWeight: "normal",
-                  fontSize: 12,
+                  fontSize: 14,
                   paddingLeft: 20,
-                  paddingRight: 140,
+                  paddingRight: 160,
+                  color: "#183A36",
                 }}
               >
                 Je hond kan gewond raken of ziek worden. Met een paar
@@ -278,8 +308,10 @@ export default function HomepageScreen() {
             style={{
               fontFamily: "Nunito",
               fontWeight: "normal",
-              fontSize: 14,
+              fontSize: 16,
               paddingLeft: 20,
+              color: "#183A36",
+              marginTop: 10,
             }}
           >
             Lees eerst wat je moet weten over hondenbezit.
@@ -287,13 +319,21 @@ export default function HomepageScreen() {
           <Link
             href="/artikelsIndex"
             style={{
-              padding: 12,
+             padding: 12,
               margin: 20,
               paddingHorizontal: 20,
+              paddingVertical: 15,
               backgroundColor: "#FFD87E",
               fontWeight: "bold",
+              fontSize: 15,
               borderRadius: 15,
               textAlign: "center",
+              color: "#183A36",
+              width: "90%",
+              alignItems: "center",
+              shadowOffset: { width: 0, height: 2 },
+              shadowOpacity: 0.1,
+              shadowRadius: 4,
             }}
           >
             LEES MEER TIPS
@@ -306,6 +346,7 @@ export default function HomepageScreen() {
               fontWeight: "semibold",
               fontSize: 20,
               padding: 20,
+              color: "#183A36",
             }}
           >
             Deze honden passen bij jouw profiel:
@@ -320,6 +361,8 @@ export default function HomepageScreen() {
               padding: 10,
               borderRadius: 20,
               marginBottom: 10,
+              marginLeft: 20,
+              marginRight: 20,
             }}
           >
             <TouchableOpacity
@@ -349,16 +392,18 @@ export default function HomepageScreen() {
                   alignItems: "center",
                   flexDirection: "row",
                   gap: 4,
+                  
                 }}
               >
                 <Text
                   style={{
                     fontWeight: "bold",
+                    color: "#183A36",
                   }}
                 >
                   Naam:
                 </Text>
-                <Text>Basiel</Text>
+                <Text style={{color: "#183A36"}}>Basiel</Text>
               </View>
               <View
                 style={{
@@ -371,11 +416,12 @@ export default function HomepageScreen() {
                 <Text
                   style={{
                     fontWeight: "bold",
+                    color: "#183A36"
                   }}
                 >
                   leeftijd:
                 </Text>
-                <Text>4 jaar</Text>
+                <Text style={{color: "#183A36"}}>4 jaar</Text>
               </View>
               <View
                 style={{
@@ -388,11 +434,12 @@ export default function HomepageScreen() {
                 <Text
                   style={{
                     fontWeight: "bold",
+                    color: "#183A36"
                   }}
                 >
                   Ras:
                 </Text>
-                <Text>Labrador retriever</Text>
+                <Text style={{color: "#183A36"}}>Labrador retriever</Text>
               </View>
               <View
                 style={{
@@ -405,6 +452,7 @@ export default function HomepageScreen() {
                 <Text
                   style={{
                     fontWeight: "bold",
+                    color: "#183A36"
                   }}
                 >
                   Asiel:
@@ -412,6 +460,7 @@ export default function HomepageScreen() {
                 <Text
                   style={{
                     paddingRight: 150,
+                    color: "#183A36"
                   }}
                 >
                   Dierenbescherming Mechelen
@@ -430,6 +479,8 @@ export default function HomepageScreen() {
               padding: 10,
               borderRadius: 20,
               marginVertical: 10,
+              marginLeft: 20,
+              marginRight: 20,
             }}
           >
             <TouchableOpacity
@@ -459,16 +510,18 @@ export default function HomepageScreen() {
                   alignItems: "center",
                   flexDirection: "row",
                   gap: 4,
+         
                 }}
               >
                 <Text
                   style={{
                     fontWeight: "bold",
+                    color: "#183A36"
                   }}
                 >
                   Naam:
                 </Text>
-                <Text>Basiel</Text>
+                <Text style={{color: "#183A36"}}>Ollie</Text>
               </View>
               <View
                 style={{
@@ -481,11 +534,12 @@ export default function HomepageScreen() {
                 <Text
                   style={{
                     fontWeight: "bold",
+                    color: "#183A36"
                   }}
                 >
                   leeftijd:
                 </Text>
-                <Text>4 jaar</Text>
+                <Text style={{color: "#183A36"}}>4 jaar</Text>
               </View>
               <View
                 style={{
@@ -498,11 +552,12 @@ export default function HomepageScreen() {
                 <Text
                   style={{
                     fontWeight: "bold",
+                    color: "#183A36"
                   }}
                 >
                   Ras:
                 </Text>
-                <Text>Labrador retriever</Text>
+                <Text style={{color: "#183A36"}}>Basset Fauve de Bretagne</Text>
               </View>
               <View
                 style={{
@@ -515,6 +570,7 @@ export default function HomepageScreen() {
                 <Text
                   style={{
                     fontWeight: "bold",
+                    color: "#183A36"
                   }}
                 >
                   Asiel:
@@ -522,6 +578,7 @@ export default function HomepageScreen() {
                 <Text
                   style={{
                     paddingRight: 150,
+                    color: "#183A36"
                   }}
                 >
                   Dierenbescherming Mechelen

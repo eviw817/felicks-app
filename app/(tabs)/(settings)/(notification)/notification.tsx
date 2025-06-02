@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, TouchableOpacity, StyleSheet, Switch, Alert } from "react-native";
+import { View, Text, TouchableOpacity, StyleSheet, Switch, Alert, SafeAreaView } from "react-native";
 import { useRouter } from "expo-router";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
-import { supabase } from "../../../../lib/supabase";
+import BaseText from "@/components/BaseText";
+import { supabase } from "@/lib/supabase";
+import NavBar from "@/components/NavigationBar";
 
 const NotificatiesScreen = () => {
     const router = useRouter();
@@ -136,13 +138,13 @@ useEffect(() => {
 
 
     return (
-        <View style={styles.container}>
+        <SafeAreaView style={styles.container}>
             {/* Header */}
             <View style={styles.header}>
-                <TouchableOpacity onPress={() => router.push("../settings")}>
+                <TouchableOpacity onPress={() => router.push("/settings")}>
                     <FontAwesomeIcon icon={faArrowLeft} size={30} color="#183A36" />
                 </TouchableOpacity>
-                <Text style={styles.title}>Meldingen en toestemmingen</Text>
+                <BaseText style={styles.title}>Meldingen en toestemmingen</BaseText>
             </View>
 
             {/* Meldingen */}
@@ -195,7 +197,17 @@ useEffect(() => {
             <TouchableOpacity style={styles.button} onPress={saveUserSettings}>
                 <Text style={styles.buttonText}>OPSLAAN</Text>
             </TouchableOpacity>
-        </View>
+            {/* Fixed navbar onderaan scherm */}
+            <View
+                style={{
+                    position: "absolute",
+                    bottom: 0,
+                    left: 0,
+                    right: 0,
+                }}>
+                <NavBar />
+            </View>
+        </SafeAreaView>
     );
 };
 
@@ -204,7 +216,7 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: "#FFFDF9",
         padding: 20,
-        paddingTop: 100,
+        paddingTop: 60,
     },
     header: {
         flexDirection: "row",
@@ -215,10 +227,10 @@ const styles = StyleSheet.create({
         marginBottom: 20,
     },
     title: {
-        fontSize: 23,
-        fontWeight: "bold",
-        color: "#183A36",
+        fontSize: 26,
+        fontFamily: 'SireniaMedium',
         textAlign: "center",
+
         marginLeft: 15, 
     },
     sectionTitle: {

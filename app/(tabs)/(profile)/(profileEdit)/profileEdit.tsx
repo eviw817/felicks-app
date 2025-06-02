@@ -11,6 +11,9 @@ import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 import { faGear } from '@fortawesome/free-solid-svg-icons';
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 import Avatar from "../../../../components/Avatar";
+import NavBar from "@/components/NavigationBar";
+import BaseText from "@/components/BaseText";
+import { Ionicons } from "@expo/vector-icons";
 
 const ProfileEditScreen = () => {
     const router = useRouter();
@@ -178,25 +181,26 @@ const ProfileEditScreen = () => {
     }, [session]);
     
        const goToSettings = () => {
-        router.push('../settings');
+        router.push('/settings');
       };
     
 
     
     return (
+      <SafeAreaView style={{ flex: 1 }}>
       <KeyboardAvoidingView 
       style={{ flex: 1 }} 
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
     >
-      <ScrollView contentContainerStyle={{ flexGrow: 1, paddingBottom: 50}}>
+      <ScrollView contentContainerStyle={{ flexGrow: 1, paddingBottom: 100}}>
       <SafeAreaView  style={styles.container} >
          <View style={styles.header}>
-         <TouchableOpacity onPress={() => router.push("../profile")} style={styles.backButton}>
+         <TouchableOpacity onPress={() => router.push("/profile")} style={styles.backButton}>
          <FontAwesomeIcon icon={faArrowLeft} size={30} color={'#183A36'} style={styles.backButton} />
         </TouchableOpacity>
-          <Text style={styles.title}>Profiel bewerken</Text>
+          <BaseText style={styles.title}>Profiel bewerken</BaseText>
             <TouchableOpacity onPress={goToSettings} style={styles.settingsicon}>
-              <FontAwesomeIcon icon={faGear} size={28} color={'#183A36'}  />
+               <Ionicons name="settings-outline" size={32} color="#183A36" />
             </TouchableOpacity>
         </View>
   
@@ -334,7 +338,7 @@ const ProfileEditScreen = () => {
                 style={styles.buttons} 
                 onPress={() => {
                   setModalVisible(false);
-                  router.push("../forget_password");
+                  router.push("/forgetPassword");
                 }}
               >
                 <Text style={styles.buttonText}>Ja</Text>
@@ -357,7 +361,29 @@ const ProfileEditScreen = () => {
 
   </SafeAreaView>
   </ScrollView>
+   {/* Fixed navbar onderaan scherm */}
+        <View
+          style={{
+            position: "absolute",
+            bottom: 0,
+            left: 0,
+            right: 0,
+          }}
+        >
+          <NavBar />
+        </View>
   </KeyboardAvoidingView>
+  {/* Fixed navbar onderaan scherm */}
+  <View
+    style={{
+      position: "absolute",
+      bottom: 0,
+      left: 0,
+      right: 0,
+    }}>
+    <NavBar />
+  </View>
+  </SafeAreaView>
     );
   };
 
@@ -365,18 +391,18 @@ const ProfileEditScreen = () => {
   const styles = StyleSheet.create({
     container: { 
         flex: 1,
-        paddingTop: 100,
+        paddingTop: 60,
         alignItems: 'center',
         padding: 20,
         backgroundColor: '#FFFDF9',
-        fontFamily: 'Nunito'
+        fontFamily: 'Nunito',
+        paddingBottom: 70, // Extra padding om ruimte te maken voor de navbar
     },
     title: {
-        fontSize: 23,
-        fontWeight: "bold",
-        color: '#183A36',
-        marginBottom: 20,
+         fontSize: 28,
+        fontFamily: 'SireniaMedium',
         textAlign: "center",
+        marginBottom: 20,
     },
     backButton: {
       position: "absolute",

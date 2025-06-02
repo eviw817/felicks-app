@@ -1,10 +1,12 @@
 import React, { useState } from "react";
-import { View, Text, TouchableOpacity, StyleSheet, TextInput, Alert } from "react-native";
+import { View, Text, TouchableOpacity, StyleSheet, TextInput, Alert, SafeAreaView } from "react-native";
 import { useRouter } from "expo-router";
 import { supabase } from "../../../../lib/supabase"; 
 import { Session } from "@supabase/supabase-js"; 
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
+import NavBar from "@/components/NavigationBar";
+import BaseText from "@/components/BaseText";
 
 const HelpCentrumScreen = () => {
   const router = useRouter();
@@ -54,7 +56,7 @@ const HelpCentrumScreen = () => {
       setHelp("");  
       setLoading(false);
       
-      router.push("../hulp/sendHelp");
+      router.push("/sendHelp");
 
     } catch (error) {
       Alert.alert("Fout", "Er is een fout opgetreden bij het verzenden van het probleem.");
@@ -63,12 +65,12 @@ const HelpCentrumScreen = () => {
   };
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <View style={styles.header}>
-        <TouchableOpacity onPress={() => router.push("../help")} style={styles.backButton}>
+        <TouchableOpacity onPress={() => router.push("/help")} style={styles.backButton}>
           <FontAwesomeIcon icon={faArrowLeft} size={30} color={'#183A36'} />
         </TouchableOpacity>
-        <Text style={styles.title}>Helpcentrum</Text>
+        <BaseText style={styles.title}>Helpcentrum</BaseText>
       </View>
 
       <Text style={styles.subtitle}>Waar kunnen wij u mee helpen?</Text>
@@ -88,14 +90,24 @@ const HelpCentrumScreen = () => {
       >
         <Text style={styles.submitText}>{loading ? 'VERZENDEN...' : 'VERSTUUR'}</Text>
       </TouchableOpacity>
-    </View>
+      {/* Fixed navbar onderaan scherm */}
+      <View
+        style={{
+          position: "absolute",
+          bottom: 0,
+          left: 0,
+          right: 0,
+          }}>
+          <NavBar />
+      </View>
+    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: 100,
+    paddingTop: 60,
     alignItems: 'center',
     padding: 20,
     backgroundColor: '#FFFDF9',
@@ -111,11 +123,10 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   title: {
-    fontSize: 23,
-    fontWeight: "bold",
-    color: '#183A36',
-    marginBottom: 20,
-    textAlign: "center",
+         fontSize: 28,
+        fontFamily: 'SireniaMedium',
+        textAlign: "center",
+        marginBottom: 20,
   },
   subtitle: {
     fontSize: 23,
