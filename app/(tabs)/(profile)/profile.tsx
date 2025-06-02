@@ -7,6 +7,8 @@ import { supabase } from "@/lib/supabase";
 import { Session } from "@supabase/supabase-js";
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 import { faGear } from '@fortawesome/free-solid-svg-icons';
+import BaseText from "@/components/BaseText";
+import { Ionicons } from "@expo/vector-icons";
 import Avatar from "@/components/Avatar";
 import NavBar from "@/components/NavigationBar";
 
@@ -78,20 +80,20 @@ const ProfileScreen = () => {
     
 
     return (
-      <SafeAreaView style={styles.container}>
+     <SafeAreaView style={styles.container}>
         <ScrollView 
         contentContainerStyle={{ flexGrow: 1, paddingBottom: 100, paddingTop: 60, padding: 20, }}>
           <View style={styles.header}>
-          <Text style={styles.title}>Profiel</Text>
-        <TouchableOpacity onPress={goToSettings} style={styles.settingsicon}>
-          <FontAwesomeIcon icon={faGear} size={28} color={'#183A36'}  />
-        </TouchableOpacity>
-          </View>
-    
-          {/* Profielsectie */}
-      <View style={styles.profileSection}>
-      <View style={styles.profileInfoContainer}>
-      <Avatar size={100} url={avatarUrl} onUpload={(url) => setAvatarUrl(url)} showUploadButton={false} />
+        <BaseText style={styles.title}>Profiel</BaseText>
+       <TouchableOpacity onPress={goToSettings} style={styles.settingsicon}>
+          <Ionicons name="settings-outline" size={32} color="#183A36" />
+       </TouchableOpacity>
+        </View>
+  
+        {/* Profielsectie */}
+     <View style={styles.profileSection}>
+     <View style={styles.profileInfoContainer}>
+    <Avatar size={100} url={avatarUrl} onUpload={(url) => setAvatarUrl(url)} showUploadButton={false} />
 
         <View style={styles.profileInfo}>
           <Text style={styles.profileName}>{`${firstname} ${lastname}`}</Text>
@@ -99,13 +101,48 @@ const ProfileScreen = () => {
           <Text style={styles.profileEmail}>{email}</Text>
         </View>
       </View>
-
-        
-        {/* De bewerk-knop onder de tekst */}
-        <Link style={styles.editButton}
-          href="/profileEdit">
-          <Text style={styles.editButtonText}>BEWERKEN</Text>
-        </Link>
+      
+      {/* De bewerk-knop onder de tekst */}
+      <Link style={styles.editButton}
+        href="/profileEdit">
+        <Text style={styles.editButtonText}>BEWERKEN</Text>
+      </Link>
+    </View>
+  
+        {/* Info Secties */}
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>Jouw favoriete hond(en)</Text>
+          <Text style={styles.sectionText}>
+            Als je een hond liket dan kan je deze hier terugvinden.
+          </Text>
+        </View>
+  
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>Formulier in behandeling</Text>
+          <Text style={styles.sectionText}>
+            Wanneer u een aanvraag doet, wordt je formulier doorgestuurd naar het asiel, je kan de
+            status hiervan bij je profiel vinden.
+          </Text>
+        </View>
+  
+        <View style={styles.section}>
+          <Text style={styles.sectionSubtile}>Deze honden passen bij jou profiel:</Text>
+          <Text style={styles.sectionText}>
+            Om te bepalen welke hond(en) het beste bij jou passen, vragen we je om eerst de
+            vragenlijst in te vullen. Zo kunnen we een perfecte match voor je vinden!
+          </Text>
+        </View>
+         {/* Fixed navbar onderaan scherm */}
+              <View
+                style={{
+                  position: "absolute",
+                  bottom: 0,
+                  left: 0,
+                  right: 0,
+                }}
+              >
+                <NavBar />
+              </View>
       </View>
     
           {/* Info Secties */}
@@ -142,6 +179,7 @@ const ProfileScreen = () => {
           }}>
           <NavBar />
         </View>
+        </ScrollView>
       </SafeAreaView>
     );
   };
@@ -154,11 +192,11 @@ const ProfileScreen = () => {
         fontFamily: 'Nunito'
     },
     title: {
-        fontSize: 23,
-        fontWeight: "bold",
-        color: '#183A36',
-        marginBottom: 30,
+        fontSize: 28,
+        fontFamily: 'SireniaMedium',
         textAlign: "center",
+        marginBottom: 30,
+
     },
     header: {
         flexDirection: "row",
@@ -212,7 +250,7 @@ const ProfileScreen = () => {
         marginTop: 25,
         paddingVertical: 10, 
         paddingHorizontal: 90, 
-        borderRadius: 15 
+        borderRadius: 20 
     },
     editButtonText: { 
         color: '#183A36',

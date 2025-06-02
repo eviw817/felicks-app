@@ -13,8 +13,10 @@ import { useLocalSearchParams, useRouter } from "expo-router";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import { supabase } from "@/lib/supabase"; // adjust if your path is different
 import NavBar from "@/components/NavigationBar";
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
+import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
+import BaseText from "@/components/BaseText";
 import { useNavigation } from '@react-navigation/native'
-import { Ionicons } from '@expo/vector-icons'
 
 export default function DogName() {
   const router = useRouter();
@@ -80,48 +82,35 @@ export default function DogName() {
     <SafeAreaView
       style={{
         flex: 1,
-        justifyContent: "center",
-        alignItems: "center",
         backgroundColor: "#FFFDF9",
         position: "relative",
+        paddingTop: 100,
       }}
     >
-      <Pressable
-            onPress={() => navigation.goBack()}
-            style={{
-              position: "absolute",
-              top: 68,
-              left: 40,
-            }}
-          >
-            <Ionicons name="arrow-back" size={24} color="#183A36" />
-          </Pressable>
-      <ScrollView>
-        <View
-          style={{
-            top: 1,
-            flex: 1,
-            marginTop: 40,
-            justifyContent: "flex-start",
-          }}
-        >
+          <View style={{flexDirection: "row",
+                          alignItems: "center",
+                          justifyContent: "center", 
+                          width: "100%",
+                          position: "relative", 
+                          paddingVertical: 10,}}
+              >
+                 <TouchableOpacity onPress={() => router.push("/dogStart")} style={{position: "absolute", left: 5, top:7,}}>
+                 <FontAwesomeIcon icon={faArrowLeft} size={30} color={'#183A36'} style={{position: "absolute", left: 10,top:7,}} />
+                </TouchableOpacity>
+                <BaseText style={{ fontSize: 28,
+                  fontFamily: 'SireniaMedium',
+                  textAlign: "center",
+                  marginBottom: 20,}}>
+                    Virtuele hond
+                </BaseText>
+            </View>
           <Text
             style={{
               fontFamily: "Nunito",
               fontWeight: "bold",
-              fontSize: 24,
+              fontSize: 20,
               padding: 20,
-              textAlign: "center",
-            }}
-          >
-            Virtuele hond
-          </Text>
-          <Text
-            style={{
-              fontFamily: "Nunito",
-              fontWeight: "bold",
-              fontSize: 16,
-              padding: 20,
+              color: '#183A36'
             }}
           >
             Gefeliciteerd!
@@ -133,6 +122,7 @@ export default function DogName() {
               fontSize: 16,
               padding: 20,
               paddingTop: 12,
+              color: '#183A36'
             }}
           >
             Je hebt net een {dogBreed || "hond"} toegevoegd aan je gezin. Tijd
@@ -146,6 +136,7 @@ export default function DogName() {
               padding: 20,
               paddingTop: 16,
               paddingBottom: 0,
+              color: '#183A36'
             }}
           >
             Naam
@@ -154,8 +145,10 @@ export default function DogName() {
             style={{
               margin: 20,
               marginTop: 8,
-              backgroundColor: "#D9D9D9",
+              backgroundColor: "#FFFDF9",
               borderRadius: 10,
+              borderColor: "#183A36",
+              borderWidth: 1,
             }}
           >
             <TextInput
@@ -163,8 +156,10 @@ export default function DogName() {
                 height: 20,
                 margin: 12,
                 borderRadius: 10,
+                fontSize: 16,
+                color: "#183A36",
               }}
-              placeholderTextColor="#879593"
+              placeholderTextColor="#183A36"
               onChangeText={onChangeText}
               value={text}
               placeholder="Geef je viervoeter een naam"
@@ -175,20 +170,20 @@ export default function DogName() {
             disabled={text.trim().length === 0}
             style={{
               opacity: text.trim().length > 0 ? 1 : 0.5,
-              padding: 12,
-              margin: 20,
-              paddingHorizontal: 20,
-              backgroundColor: "#97B8A5",
-              borderRadius: 15,
-              alignItems: "center",
+              backgroundColor: '#97B8A5',
+              paddingVertical: 15,
+              borderRadius: 20, 
+              marginLeft: 20,
+              width: '90%',
+              alignItems: 'center',
+              shadowOffset: { width: 0, height: 2 },
+              shadowOpacity: 0.1,
+              shadowRadius: 4,
             }}
           >
-            <Text style={{ fontWeight: "bold", color: "#000000" }}>
-              DOORGAAN
-            </Text>
+                  <Text style={{color: '#183A36', fontSize: 16, fontWeight: "bold",}}>OPSLAAN</Text>
           </TouchableOpacity>
-        </View>
-      </ScrollView>
+ 
       {/* Fixed navbar onderaan scherm */}
       <View
         style={{

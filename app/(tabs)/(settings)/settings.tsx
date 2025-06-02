@@ -6,6 +6,7 @@ import { useRouter } from "expo-router";
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 import { faArrowLeft, faBell, faPaw, faCircleInfo, faChevronRight } from "@fortawesome/free-solid-svg-icons";
 import NavBar from "@/components/NavigationBar";
+import BaseText from "@/components/BaseText";
 
 const SettingsScreen = () => {
       const router = useRouter();
@@ -16,7 +17,7 @@ const SettingsScreen = () => {
                 <TouchableOpacity onPress={() => router.push("/profile")} style={styles.backButton}>
                     <FontAwesomeIcon icon={faArrowLeft} size={30} color={'#183A36'} style={styles.backButton} />
                 </TouchableOpacity>
-                <Text style={styles.title}>Instellingen</Text>
+                <BaseText style={styles.title}>Instellingen</BaseText>
             </View>
 
             <View style={styles.menu}>
@@ -88,11 +89,10 @@ const SettingsScreen = () => {
         paddingVertical: 10,
       },
     title: {
-        fontSize: 23,
-        fontWeight: "bold",
-        color: '#183A36',
-        marginBottom: 20,
+        fontSize: 28,
+        fontFamily: 'SireniaMedium',
         textAlign: "center",
+        marginBottom: 20,
     },
     backButton: {
       position: "absolute",

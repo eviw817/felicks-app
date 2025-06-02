@@ -16,6 +16,9 @@ import { Ionicons } from '@expo/vector-icons'
 
 import { supabase } from "@/lib/supabase"; // adjust path if needed
 import { useEffect } from "react";
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
+import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
+import BaseText from "@/components/BaseText";
 
 export default function DogBreed() {
   const router = useRouter();
@@ -100,33 +103,30 @@ export default function DogBreed() {
 
   return (
     <SafeAreaView
-      style={{ flex: 1, alignItems: "center", backgroundColor: "#FFFDF9" }}
+      style={{ flex: 1, alignItems: "center", backgroundColor: "#FFFDF9", paddingTop: 100, }}
     >
-        <Pressable
-            onPress={() => navigation.goBack()}
-            style={{
-              position: "absolute",
-              top: 68,
-              left: 40,
-            }}
-          >
-            <Ionicons name="arrow-back" size={24} color="#183A36" />
-          </Pressable>
-        <View style={{ marginTop: 62, width: "100%", paddingHorizontal: 20 }}>
-          <Text
-            style={{
-              fontFamily: "Nunito",
-              fontWeight: "bold",
-              fontSize: 24,
-              textAlign: "center",
-            }}
-          >
-            Virtuele hond
-          </Text>
-        <Text style={{ fontFamily: "Nunito", fontSize: 16, marginTop: 20 }}>
+      <View style={{ width: "100%", paddingHorizontal: 20 }}>
+      <View style={{flexDirection: "row",
+                    alignItems: "center",
+                    justifyContent: "center", 
+                    width: "100%",
+                    position: "relative", 
+                    paddingVertical: 10,}}
+        >
+           <TouchableOpacity onPress={() => router.push("/dogStart")} style={{position: "absolute", left: 5, top:7,}}>
+           <FontAwesomeIcon icon={faArrowLeft} size={30} color={'#183A36'} style={{position: "absolute", left: 5, top:7,}} />
+          </TouchableOpacity>
+          <BaseText style={{ fontSize: 28,
+            fontFamily: 'SireniaMedium',
+            textAlign: "center",
+            marginBottom: 20,}}>
+              Virtuele hond
+          </BaseText>
+      </View>
+        <Text style={{ fontFamily: "Nunito", fontSize: 16, marginTop: 20, color: "#183A36", }}>
           Denk aan jouw favoriete hond...
         </Text>
-        <Text style={{ fontFamily: "Nunito", fontSize: 16, marginTop: 12 }}>
+        <Text style={{ fontFamily: "Nunito", fontSize: 16, marginTop: 12,  color: "#183A36", }}>
           Welk ras schiet er als eerste te binnen? Dat wordt jouw virtuele
           maatje!
         </Text>
@@ -153,20 +153,37 @@ export default function DogBreed() {
             <Picker.Item label="Labrador" value="labrador" />
           </Picker>
         </View>
-        <TouchableOpacity
-          onPress={handleBreedSubmit}
-          disabled={!dogBreed}
-          style={{
-            padding: 12,
-            marginTop: 20,
-            backgroundColor: "#97B8A5",
-            borderRadius: 15,
-            alignItems: "center",
-            opacity: !dogBreed ? 0.5 : 1,
-          }}
-        >
-          <Text style={{ fontWeight: "bold", color: "#000000" }}>DOORGAAN</Text>
-        </TouchableOpacity>
+        <View style={{ width: "100%", alignItems: "center" }}>
+          <TouchableOpacity
+            onPress={handleBreedSubmit}
+            disabled={!dogBreed}
+            style={{
+              margin: 20,
+              marginTop: 40,
+              paddingHorizontal: 20,
+              paddingVertical: 15,
+              backgroundColor: "#97B8A5",
+              borderRadius: 15,
+              width: "100%",
+              alignItems: "center",
+              shadowOffset: { width: 0, height: 2 },
+              shadowOpacity: 0.1,
+              shadowRadius: 4,
+              opacity: !dogBreed ? 0.5 : 1,
+            }}
+          >
+            <Text
+              style={{
+                fontWeight: "bold",
+                fontSize: 15,
+                color: "#183A36",
+                textAlign: "center",
+              }}
+            >
+              DOORGAAN
+            </Text>
+          </TouchableOpacity>
+      </View>
       </View>
       {/* Fixed navbar onderaan scherm */}
       <View
