@@ -130,7 +130,7 @@ export default function HomepageScreen() {
       </View>
 
       <View style={{ position: "absolute", top: 70, right: 30 }}>
-        <Link href="/notifications_home">
+        <Link href="/notificationsIndex">
           <View style={{ position: "relative" }}>
             <FontAwesome name="envelope-o" size={30} color="#183A36" />
             {unreadCount > 0 && (

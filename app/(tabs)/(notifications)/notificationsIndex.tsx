@@ -136,7 +136,7 @@ export default function NotificationsScreen() {
         </TouchableOpacity>
 
         <View style={{ alignItems: "center", marginTop: 70 }}>
-          <Text style={{ fontFamily: "Sirenia", fontSize: 24, padding: 20 }}>
+          <Text style={{ fontFamily: "SireniaMedium", fontSize: 24, padding: 20 }}>
             Meldingen
           </Text>
         </View>
