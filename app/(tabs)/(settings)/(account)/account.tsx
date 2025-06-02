@@ -64,7 +64,7 @@ const DeleteScreen = () => {
         <SafeAreaView style={styles.container}>
             {/* Header met terugknop */}
             <View style={styles.header}>
-                <TouchableOpacity onPress={() => router.push("../settings")}>
+                <TouchableOpacity onPress={() => router.push("/settings")}>
                     <FontAwesomeIcon icon={faArrowLeft} size={30} color="#183A36" />
                 </TouchableOpacity>
                 <Text style={styles.title}>Account verwijderen</Text>
@@ -77,7 +77,7 @@ const DeleteScreen = () => {
             verwijderen?</Text>
 
             {/* Knoppen */}
-            <TouchableOpacity style={styles.button} onPress={() => router.push("../settings")}>
+            <TouchableOpacity style={styles.button} onPress={() => router.push("/settings")}>
                 <Text style={styles.buttonText}>NEE</Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.nobutton} onPress={handleDeleteAccount}>
@@ -117,9 +117,8 @@ const styles = StyleSheet.create({
     },
     title: {
         flex: 1, 
-        fontSize: 23,
-        fontWeight: "bold",
-        color: '#183A36',
+         fontSize: 28,
+        fontFamily: 'SireniaMedium',
         textAlign: "center",
         alignSelf: "center",
         marginRight: 50, 

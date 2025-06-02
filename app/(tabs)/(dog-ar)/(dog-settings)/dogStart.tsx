@@ -3,6 +3,7 @@ import { View, Text, Image, ScrollView } from "react-native";
 import { Link } from "expo-router";
 import NavBar from "@/components/NavigationBar";
 import { useFonts } from 'expo-font';
+import BaseText from "@/components/BaseText";
 
 export default function DogStart() {
   const [fontsLoaded] = useFonts({
@@ -20,6 +21,7 @@ export default function DogStart() {
         justifyContent: "center",
         alignItems: "center",
         backgroundColor: "#FFFDF9",
+         paddingTop: 20,
       }}
     >
       <ScrollView
@@ -31,22 +33,24 @@ export default function DogStart() {
           paddingRight: 140,
         }}
       >
-        <Text
+        <BaseText
           style={{
-            fontFamily: 'SireniaSemiBold',
-            fontSize: 24,
-            padding: 20,
-            textAlign: "center",
+              fontSize: 28,
+              fontFamily: 'SireniaMedium',
+              textAlign: "center",
+              padding: 20,
           }}
         >
           Welkom bij de virtuele hond
-        </Text>
+        </BaseText>
         <Text
           style={{
             fontFamily: "Nunito",
             fontWeight: "bold",
             fontSize: 16,
             paddingHorizontal: 20,
+            color: "#183A36",
+            marginBottom: 10,
           }}
         >
           Altijd al gedroomd van een trouwe viervoeter in huis?
@@ -57,9 +61,11 @@ export default function DogStart() {
             fontWeight: "normal",
             fontSize: 16,
             paddingHorizontal: 20,
+            color: "#183A36",
           }}
         >
-          Maar ben jij er klaar voor? Dan is deze ervaring precies wat je nodig
+          Maar ben jij er klaar voor? {"\n"}
+          Dan is deze ervaring precies wat je nodig
           hebt om daar achter te komen!
         </Text>
         <View
@@ -87,6 +93,7 @@ export default function DogStart() {
                 fontWeight: "bold",
                 fontSize: 16,
                 paddingHorizontal: 20,
+                color: "#183A36",
               }}
             >
               Step 1
@@ -98,6 +105,7 @@ export default function DogStart() {
                 fontSize: 16,
                 paddingHorizontal: 20,
                 marginRight: 100,
+                color: "#183A36",
               }}
             >
               Maak jouw virtuele hond aan.
@@ -134,6 +142,7 @@ export default function DogStart() {
                 fontWeight: "bold",
                 fontSize: 16,
                 paddingHorizontal: 20,
+                color: "#183A36",
               }}
             >
               Step 2
@@ -145,25 +154,58 @@ export default function DogStart() {
                 fontSize: 16,
                 paddingHorizontal: 20,
                 marginRight: 120,
+                color: "#183A36",
               }}
             >
               Ga op avontuur met jouw viervoeter en ontdek het zelf!
             </Text>
           </View>
         </View>
-        <Link
+      
+        <Text
+              style={{
+                fontFamily: "Nunito",
+                fontWeight: "bold",
+                fontSize: 16,
+                paddingHorizontal: 20,
+                color: "#183A36",
+                marginTop: 20,
+              }}
+            >
+              Niet te vergeten!
+            </Text>
+            <Text
+              style={{
+                fontFamily: "Nunito",
+                fontWeight: "regular",
+                fontSize: 16,
+                paddingHorizontal: 20,
+                color: "#183A36",
+              }}
+            >
+              Het is leerzaam, leuk én helemaal gratis!
+            </Text>
+            <Link
           style={{
             padding: 12,
             margin: 20,
             paddingHorizontal: 20,
+            paddingVertical: 15,
             backgroundColor: "#97B8A5",
             fontWeight: "bold",
+            fontSize: 15,
             borderRadius: 15,
             textAlign: "center",
+            color: "#183A36",
+            width: "90%",
+            alignItems: "center",
+            shadowOffset: { width: 0, height: 2 },
+            shadowOpacity: 0.1,
+            shadowRadius: 4,
           }}
           href="/dogBreed"
         >
-          DOORGAAN
+          BEGIN NU
         </Link>
       </ScrollView>
 

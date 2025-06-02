@@ -1,23 +1,19 @@
 import React, { useState } from "react";
-import {
-  View,
-  Text,
-  StyleSheet,
-  TouchableOpacity,
-  TextInput,
-  Alert,
-} from "react-native";
-import { useRouter } from "expo-router";
+import { View, Text, StyleSheet, TouchableOpacity, TextInput, Alert } from "react-native";
+import { useRouter } from "expo-router";  
 import { supabase } from "../../../../../lib/supabase";
+import BaseText from "@/components/BaseText";
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
+import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 
 const ForgetPasswordScreen = () => {
   const router = useRouter();
   const [emailFocus, setEmailFocus] = useState(false);
-  const [email, setEmail] = useState("");
+  const [email, setEmail] = useState('');
   const [loading, setLoading] = useState(false);
 
   // Functie om te controleren of er tekst is ingevoerd
-  const isEmailFilled = email.trim() !== "";
+  const isEmailFilled = email.trim() !== '';
 
   const handleResetPassword = async () => {
     if (!email) {
@@ -28,7 +24,7 @@ const ForgetPasswordScreen = () => {
     setLoading(true);
 
     const { error } = await supabase.auth.resetPasswordForEmail(email, {
-      redirectTo: "com.anonymous.felicksapp://newPassword",
+      redirectTo: 'com.anonymous.felicksapp://newPassword'
     });
 
     if (error) {
@@ -42,29 +38,33 @@ const ForgetPasswordScreen = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Wachtwoord vergeten</Text>
+       <View style={styles.header}>
+          <TouchableOpacity onPress={() => router.push("/login")} style={styles.backButton}>
+                  <FontAwesomeIcon icon={faArrowLeft} size={30} color={'#183A36'} style={styles.backButton} />
+          </TouchableOpacity>
+          <BaseText style={styles.title}>Wachtwoord vergeten</BaseText>
+      </View>
 
       {/* E-mail input */}
       <Text style={styles.label}>E-mail</Text>
       <TextInput
         style={[
-          styles.input,
-          emailFocus || isEmailFilled
-            ? styles.focusedInput
-            : styles.unfocusedInput,
+          styles.input, 
+          emailFocus || isEmailFilled ? styles.focusedInput : styles.unfocusedInput
         ]}
-        placeholder="E-mail"
+        placeholder="E-mail" 
         placeholderTextColor="rgba(151, 184, 165, 0.5)"
         keyboardType="email-address"
-        onFocus={() => setEmailFocus(true)}
-        onBlur={() => setEmailFocus(false)}
+        onFocus={() => setEmailFocus(true)} 
+        onBlur={() => setEmailFocus(false)} 
         onChangeText={setEmail}
         value={email}
       />
-
+  
       <TouchableOpacity style={styles.button} onPress={handleResetPassword}>
         <Text style={styles.buttonText}>VERZEND</Text>
       </TouchableOpacity>
+
     </View>
   );
 };
@@ -73,36 +73,36 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingTop: 100,
-    alignItems: "center",
+    alignItems: 'center',
     padding: 20,
-    backgroundColor: "#FFFDF9",
+    backgroundColor: '#FFFDF9',
   },
   title: {
-    fontSize: 23,
-    fontWeight: "bold",
-    color: "#183A36",
+    fontSize: 28,
+    fontFamily: 'SireniaMedium',
     marginBottom: 60,
+    textAlign: "center",
   },
   text: {
     fontSize: 20,
     fontWeight: "bold",
   },
   button: {
-    backgroundColor: "#97B8A5",
+    backgroundColor: '#97B8A5',
     paddingVertical: 15,
-    borderRadius: 20,
+    borderRadius: 20, 
     marginBottom: 20,
-    width: "97%",
-    alignItems: "center",
+    width: '97%',
+    alignItems: 'center',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
     marginTop: 20,
   },
   buttonText: {
-    color: "#183A36",
+    color: '#183A36',
     fontSize: 16,
-    fontWeight: "bold",
+    fontWeight: 'bold',
   },
   label: {
     alignSelf: "flex-start",
@@ -115,18 +115,33 @@ const styles = StyleSheet.create({
     width: "100%",
     height: 45,
     borderBottomWidth: 1,
-    borderBottomColor: "#97B8A5",
+    borderBottomColor: "#97B8A5", 
     marginBottom: 25,
     fontSize: 16,
     color: "#183A36",
     paddingLeft: 15,
   },
   focusedInput: {
-    borderBottomColor: "#183A36",
+    borderBottomColor: '#183A36', 
   },
   unfocusedInput: {
-    borderBottomColor: "#97B8A5",
+    borderBottomColor: "#97B8A5", 
   },
+   backButton: {
+      position: "absolute",
+      left: 5,
+      top:7,
+    },
+    header: {
+        flexDirection: "row",
+        alignItems: "center",
+        justifyContent: "center", 
+        width: "100%",
+        position: "relative", 
+        paddingVertical: 10,
+      },
+  
 });
 
 export default ForgetPasswordScreen;
+>>>>>>> origin/main

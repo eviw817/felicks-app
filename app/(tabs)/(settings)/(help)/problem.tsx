@@ -5,6 +5,7 @@ import { supabase } from "@/lib/supabase";
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import NavBar from "@/components/NavigationBar";
+import BaseText from "@/components/BaseText";
 
 const ProbleemScreen = () => {
   const router = useRouter();
@@ -53,7 +54,7 @@ const ProbleemScreen = () => {
         }
       
         setProbleem("");
-        router.push("../sendProblem");
+        router.push("/sendProblem");
       } catch (error) {
         console.log("Error message:", error);  
         Alert.alert("Fout", "Er is een fout opgetreden bij het verzenden van het probleem.");
@@ -65,10 +66,10 @@ const ProbleemScreen = () => {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
-        <TouchableOpacity onPress={() => router.push("../help")} style={styles.backButton}>
+        <TouchableOpacity onPress={() => router.push("/help")} style={styles.backButton}>
           <FontAwesomeIcon icon={faArrowLeft} size={30} color={'#183A36'} style={styles.backButton} />
         </TouchableOpacity>
-        <Text style={styles.title}>Probleem rapporteren</Text>
+        <BaseText style={styles.title}>Probleem rapporteren</BaseText>
       </View>
 
       <TextInput
@@ -119,11 +120,10 @@ const ProbleemScreen = () => {
         paddingVertical: 10,
       },
     title: {
-        fontSize: 23,
-        fontWeight: "bold",
-        color: '#183A36',
-        marginBottom: 20,
+         fontSize: 28,
+        fontFamily: 'SireniaMedium',
         textAlign: "center",
+        marginBottom: 20,
     },
     backButton: {
       position: "absolute",
