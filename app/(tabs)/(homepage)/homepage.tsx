@@ -181,7 +181,7 @@ export default function HomepageScreen() {
           right: 30,
         }}
       >
-        <Link href="/notifications_home">
+        <Link href="/notificationsIndex">
           <FontAwesome
             name="envelope-o"
             size={30} // Icon size
@@ -375,7 +375,7 @@ export default function HomepageScreen() {
                   marginBottom: 20,
                   marginTop: 10,
                 }}
-                onPress={() => router.push("/(homepage)/homepage")}
+                onPress={() => router.push("/homepage")}
               >
                 <Text
                   style={{
@@ -403,7 +403,7 @@ export default function HomepageScreen() {
                 }}
               >
                 <TouchableOpacity
-                  onPress={() => router.push(`/(adoption_personality)/dog-detail/${dog.id}`)}
+                  onPress={() => router.push(`/`)}
                   style={{ flexDirection: "row", flex: 1 }}
                 >
                   <View
