@@ -172,9 +172,16 @@ const ProfileScreen = () => {
 
             if (session && session.user && session.user.id) {
               const { data: liked, error: likedError } = await supabase
-                .from("liked_dogs")
-                .select("*, adoption_dogs(*)")
-                .eq("user_id", session.user.id);
+              .from("liked_dogs")
+              .select(`
+                adoption_dogs (
+                  id,
+                  name,
+                  breed
+                )
+              `)
+              .eq("user_id", session.user.id);
+
 
               if (likedError) {
                 console.error("Fout bij ophalen liked dogs:", likedError);
@@ -271,7 +278,7 @@ const ProfileScreen = () => {
             ))
           ) : (
             <Text style={styles.sectionText}>
-              Als je een hond liket dan kan je deze hier terugvinden.
+              Als je een hond liked dan kan je deze hier terugvinden.
             </Text>
           )}
         </View>
