@@ -52,6 +52,7 @@ const ProfileScreen = () => {
       const [formSubmitted, setFormSubmitted] = useState(false);
       const [formStatus, setFormStatus] = useState<"niet_ingediend" | "ingediend" | "goedgekeurd" | "in_behandeling">("niet_ingediend");
       const [matches, setMatches] = useState<{ dog: Dog; score: number }[]>([]);
+      const [likedDogs, setLikedDogs] = useState<Dog[]>([]);
 
       const fetchUserData = async () => {
         setLoading(true);
@@ -168,6 +169,21 @@ const ProfileScreen = () => {
               } finally {
                 setLoading(false);
               }
+
+            if (session && session.user && session.user.id) {
+              const { data: liked, error: likedError } = await supabase
+                .from("liked_dogs")
+                .select("*, adoption_dogs(*)")
+                .eq("user_id", session.user.id);
+
+              if (likedError) {
+                console.error("Fout bij ophalen liked dogs:", likedError);
+              } else if (liked) {
+                const dogs = liked.map((entry: any) => entry.adoption_dogs);
+                setLikedDogs(dogs);
+              }
+            }
+
       };
     
       // Vernieuw de sessie en email
@@ -231,10 +247,35 @@ const ProfileScreen = () => {
         {/* Info Secties */}
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>Jouw favoriete hond(en)</Text>
-          <Text style={styles.sectionText}>
-            Als je een hond liket dan kan je deze hier terugvinden.
-          </Text>
+          {likedDogs.length > 0 ? (
+            likedDogs.map((dog) => (
+              <TouchableOpacity
+                key={dog.id}
+                style={{
+                  backgroundColor: "#E2F0E7",
+                  padding: 12,
+                  marginTop: 10,
+                  borderRadius: 10,
+                  width: '100%',
+                }}
+                // onPress={() =>
+                //   router.push({
+                //     pathname: "/(tabs)/(adoptionprofile)/(personality)/dogDetail/[id]",
+                //     params: { id: dog.id },
+                //   })
+                // }
+              >
+                <Text style={{ fontSize: 16, fontWeight: "bold", color: "#183A36" }}>{dog.name}</Text>
+                <Text style={{ color: "#97B8A5" }}>{dog.breed}</Text>
+              </TouchableOpacity>
+            ))
+          ) : (
+            <Text style={styles.sectionText}>
+              Als je een hond liket dan kan je deze hier terugvinden.
+            </Text>
+          )}
         </View>
+
 
         <View style={styles.section}>
           <Text style={styles.sectionSubtile}>Deze honden passen bij jouw profiel:</Text>
