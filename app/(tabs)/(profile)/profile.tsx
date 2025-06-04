@@ -21,6 +21,10 @@ const ProfileScreen = () => {
       const [avatarUrl, setAvatarUrl] = useState<string | null>(null)
       const [userId, setUserId] = useState<string | null>(null);
       const [loading, setLoading] = useState(true);
+      const [formSubmitted, setFormSubmitted] = useState(false);
+      const [formStatus, setFormStatus] = useState<"niet_ingediend" | "ingediend" | "goedgekeurd" | "in_behandeling">("niet_ingediend");
+
+
 
       const fetchUserData = async () => {
         setLoading(true);
@@ -33,7 +37,7 @@ const ProfileScreen = () => {
           if (session?.user?.id) {
             const { data, error } = await supabase
               .from("profiles")
-              .select("firstname, lastname, avatar_url")
+              .select("id, firstname, lastname, avatar_url")
               .eq("id", session.user.id)
               .single();
     
@@ -43,6 +47,33 @@ const ProfileScreen = () => {
             setLastname(data.lastname || "");
             setEmail(session.user.email || '');
             setAvatarUrl(data.avatar_url || null);
+
+           const { data: adoptionRequest, error: adoptionError } = await supabase
+        .from("adoption_requests")
+        .select("*")
+        .eq("user_id", session.user.id);
+
+      console.log("Session user ID:", session.user.id);
+      console.log("Profile data user ID:", data.id);
+      console.log("Adoption requests:", adoptionRequest);
+      console.log("Adoption error:", adoptionError);
+
+      if (adoptionError) {
+        console.error("Fout bij ophalen adoptieverzoeken:", adoptionError);
+      }
+
+      if (adoptionRequest && adoptionRequest.length > 0) {
+  if (adoptionRequest[0].status === "goedgekeurd") {
+    setFormStatus("goedgekeurd");
+  } else if (adoptionRequest[0].status === "in_behandeling") {
+    setFormStatus("in_behandeling");
+  } else {
+    setFormStatus("ingediend");
+  }
+} else {
+  setFormStatus("niet_ingediend");
+}
+
           }
         } catch (error) {
           console.error(error);
@@ -116,16 +147,8 @@ const ProfileScreen = () => {
             Als je een hond liket dan kan je deze hier terugvinden.
           </Text>
         </View>
-  
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Formulier in behandeling</Text>
-          <Text style={styles.sectionText}>
-            Wanneer u een aanvraag doet, wordt je formulier doorgestuurd naar het asiel, je kan de
-            status hiervan bij je profiel vinden.
-          </Text>
-        </View>
-  
-        <View style={styles.section}>
+
+          <View style={styles.section}>
           <Text style={styles.sectionSubtile}>Deze honden passen bij jou profiel:</Text>
           <Text style={styles.sectionText}>
             Om te bepalen welke hond(en) het beste bij jou passen, vragen we je om eerst de
@@ -133,6 +156,32 @@ const ProfileScreen = () => {
           </Text>
 
         </View>
+  
+        <View style={styles.section}>
+  <Text style={styles.sectionTitle}>Status van je aanvraag</Text>
+
+      {formStatus === "goedgekeurd" && (
+        <Text style={styles.sectionTextStatus}>
+          Uw formulier werd goedgekeurd. Wij sturen een mail naar het asiel en zij bekijken uw aanvraag verder. U zal een bericht krijgen als u op gesprek mag komen.
+        </Text>
+      )}
+
+      {formStatus === "in_behandeling" && (
+        <Text style={styles.sectionTextStatus}>
+          We hebben uw formulier ontvangen en zijn ermee aan de slag.
+        </Text>
+      )}
+
+      {formStatus === "niet_ingediend" && (
+        <Text style={styles.sectionText}>
+          Wanneer u een aanvraag doet, wordt uw formulier doorgestuurd naar het asiel. Je kan de status hiervan bij je profiel terugvinden.
+        </Text>
+      )}
+    </View>
+
+
+  
+      
         </ScrollView>
          {/* Fixed navbar onderaan scherm */}
               <View
@@ -244,6 +293,15 @@ const ProfileScreen = () => {
     sectionText: { 
         fontSize: 15,
         color: '#183A36',
+    },
+    sectionTextStatus: { 
+        fontSize: 16, 
+        color: '#183A36',
+        backgroundColor: '#97B8A5',
+        borderRadius: 15,
+        padding: 20,
+        marginTop: 10,
+   
     },
   });
   
