@@ -8,7 +8,7 @@ import {
   Alert,
   AppState,
 } from "react-native";
-import { useRouter, Link } from "expo-router"; 
+import { useRouter, Link } from "expo-router";
 import { supabase } from "../../../../lib/supabase";
 import { AppStateStatus } from "react-native";
 import { Session } from "@supabase/supabase-js";
@@ -104,7 +104,7 @@ const LoginScreen = () => {
       return;
     }
 
-    router.push("/homepage"); 
+    router.push("/homepage");
     setLoading(false);
   }
 
@@ -161,12 +161,9 @@ const LoginScreen = () => {
         </TouchableOpacity>
       </View>
 
-
       {/* Wachtwoord vergeten */}
       <View style={styles.forgotPasswordContainer}>
-        <Link
-          href="/forgetPassword"
-        >
+        <Link href="/forgetPassword">
           <Text style={styles.forgotPassword}>Wachtwoord vergeten?</Text>
         </Link>
       </View>
@@ -181,10 +178,7 @@ const LoginScreen = () => {
       {/* Registreren link */}
       <Text style={styles.registerText}>
         Nog geen account?{" "}
-        <Link
-          style={styles.registerLink}
-          href="/register"
-        >
+        <Link style={styles.registerLink} href="/register">
           Registreer hier
         </Link>
       </Text>
@@ -202,7 +196,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 28,
-    fontFamily: 'SireniaMedium',
+    fontFamily: "SireniaMedium",
     marginBottom: 60,
     textAlign: "center",
   },
@@ -269,17 +263,15 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   passwordContainer: {
-  width: "100%",
-  marginBottom: -3,
-  position: "relative",
-},
-eyeIcon: {
-  position: "absolute",
-  right: 10,
-  top: 12,
-},
-
+    width: "100%",
+    marginBottom: -3,
+    position: "relative",
+  },
+  eyeIcon: {
+    position: "absolute",
+    right: 10,
+    top: 12,
+  },
 });
 
 export default LoginScreen;
->>>>>>>> origin/main:app/(tabs)/(login-register)/(login)/login.tsx

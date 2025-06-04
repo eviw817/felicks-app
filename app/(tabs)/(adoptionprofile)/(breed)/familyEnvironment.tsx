@@ -129,7 +129,7 @@ export default function FamilyEnvironment() {
 
       <TouchableOpacity
         style={[styles.button, !canNext && styles.buttonDisabled]}
-        onPress={() => router.push("/activity_personality")}
+        onPress={() => router.push("/activityPersonality")}
         disabled={!canNext}
       >
         <BaseText style={styles.buttonText}>VOLGENDE</BaseText>
@@ -161,9 +161,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 8,
   },
   headerTitle: {
-    fontFamily: "Sirenia-Regular",
-    fontSize: 20,
-    color: "#183A36",
     textAlign: "center",
   },
   progressBar: {

@@ -61,7 +61,7 @@ export default function DogAge() {
     if (error) {
       Alert.alert("Fout", "Kon voorkeur niet opslaan.");
     } else {
-      router.push("/training_level");
+      router.push("/trainingLevel");
     }
   };
 

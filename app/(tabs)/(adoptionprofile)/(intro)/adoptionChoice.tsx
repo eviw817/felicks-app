@@ -20,7 +20,7 @@ export default function AdoptionChoice() {
         <TouchableOpacity onPress={() => router.back()} style={styles.back}>
           <Ionicons name="arrow-back" size={24} color="#183A36" />
         </TouchableOpacity>
-        <BaseText style={styles.title} variant="title">
+        <BaseText variant="title" style={styles.title}>
           Adoptie
         </BaseText>
       </View>
@@ -31,19 +31,21 @@ export default function AdoptionChoice() {
       </BaseText>
 
       <TouchableOpacity
-        style={styles.optionButton}
-        onPress={() =>
-          router.push("/(adoption_personality)/personality_traits")
-        }
+        style={styles.secondaryButton}
+        onPress={() => router.push("/personalityTraits")}
       >
-        <BaseText style={styles.optionText}>PERSOONLIJKHEID</BaseText>
+        <BaseText variant="button" style={styles.secondaryText}>
+          PERSOONLIJKHEID
+        </BaseText>
       </TouchableOpacity>
 
       <TouchableOpacity
-        style={styles.optionButton}
-        onPress={() => router.push("/(adoptionprofile1)/livingsituation")}
+        style={styles.secondaryButton}
+        onPress={() => router.push("/personalityTraits")}
       >
-        <BaseText style={styles.optionText}>RAS</BaseText>
+        <BaseText variant="button" style={styles.secondaryText}>
+          RAS
+        </BaseText>
       </TouchableOpacity>
     </SafeAreaView>
   );
@@ -68,7 +70,6 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 22,
-    fontFamily: "Sirenia-Regular",
     color: "#183A36",
     textAlign: "center",
   },
@@ -77,7 +78,7 @@ const styles = StyleSheet.create({
     color: "#183A36",
     lineHeight: 24,
     marginBottom: 32,
-    textAlign: "center",
+    fontFamily: "Nunito-Regular",
   },
   optionButton: {
     borderColor: "#183A36",
@@ -91,7 +92,16 @@ const styles = StyleSheet.create({
   optionText: {
     fontSize: 16,
     color: "#183A36",
-    fontWeight: "bold",
     textTransform: "uppercase",
+    fontFamily: "Nunito-Bold",
   },
+  secondaryButton: {
+    borderColor: "#97B8A5",
+    borderWidth: 1,
+    borderRadius: 20,
+    paddingVertical: 16,
+    alignItems: "center",
+    marginBottom: 16,
+  },
+  secondaryText: {},
 });

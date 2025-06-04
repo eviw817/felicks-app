@@ -6,7 +6,7 @@ import { Ionicons } from "@expo/vector-icons";
 const tabs = [
   { name: "homepage", label: "Home", icon: "home" },
   {
-    name: "(adoption)/adoption_intro",
+    name: "adoptionChoice",
     label: "Adoptie",
     icon: "list",
   },
@@ -30,11 +30,18 @@ export default function NavBar() {
             onPress={() => router.push(("/" + tab.name) as any)}
           >
             <Ionicons
-            name={isActive ? tab.icon : (`${tab.icon}-outline` as any)}
+              name={isActive ? tab.icon : (`${tab.icon}-outline` as any)}
               size={32}
               color={isActive ? "#FDE4D2" : "#FFFDF9"}
             />
-            <Text style={{ color: isActive ? "#FDE4D2" : "#FFFDF9", textAlign: "center", fontSize: 14,   fontFamily: "Nunito", }}>
+            <Text
+              style={{
+                color: isActive ? "#FDE4D2" : "#FFFDF9",
+                textAlign: "center",
+                fontSize: 14,
+                fontFamily: "Nunito",
+              }}
+            >
               {tab.label}
             </Text>
           </TouchableOpacity>
@@ -57,4 +64,3 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
 });
-

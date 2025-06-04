@@ -4,7 +4,7 @@ import { useRouter } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 import BaseText from "@/components/BaseText";
 
-function AdoptionProfileScreen() {
+function AdoptionprofileScreen() {
   const router = useRouter();
 
   return (
@@ -110,4 +110,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default AdoptionProfileScreen;
+export default AdoptionprofileScreen;

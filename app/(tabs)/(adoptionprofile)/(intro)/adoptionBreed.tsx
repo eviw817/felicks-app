@@ -20,30 +20,36 @@ export default function AdoptionChoice() {
         <TouchableOpacity onPress={() => router.back()} style={styles.back}>
           <Ionicons name="arrow-back" size={24} color="#183A36" />
         </TouchableOpacity>
-        <BaseText style={styles.title} variant="title">
-          Adoptie
+        <BaseText variant="title" style={styles.title}>
+          Adoptieprofiel
         </BaseText>
       </View>
 
-      <BaseText style={styles.question}>
-        Wil je een hond die meer op jouw persoonlijkheid gebaseerd is of ga je
-        liever voor een bepaald ras?
+      <BaseText variant="text" style={styles.description}>
+        Je profiel is aangemaakt! Laten we nu ontdekken welk hondenras écht bij
+        jou past.
+      </BaseText>
+      <BaseText variant="text" style={styles.subtitle}>
+        Beantwoord een paar korte vragen en ontvang een persoonlijke
+        aanbeveling.
       </BaseText>
 
       <TouchableOpacity
-        style={styles.optionButton}
-        onPress={() =>
-          router.push("/(adoption_personality)/personality_traits")
-        }
+        style={styles.primaryButton}
+        onPress={() => router.push("/livingsituation")}
       >
-        <BaseText style={styles.optionText}>PERSOONLIJKHEID</BaseText>
+        <BaseText variant="button" style={styles.primaryText}>
+          VIND JOUW PERFECTE RAS
+        </BaseText>
       </TouchableOpacity>
 
       <TouchableOpacity
-        style={styles.optionButton}
-        onPress={() => router.push("/(adoptionprofile1)/livingsituation")}
+        style={styles.secondaryButton}
+        onPress={() => router.push("/homepage")}
       >
-        <BaseText style={styles.optionText}>RAS</BaseText>
+        <BaseText variant="button" style={styles.secondaryText}>
+          OVERSLAAN
+        </BaseText>
       </TouchableOpacity>
     </SafeAreaView>
   );
@@ -67,31 +73,32 @@ const styles = StyleSheet.create({
     left: 0,
   },
   title: {
-    fontSize: 22,
-    fontFamily: "Sirenia-Regular",
-    color: "#183A36",
     textAlign: "center",
   },
-  question: {
-    fontSize: 16,
-    color: "#183A36",
+  description: {
+    lineHeight: 24,
+    marginBottom: 12,
+    textAlign: "left",
+  },
+  subtitle: {
     lineHeight: 24,
     marginBottom: 32,
-    textAlign: "center",
+    textAlign: "left",
   },
-  optionButton: {
-    borderColor: "#183A36",
-    borderWidth: 1,
-    borderRadius: 25,
+  primaryButton: {
+    backgroundColor: "#97B8A5",
     paddingVertical: 16,
-    paddingHorizontal: 24,
+    borderRadius: 20,
+    alignItems: "center",
     marginBottom: 16,
+  },
+  primaryText: {},
+  secondaryButton: {
+    borderColor: "#97B8A5",
+    borderWidth: 1,
+    borderRadius: 20,
+    paddingVertical: 16,
     alignItems: "center",
   },
-  optionText: {
-    fontSize: 16,
-    color: "#183A36",
-    fontWeight: "bold",
-    textTransform: "uppercase",
-  },
+  secondaryText: {},
 });

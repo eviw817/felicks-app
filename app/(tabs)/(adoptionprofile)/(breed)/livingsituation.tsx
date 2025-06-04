@@ -9,94 +9,120 @@ import {
   Platform,
 } from "react-native";
 import { useRouter } from "expo-router";
-import { supabase } from "../../../../lib/supabase";
+import { supabase } from "@/lib/supabase";
 import { Ionicons } from "@expo/vector-icons";
 import BaseText from "@/components/BaseText";
 
-const RadioButton: React.FC<{ selected: boolean }> = ({ selected }) => (
-  <View style={styles.radioOuter}>
-    {selected && <View style={styles.radioInner} />}
-  </View>
-);
-
-export default function GroomingCoat() {
+export default function LivingSituation() {
   const router = useRouter();
   const [userId, setUserId] = useState<string | null>(null);
   const [answers, setAnswers] = useState({
-    grooming: "",
-    shedding: "",
+    livingSituation: "",
+    homeFrequency: "",
   });
 
   useEffect(() => {
     (async () => {
-      const {
-        data: { user },
-      } = await supabase.auth.getUser();
-      if (user) {
-        setUserId(user.id);
+      const { data: userData, error: userError } =
+        await supabase.auth.getUser();
 
-        const { data, error } = await supabase
-          .from("adoption_profiles")
-          .select("grooming, shedding")
-          .eq("user_id", user.id)
-          .single();
+      if (userError || !userData?.user?.id) return;
 
-        if (error) {
-          console.error(
-            "❌ Ophalen bestaande antwoorden mislukt:",
-            error.message
-          );
-        } else if (data) {
-          setAnswers({
-            grooming: data.grooming || "",
-            shedding: data.shedding || "",
-          });
-        }
+      const uid = userData.user.id;
+      setUserId(uid);
+
+      const { data: existingProfile, error } = await supabase
+        .from("adoption_profiles")
+        .select("living_situation, home_frequency")
+        .eq("user_id", uid)
+        .single();
+
+      if (error) {
+        console.error("❌ Fout bij ophalen profiel:", error.message);
+      }
+
+      if (existingProfile) {
+        console.log("✅ Profiel geladen:", existingProfile);
+        setAnswers({
+          livingSituation: existingProfile.living_situation || "",
+          homeFrequency: existingProfile.home_frequency || "",
+        });
       }
     })();
   }, []);
 
   const handleAnswer = async (
-    question: "grooming" | "shedding",
+    question: "livingSituation" | "homeFrequency",
     value: string
   ) => {
     const newAnswers = { ...answers, [question]: value };
     setAnswers(newAnswers);
+    console.log("🔄 Antwoord bijgewerkt:", newAnswers);
 
     if (!userId) return;
 
     const payload = {
       user_id: userId,
-      grooming: newAnswers.grooming,
-      shedding: newAnswers.shedding,
+      living_situation: newAnswers.livingSituation,
+      home_frequency: newAnswers.homeFrequency,
     };
 
     const { error } = await supabase
       .from("adoption_profiles")
-      .upsert(payload, { onConflict: "user_id" });
+      .upsert([payload], {
+        onConflict: "user_id",
+      });
 
-    if (error) console.error("❌ DB save error:", error.message);
+    if (error) console.error("❌ Fout bij opslaan in DB:", error.message);
+    else console.log("✅ Antwoorden opgeslagen in DB:", payload);
   };
 
-  const canNext = answers.grooming !== "" && answers.shedding !== "";
+  const canNext =
+    answers.livingSituation !== "" && answers.homeFrequency !== "";
 
-  const groomingOptions = [
+  const livingOptions = [
     {
-      label: "Zo weinig mogelijk – ik hou het graag praktisch",
-      value: "minimal",
+      label: "In een gezellig appartement – knus en compact",
+      value: "apartment",
     },
-    { label: "Af en toe borstelen? Dat hoort erbij", value: "occasional" },
-    { label: "Dagelijks borstelen is voor mij qualitytime", value: "daily" },
+    {
+      label: "Een huis zonder tuin, maar met wandelopties",
+      value: "house_no_garden",
+    },
+    {
+      label: "We hebben een tuin waar de hond kan snuffelen",
+      value: "garden",
+    },
+    {
+      label: "Veel ruimte, veel natuur – buiten zijn vanzelfsprekend",
+      value: "nature",
+    },
   ];
 
-  const sheddingOptions = [
-    { label: "Ik hou m’n huis graag netjes en haarvrij", value: "no_hair" },
+  const homeOptions = [
     {
-      label: "Een beetje haar? Daar lig ik niet van wakker",
-      value: "some_hair",
+      label: "Bijna altijd, ik werk thuis of ben vaak thuis",
+      value: "mostly_home",
     },
-    { label: "Ik accepteer dat het erbij hoort", value: "accept_hair" },
+    { label: "Gedeeld – soms thuis, soms weg", value: "mixed" },
+    {
+      label: "Vaak van huis – hond moet alleen kunnen zijn",
+      value: "often_away",
+    },
   ];
+
+  const RadioButtonOption: React.FC<{
+    selected: boolean;
+    label: string;
+    onPress: () => void;
+  }> = ({ selected, label, onPress }) => (
+    <TouchableOpacity style={styles.radioRow} onPress={onPress}>
+      <View style={styles.radioOuter}>
+        {selected && <View style={styles.radioInner} />}
+      </View>
+      <BaseText style={styles.answerText}>{label}</BaseText>
+    </TouchableOpacity>
+  );
 
   return (
     <SafeAreaView style={styles.container}>
@@ -107,49 +133,45 @@ export default function GroomingCoat() {
         >
           <Ionicons name="arrow-back" size={24} color="#183A36" />
         </TouchableOpacity>
-        <BaseText style={styles.headerTitle} variant="title">
-          Verzorging & vacht
+        <BaseText variant="title" style={styles.headerTitle}>
+          Woonsituatie
         </BaseText>
       </View>
 
       <View style={styles.progressBar}>
-        <View style={styles.progressFill6} />
+        <View style={styles.progressFill1} />
       </View>
 
-      <BaseText style={styles.question}>
-        Hoeveel verzorging wil je geven?
-      </BaseText>
-      {groomingOptions.map((opt) => (
-        <TouchableOpacity
+      <BaseText style={styles.question}>Waar woon je?</BaseText>
+      {livingOptions.map((opt) => (
+        <RadioButtonOption
           key={opt.value}
-          style={styles.radioRow}
-          onPress={() => handleAnswer("grooming", opt.value)}
-        >
-          <RadioButton selected={answers.grooming === opt.value} />
-          <BaseText style={styles.answerText}>{opt.label}</BaseText>
-        </TouchableOpacity>
+          label={opt.label}
+          selected={answers.livingSituation === opt.value}
+          onPress={() => handleAnswer("livingSituation", opt.value)}
+        />
       ))}
 
       <BaseText style={[styles.question, { marginTop: 32 }]}>
-        Wat vind je van hondenhaar in huis?
+        Hoe vaak ben je thuis?
       </BaseText>
-      {sheddingOptions.map((opt) => (
-        <TouchableOpacity
+      {homeOptions.map((opt) => (
+        <RadioButtonOption
           key={opt.value}
-          style={styles.radioRow}
-          onPress={() => handleAnswer("shedding", opt.value)}
-        >
-          <RadioButton selected={answers.shedding === opt.value} />
-          <BaseText style={styles.answerText}>{opt.label}</BaseText>
-        </TouchableOpacity>
+          label={opt.label}
+          selected={answers.homeFrequency === opt.value}
+          onPress={() => handleAnswer("homeFrequency", opt.value)}
+        />
       ))}
 
       <TouchableOpacity
         style={[styles.button, !canNext && styles.buttonDisabled]}
-        onPress={() => router.push("/adoptieprofiel_results1")}
+        onPress={() => router.push("/experienceSize")}
         disabled={!canNext}
       >
-        <BaseText style={styles.buttonText}>VOLGENDE</BaseText>
+        <BaseText variant="button" style={styles.buttonText}>
+          VOLGENDE
+        </BaseText>
       </TouchableOpacity>
     </SafeAreaView>
   );
@@ -166,8 +188,8 @@ const styles = StyleSheet.create({
     position: "relative",
     justifyContent: "center",
     alignItems: "center",
-    height: 40,
     marginBottom: 16,
+    height: 40,
   },
   backButton: {
     position: "absolute",
@@ -178,9 +200,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 8,
   },
   headerTitle: {
-    fontFamily: "Sirenia-Regular",
-    fontSize: 20,
-    color: "#183A36",
     textAlign: "center",
   },
   progressBar: {
@@ -192,16 +211,14 @@ const styles = StyleSheet.create({
     overflow: "hidden",
     marginBottom: 20,
   },
-  progressFill6: {
-    width: "85.71%",
+  progressFill1: {
+    width: "14.28%",
     height: "100%",
     backgroundColor: "#FFD87E",
-    borderTopRightRadius: 3,
-    borderBottomRightRadius: 3,
   },
   question: {
-    fontFamily: "Nunito-Bold",
     fontSize: 18,
+    fontFamily: "Nunito-Bold",
     color: "#183A36",
     marginBottom: 8,
   },
@@ -227,8 +244,8 @@ const styles = StyleSheet.create({
     backgroundColor: "#97B8A5",
   },
   answerText: {
-    fontFamily: "Nunito-Regular",
     fontSize: 16,
+    fontFamily: "Nunito-Regular",
     color: "#183A36",
     flex: 1,
   },
@@ -239,10 +256,12 @@ const styles = StyleSheet.create({
     borderRadius: 25,
     alignItems: "center",
   },
-  buttonDisabled: { opacity: 0.5 },
+  buttonDisabled: {
+    opacity: 0.5,
+  },
   buttonText: {
-    fontFamily: "Nunito-Bold",
     fontSize: 16,
+    fontFamily: "Nunito-Bold",
     color: "#183A36",
   },
 });

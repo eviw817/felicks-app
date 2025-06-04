@@ -256,15 +256,6 @@ export default function AdoptieprofielResults() {
           topMatches.map(renderBreed)
         )}
 
-        <BaseText style={[styles.title, { marginTop: 32 }]}>
-          💡 Andere mogelijke matches
-        </BaseText>
-        {otherMatches.length === 0 ? (
-          <BaseText style={styles.empty}>Geen andere matches gevonden</BaseText>
-        ) : (
-          otherMatches.map(renderBreed)
-        )}
-
         <TouchableOpacity
           onPress={() => router.push("/homepage")}
           style={styles.button}

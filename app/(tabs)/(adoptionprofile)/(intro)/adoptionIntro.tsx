@@ -29,27 +29,27 @@ export default function AdoptieIntro() {
 
         <BaseText style={styles.subtitle}>Welkom op de adoptiepagina</BaseText>
 
-        <BaseText style={styles.paragraph}>
+        <BaseText style={styles.paragraph} variant="text">
           Wat fijn dat je geïnteresseerd bent in het adopteren van een hond!
           Hier vind je alle informatie die je nodig hebt om jouw nieuwe maatje
           te vinden.
         </BaseText>
-        <BaseText style={styles.paragraph}>
+        <BaseText style={styles.paragraph} variant="text">
           We begeleiden je stap voor stap in het proces en helpen je om een hond
           te kiezen die perfect past bij jouw levensstijl en voorkeuren.
         </BaseText>
-        <BaseText style={styles.paragraph}>
+        <BaseText style={styles.paragraph} variant="text">
           Zodra je jouw ideale hond hebt gevonden, kun je een aanvraag indienen.
           Wij zorgen ervoor dat je aanvraag bij het juiste asiel terechtkomt.
         </BaseText>
-        <BaseText style={styles.paragraph}>
+        <BaseText style={styles.paragraph} variant="text">
           Samen maken we een verschil en geven we deze honden een tweede kans op
           liefde en een thuis!
         </BaseText>
 
         <TouchableOpacity
           style={styles.button}
-          onPress={() => router.push("/(adoption)/missing_adoption_profile")}
+          onPress={() => router.push("/missingAdoptionProfile")}
         >
           <BaseText style={styles.buttonText}>DOORGAAN</BaseText>
         </TouchableOpacity>
@@ -79,9 +79,6 @@ const styles = StyleSheet.create({
     left: 0,
   },
   title: {
-    fontSize: 22,
-    fontFamily: "Sirenia-Regular",
-    color: "#183A36",
     textAlign: "center",
   },
   subtitle: {

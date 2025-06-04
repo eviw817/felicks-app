@@ -106,7 +106,7 @@ export default function ExperienceSize() {
         >
           <Ionicons name="arrow-back" size={24} color="#183A36" />
         </TouchableOpacity>
-        <BaseText style={styles.headerTitle} variant="title">
+        <BaseText variant="title" style={styles.headerTitle}>
           Ervaring & grootte
         </BaseText>
       </View>
@@ -145,7 +145,7 @@ export default function ExperienceSize() {
 
       <TouchableOpacity
         style={[styles.button, !canNext && styles.buttonDisabled]}
-        onPress={() => router.push("/family_environment")}
+        onPress={() => router.push("/familyEnvironment")}
         disabled={!canNext}
       >
         <BaseText style={styles.buttonText}>VOLGENDE</BaseText>
@@ -168,6 +168,9 @@ const styles = StyleSheet.create({
     height: 40,
     marginBottom: 16,
   },
+  headerTitle: {
+    textAlign: "center",
+  },
   backButton: {
     position: "absolute",
     left: 0,
@@ -175,12 +178,6 @@ const styles = StyleSheet.create({
     bottom: 0,
     justifyContent: "center",
     paddingHorizontal: 8,
-  },
-  headerTitle: {
-    fontFamily: "Sirenia-Regular",
-    fontSize: 20,
-    color: "#183A36",
-    textAlign: "center",
   },
   progressBar: {
     width: "100%",

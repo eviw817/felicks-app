@@ -116,7 +116,7 @@ export default function HomepageScreen() {
       >
         <BaseText
           style={{
-            fontFamily: 'SireniaMedium',
+            fontFamily: "SireniaMedium",
             fontSize: 28,
             padding: 20,
             marginTop: 50,
@@ -306,7 +306,7 @@ export default function HomepageScreen() {
           <Link
             href="/artikelsIndex"
             style={{
-             padding: 12,
+              padding: 12,
               margin: 20,
               paddingHorizontal: 20,
               paddingVertical: 15,
@@ -379,7 +379,6 @@ export default function HomepageScreen() {
                   alignItems: "center",
                   flexDirection: "row",
                   gap: 4,
-                  
                 }}
               >
                 <Text
@@ -390,7 +389,7 @@ export default function HomepageScreen() {
                 >
                   Naam:
                 </Text>
-                <Text style={{color: "#183A36"}}>Basiel</Text>
+                <Text style={{ color: "#183A36" }}>Basiel</Text>
               </View>
               <View
                 style={{
@@ -403,12 +402,12 @@ export default function HomepageScreen() {
                 <Text
                   style={{
                     fontWeight: "bold",
-                    color: "#183A36"
+                    color: "#183A36",
                   }}
                 >
                   leeftijd:
                 </Text>
-                <Text style={{color: "#183A36"}}>4 jaar</Text>
+                <Text style={{ color: "#183A36" }}>4 jaar</Text>
               </View>
               <View
                 style={{
@@ -421,12 +420,12 @@ export default function HomepageScreen() {
                 <Text
                   style={{
                     fontWeight: "bold",
-                    color: "#183A36"
+                    color: "#183A36",
                   }}
                 >
                   Ras:
                 </Text>
-                <Text style={{color: "#183A36"}}>Labrador retriever</Text>
+                <Text style={{ color: "#183A36" }}>Labrador retriever</Text>
               </View>
               <View
                 style={{
@@ -439,7 +438,7 @@ export default function HomepageScreen() {
                 <Text
                   style={{
                     fontWeight: "bold",
-                    color: "#183A36"
+                    color: "#183A36",
                   }}
                 >
                   Asiel:
@@ -447,7 +446,7 @@ export default function HomepageScreen() {
                 <Text
                   style={{
                     paddingRight: 150,
-                    color: "#183A36"
+                    color: "#183A36",
                   }}
                 >
                   Dierenbescherming Mechelen
@@ -497,18 +496,17 @@ export default function HomepageScreen() {
                   alignItems: "center",
                   flexDirection: "row",
                   gap: 4,
-         
                 }}
               >
                 <Text
                   style={{
                     fontWeight: "bold",
-                    color: "#183A36"
+                    color: "#183A36",
                   }}
                 >
                   Naam:
                 </Text>
-                <Text style={{color: "#183A36"}}>Ollie</Text>
+                <Text style={{ color: "#183A36" }}>Ollie</Text>
               </View>
               <View
                 style={{
@@ -521,12 +519,12 @@ export default function HomepageScreen() {
                 <Text
                   style={{
                     fontWeight: "bold",
-                    color: "#183A36"
+                    color: "#183A36",
                   }}
                 >
                   leeftijd:
                 </Text>
-                <Text style={{color: "#183A36"}}>4 jaar</Text>
+                <Text style={{ color: "#183A36" }}>4 jaar</Text>
               </View>
               <View
                 style={{
@@ -539,12 +537,14 @@ export default function HomepageScreen() {
                 <Text
                   style={{
                     fontWeight: "bold",
-                    color: "#183A36"
+                    color: "#183A36",
                   }}
                 >
                   Ras:
                 </Text>
-                <Text style={{color: "#183A36"}}>Basset Fauve de Bretagne</Text>
+                <Text style={{ color: "#183A36" }}>
+                  Basset Fauve de Bretagne
+                </Text>
               </View>
               <View
                 style={{
@@ -557,7 +557,7 @@ export default function HomepageScreen() {
                 <Text
                   style={{
                     fontWeight: "bold",
-                    color: "#183A36"
+                    color: "#183A36",
                   }}
                 >
                   Asiel:
@@ -565,7 +565,7 @@ export default function HomepageScreen() {
                 <Text
                   style={{
                     paddingRight: 150,
-                    color: "#183A36"
+                    color: "#183A36",
                   }}
                 >
                   Dierenbescherming Mechelen

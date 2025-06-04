@@ -81,17 +81,17 @@ export default function BaseText({
 
   const variantStyles = {
     text: {
-      fontFamily: "Nunito-Regular", //standaardstijl
+      fontFamily: "NunitoRegular", //standaardstijl
       fontSize: 16,
       color: "#183A36",
     },
     title: {
-      fontFamily: "Sirenia-Medium",
+      fontFamily: "SireniaMedium",
       fontSize: 24,
       color: "#183A36",
     },
     button: {
-      fontFamily: "Nunito-Bold",
+      fontFamily: "NunitoBold",
       fontSize: 14,
       color: "#183A36",
       textTransform: "uppercase",

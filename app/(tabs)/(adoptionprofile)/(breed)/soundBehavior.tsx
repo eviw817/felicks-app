@@ -146,7 +146,7 @@ export default function GroomingCoat() {
 
       <TouchableOpacity
         style={[styles.button, !canNext && styles.buttonDisabled]}
-        onPress={() => router.push("/adoptieprofiel_results1")}
+        onPress={() => router.push("/adoptionprofileResults")}
         disabled={!canNext}
       >
         <BaseText style={styles.buttonText}>VOLGENDE</BaseText>
@@ -169,6 +169,9 @@ const styles = StyleSheet.create({
     height: 40,
     marginBottom: 16,
   },
+  headerTitle: {
+    textAlign: "center",
+  },
   backButton: {
     position: "absolute",
     left: 0,
@@ -176,12 +179,6 @@ const styles = StyleSheet.create({
     bottom: 0,
     justifyContent: "center",
     paddingHorizontal: 8,
-  },
-  headerTitle: {
-    fontFamily: "Sirenia-Regular",
-    fontSize: 20,
-    color: "#183A36",
-    textAlign: "center",
   },
   progressBar: {
     width: "100%",

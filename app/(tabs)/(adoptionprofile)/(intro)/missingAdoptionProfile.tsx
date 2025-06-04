@@ -33,7 +33,7 @@ export default function MissingAdoptionProfile() {
 
       <TouchableOpacity
         style={styles.button}
-        onPress={() => router.push("/(adoption)/adoption_choice")}
+        onPress={() => router.push("/adoptionChoice")}
       >
         <BaseText style={styles.buttonText}>GA NAAR ADOPTIEPROFIEL</BaseText>
       </TouchableOpacity>
@@ -60,9 +60,6 @@ const styles = StyleSheet.create({
     left: 0,
   },
   title: {
-    fontSize: 22,
-    fontFamily: "Sirenia-Regular",
-    color: "#183A36",
     textAlign: "center",
   },
   text: {

@@ -67,7 +67,7 @@ export default function PersonalityTraits() {
     if (error) {
       Alert.alert("Fout", "Kon voorkeur niet opslaan.");
     } else {
-      router.push("/dog_age");
+      router.push("/dogAge");
     }
   };
 
