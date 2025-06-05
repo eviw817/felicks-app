@@ -49,7 +49,7 @@ const ProfileScreen = () => {
       const [avatarUrl, setAvatarUrl] = useState<string | null>(null)
       const [userId, setUserId] = useState<string | null>(null);
       const [loading, setLoading] = useState(true);
-      const [formSubmitted, setFormSubmitted] = useState(false);
+// Removed unused formSubmitted state declaration.
       const [formStatus, setFormStatus] = useState<"niet_ingediend" | "ingediend" | "goedgekeurd" | "in_behandeling">("niet_ingediend");
       const [matches, setMatches] = useState<{ dog: Dog; score: number }[]>([]);
       const [likedDogs, setLikedDogs] = useState<Dog[]>([]);
