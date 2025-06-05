@@ -5,7 +5,8 @@ import {
   Text,
   TouchableOpacity,
   ActivityIndicator,
-  Pressable
+  Pressable, 
+  Alert
 } from "react-native";
 import { BeagleScene } from "@/components/augumented-dog/scenes/BeagleScene";
 import { ViroARSceneNavigator } from "@reactvision/react-viro";
@@ -39,10 +40,14 @@ type NotificationSummary = {
 const AugmentedDog: React.FC = () => {
    const router = useRouter();
   const navigation = useNavigation()
-  const { petId, notificationId } = useLocalSearchParams<{
+  const { petId, notificationId, fromArInfo } = useLocalSearchParams<{
     petId: string;
     notificationId?: string;
+    fromArInfo?: string;
   }>();
+
+  const cameFromArInfo = fromArInfo === 'true';
+  const [showOverlay, setShowOverlay] = useState(false);
 
   const [status, setStatus] = useState<DogStatus | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
@@ -99,6 +104,11 @@ const AugmentedDog: React.FC = () => {
       console.warn("petId ontbreekt!");
       setLoading(false);
       return;
+    }
+
+    if (cameFromArInfo) {
+      console.log("User came from arInformation screen");
+      setShowOverlay(true); // show the alert overlay
     }
 
     const fetchStatusEnNotifications = async () => {
@@ -163,7 +173,7 @@ const AugmentedDog: React.FC = () => {
     };
 
     fetchStatusEnNotifications();
-  }, [petId, notificationId]);
+  }, [petId, notificationId, cameFromArInfo]);
 
   const getCurrentMessages = (): string[] => {
     if (
@@ -249,6 +259,38 @@ const AugmentedDog: React.FC = () => {
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
+      {showOverlay && (
+        <Pressable
+          style={{
+            position: "absolute",
+            top: 0,
+            bottom: 0,
+            left: 0,
+            right: 0,
+            backgroundColor: "rgba(0, 0, 0, 0.5)",
+            justifyContent: "center",
+            alignItems: "center",
+            zIndex: 100,
+          }}
+          onPress={() => setShowOverlay(false)} // close when tapped anywhere
+        >
+          <View style={{
+            backgroundColor: "#fff",
+            padding: 24,
+            borderRadius: 12,
+            maxWidth: "80%",
+          }}>
+            <Text style={{
+              textAlign: "center",
+              fontSize: 16,
+            }}>
+              Scan de kamer zodat je vriend weet waar jij bent!
+              {"\n\n"}Klik op het scherm om deze melding te sluiten.
+            </Text>
+          </View>
+        </Pressable>
+      )}
+
       <ViroARSceneNavigator
         autofocus={true}
         initialScene={{

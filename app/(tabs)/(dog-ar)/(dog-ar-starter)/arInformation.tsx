@@ -274,7 +274,7 @@ export default function DogInformation() {
               borderRadius: 15,
               textAlign: "center",
             }}
-            href={`/demo?petId=${petId}`}
+            href={`/demo?petId=${petId}&fromArInfo=true`}
           >
             DOORGAAN
           </Link>
