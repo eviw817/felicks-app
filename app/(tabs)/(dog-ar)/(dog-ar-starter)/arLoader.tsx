@@ -3,9 +3,14 @@ import { View, Text, StyleSheet } from "react-native";
 import { useRouter, useLocalSearchParams } from "expo-router";
 import LottieView from "lottie-react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { supabase } from "@/lib/supabase"; // adjust if your path is different
+import { supabase } from "@/lib/supabase";
+import { useFonts } from "expo-font";
 
 export default function Index() {
+  const [fontsLoaded] = useFonts({
+    NunitoBold: require("@/assets/fonts/Nunito/NunitoBold.ttf"),
+  });
+
   const router = useRouter();
 
   const { petId } = useLocalSearchParams();
@@ -13,6 +18,10 @@ export default function Index() {
   const [dogName, setDogName] = React.useState("");
   const [loading, setLoading] = React.useState(true);
   const [fetchError, setFetchError] = React.useState("");
+
+  if (!fontsLoaded) {
+    return <View />;
+  }
 
   React.useEffect(() => {
     console.log("DogInformation petId:", petId); // <-- Debug: log petId here
@@ -80,14 +89,14 @@ export default function Index() {
       />
       <Text
         style={{
-          fontFamily: "Nunito",
-          fontWeight: "bold",
+          fontFamily: "NunitoBold",
           fontSize: 24,
           padding: 20,
           textAlign: "center",
         }}
       >
-        {capitalizeFirstLetter(dogName || "nog geen naam")} wordt op jouw profiel ontworpen
+        {capitalizeFirstLetter(dogName || "nog geen naam")} wordt op jouw
+        profiel ontworpen
       </Text>
     </SafeAreaView>
   );

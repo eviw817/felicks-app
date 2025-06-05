@@ -2,12 +2,16 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { View, Text, Image, ScrollView } from "react-native";
 import { Link } from "expo-router";
 import NavBar from "@/components/NavigationBar";
-import { useFonts } from 'expo-font';
+import { useFonts } from "expo-font";
 import BaseText from "@/components/BaseText";
 
 export default function DogStart() {
   const [fontsLoaded] = useFonts({
-    'SireniaSemiBold': require("@/assets/fonts/Sirenia/SireniaSemiBold.ttf"),
+    NunitoRegular: require("@/assets/fonts/Nunito/NunitoRegular.ttf"),
+    NunitoSemiBold: require("@/assets/fonts/Nunito/NunitoSemiBold.ttf"),
+    NunitoBold: require("@/assets/fonts/Nunito/NunitoBold.ttf"),
+    SireniaMedium: require("@/assets/fonts/Sirenia/SireniaMedium.ttf"),
+    SireniaSemiBold: require("@/assets/fonts/Sirenia/SireniaSemiBold.ttf"),
   });
 
   if (!fontsLoaded) {
@@ -30,23 +34,21 @@ export default function DogStart() {
           marginTop: 40,
           justifyContent: "flex-start",
           paddingRight: 140,
-          
         }}
       >
         <BaseText
           style={{
-              fontSize: 28,
-              fontFamily: 'SireniaMedium',
-              textAlign: "center",
-              padding: 20,
+            fontSize: 28,
+            fontFamily: "SireniaMedium",
+            textAlign: "center",
+            padding: 20,
           }}
         >
           Welkom bij de virtuele hond
         </BaseText>
         <Text
           style={{
-            fontFamily: "Nunito",
-            fontWeight: "bold",
+            fontFamily: "NunitoBold",
             fontSize: 16,
             paddingHorizontal: 20,
             color: "#183A36",
@@ -57,16 +59,15 @@ export default function DogStart() {
         </Text>
         <Text
           style={{
-            fontFamily: "Nunito",
-            fontWeight: "normal",
+            fontFamily: "NunitoRegular",
             fontSize: 16,
             paddingHorizontal: 20,
             color: "#183A36",
           }}
         >
           Maar ben jij er klaar voor? {"\n"}
-          Dan is deze ervaring precies wat je nodig
-          hebt om daar achter te komen!
+          Dan is deze ervaring precies wat je nodig hebt om daar achter te
+          komen!
         </Text>
         <View
           style={{
@@ -89,8 +90,7 @@ export default function DogStart() {
           <View>
             <Text
               style={{
-                fontFamily: "Nunito",
-                fontWeight: "bold",
+                fontFamily: "NunitoBold",
                 fontSize: 16,
                 paddingHorizontal: 20,
                 color: "#183A36",
@@ -100,8 +100,7 @@ export default function DogStart() {
             </Text>
             <Text
               style={{
-                fontFamily: "Nunito",
-                fontWeight: "normal",
+                fontFamily: "NunitoRegular",
                 fontSize: 16,
                 paddingHorizontal: 20,
                 marginRight: 100,
@@ -138,8 +137,7 @@ export default function DogStart() {
           >
             <Text
               style={{
-                fontFamily: "Nunito",
-                fontWeight: "bold",
+                fontFamily: "NunitoBold",
                 fontSize: 16,
                 paddingHorizontal: 20,
                 color: "#183A36",
@@ -149,8 +147,7 @@ export default function DogStart() {
             </Text>
             <Text
               style={{
-                fontFamily: "Nunito",
-                fontWeight: "normal",
+                fontFamily: "NunitoRegular",
                 fontSize: 16,
                 paddingHorizontal: 20,
                 marginRight: 120,
@@ -161,31 +158,31 @@ export default function DogStart() {
             </Text>
           </View>
         </View>
-      
+
         <Text
-              style={{
-                fontFamily: "Nunito",
-                fontWeight: "bold",
-                fontSize: 16,
-                paddingHorizontal: 20,
-                color: "#183A36",
-                marginTop: 20,
-              }}
-            >
-              Niet te vergeten!
-            </Text>
-            <Text
-              style={{
-                fontFamily: "Nunito",
-                fontWeight: "regular",
-                fontSize: 16,
-                paddingHorizontal: 20,
-                color: "#183A36",
-              }}
-            >
-              Het is leerzaam, leuk én helemaal gratis!
-            </Text>
-            <Link
+          style={{
+            fontFamily: "Nunito",
+            fontWeight: "bold",
+            fontSize: 16,
+            paddingHorizontal: 20,
+            color: "#183A36",
+            marginTop: 20,
+          }}
+        >
+          Niet te vergeten!
+        </Text>
+        <Text
+          style={{
+            fontFamily: "Nunito",
+            fontWeight: "regular",
+            fontSize: 16,
+            paddingHorizontal: 20,
+            color: "#183A36",
+          }}
+        >
+          Het is leerzaam, leuk én helemaal gratis!
+        </Text>
+        <Link
           style={{
             padding: 12,
             margin: 20,

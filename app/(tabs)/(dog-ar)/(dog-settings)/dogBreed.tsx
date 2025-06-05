@@ -19,11 +19,23 @@ import { useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import BaseText from "@/components/BaseText";
+import { useFonts } from "expo-font";
 
 export default function DogBreed() {
+  const [fontsLoaded] = useFonts({
+    NunitoRegular: require("@/assets/fonts/Nunito/NunitoRegular.ttf"),
+    NunitoSemiBold: require("@/assets/fonts/Nunito/NunitoSemiBold.ttf"),
+    NunitoBold: require("@/assets/fonts/Nunito/NunitoBold.ttf"),
+    SireniaMedium: require("@/assets/fonts/Sirenia/SireniaMedium.ttf"),
+  });
+
   const router = useRouter();
   const [dogBreed, setdogBreed] = useState<string | null>(null);
   const navigation = useNavigation();
+
+  if (!fontsLoaded) {
+    return <View />;
+  }
 
   const handleBreedSubmit = async () => {
     if (!dogBreed) return;
@@ -123,7 +135,7 @@ export default function DogBreed() {
         >
           <TouchableOpacity
             onPress={() => router.push("/dogStart")}
-            style={{ position: "absolute", left: 5, top: 7 }}
+            style={{ position: "absolute", left: 5, top: 7, zIndex: 10 }}
           >
             <FontAwesomeIcon
               icon={faArrowLeft}
@@ -145,7 +157,7 @@ export default function DogBreed() {
         </View>
         <Text
           style={{
-            fontFamily: "Nunito",
+            fontFamily: "NunitoRegular",
             fontSize: 16,
             marginTop: 20,
             color: "#183A36",
@@ -155,7 +167,7 @@ export default function DogBreed() {
         </Text>
         <Text
           style={{
-            fontFamily: "Nunito",
+            fontFamily: "NunitoRegular",
             fontSize: 16,
             marginTop: 12,
             color: "#183A36",
@@ -208,7 +220,7 @@ export default function DogBreed() {
           >
             <Text
               style={{
-                fontWeight: "bold",
+                fontFamily: "NunitoBold",
                 fontSize: 15,
                 color: "#183A36",
                 textAlign: "center",

@@ -17,14 +17,26 @@ import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import BaseText from "@/components/BaseText";
 import { useNavigation } from "@react-navigation/native";
+import { useFonts } from "expo-font";
 
 export default function DogName() {
+  const [fontsLoaded] = useFonts({
+    NunitoRegular: require("@/assets/fonts/Nunito/NunitoRegular.ttf"),
+    NunitoSemiBold: require("@/assets/fonts/Nunito/NunitoSemiBold.ttf"),
+    NunitoBold: require("@/assets/fonts/Nunito/NunitoBold.ttf"),
+    SireniaMedium: require("@/assets/fonts/Sirenia/SireniaMedium.ttf"),
+  });
+
   const router = useRouter();
   const { petId } = useLocalSearchParams();
   const [text, onChangeText] = React.useState("");
   const [dogBreed, setDogBreed] = React.useState<string>("");
   const [dogName, setDogName] = React.useState<string>("");
   const navigation = useNavigation();
+
+  if (!fontsLoaded) {
+    return <View />;
+  }
 
   React.useEffect(() => {
     if (petId && typeof petId === "string" && petId.length > 0) {
@@ -77,7 +89,7 @@ export default function DogName() {
     // ✅ Correct dynamic navigation:
     router.push(`/dogInformation?petId=${petId}`);
   };
- 
+
   return (
     <SafeAreaView
       style={{
@@ -98,8 +110,8 @@ export default function DogName() {
         }}
       >
         <TouchableOpacity
-          onPress={() => router.push("/dogStart")}
-          style={{ position: "absolute", left: 5, top: 7 }}
+          onPress={() => router.push(`/dogBreed?petId=${petId}`)}
+          style={{ position: "absolute", left: 5, top: 7, zIndex: 10 }}
         >
           <FontAwesomeIcon
             icon={faArrowLeft}
@@ -121,8 +133,7 @@ export default function DogName() {
       </View>
       <Text
         style={{
-          fontFamily: "Nunito",
-          fontWeight: "bold",
+          fontFamily: "NunitoBold",
           fontSize: 20,
           padding: 20,
           color: "#183A36",
@@ -132,8 +143,7 @@ export default function DogName() {
       </Text>
       <Text
         style={{
-          fontFamily: "Nunito",
-          fontWeight: "normal",
+          fontFamily: "NunitoRegular",
           fontSize: 16,
           padding: 20,
           paddingTop: 12,
@@ -145,8 +155,7 @@ export default function DogName() {
       </Text>
       <Text
         style={{
-          fontFamily: "Nunito",
-          fontWeight: "bold",
+          fontFamily: "NunitoBold",
           fontSize: 16,
           padding: 20,
           paddingTop: 16,
@@ -196,7 +205,13 @@ export default function DogName() {
           shadowRadius: 4,
         }}
       >
-        <Text style={{ color: "#183A36", fontSize: 16, fontWeight: "bold" }}>
+        <Text
+          style={{
+            color: "#183A36",
+            fontSize: 16,
+            fontFamily: "NunitoBold",
+          }}
+        >
           OPSLAAN
         </Text>
       </TouchableOpacity>

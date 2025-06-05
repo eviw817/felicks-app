@@ -17,8 +17,16 @@ import { supabase } from "@/lib/supabase";
 import NavBar from "@/components/NavigationBar";
 import { useNavigation } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
+import { useFonts } from "expo-font";
 
 export default function UserPermissions() {
+  const [fontsLoaded] = useFonts({
+    NunitoRegular: require("@/assets/fonts/Nunito/NunitoRegular.ttf"),
+    NunitoSemiBold: require("@/assets/fonts/Nunito/NunitoSemiBold.ttf"),
+    NunitoBold: require("@/assets/fonts/Nunito/NunitoBold.ttf"),
+    SireniaMedium: require("@/assets/fonts/Sirenia/SireniaMedium.ttf"),
+  });
+
   const router = useRouter();
   const navigation = useNavigation();
 
@@ -36,6 +44,10 @@ export default function UserPermissions() {
   const { petId } = useLocalSearchParams();
 
   const [dogName, setDogName] = React.useState("");
+
+  if (!fontsLoaded) {
+    return <View />;
+  }
 
   React.useEffect(() => {
     console.log("DogInformation petId:", petId);
@@ -157,54 +169,53 @@ export default function UserPermissions() {
   }, []);
 
   const handleSave = async () => {
-  setLoading(true);
-  setFetchError("");
+    setLoading(true);
+    setFetchError("");
 
-  const {
-    data: { user },
-    error: userError,
-  } = await supabase.auth.getUser();
+    const {
+      data: { user },
+      error: userError,
+    } = await supabase.auth.getUser();
 
-  if (userError || !user) {
-    setFetchError("Failed to get user info.");
-    setLoading(false);
-    return;
-  }
-
-  const settingsPayload = {
-    user_id: user.id,
-    push_notifications: isNotificationEnabled,
-    sound_permission: isSoundEnabled,
-    camera_permission: isCameraEnabled,
-  };
-
-  try {
-    const { error } = await supabase
-      .from("user_settings")
-      .upsert(settingsPayload, { onConflict: "user_id" });
-
-    if (error) {
-      setFetchError(error.message);
-      Alert.alert("Error", "Failed to save settings.");
-    } else {
-      // 👇 Check if any toggle is disabled
-      const anyDisabled =
-        !isNotificationEnabled || !isSoundEnabled || !isCameraEnabled;
-
-      if (anyDisabled) {
-        router.push(`/dogPermissionsCheck?petId=${petId}`);
-      } else {
-        router.push(`/dogFeaturesInfo?petId=${petId}`);
-      }
+    if (userError || !user) {
+      setFetchError("Failed to get user info.");
+      setLoading(false);
+      return;
     }
-  } catch (e) {
-    setFetchError("Error saving settings");
-    Alert.alert("Error", "Something went wrong while saving.");
-  } finally {
-    setLoading(false);
-  }
-};
 
+    const settingsPayload = {
+      user_id: user.id,
+      push_notifications: isNotificationEnabled,
+      sound_permission: isSoundEnabled,
+      camera_permission: isCameraEnabled,
+    };
+
+    try {
+      const { error } = await supabase
+        .from("user_settings")
+        .upsert(settingsPayload, { onConflict: "user_id" });
+
+      if (error) {
+        setFetchError(error.message);
+        Alert.alert("Error", "Failed to save settings.");
+      } else {
+        // 👇 Check if any toggle is disabled
+        const anyDisabled =
+          !isNotificationEnabled || !isSoundEnabled || !isCameraEnabled;
+
+        if (anyDisabled) {
+          router.push(`/dogPermissionsCheck?petId=${petId}`);
+        } else {
+          router.push(`/dogFeaturesInfo?petId=${petId}`);
+        }
+      }
+    } catch (e) {
+      setFetchError("Error saving settings");
+      Alert.alert("Error", "Something went wrong while saving.");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <SafeAreaView
@@ -223,8 +234,8 @@ export default function UserPermissions() {
           marginRight: 20,
         }}
       >
-        <Pressable
-          onPress={() => navigation.goBack()}
+        <TouchableOpacity
+          onPress={() => router.push(`/dogInformation?petId=${petId}`)}
           style={{
             position: "absolute",
             top: 68,
@@ -232,7 +243,7 @@ export default function UserPermissions() {
           }}
         >
           <Ionicons name="arrow-back" size={24} color="#183A36" />
-        </Pressable>
+        </TouchableOpacity>
         <Text
           style={{
             fontFamily: "Nunito",
@@ -372,7 +383,7 @@ export default function UserPermissions() {
             spelen of naar buiten moet
           </Text>
         </View>
-        
+
         <Text
           style={{
             fontFamily: "Nunito",
@@ -451,7 +462,6 @@ export default function UserPermissions() {
             paddingVertical: 10,
           }}
         >
-          
           <Text
             style={{
               fontFamily: "Nunito",
@@ -483,7 +493,6 @@ export default function UserPermissions() {
             paddingVertical: 10,
           }}
         >
-          
           <Text
             style={{
               fontFamily: "Nunito",

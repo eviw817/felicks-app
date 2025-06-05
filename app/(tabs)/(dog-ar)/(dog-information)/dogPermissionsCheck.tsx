@@ -9,18 +9,26 @@ import {
   Animated,
   Easing,
   Alert,
-  Pressable
+  Pressable,
 } from "react-native";
 import { useRouter, useLocalSearchParams } from "expo-router";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import { supabase } from "@/lib/supabase";
 import NavBar from "@/components/NavigationBar";
-import { useNavigation } from '@react-navigation/native'
-import { Ionicons } from '@expo/vector-icons'
+import { useNavigation } from "@react-navigation/native";
+import { Ionicons } from "@expo/vector-icons";
+import { useFonts } from "expo-font";
 
 export default function UserPermissions() {
+  const [fontsLoaded] = useFonts({
+    NunitoRegular: require("@/assets/fonts/Nunito/NunitoRegular.ttf"),
+    NunitoSemiBold: require("@/assets/fonts/Nunito/NunitoSemiBold.ttf"),
+    NunitoBold: require("@/assets/fonts/Nunito/NunitoBold.ttf"),
+    SireniaMedium: require("@/assets/fonts/Sirenia/SireniaMedium.ttf"),
+  });
+
   const router = useRouter();
-  const navigation = useNavigation()
+  const navigation = useNavigation();
 
   const [loading, setLoading] = useState(true);
   const [fetchError, setFetchError] = useState("");
@@ -36,6 +44,10 @@ export default function UserPermissions() {
   const { petId } = useLocalSearchParams();
 
   const [dogName, setDogName] = React.useState("");
+
+  if (!fontsLoaded) {
+    return <View />;
+  }
 
   React.useEffect(() => {
     console.log("DogInformation petId:", petId); // <-- Debug: log petId here
@@ -163,53 +175,53 @@ export default function UserPermissions() {
   }, []);
 
   const handleSave = async () => {
-  if (!isCameraEnabled && !isNotificationEnabled) {
-    Alert.alert(
-      "Toestemming vereist",
-      "U moet minstens camera of meldingen inschakelen om door te gaan."
-    );
-    return; // Stop saving
-  }
-
-  setLoading(true);
-  setFetchError("");
-
-  const {
-    data: { user },
-    error: userError,
-  } = await supabase.auth.getUser();
-
-  if (userError || !user) {
-    setFetchError("Failed to get user info.");
-    setLoading(false);
-    return;
-  }
-
-  const settingsPayload = {
-    user_id: user.id,
-    push_notifications: isNotificationEnabled,
-    sound_permission: isSoundEnabled,
-    camera_permission: isCameraEnabled,
-  };
-
-  try {
-    const { error } = await supabase
-      .from("user_settings")
-      .upsert(settingsPayload, { onConflict: "user_id" });
-
-    if (error) {
-      setFetchError(error.message);
-      Alert.alert("Error", "Failed to save settings.");
-    } else {
-      router.push(`/dogFeaturesInfo?petId=${petId}`);
+    if (!isCameraEnabled && !isNotificationEnabled) {
+      Alert.alert(
+        "Toestemming vereist",
+        "U moet minstens camera of meldingen inschakelen om door te gaan."
+      );
+      return; // Stop saving
     }
-  } catch (e) {
-    setFetchError("Error saving settings");
-    Alert.alert("Error", "Something went wrong while saving.");
-  } finally {
-    setLoading(false);
-  }
-};
+
+    setLoading(true);
+    setFetchError("");
+
+    const {
+      data: { user },
+      error: userError,
+    } = await supabase.auth.getUser();
+
+    if (userError || !user) {
+      setFetchError("Failed to get user info.");
+      setLoading(false);
+      return;
+    }
+
+    const settingsPayload = {
+      user_id: user.id,
+      push_notifications: isNotificationEnabled,
+      sound_permission: isSoundEnabled,
+      camera_permission: isCameraEnabled,
+    };
+
+    try {
+      const { error } = await supabase
+        .from("user_settings")
+        .upsert(settingsPayload, { onConflict: "user_id" });
+
+      if (error) {
+        setFetchError(error.message);
+        Alert.alert("Error", "Failed to save settings.");
+      } else {
+        router.push(`/dogFeaturesInfo?petId=${petId}`);
+      }
+    } catch (e) {
+      setFetchError("Error saving settings");
+      Alert.alert("Error", "Something went wrong while saving.");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <SafeAreaView
@@ -228,20 +240,19 @@ export default function UserPermissions() {
           marginRight: 20,
         }}
       >
-        <Pressable
-            onPress={() => navigation.goBack()}
-            style={{
-              position: "absolute",
-              top: 68,
-              left: 40,
-            }}
-          >
-            <Ionicons name="arrow-back" size={24} color="#183A36" />
-          </Pressable>
+        <TouchableOpacity
+          onPress={() => router.push(`/dogNotifications?petId=${petId}`)}
+          style={{
+            position: "absolute",
+            top: 68,
+            left: 40,
+          }}
+        >
+          <Ionicons name="arrow-back" size={24} color="#183A36" />
+        </TouchableOpacity>
         <Text
           style={{
-            fontFamily: "Nunito",
-            fontWeight: "bold",
+            fontFamily: "NunitoBold",
             fontSize: 20,
             padding: 20,
             textAlign: "center",
@@ -251,20 +262,19 @@ export default function UserPermissions() {
         </Text>
         <Text
           style={{
-            fontFamily: "Nunito",
-            fontWeight: "normal",
+            fontFamily: "NunitoRegular",
             fontSize: 16,
             paddingTop: 20,
             paddingLeft: 20,
             paddingRight: 40,
           }}
         >
-          U duidde aan om geen meldingen en camera toe te staan. Wij kunnen hierdoor jou niet Cooper maken. 
+          U duidde aan om geen meldingen en camera toe te staan. Wij kunnen
+          hierdoor jou niet Cooper maken.
         </Text>
         <Text
           style={{
-            fontFamily: "Nunito",
-            fontWeight: "normal",
+            fontFamily: "NunitoRegular",
             fontSize: 16,
             paddingBottom: 20,
             paddingLeft: 20,
@@ -275,8 +285,7 @@ export default function UserPermissions() {
         </Text>
         <Text
           style={{
-            fontFamily: "Nunito",
-            fontWeight: "bold",
+            fontFamily: "NunitoBold",
             fontSize: 16,
             padding: 20,
             paddingBottom: 8,
@@ -308,7 +317,7 @@ export default function UserPermissions() {
         >
           <Text
             style={{
-              fontFamily: "Nunito",
+              fontFamily: "NunitoRegylar",
               fontSize: 16,
               paddingVertical: 12,
             }}
@@ -335,7 +344,7 @@ export default function UserPermissions() {
         >
           <Text
             style={{
-              fontFamily: "Nunito",
+              fontFamily: "NunitoRegular",
               fontSize: 16,
               paddingVertical: 12,
             }}
@@ -362,7 +371,7 @@ export default function UserPermissions() {
         >
           <Text
             style={{
-              fontFamily: "Nunito",
+              fontFamily: "NunitoRegular",
               fontSize: 16,
               paddingVertical: 12,
             }}
@@ -392,7 +401,13 @@ export default function UserPermissions() {
           onPress={handleSave}
           disabled={loading}
         >
-          <Text style={{ color: "black", fontWeight: "bold", fontSize: 16 }}>
+          <Text
+            style={{
+              color: "black",
+              fontFamily: "Nunitobold",
+              fontSize: 16,
+            }}
+          >
             OPSLAAN
           </Text>
         </TouchableOpacity>
