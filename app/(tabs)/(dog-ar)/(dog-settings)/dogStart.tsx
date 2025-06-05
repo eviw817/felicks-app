@@ -21,16 +21,16 @@ export default function DogStart() {
         justifyContent: "center",
         alignItems: "center",
         backgroundColor: "#FFFDF9",
-         paddingTop: 20,
+        paddingTop: 20,
       }}
     >
       <ScrollView
         contentContainerStyle={{
           top: 1,
-          flex: 1,
           marginTop: 40,
           justifyContent: "flex-start",
           paddingRight: 140,
+          
         }}
       >
         <BaseText

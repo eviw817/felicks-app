@@ -9,18 +9,18 @@ import {
   Animated,
   Easing,
   Alert,
-  Pressable,
+  Pressable
 } from "react-native";
 import { useRouter, useLocalSearchParams } from "expo-router";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import { supabase } from "@/lib/supabase";
 import NavBar from "@/components/NavigationBar";
-import { useNavigation } from "@react-navigation/native";
-import { Ionicons } from "@expo/vector-icons";
+import { useNavigation } from '@react-navigation/native'
+import { Ionicons } from '@expo/vector-icons'
 
 export default function UserPermissions() {
   const router = useRouter();
-  const navigation = useNavigation();
+  const navigation = useNavigation()
 
   const [loading, setLoading] = useState(true);
   const [fetchError, setFetchError] = useState("");
@@ -38,7 +38,7 @@ export default function UserPermissions() {
   const [dogName, setDogName] = React.useState("");
 
   React.useEffect(() => {
-    console.log("DogInformation petId:", petId);
+    console.log("DogInformation petId:", petId); // <-- Debug: log petId here
 
     if (petId && typeof petId === "string" && petId.length > 0) {
       const fetchDogName = async () => {
@@ -51,7 +51,7 @@ export default function UserPermissions() {
           .eq("id", petId)
           .single();
 
-        console.log("Supabase fetch result:", { data, error });
+        console.log("Supabase fetch result:", { data, error }); // <-- Debug: log result
 
         if (error) {
           console.log("Error fetching dog name:", error.message);
@@ -66,11 +66,13 @@ export default function UserPermissions() {
 
       fetchDogName();
     } else {
+      // If petId is invalid or missing
       setLoading(false);
       setFetchError("Ongeldig of ontbrekend petId.");
     }
   }, [petId]);
 
+  // Animate toggle press
   const animateToggle = (anim: Animated.Value) => {
     Animated.sequence([
       Animated.timing(anim, {
@@ -88,6 +90,7 @@ export default function UserPermissions() {
     ]).start();
   };
 
+  // Toggle handlers
   const toggleSoundSwitch = () => {
     animateToggle(soundAnim);
     setIsSoundEnabled((prev) => !prev);
@@ -101,6 +104,7 @@ export default function UserPermissions() {
     setIsNotificationEnabled((prev) => !prev);
   };
 
+  // Load user settings on mount
   useEffect(() => {
     const fetchSettings = async () => {
       setLoading(true);
@@ -125,8 +129,10 @@ export default function UserPermissions() {
           .single();
 
         if (error && error.code !== "PGRST116") {
+          // PGRST116 = no rows found
           setFetchError(error.message);
         } else {
+          // If data is missing, default to true
           setIsNotificationEnabled(
             data?.push_notifications !== null &&
               data?.push_notifications !== undefined
@@ -157,6 +163,14 @@ export default function UserPermissions() {
   }, []);
 
   const handleSave = async () => {
+  if (!isCameraEnabled && !isNotificationEnabled) {
+    Alert.alert(
+      "Toestemming vereist",
+      "U moet minstens camera of meldingen inschakelen om door te gaan."
+    );
+    return; // Stop saving
+  }
+
   setLoading(true);
   setFetchError("");
 
@@ -187,15 +201,7 @@ export default function UserPermissions() {
       setFetchError(error.message);
       Alert.alert("Error", "Failed to save settings.");
     } else {
-      // 👇 Check if any toggle is disabled
-      const anyDisabled =
-        !isNotificationEnabled || !isSoundEnabled || !isCameraEnabled;
-
-      if (anyDisabled) {
-        router.push(`/dogPermissionsCheck?petId=${petId}`);
-      } else {
-        router.push(`/dogFeaturesInfo?petId=${petId}`);
-      }
+      router.push(`/dogFeaturesInfo?petId=${petId}`);
     }
   } catch (e) {
     setFetchError("Error saving settings");
@@ -204,7 +210,6 @@ export default function UserPermissions() {
     setLoading(false);
   }
 };
-
 
   return (
     <SafeAreaView
@@ -224,15 +229,15 @@ export default function UserPermissions() {
         }}
       >
         <Pressable
-          onPress={() => navigation.goBack()}
-          style={{
-            position: "absolute",
-            top: 68,
-            left: 40,
-          }}
-        >
-          <Ionicons name="arrow-back" size={24} color="#183A36" />
-        </Pressable>
+            onPress={() => navigation.goBack()}
+            style={{
+              position: "absolute",
+              top: 68,
+              left: 40,
+            }}
+          >
+            <Ionicons name="arrow-back" size={24} color="#183A36" />
+          </Pressable>
         <Text
           style={{
             fontFamily: "Nunito",
@@ -254,7 +259,7 @@ export default function UserPermissions() {
             paddingRight: 40,
           }}
         >
-          Geef toestemming voor camera, geluid en meldingen.
+          U duidde aan om geen meldingen en camera toe te staan. Wij kunnen hierdoor jou niet Cooper maken. 
         </Text>
         <Text
           style={{
@@ -266,125 +271,7 @@ export default function UserPermissions() {
             paddingRight: 40,
           }}
         >
-          Zo kunnen we jou helpen goed voor {dogName || "nog geen naam"} te
-          zorgen!
-        </Text>
-        <Text
-          style={{
-            fontFamily: "Nunito",
-            fontWeight: "bold",
-            fontSize: 16,
-            padding: 20,
-            paddingTop: 20,
-            paddingBottom: 0,
-          }}
-        >
-          Met deze instellingen kunnen we:
-        </Text>
-        <View
-          style={{
-            flexDirection: "row",
-            alignItems: "flex-start",
-            paddingHorizontal: 20,
-          }}
-        >
-          <Text
-            style={{
-              fontFamily: "Nunito",
-              fontWeight: "normal",
-              fontSize: 36,
-              paddingRight: 8,
-              lineHeight: 36,
-            }}
-          >
-            -
-          </Text>
-          <Text
-            style={{
-              fontFamily: "Nunito",
-              fontWeight: "normal",
-              fontSize: 16,
-              paddingRight: 50,
-              lineHeight: 32,
-            }}
-          >
-            {dogName || "nog geen naam"} tot leven brengen in AR
-          </Text>
-        </View>
-        <View
-          style={{
-            flexDirection: "row",
-            alignItems: "flex-start",
-            paddingHorizontal: 20,
-          }}
-        >
-          <Text
-            style={{
-              fontFamily: "Nunito",
-              fontWeight: "normal",
-              fontSize: 36,
-              paddingRight: 8,
-              lineHeight: 36,
-            }}
-          >
-            -
-          </Text>
-          <Text
-            style={{
-              fontFamily: "Nunito",
-              fontWeight: "normal",
-              fontSize: 16,
-              paddingRight: 12,
-              lineHeight: 32,
-            }}
-          >
-            Geluid gebruiken voor leuke interacties
-          </Text>
-        </View>
-        <View
-          style={{
-            flexDirection: "row",
-            alignItems: "flex-start",
-            paddingHorizontal: 20,
-          }}
-        >
-          <Text
-            style={{
-              fontFamily: "Nunito",
-              fontWeight: "normal",
-              fontSize: 36,
-              paddingRight: 8,
-              lineHeight: 36,
-            }}
-          >
-            -
-          </Text>
-          <Text
-            style={{
-              fontFamily: "Nunito",
-              fontWeight: "normal",
-              fontSize: 16,
-              paddingRight: 40,
-              lineHeight: 32,
-            }}
-          >
-            Je waarschuwen als {dogName || "nog geen naam"} honger heeft, wil
-            spelen of naar buiten moet
-          </Text>
-        </View>
-        
-        <Text
-          style={{
-            fontFamily: "Nunito",
-            fontWeight: "normal",
-            fontSize: 16,
-            padding: 20,
-            paddingRight: 30,
-            paddingTop: 12,
-          }}
-        >
-          Klaar om {dogName || "nog geen naam"} de beste zorg te geven? Zet de
-          schuifjes aan en druk op 'Opslaan' om verder te gaan!
+          Als u toch twijfelt kunt hier ook weg gaan via de navigatiebalk.
         </Text>
         <Text
           style={{
@@ -395,7 +282,7 @@ export default function UserPermissions() {
             paddingBottom: 8,
           }}
         >
-          Toestemming
+          Toestemmingen
         </Text>
 
         {fetchError ? (
@@ -417,17 +304,13 @@ export default function UserPermissions() {
             flexDirection: "row",
             justifyContent: "space-between",
             paddingHorizontal: 20,
-            paddingVertical: 10,
           }}
         >
           <Text
             style={{
               fontFamily: "Nunito",
-              fontWeight: "normal",
               fontSize: 16,
-              paddingLeft: 8,
-              marginTop: 8,
-              flexShrink: 1,
+              paddingVertical: 12,
             }}
           >
             Geluid
@@ -436,9 +319,9 @@ export default function UserPermissions() {
             <Switch
               trackColor={{ false: "#cac5c5", true: "#97b8a5" }}
               thumbColor={isSoundEnabled ? "#ececeb" : "#ececeb"}
-              ios_backgroundColor="#ececeb"
               onValueChange={toggleSoundSwitch}
               value={isSoundEnabled}
+              disabled={loading}
             />
           </Animated.View>
         </View>
@@ -448,18 +331,13 @@ export default function UserPermissions() {
             flexDirection: "row",
             justifyContent: "space-between",
             paddingHorizontal: 20,
-            paddingVertical: 10,
           }}
         >
-          
           <Text
             style={{
               fontFamily: "Nunito",
-              fontWeight: "normal",
               fontSize: 16,
-              paddingLeft: 8,
-              marginTop: 8,
-              flexShrink: 1,
+              paddingVertical: 12,
             }}
           >
             Camera
@@ -468,9 +346,9 @@ export default function UserPermissions() {
             <Switch
               trackColor={{ false: "#cac5c5", true: "#97b8a5" }}
               thumbColor={isCameraEnabled ? "#ececeb" : "#ececeb"}
-              ios_backgroundColor="#ececeb"
               onValueChange={toggleCameraSwitch}
               value={isCameraEnabled}
+              disabled={loading}
             />
           </Animated.View>
         </View>
@@ -480,18 +358,13 @@ export default function UserPermissions() {
             flexDirection: "row",
             justifyContent: "space-between",
             paddingHorizontal: 20,
-            paddingVertical: 10,
           }}
         >
-          
           <Text
             style={{
               fontFamily: "Nunito",
-              fontWeight: "normal",
               fontSize: 16,
-              paddingLeft: 8,
-              marginTop: 8,
-              flexShrink: 1,
+              paddingVertical: 12,
             }}
           >
             Meldingen
@@ -500,52 +373,29 @@ export default function UserPermissions() {
             <Switch
               trackColor={{ false: "#cac5c5", true: "#97b8a5" }}
               thumbColor={isNotificationEnabled ? "#ececeb" : "#ececeb"}
-              ios_backgroundColor="#ececeb"
               onValueChange={toggleNotificationSwitch}
               value={isNotificationEnabled}
+              disabled={loading}
             />
           </Animated.View>
         </View>
 
         <TouchableOpacity
-          onPress={handleSave}
           style={{
             backgroundColor: "#97B8A5",
-            marginVertical: 20,
-            marginHorizontal: 50,
-            borderRadius: 50,
-            paddingVertical: 15,
-            paddingHorizontal: 40,
+            margin: 20,
+            borderRadius: 15,
+            paddingVertical: 12,
+            paddingHorizontal: 20,
             alignItems: "center",
           }}
+          onPress={handleSave}
           disabled={loading}
         >
-          <Text
-            style={{
-              fontFamily: "Nunito",
-              fontWeight: "bold",
-              fontSize: 18,
-              color: "black",
-            }}
-          >
-            {loading ? "Bezig met opslaan..." : "OPSLAAN"}
+          <Text style={{ color: "black", fontWeight: "bold", fontSize: 16 }}>
+            OPSLAAN
           </Text>
         </TouchableOpacity>
-
-        {fetchError ? (
-          <Text
-            style={{
-              fontFamily: "Nunito",
-              fontWeight: "bold",
-              fontSize: 16,
-              padding: 20,
-              color: "red",
-              textAlign: "center",
-            }}
-          >
-            {fetchError}
-          </Text>
-        ) : null}
       </ScrollView>
       {/* Fixed navbar onderaan scherm */}
       <View
