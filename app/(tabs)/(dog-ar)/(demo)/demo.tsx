@@ -15,6 +15,7 @@ import { useLocalSearchParams } from "expo-router";
 import NavBar from "@/components/NavigationBar";
 import { useNavigation } from '@react-navigation/native'
 import { Ionicons } from '@expo/vector-icons'
+import { useRouter } from "expo-router";
 
 type DogStatus = {
   id: string;
@@ -36,6 +37,7 @@ type NotificationSummary = {
 };
 
 const AugmentedDog: React.FC = () => {
+   const router = useRouter();
   const navigation = useNavigation()
   const { petId, notificationId } = useLocalSearchParams<{
     petId: string;
@@ -238,6 +240,11 @@ const AugmentedDog: React.FC = () => {
     );
   }
 
+ 
+  const goToSettings = () => {
+    router.push('/settings');
+  };
+
   const messagesToShow = getCurrentMessages();
 
   return (
@@ -256,10 +263,11 @@ const AugmentedDog: React.FC = () => {
             style={{
               position: "absolute",
               top: 68,
-              left: 40,
+              left: 20,
+              zIndex: 10,
             }}
           >
-            <Ionicons name="arrow-back" size={24} color="#183A36" />
+            <Ionicons name="arrow-back" size={24} color="#ffffff" />
           </Pressable>
 
       {/* ─── Tekstballon ─── */}
@@ -295,6 +303,16 @@ const AugmentedDog: React.FC = () => {
           </Text>
         ))}
       </View>
+
+      <TouchableOpacity onPress={goToSettings} 
+        style={{
+          position: "absolute",
+          top: 68,
+          right: 20,
+          zIndex: 10,
+        }}>
+        <Ionicons name="settings-outline" size={32} color="#ffffff" />
+      </TouchableOpacity>
 
       {/* ─── Buttons ─── */}
       <View

@@ -400,7 +400,7 @@ export default function HomepageScreen() {
         <View>
           <Text
             style={{
-              fontFamily: "Nunito-Bold",
+              fontFamily: "NunitoBold",
               fontSize: 20,
               marginBottom: 10,
               padding: 20,
@@ -413,10 +413,11 @@ export default function HomepageScreen() {
             <>
               <Text
                 style={{
-                  fontFamily: "Nunito-Regular",
+                  fontFamily: "NunitoRegular",
                   fontSize: 16,
                   marginBottom: 10,
                   color: "#183A36",
+                  marginHorizontal: 20,
                 }}
               >
                 Geen matches gevonden.
@@ -431,7 +432,7 @@ export default function HomepageScreen() {
                   marginTop: 10,
                   flexDirection: "row",
                   gap: 4,
-                  
+                  marginHorizontal: 20,
                 }}
                 onPress={() => router.push("/homepage")}
               >
@@ -503,7 +504,7 @@ export default function HomepageScreen() {
                   <View style={{ flex: 1 }}>
                     <Text
                       style={{
-                        fontFamily: "Nunito-Bold",
+                        fontFamily: "NunitoBold",
                         fontSize: 18,
                         marginBottom: 4,
                         color: "#183A36",
@@ -513,7 +514,7 @@ export default function HomepageScreen() {
                     </Text>
                     <Text
                       style={{
-                        fontFamily: "Nunito-Regular",
+                        fontFamily: "NunitoRegular",
                         fontSize: 14,
                         marginBottom: 2,
                         color: "#183A36",
@@ -521,7 +522,7 @@ export default function HomepageScreen() {
                     >
                       <Text
                         style={{
-                          fontFamily: "Nunito-Medium",
+                          fontFamily: "NunitoMedium",
                           color: "#183A36",
                         }}
                       >
@@ -532,7 +533,7 @@ export default function HomepageScreen() {
                     </Text>
                     <Text
                       style={{
-                        fontFamily: "Nunito-Regular",
+                        fontFamily: "NunitoRegular",
                         fontSize: 14,
                         marginBottom: 2,
                         color: "#183A36",
@@ -540,7 +541,7 @@ export default function HomepageScreen() {
                     >
                       <Text
                         style={{
-                          fontFamily: "Nunito-Medium",
+                          fontFamily: "NunitoMedium",
                           color: "#183A36",
                         }}
                       >
@@ -550,7 +551,7 @@ export default function HomepageScreen() {
                     </Text>
                     <Text
                       style={{
-                        fontFamily: "Nunito-Regular",
+                        fontFamily: "NunitoRegular",
                         fontSize: 14,
                         marginBottom: 2,
                         color: "#183A36",
@@ -558,7 +559,7 @@ export default function HomepageScreen() {
                     >
                       <Text
                         style={{
-                          fontFamily: "Nunito-Medium",
+                          fontFamily: "NunitoMedium",
                           color: "#183A36",
                         }}
                       >
@@ -568,14 +569,14 @@ export default function HomepageScreen() {
                     </Text>
                     <Text
                       style={{
-                        fontFamily: "Nunito-Regular",
+                        fontFamily: "NunitoRegular",
                         fontSize: 14,
                         color: "#183A36",
                       }}
                     >
                       <Text
                         style={{
-                          fontFamily: "Nunito-Medium",
+                          fontFamily: "NunitoMedium",
                           color: "#183A36",
                         }}
                       >
