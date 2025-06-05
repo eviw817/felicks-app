@@ -285,7 +285,7 @@ const ProfileScreen = () => {
 
 
         <View style={styles.section}>
-          <Text style={styles.sectionSubtile}>Deze honden passen bij jouw profiel:</Text>
+          <Text style={styles.sectionSubtitle}>Deze honden passen bij jouw profiel:</Text>
           {matches.length > 0 && (
             <Text style={styles.sectionText}>
               Dit zijn enkele honden die bij jouw profiel passen. Wil je weten waarom? Klik dan op een hond.
@@ -449,7 +449,7 @@ const ProfileScreen = () => {
         fontWeight: "semibold", 
         marginBottom: 5 
     },
-    sectionSubtile:{
+    sectionSubtitle:{
         fontSize: 18, 
         color: '#183A36',
         fontWeight: "semibold", 
