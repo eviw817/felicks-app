@@ -18,7 +18,7 @@ export default function Index() {
   }, []);
 
   return (
-    <View style={styles.container} className="bg-baby-powder">
+    <View style={styles.container}>
       <Image
         source={require("@/assets/images/logo_felicks.png")}
         style={styles.logo}
