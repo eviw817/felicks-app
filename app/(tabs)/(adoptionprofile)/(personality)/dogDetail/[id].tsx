@@ -109,7 +109,7 @@ const styles = StyleSheet.create({
   galleryImage: {
     width: "100%",
     aspectRatio: 1.2,
-    borderRadius: 0,
+    borderRadius: 10,
     marginBottom: 10,
   },
 });
@@ -255,7 +255,6 @@ export default function DogDetail() {
             )}
           </View>
         )}
-
         <TouchableOpacity style={styles.adoptButton}>
           <BaseText variant="button">Contacteer het asiel</BaseText>
         </TouchableOpacity>
