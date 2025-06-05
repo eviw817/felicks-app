@@ -77,32 +77,32 @@ export default function BreedDetail() {
           resizeMode="contain"
         />
 
-        <BaseText style={styles.label}>🐾 Karakter</BaseText>
+        <BaseText style={styles.label}>Karakter</BaseText>
         <BaseText style={styles.text}>{breed.character}</BaseText>
 
-        <BaseText style={styles.label}>⚠️ Aandachtspunten</BaseText>
+        <BaseText style={styles.label}>Aandachtspunten</BaseText>
         {breed.attention_points?.map((point: string, index: number) => (
           <BaseText key={index} style={styles.text}>
             • {point}
           </BaseText>
         ))}
 
-        <BaseText style={styles.label}>🧍 Geschikte eigenaar</BaseText>
+        <BaseText style={styles.label}>Geschikte eigenaar</BaseText>
         <BaseText style={styles.text}>{breed.suitable_owner}</BaseText>
 
-        <BaseText style={styles.label}>🩺 Gezondheid</BaseText>
+        <BaseText style={styles.label}>Gezondheid</BaseText>
         <BaseText style={styles.text}>{breed.health}</BaseText>
 
-        <BaseText style={styles.label}>🛁 Verzorging</BaseText>
+        <BaseText style={styles.label}>Verzorging</BaseText>
         <BaseText style={styles.text}>{breed.care}</BaseText>
 
-        <BaseText style={styles.label}>👶 Kinderen</BaseText>
+        <BaseText style={styles.label}>Kinderen</BaseText>
         <BaseText style={styles.text}>{breed.children_info}</BaseText>
 
-        <BaseText style={styles.label}>🐕 Andere dieren</BaseText>
+        <BaseText style={styles.label}>Andere dieren</BaseText>
         <BaseText style={styles.text}>{breed.pets_info}</BaseText>
 
-        <BaseText style={styles.label}>🔍 Profielvergelijking</BaseText>
+        <BaseText style={styles.label}>Profielvergelijking</BaseText>
         <BaseText style={styles.text}>{breed.profile_match_summary}</BaseText>
 
         <TouchableOpacity
