@@ -196,7 +196,7 @@ const styles = StyleSheet.create({
     borderBottomRightRadius: 3,
   },
   question: {
-    fontFamily: "Nunito-Bold",
+    fontFamily: "NunitoBold",
     fontSize: 18,
     color: "#183A36",
     marginBottom: 8,
@@ -223,7 +223,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#97B8A5",
   },
   answerText: {
-    fontFamily: "Nunito-Regular",
+    fontFamily: "NunitoRegular",
     fontSize: 16,
     color: "#183A36",
     flex: 1,
@@ -237,7 +237,7 @@ const styles = StyleSheet.create({
   },
   buttonDisabled: { opacity: 0.5 },
   buttonText: {
-    fontFamily: "Nunito-Bold",
+    fontFamily: "NunitoBold",
     fontSize: 16,
     color: "#183A36",
   },

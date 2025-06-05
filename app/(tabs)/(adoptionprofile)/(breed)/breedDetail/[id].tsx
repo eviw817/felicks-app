@@ -1,7 +1,6 @@
 "use client";
 
-import { useLocalSearchParams, useRouter } from "expo-router";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   SafeAreaView,
   StyleSheet,
@@ -9,10 +8,15 @@ import {
   ScrollView,
   TouchableOpacity,
   ActivityIndicator,
+  Image,
+  Dimensions,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
+import { useLocalSearchParams, useRouter } from "expo-router";
 import { supabase } from "../../../../../lib/supabase";
 import BaseText from "@/components/BaseText";
+
+const windowWidth = Dimensions.get("window").width;
 
 export default function BreedDetail() {
   const { id } = useLocalSearchParams();
@@ -63,6 +67,16 @@ export default function BreedDetail() {
           </BaseText>
         </View>
 
+        <Image
+          source={
+            breed.image_url
+              ? { uri: breed.image_url }
+              : require("@/assets/images/logo_felicks.png")
+          }
+          style={styles.image}
+          resizeMode="contain"
+        />
+
         <BaseText style={styles.label}>🐾 Karakter</BaseText>
         <BaseText style={styles.text}>{breed.character}</BaseText>
 
@@ -109,8 +123,8 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     height: 40,
-    marginBottom: 16,
-    marginTop: 25,
+    marginBottom: 8,
+    marginTop: 16,
   },
   backButton: {
     position: "absolute",
@@ -121,10 +135,17 @@ const styles = StyleSheet.create({
     paddingHorizontal: 8,
   },
   headerTitle: {
-    fontFamily: "Sirenia-Regular",
+    fontFamily: "SireniaRegular",
     fontSize: 20,
     color: "#183A36",
     textAlign: "center",
+  },
+  image: {
+    width: windowWidth - 32,
+    height: 260,
+    borderRadius: 10,
+    alignSelf: "center",
+    transform: [{ scale: 0.75 }],
   },
   label: {
     fontSize: 16,
@@ -148,7 +169,7 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     color: "#183A36",
-    fontFamily: "Nunito-Bold",
+    fontFamily: "NunitoBold",
     textTransform: "uppercase",
     fontWeight: "bold",
   },

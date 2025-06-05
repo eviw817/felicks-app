@@ -8,10 +8,10 @@ import {
   TouchableOpacity,
   Platform,
 } from "react-native";
-import { useRouter } from "expo-router";
-import { supabase } from "@/lib/supabase";
 import { Ionicons } from "@expo/vector-icons";
+import { useRouter } from "expo-router";
 import BaseText from "@/components/BaseText";
+import { supabase } from "@/lib/supabase";
 
 export default function LivingSituation() {
   const router = useRouter();
@@ -23,58 +23,43 @@ export default function LivingSituation() {
 
   useEffect(() => {
     (async () => {
-      const { data: userData, error: userError } =
-        await supabase.auth.getUser();
-
-      if (userError || !userData?.user?.id) return;
-
+      const { data: userData } = await supabase.auth.getUser();
+      if (!userData?.user?.id) return;
       const uid = userData.user.id;
       setUserId(uid);
 
-      const { data: existingProfile, error } = await supabase
+      const { data } = await supabase
         .from("adoption_profiles")
         .select("living_situation, home_frequency")
         .eq("user_id", uid)
         .single();
 
-      if (error) {
-        console.error("❌ Fout bij ophalen profiel:", error.message);
-      }
-
-      if (existingProfile) {
-        console.log("✅ Profiel geladen:", existingProfile);
+      if (data) {
         setAnswers({
-          livingSituation: existingProfile.living_situation || "",
-          homeFrequency: existingProfile.home_frequency || "",
+          livingSituation: data.living_situation || "",
+          homeFrequency: data.home_frequency || "",
         });
       }
     })();
   }, []);
 
   const handleAnswer = async (
-    question: "livingSituation" | "homeFrequency",
+    key: "livingSituation" | "homeFrequency",
     value: string
   ) => {
-    const newAnswers = { ...answers, [question]: value };
+    const newAnswers = { ...answers, [key]: value };
     setAnswers(newAnswers);
-    console.log("🔄 Antwoord bijgewerkt:", newAnswers);
 
     if (!userId) return;
-
     const payload = {
       user_id: userId,
       living_situation: newAnswers.livingSituation,
       home_frequency: newAnswers.homeFrequency,
     };
 
-    const { error } = await supabase
+    await supabase
       .from("adoption_profiles")
-      .upsert([payload], {
-        onConflict: "user_id",
-      });
-
-    if (error) console.error("❌ Fout bij opslaan in DB:", error.message);
-    else console.log("✅ Antwoorden opgeslagen in DB:", payload);
+      .upsert(payload, { onConflict: "user_id" });
   };
 
   const canNext =
@@ -86,36 +71,44 @@ export default function LivingSituation() {
       value: "apartment",
     },
     {
-      label: "Een huis zonder tuin, maar met wandelopties",
+      label: "Een huis zonder tuin, maar met veel wandelopties in de buurt",
       value: "house_no_garden",
     },
     {
-      label: "We hebben een tuin waar de hond kan snuffelen",
+      label: "We hebben een tuin waar de hond lekker kan snuffelen",
       value: "garden",
     },
     {
-      label: "Veel ruimte, veel natuur – buiten zijn vanzelfsprekend",
+      label:
+        "Veel ruimte, veel natuur – buiten zijn is bij ons vanzelfsprekend",
       value: "nature",
     },
   ];
 
   const homeOptions = [
     {
-      label: "Bijna altijd, ik werk thuis of ben vaak thuis",
+      label: "Bijna altijd, ik werk van thuis uit of ben vaak thuis",
       value: "mostly_home",
     },
-    { label: "Gedeeld – soms thuis, soms weg", value: "mixed" },
     {
-      label: "Vaak van huis – hond moet alleen kunnen zijn",
+      label: "Gedeeld – soms thuis, soms weg",
+      value: "mixed",
+    },
+    {
+      label: "Vaak van huis – mijn hond moet goed alleen kunnen zijn",
       value: "often_away",
     },
   ];
 
-  const RadioButtonOption: React.FC<{
+  const RadioButton = ({
+    selected,
+    label,
+    onPress,
+  }: {
     selected: boolean;
     label: string;
     onPress: () => void;
-  }> = ({ selected, label, onPress }) => (
+  }) => (
     <TouchableOpacity style={styles.radioRow} onPress={onPress}>
       <View style={styles.radioOuter}>
         {selected && <View style={styles.radioInner} />}
@@ -126,11 +119,8 @@ export default function LivingSituation() {
 
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.headerContainer}>
-        <TouchableOpacity
-          style={styles.backButton}
-          onPress={() => router.back()}
-        >
+      <View style={styles.header}>
+        <TouchableOpacity onPress={() => router.back()} style={styles.back}>
           <Ionicons name="arrow-back" size={24} color="#183A36" />
         </TouchableOpacity>
         <BaseText variant="title" style={styles.headerTitle}>
@@ -139,34 +129,36 @@ export default function LivingSituation() {
       </View>
 
       <View style={styles.progressBar}>
-        <View style={styles.progressFill1} />
+        <View style={styles.progressFill} />
       </View>
 
       <BaseText style={styles.question}>Waar woon je?</BaseText>
       {livingOptions.map((opt) => (
-        <RadioButtonOption
+        <RadioButton
           key={opt.value}
-          label={opt.label}
           selected={answers.livingSituation === opt.value}
+          label={opt.label}
           onPress={() => handleAnswer("livingSituation", opt.value)}
         />
       ))}
 
-      <BaseText style={[styles.question, { marginTop: 32 }]}>
+      <BaseText style={[styles.question, { marginTop: 24 }]}>
         Hoe vaak ben je thuis?
       </BaseText>
       {homeOptions.map((opt) => (
-        <RadioButtonOption
+        <RadioButton
           key={opt.value}
-          label={opt.label}
           selected={answers.homeFrequency === opt.value}
+          label={opt.label}
           onPress={() => handleAnswer("homeFrequency", opt.value)}
         />
       ))}
 
       <TouchableOpacity
         style={[styles.button, !canNext && styles.buttonDisabled]}
-        onPress={() => router.push("/experienceSize")}
+        onPress={() =>
+          router.push("/(tabs)/(adoptionprofile)/(breed)/experienceSize")
+        }
         disabled={!canNext}
       >
         <BaseText variant="button" style={styles.buttonText}>
@@ -180,52 +172,46 @@ export default function LivingSituation() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#F8F8F8",
-    paddingHorizontal: 16,
-    paddingTop: Platform.OS === "ios" ? 20 : 50,
+    backgroundColor: "#FFFDF9",
+    paddingHorizontal: 20,
+    paddingTop: Platform.OS === "ios" ? 50 : 40,
   },
-  headerContainer: {
-    position: "relative",
-    justifyContent: "center",
+  header: {
     alignItems: "center",
     marginBottom: 16,
-    height: 40,
+    position: "relative",
   },
-  backButton: {
+  back: {
     position: "absolute",
     left: 0,
     top: 0,
-    bottom: 0,
-    justifyContent: "center",
-    paddingHorizontal: 8,
   },
   headerTitle: {
     textAlign: "center",
+    fontSize: 22,
   },
   progressBar: {
-    width: "100%",
     height: 6,
-    borderColor: "#FFD87E",
-    borderWidth: 1,
     borderRadius: 3,
+    backgroundColor: "#FFD87E55",
     overflow: "hidden",
-    marginBottom: 20,
+    marginVertical: 16,
   },
-  progressFill1: {
+  progressFill: {
     width: "14.28%",
     height: "100%",
     backgroundColor: "#FFD87E",
   },
   question: {
-    fontSize: 18,
+    fontSize: 16,
     fontFamily: "Nunito-Bold",
     color: "#183A36",
-    marginBottom: 8,
+    marginBottom: 12,
   },
   radioRow: {
     flexDirection: "row",
     alignItems: "center",
-    marginBottom: 12,
+    marginBottom: 14,
   },
   radioOuter: {
     width: 20,
@@ -245,7 +231,7 @@ const styles = StyleSheet.create({
   },
   answerText: {
     fontSize: 16,
-    fontFamily: "Nunito-Regular",
+    fontFamily: "NunitoRegular",
     color: "#183A36",
     flex: 1,
   },
@@ -256,12 +242,10 @@ const styles = StyleSheet.create({
     borderRadius: 25,
     alignItems: "center",
   },
-  buttonDisabled: {
-    opacity: 0.5,
-  },
+  buttonDisabled: { opacity: 0.5 },
   buttonText: {
+    fontFamily: "NunitoBold",
     fontSize: 16,
-    fontFamily: "Nunito-Bold",
     color: "#183A36",
   },
 });

@@ -212,7 +212,7 @@ export default function Registeren() {
 
       // Redirect to adoptionProfileStart page
       console.log("Router naar adoptionIntro");
-      router.push("/adoptionChoice");
+      router.push("/adoptionBreed");
     }
 
     setLoading(false);

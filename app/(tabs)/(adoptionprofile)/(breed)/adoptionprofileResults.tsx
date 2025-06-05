@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
   ActivityIndicator,
   ScrollView,
+  Image,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
@@ -48,6 +49,7 @@ interface Breed {
   living_situation: string;
   can_be_alone: boolean;
   character: string;
+  image_url: string;
 }
 
 export default function AdoptieprofielResults() {
@@ -215,15 +217,24 @@ export default function AdoptieprofielResults() {
       style={styles.card}
       onPress={() =>
         router.push({
-          pathname: "(adoptionprofile)/(breed)/breedDetail/[id].tsx",
+          pathname: "/breedDetail/[id]",
           params: { id: item.breed.id.toString() },
         } as any)
       }
     >
-      <BaseText style={styles.name}>{item.breed.name}</BaseText>
-      <BaseText style={styles.score}>
-        {Math.round(item.score * 100)}% match
-      </BaseText>
+      <View style={styles.breedRow}>
+        <Image
+          source={{ uri: item.breed.image_url }}
+          style={styles.image}
+          resizeMode="cover"
+        />
+        <View style={{ flex: 1, marginLeft: 12 }}>
+          <BaseText style={styles.name}>{item.breed.name}</BaseText>
+          <BaseText style={styles.score}>
+            {Math.round(item.score * 100)}% match
+          </BaseText>
+        </View>
+      </View>
     </TouchableOpacity>
   );
 
@@ -285,11 +296,15 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   title: {
-    fontFamily: "Sirenia-Regular",
+    fontFamily: "SireniaRegular",
     fontSize: 20,
     color: "#183A36",
     textAlign: "center",
     marginBottom: 10,
+  },
+  breedRow: {
+    flexDirection: "row",
+    alignItems: "center",
   },
   name: { fontSize: 16, fontWeight: "600", color: "#183A36" },
   score: { fontSize: 14, color: "#97B8A5" },
@@ -297,6 +312,11 @@ const styles = StyleSheet.create({
     marginBottom: 16,
     padding: 12,
     backgroundColor: "#F0F5F3",
+    borderRadius: 10,
+  },
+  image: {
+    width: 100,
+    height: 100,
     borderRadius: 10,
   },
   button: {
@@ -308,7 +328,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   buttonText: {
-    fontFamily: "Nunito-Bold",
+    fontFamily: "NunitoBold",
     fontSize: 16,
     color: "#183A36",
     textTransform: "uppercase",

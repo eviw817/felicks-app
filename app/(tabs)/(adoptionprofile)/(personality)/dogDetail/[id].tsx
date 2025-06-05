@@ -149,6 +149,7 @@ export default function DogDetail() {
         .eq("id", id)
         .single();
 
+      console.log("🐶 Gevonden hond:", data);
       setDog(data);
     })();
   }, [id]);
@@ -159,8 +160,9 @@ export default function DogDetail() {
   try {
     imageList =
       typeof dog.images === "string" ? JSON.parse(dog.images) : dog.images;
+    console.log("📷 ImageList:", imageList);
   } catch (e) {
-    console.error("Fout bij parsen van images:", e);
+    console.error("❌ Fout bij parsen van images:", e);
   }
 
   return (
@@ -175,13 +177,17 @@ export default function DogDetail() {
           </BaseText>
         </View>
 
-        {imageList?.length > 0 && (
+        {imageList?.length > 0 && imageList[0] ? (
           <Image
-            source={{
-              uri: `https://vgbuoxdfrbzqbqltcelz.supabase.co/storage/v1/object/public/${imageList[0]}`,
-            }}
+            source={{ uri: imageList[0] }}
             style={styles.avatar}
             resizeMode="cover"
+          />
+        ) : (
+          <Image
+            source={require("@/assets/images/logo_felicks.png")}
+            style={styles.avatar}
+            resizeMode="contain"
           />
         )}
 
@@ -230,16 +236,23 @@ export default function DogDetail() {
         {imageList?.length > 0 && (
           <View style={styles.gallerySection}>
             <BaseText style={styles.subtitle}>Foto's</BaseText>
-            {imageList.map((path, index) => (
-              <Image
-                key={index}
-                source={{
-                  uri: `https://vgbuoxdfrbzqbqltcelz.supabase.co/storage/v1/object/public/${path}`,
-                }}
-                style={styles.galleryImage}
-                resizeMode="cover"
-              />
-            ))}
+            {imageList.map((path, index) =>
+              path ? (
+                <Image
+                  key={index}
+                  source={{ uri: path }}
+                  style={styles.galleryImage}
+                  resizeMode="cover"
+                />
+              ) : (
+                <Image
+                  key={index}
+                  source={require("@/assets/images/logo_felicks.png")}
+                  style={styles.galleryImage}
+                  resizeMode="contain"
+                />
+              )
+            )}
           </View>
         )}
 

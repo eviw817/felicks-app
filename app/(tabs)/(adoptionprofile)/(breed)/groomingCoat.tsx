@@ -178,7 +178,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 8,
   },
   headerTitle: {
-    fontFamily: "Sirenia-Regular",
+    fontFamily: "SireniaRegular",
     fontSize: 20,
     color: "#183A36",
     textAlign: "center",
@@ -200,8 +200,8 @@ const styles = StyleSheet.create({
     borderBottomRightRadius: 3,
   },
   question: {
-    fontFamily: "Nunito-Bold",
     fontSize: 18,
+    fontFamily: "NunitoBold",
     color: "#183A36",
     marginBottom: 8,
   },
@@ -227,7 +227,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#97B8A5",
   },
   answerText: {
-    fontFamily: "Nunito-Regular",
+    fontFamily: "NunitoRegular",
     fontSize: 16,
     color: "#183A36",
     flex: 1,
@@ -241,7 +241,7 @@ const styles = StyleSheet.create({
   },
   buttonDisabled: { opacity: 0.5 },
   buttonText: {
-    fontFamily: "Nunito-Bold",
+    fontFamily: "NunitoBold",
     fontSize: 16,
     color: "#183A36",
   },

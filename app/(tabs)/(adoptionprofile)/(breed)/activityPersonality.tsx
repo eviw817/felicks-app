@@ -217,7 +217,7 @@ const styles = StyleSheet.create({
   },
   question: {
     fontSize: 18,
-    fontFamily: "Nunito-Bold",
+    fontFamily: "NunitoBold",
     color: "#183A36",
     marginBottom: 8,
   },
@@ -244,7 +244,7 @@ const styles = StyleSheet.create({
   },
   answerText: {
     fontSize: 16,
-    fontFamily: "Nunito-Regular",
+    fontFamily: "NunitoRegular",
     color: "#183A36",
     flex: 1,
   },
@@ -260,7 +260,7 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     fontSize: 16,
-    fontFamily: "Nunito-Bold",
+    fontFamily: "NunitoBold",
     color: "#183A36",
   },
 });

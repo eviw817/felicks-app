@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
   FlatList,
   ActivityIndicator,
+  Image,
   Platform,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
@@ -180,14 +181,26 @@ export default function Matching() {
               style={styles.card}
               onPress={() =>
                 router.push({
-                  pathname:
-                    "/(tabs)/(adoptionprofile)/(personality)/dogDetail/[id]",
+                  pathname: "/dogDetail/[id]",
                   params: { id: item.dog.id },
                 })
               }
             >
-              <BaseText style={styles.name}>{item.dog.name}</BaseText>
-              <BaseText style={styles.score}>{item.score}% match</BaseText>
+              <View style={styles.cardRow}>
+                <Image
+                  source={
+                    item.dog.images?.length
+                      ? { uri: item.dog.images[0] }
+                      : require("@/assets/images/logo_felicks.png")
+                  }
+                  style={styles.cardImage}
+                  resizeMode="cover"
+                />
+                <View style={styles.cardInfo}>
+                  <BaseText style={styles.name}>{item.dog.name}</BaseText>
+                  <BaseText style={styles.score}>{item.score}% match</BaseText>
+                </View>
+              </View>
             </TouchableOpacity>
           )}
         />
@@ -230,8 +243,22 @@ const styles = StyleSheet.create({
   card: {
     backgroundColor: "#E2F0E7",
     borderRadius: 12,
-    padding: 16,
+    padding: 12,
     marginBottom: 12,
+  },
+  cardRow: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  cardImage: {
+    width: 80,
+    height: 80,
+    borderRadius: 10,
+    marginRight: 12,
+    backgroundColor: "#fff",
+  },
+  cardInfo: {
+    flex: 1,
   },
   name: {
     fontSize: 18,
