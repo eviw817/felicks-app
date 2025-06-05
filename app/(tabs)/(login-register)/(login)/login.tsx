@@ -154,7 +154,7 @@ const LoginScreen = () => {
           onPress={() => setShowPassword((prev) => !prev)}
         >
           <Ionicons
-            name={showPassword ? "eye-off-outline" : "eye-outline"}
+            name={showPassword ? "eye-outline" : "eye-off-outline"}
             size={28}
             color="#183A36"
           />

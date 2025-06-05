@@ -153,7 +153,7 @@ const NewPasswordScreen = () => {
         value={herhaalpassword}
       />
        <TouchableOpacity onPress={() => setShowRepeatPassword(prev => !prev)} style={styles.eyeIcon}>
-    <Ionicons name={showRepeatPassword ? "eye-off-outline" : "eye-outline"} size={24} color="#183A36" />
+    <Ionicons name={showRepeatPassword ? "eye-outline" : "eye-off-outline"} size={24} color="#183A36" />
   </TouchableOpacity>
   </View>
 
