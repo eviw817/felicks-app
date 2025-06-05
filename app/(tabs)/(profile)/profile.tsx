@@ -278,7 +278,7 @@ const ProfileScreen = () => {
             ))
           ) : (
             <Text style={styles.sectionText}>
-              Als je een hond liked dan kan je deze hier terugvinden.
+              Als je een hond liket dan kan je deze hier terugvinden.
             </Text>
           )}
         </View>
