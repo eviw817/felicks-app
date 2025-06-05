@@ -29,8 +29,8 @@ export default function ActivityPersonality() {
   });
 
   const [fontsLoaded] = useFonts({
-    "Nunito-Regular": require("../../assets/fonts/nunito/Nunito-Regular.ttf"),
-    "Nunito-Bold": require("../../assets/fonts/nunito/Nunito-Bold.ttf"),
+    "Nunito-Regular": require("../../assets/fonts/Nunito/NunitoRegular.ttf"),
+    "Nunito-Bold": require("../../assets/fonts/Nunito/NunitoBold.ttf"),
   });
 
   useEffect(() => {

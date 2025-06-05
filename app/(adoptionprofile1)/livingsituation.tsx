@@ -38,9 +38,9 @@ export default function LivingSituation() {
   });
 
   const [fontsLoaded] = useFonts({
-    "Nunito-Regular": require("@/assets/fonts/nunito/Nunito-Regular.ttf"),
-    "Nunito-Medium": require("@/assets/fonts/nunito/Nunito-Medium.ttf"),
-    "Nunito-Bold": require("@/assets/fonts/nunito/Nunito-Bold.ttf"),
+    "Nunito-Regular": require("@/assets/fonts/Nunito/NunitoRegular.ttf"),
+    "Nunito-Medium": require("@/assets/fonts/Nunito/NunitoMedium.ttf"),
+    "Nunito-Bold": require("@/assets/fonts/Nunito/NunitoBold.ttf"),
     "Sirenia-Regular": require("@/assets/fonts/Sirenia/SireniaRegular.ttf"),
   });
 

@@ -6,8 +6,8 @@ import { Ionicons } from "@expo/vector-icons";
 
 function AdoptionProfileScreen() {
   const [fontsLoaded] = useFonts({
-    nunitoBold: require("../../assets/fonts/nunito/Nunito-Bold.ttf"),
-    nunitoRegular: require("../../assets/fonts/nunito/Nunito-Regular.ttf"),
+    nunitoBold: require("../../assets/fonts/Nunito/NunitoBold.ttf"),
+    nunitoRegular: require("../../assets/fonts/Nunito/NunitoRegular.ttf"),
   });
 
   const router = useRouter();

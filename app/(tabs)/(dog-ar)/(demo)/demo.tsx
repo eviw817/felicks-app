@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from "react";
 import {
   SafeAreaView,
@@ -8,8 +7,8 @@ import {
   ActivityIndicator,
   Pressable
 } from "react-native";
-import { BeagleScene } from "@/components/augumented-dog/scenes/BeagleScene";
-import { ViroARSceneNavigator } from "@reactvision/react-viro";
+// import { BeagleScene } from "@/components/augumented-dog/scenes/BeagleScene";
+// import { ViroARSceneNavigator } from "@reactvision/react-viro";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import { supabase } from "@/lib/supabase";
 import { useLocalSearchParams } from "expo-router";
@@ -244,6 +243,8 @@ const AugmentedDog: React.FC = () => {
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
+      {/* ─── AR HOND UITGECOMMENTARIEERD ─── */}
+      {/*
       <ViroARSceneNavigator
         autofocus={true}
         initialScene={{
@@ -253,17 +254,21 @@ const AugmentedDog: React.FC = () => {
       >
         <BeagleScene style={{ width: "100%", height: 1000 }} />
       </ViroARSceneNavigator>
-      <Pressable
-            onPress={() => navigation.goBack()}
-            style={{
-              position: "absolute",
-              top: 68,
-              left: 40,
-            }}
-          >
-            <Ionicons name="arrow-back" size={24} color="#183A36" />
-          </Pressable>
+      */}
 
+      {/* In plaats van AR: een grijs scherm */}
+      <View style={{ flex: 1, backgroundColor: "#CCCCCC" }} />
+
+      <Pressable
+        onPress={() => navigation.goBack()}
+        style={{
+          position: "absolute",
+          top: 68,
+          left: 40,
+        }}
+      >
+        <Ionicons name="arrow-back" size={24} color="#183A36" />
+      </Pressable>
 
       {/* ─── Tekstballon ─── */}
       <View
