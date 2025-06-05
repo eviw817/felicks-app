@@ -6,7 +6,7 @@ import {
   Text,
   TouchableOpacity,
   ActivityIndicator,
-  Pressable,
+  Pressable
 } from "react-native";
 import { BeagleScene } from "@/components/augumented-dog/scenes/BeagleScene";
 import { ViroARSceneNavigator } from "@reactvision/react-viro";
@@ -17,10 +17,6 @@ import NavBar from "@/components/NavigationBar";
 import { useNavigation } from '@react-navigation/native'
 import { Ionicons } from '@expo/vector-icons'
 
-
-
-const navigation = useNavigation()
-const { petId } = useLocalSearchParams();
 
 type DogStatus = {
   id: string;
@@ -42,6 +38,7 @@ type NotificationSummary = {
 };
 
 const AugmentedDog: React.FC = () => {
+  const navigation = useNavigation()
   const { petId, notificationId } = useLocalSearchParams<{
     petId: string;
     notificationId?: string;
@@ -246,7 +243,6 @@ const AugmentedDog: React.FC = () => {
   const messagesToShow = getCurrentMessages();
 
   return (
-
     <SafeAreaView style={{ flex: 1 }}>
       <ViroARSceneNavigator
         autofocus={true}
@@ -258,15 +254,15 @@ const AugmentedDog: React.FC = () => {
         <BeagleScene style={{ width: "100%", height: 1000 }} />
       </ViroARSceneNavigator>
       <Pressable
-        onPress={() => navigation.goBack()}
-        style={{
-          position: "absolute",
-          top: 68,
-          left: 40,
-        }}
-      >
-        <Ionicons name="arrow-back" size={24} color="#183A36" />
-      </Pressable>
+            onPress={() => navigation.goBack()}
+            style={{
+              position: "absolute",
+              top: 68,
+              left: 40,
+            }}
+          >
+            <Ionicons name="arrow-back" size={24} color="#183A36" />
+          </Pressable>
 
 
       {/* ─── Tekstballon ─── */}

@@ -167,15 +167,15 @@ export default function AwarenessQuiz() {
           <FontAwesome name="check-circle" size={100} color="#FFD87E" />
         </View>
         <BaseText style={styles.description}>
-          Goed gedaan, je hebt de quiz afgerond!{'\n\n'}Volgende week een nieuwe
-          test.
+          Goed gedaan, je hebt de quiz volledig afgerond.{'\n'}Hopelijk heb je wat bijgeleerd! {'\n'}{'\n'}
+          Volgende week is er nog een testje, tot dan!
         </BaseText>
         <TouchableOpacity
           style={styles.continueButton}
           onPress={() => router.replace('../bewustzijnIndex')}
         >
           <BaseText style={styles.continueText}>
-            Terug naar overzicht
+            TERUG NAAR HET OVERZICHT
           </BaseText>
         </TouchableOpacity>
       </ScrollView>
@@ -239,8 +239,9 @@ export default function AwarenessQuiz() {
               Het juiste antwoord was: "{current.correctAnswer}".
             </BaseText>
           )}
-          <BaseText style={styles.description}>
-            {current.explanation}
+          <BaseText style={styles.description2}>
+            <BaseText style={{ fontWeight: 'bold', fontSize: 18 }}>Uitleg:{'\n'}</BaseText>
+           {current.explanation}
           </BaseText>
           <TouchableOpacity style={styles.continueButton} onPress={next}>
             <BaseText style={styles.continueText}>
@@ -258,6 +259,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#FFFDF9',
     padding: 16,
+    paddingTop: 100,
   },
   center: {
     justifyContent: 'center',
@@ -266,29 +268,36 @@ const styles = StyleSheet.create({
   loadingText: {
     marginTop: 12,
   },
-  backButton: {
-    position: 'absolute',
-    top: 36,
-    left: 20,
-    padding: 10,
-    borderRadius: 20,
-    backgroundColor: '#FFFDF9',
-    zIndex: 10,
-  },
-  title: {
-    fontSize: 24,
-    fontFamily: 'SireniaMedium',
-    marginTop: 40,
-    textAlign: "center",
-  },
+   title: {
+        fontSize: 28,
+      fontFamily: 'SireniaMedium',
+      textAlign: "center",
+      marginBottom: 20,
+    },
+    backButton: {
+      position: "absolute",
+      left: 5,
+      top:7,
+    },
   question: {
     marginTop: 50,
     marginBottom: 10,
-    fontSize: 18,
+    fontSize: 24,
+    color: "#183A36",
   },
   description: {
     marginBottom: 20,
-    
+    color: "#183A36",
+    fontSize: 18,
+    fontWeight: 'regular',
+    textAlign: 'center',
+  },
+   description2: {
+    marginBottom: 20,
+    color: "#183A36",
+    fontSize: 18,
+    fontWeight: 'regular',
+
   },
   optionRow: {
     flexDirection: 'row',
@@ -312,27 +321,32 @@ const styles = StyleSheet.create({
     borderColor: '#97B8A5',
   },
   radioInner: {
-    width: 10,
-    height: 10,
-    borderRadius: 5,
+    width: 19,
+    height: 19,
+    borderRadius: 10,
     backgroundColor: '#97B8A5',
   },
 
   optionText: {
-    fontSize: 14,          
+    fontSize: 16,          
     fontFamily: 'NunitoRegular',
   },
   continueButton: {
-    marginTop: 32,
-    backgroundColor: '#97B8A5',
-    paddingVertical: 12,
-    paddingHorizontal: 25,
-    borderRadius: 15,
-    alignItems: 'center',
+     backgroundColor: "#97B8A5",
+    paddingVertical: 15,
+    borderRadius: 20,
+    marginTop: 30,
+    width: "97%",
+    alignItems: "center",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
   },
   continueText: {
+     fontFamily: 'NunitoExtraBold',
     fontSize: 14,
-    fontFamily: 'NunitoBold',
+    textAlign: "center",
+     color: "#183A36",
   },
 
   feedbackContainer: {
@@ -342,11 +356,13 @@ const styles = StyleSheet.create({
     color: 'green',
     marginBottom: 12,
     textAlign: 'left',
+    fontSize: 18,
   },
   incorrect: {
     color: '#F18B7E',
     marginBottom: 24,
     textAlign: 'left',
+    fontSize: 18,
   },
   iconWrapper: {
     marginVertical: 40,
