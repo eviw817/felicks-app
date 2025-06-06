@@ -11,17 +11,33 @@ import {
   Alert,
   Image,
 } from "react-native";
-import { Session } from "@supabase/supabase-js";
 import { supabase } from "@/lib/supabase";
-import { useRouter, Link } from "expo-router";
-import NavBar from "@/components/NavigationBar";
-
-import { Ionicons } from "@expo/vector-icons";
+import type { Session } from "@supabase/supabase-js";
 import { FontAwesome } from "@expo/vector-icons";
+import { Link } from "expo-router";
+import NavBar from "@/components/NavigationBar";
+import { Ionicons } from "@expo/vector-icons";
 import { useFocusEffect } from "@react-navigation/native";
 import BaseText from "@/components/BaseText";
+import { useFonts } from 'expo-font';
+import { useRouter } from "expo-router";
+
+// ** Importeren we de functie om de badge‐update‐callback te registreren **
+import { registerBadgeCallback } from "@/app/_layout";
 
 export default function HomepageScreen() {
+const [fontsLoaded] = useFonts({
+    "NunitoRegular": require("@/assets/fonts/Nunito/NunitoRegular.ttf"),
+    "NunitoSemiBold": require("@/assets/fonts/Nunito/NunitoSemiBold.ttf"),
+    "NunitoBold": require("@/assets/fonts/Nunito/NunitoBold.ttf"),
+    'SireniaMedium': require("@/assets/fonts/Sirenia/SireniaMedium.ttf"),
+  });
+
+  if (!fontsLoaded) {
+    return <View />;
+  }
+
+
   const [session, setSession] = useState<Session | null>(null);
   const [firstname, setFirstname] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(true);
@@ -30,38 +46,69 @@ export default function HomepageScreen() {
   const [unreadCount, setUnreadCount] = useState<number>(0);
   const [isFilled, setIsFilled] = useState<boolean>(false);
 
+  const [dogId, setDogId] = useState<string | null>(null);
   const router = useRouter();
   const handleHeartClick = () => setIsFilled(!isFilled);
 
+  // ─── Functie: (opnieuw) tellen ongelezen meldingen
   const fetchUnreadNotifications = useCallback(async () => {
+    console.log("[Homepage] fetchUnreadNotifications() start");
     const {
       data: { user },
     } = await supabase.auth.getUser();
-    const { data: dog } = await supabase
+    if (!user) return;
+
+    // Haal dogId
+    const { data: dog, error: dogError } = await supabase
       .from("ar_dog")
       .select("id")
-      .eq("user_id", user?.id)
+      .eq("user_id", user.id)
       .single();
-
-    if (dog) {
-      const { data, error } = await supabase
-        .from("notifications")
-        .select("id")
-        .eq("pet_id", dog.id)
-        .eq("is_read", false);
-
-      if (!error && data) {
-        setUnreadCount(data.length);
-      }
+    if (dogError || !dog) {
+      console.warn("[Homepage] Geen ar_dog gevonden:", dogError);
+      setDogId(null);
+      setUnreadCount(0);
+      return;
     }
+    setDogId(dog.id);
+
+    // Tel ongelezen meldingen:
+    const { data, error } = await supabase
+      .from("notifications")
+      .select("id", { count: "exact" })
+      .or(
+        `pet_id.eq.${dog.id},and(category.eq.adoption_status,user_id.eq.${user.id})`
+      )
+      .eq("is_read", false);
+
+    if (error || !data) {
+      console.warn("[Homepage] Fout bij ophalen ongelezen:", error);
+      setUnreadCount(0);
+      return;
+    }
+    console.log("[Homepage] ongelezen teller:", data.length);
+    setUnreadCount(data.length);
   }, []);
 
+  // ─── TEL ongelezen MELDINGEN telkens dit scherm focus krijgt ────────────────
   useFocusEffect(
     useCallback(() => {
       fetchUnreadNotifications();
     }, [fetchUnreadNotifications])
   );
 
+  // ─── REGISTREER de badge‐update‐callback (zodat helper het kan aanroepen)
+  useEffect(() => {
+    console.log("[Homepage] registerBadgeCallback gestart");
+    registerBadgeCallback(fetchUnreadNotifications);
+
+    // **Nieuw:** direct 1× fetchUnreadNotifications, zodat badge up‐todate is na herstart
+    fetchUnreadNotifications();
+
+    // (optioneel: cleanup) return () => registerBadgeCallback(() => {});
+  }, [fetchUnreadNotifications]);
+
+  // ─── Haal session op ──────────────────────────────────────────────────────
   useEffect(() => {
     const fetchSession = async () => {
       const {
@@ -105,18 +152,37 @@ export default function HomepageScreen() {
       setLikedDogIds(liked?.map((l) => l.dog_id) || []);
       setLoading(false);
     };
-
     fetchSession();
 
     const { data: authListener } = supabase.auth.onAuthStateChange(
-      (_, session) => {
-        setSession(session);
+      (_, newSession) => {
+        setSession(newSession);
         setLoading(false);
       }
     );
-
-    return () => authListener?.subscription?.unsubscribe();
+    return () => {
+      authListener?.subscription?.unsubscribe();
+    };
   }, []);
+  // ─── Haal voornaam op ──────────────────────────────────────────────────────
+  useEffect(() => {
+    if (session?.user) {
+      const getFirstname = async () => {
+        try {
+          const { data, error } = await supabase
+            .from("profiles")
+            .select("firstname")
+            .eq("id", session.user.id)
+            .single();
+          if (error) throw error;
+          setFirstname(data?.firstname || "Guest");
+        } catch (err: any) {
+          Alert.alert("Error", err.message || "Kon profiel niet laden");
+        }
+      };
+      getFirstname();
+    }
+  }, [session]);
 
   const toggleLike = async (dogId: string) => {
     const userId = session?.user?.id;
@@ -154,6 +220,7 @@ export default function HomepageScreen() {
       : age;
   };
 
+  // ** Belangrijk: er staat écht geen eigen subscribe() meer in deze file **
   if (loading) {
     return (
       <View
@@ -178,11 +245,7 @@ export default function HomepageScreen() {
 
       }}
     >
-      <View
-        style={{
-          alignItems: "center",
-        }}
-      >
+      <View style={{ alignItems: "center" }}>
         <BaseText
           style={{
             fontFamily: "SireniaMedium",
@@ -214,7 +277,11 @@ export default function HomepageScreen() {
                 }}
               >
                 <Text
-                  style={{ color: "#183A36", fontSize: 12, fontWeight: "bold" }}
+                  style={{
+                    color: "#183A36",
+                    fontSize: 12,
+                    fontFamily: "NunitoBold",
+                  }}
                 >
                   {unreadCount}
                 </Text>
@@ -234,7 +301,6 @@ export default function HomepageScreen() {
           marginTop: 50,
         }}
       >
-        {/* Quiz */}
         <View>
           <Text
             style={{
@@ -298,7 +364,6 @@ export default function HomepageScreen() {
           </Link>
         </View>
 
-        {/* EHBO Artikel */}
         <View>
           <Text
             style={{
@@ -412,7 +477,6 @@ export default function HomepageScreen() {
           </Link>
         </View>
 
-        {/* Hondenmatches */}
         <View>
           <Text
             style={{
@@ -425,9 +489,8 @@ export default function HomepageScreen() {
               color: "#183A36",
             }}
           >
-            Deze honden passen bij jou profiel:
+            Jouw matches
           </Text>
-
           {matchedDogs.length === 0 ? (
             <>
               <Text
@@ -458,20 +521,25 @@ export default function HomepageScreen() {
                   color: "#FFFDF9",
                   width: "90%",
                   alignItems: "center",
+                  flexDirection: "row",
+                  gap: 4,
                   shadowOffset: { width: 0, height: 2 },
                   shadowOpacity: 0.1,
                   shadowRadius: 4,
                 }}
               >
-                <Text
-                  style={{
-                    color: "#183A36",
-                    fontFamily: "Nunito-Bold",
-                    textTransform: "uppercase",
-                  }}
-                >
-                  Vul je profiel in
-                </Text>
+                <View style={{ flexDirection: "row", alignItems: "center", gap: 4 }}>
+                  <Text
+                    style={{
+                      color: "#183A36",
+                      fontFamily: "Nunito-Bold",
+                      textTransform: "uppercase",
+                    }}
+                  >
+                    Vul je profiel in
+                  </Text>
+                  <Text style={{ color: "#183A36" }}>Basiel</Text>
+                </View>
               </Link>
             </>
           ) : (
@@ -589,7 +657,6 @@ export default function HomepageScreen() {
           )}
         </View>
       </ScrollView>
-
       <NavBar />
     </SafeAreaView>
   );

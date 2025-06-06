@@ -19,6 +19,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import { useFonts } from "expo-font";
 
+
 type DogStatus = {
   id: string;
   user_id: string;
