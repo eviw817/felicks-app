@@ -28,31 +28,26 @@ export default function HomepageScreen() {
   const handleHeartClick = () => setIsFilled(!isFilled);
 
   const fetchUnreadNotifications = useCallback(async () => {
-  // 1) Haal ingelogde gebruiker op
   const {
     data: { user },
   } = await supabase.auth.getUser();
-  if (!user) return;               // als er geen user is, stop
+  if (!user) return;        
 
-  // 2) Haal AR-hond-id op
+
   const { data: dog, error: dogError } = await supabase
     .from("ar_dog")
     .select("id")
     .eq("user_id", user.id)
     .single();
   if (dogError || !dog) {
-    // Als er geen hond gevonden is, zet dogId op null en stop
     setDogId(null);
     setUnreadCount(0);
     return;
   }
 
-  // Sla dogId op in state (zodat de realtime‐useEffect het kan gebruiken)
+
   setDogId(dog.id);
 
-  // 3) Tel ongelezen meldingen:
-  //    - pet_id = dog.id
-  //    - Óf (category = 'adoption_status' én user_id = user.id)
   const { data, error } = await supabase
     .from("notifications")
     .select("id", { count: "exact" })
@@ -62,12 +57,12 @@ export default function HomepageScreen() {
     .eq("is_read", false);
 
   if (error || !data) {
-    // Fallback: als er iets misgaat, zet unreadCount op 0
+
     setUnreadCount(0);
     return;
   }
 
-  // Toon in de badge het aantal ongelezen meldingen
+
   setUnreadCount(data.length);
 }, []);
 
@@ -120,14 +115,13 @@ export default function HomepageScreen() {
     }
   }, [session]);
 
-    // ===== Nieuwe useEffect: realtime-subscription op notifications =====
+    // realtime subscription via supabase
   useEffect(() => {
     if (!dogId || !session?.user) return;
 
-    // Maak een nieuw kanaal (naam mag vrij kiezen)
+
     const channel = supabase
       .channel("home_notifications_channel")
-      // Luister naar INSERT op notifications
       .on(
         "postgres_changes",
         {
@@ -147,7 +141,7 @@ export default function HomepageScreen() {
           }
         }
       )
-      // Luister naar UPDATE: bijvoorbeeld als is_read op true wordt gezet
+  
       .on(
         "postgres_changes",
         {
@@ -169,7 +163,7 @@ export default function HomepageScreen() {
       )
       .subscribe();
 
-    // Cleanup: un-subscribe wanneer dogId verandert of component unmount
+
     return () => {
       channel.unsubscribe();
     };

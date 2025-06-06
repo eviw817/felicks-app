@@ -1,75 +1,59 @@
-import { SplashScreen, Stack } from "expo-router";
+// app/_layout.tsx
+import React, { useState } from "react";
+import { SplashScreen, Slot } from "expo-router";
 import { AdoptionProfileProvider } from "../context/AdoptionProfileContext";
 import { StatusBar } from "react-native";
 import { useFonts } from "expo-font";
-import { useEffect } from "react";
+import { useRouter } from "expo-router";
 
-// Pushmeldingen import
-import * as Notifications from "expo-notifications";
-import { registerForPushNotificationsAsync } from "@/lib/notificationSetup";
-import { supabase } from "@/lib/supabase";
+import NotificationListener from "@/components/PushNotifications";
+import InAppBanner from "@/components/InAppBanner";
 
 export default function RootLayout() {
-
-  console.log("Layout geladen");
-
-  const [loaded] = useFonts({
+  const [fontsLoaded] = useFonts({
     SpaceMono: require("@/assets/fonts/SpaceMonoRegular.ttf"),
+    Nunito: require("@/assets/fonts/Nunito/NunitoRegular.ttf"),
+    SireniaMedium: require("@/assets/fonts/Sirenia/SireniaMedium.ttf"),
   });
 
+  const [bannerTitle, setBannerTitle] = useState<string | null>(null);
+  const [bannerBody, setBannerBody] = useState<string>("");
 
-  useEffect(() => {
-    if (loaded) {
-      SplashScreen.hideAsync();
-    }
-  }, [loaded]);
+  const router = useRouter();
 
-  //push meldingen
-  useEffect(() => {
-    registerForPushNotificationsAsync().then((token: string | null) => {
-      console.log("Expo Push Token:", token);
-    });
+  // Gebeurt als NotificationListener iets meld
+  const handleNotify = (title: string, body: string) => {
+    setBannerTitle(title);
+    setBannerBody(body);
+  };
 
-    const channel = supabase
-      .channel("global_notifications")
-      .on(
-        "postgres_changes",
-        {
-          event: "INSERT",
-          schema: "public",
-          table: "notifications",
-        },
-        (payload) => {
-          const { summary } = payload.new;
+  // Gebeurt als banner sluit
+  const handleBannerHide = () => {
+    setBannerTitle(null);
+    setBannerBody("");
+  };
 
-          Notifications.scheduleNotificationAsync({
-            content: {
-              title: "Je hond heeft je nodig!",
-              body: summary.replace(/\{name\}/g, "je hond"),
-              sound: "default", //voor geluid
-              data: { screen: "dogStart", petId: payload.new.pet_id }, // navigeren naar juiste pagina
-            },
-            trigger: null,
-          });
-        }
-      )
-      .subscribe();
+  // Gebeurt als je op de banner drukt:
+  const handleBannerPress = () => {
+    router.push("/notificationsIndex");
+  };
 
-    return () => {
-      channel.unsubscribe();
-    };
-  }, []);
-
-
-  if (!loaded) return null;
-
+  if (!fontsLoaded) return null;
 
   return (
     <AdoptionProfileProvider>
-      <Stack screenOptions={{ headerShown: false }}>
-        <Stack.Screen name="(tabs)" />
-        <Stack.Screen name="+not-found" />
-      </Stack>
+      {bannerTitle !== null && (
+        <InAppBanner
+          title={bannerTitle}
+          body={bannerBody}
+          onHide={handleBannerHide}
+          onPress={handleBannerPress} // navigeer naar notificationsIndex
+        />
+      )}
+
+      <NotificationListener onNotify={handleNotify} />
+
+      <Slot />
       <StatusBar />
     </AdoptionProfileProvider>
   );
