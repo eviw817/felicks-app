@@ -107,7 +107,7 @@ export default function BreedDetail() {
 
         <TouchableOpacity
           style={styles.button}
-          onPress={() => router.push("/(tabs)/(homepage)/homepage")}
+          onPress={() => router.push("/homepage")}
         >
           <BaseText style={styles.buttonText}>NAAR HOME</BaseText>
         </TouchableOpacity>
