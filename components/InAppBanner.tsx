@@ -56,7 +56,7 @@ export default function InAppBanner({
       bounciness: 12,
     }).start();
 
-    //Na 6 seconden
+    //Na 4 seconden
     const timeout = setTimeout(() => {
       Animated.timing(translateY, {
         toValue: -100,
@@ -65,7 +65,7 @@ export default function InAppBanner({
       }).start(() => {
         onHide();
       });
-    }, 6000);
+    }, 4000);
 
     return () => clearTimeout(timeout);
   }, [translateY, onHide]);
