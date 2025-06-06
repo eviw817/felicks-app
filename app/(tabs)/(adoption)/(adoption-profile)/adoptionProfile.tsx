@@ -1,6 +1,6 @@
 import React from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
-import { useRouter, Link } from "expo-router";
+import { useRouter } from "expo-router";
 import { useFonts } from "expo-font";
 import { Ionicons } from "@expo/vector-icons";
 
@@ -25,24 +25,26 @@ function AdoptionProfileScreen() {
       {/* text */}
       <View style={styles.textContainer}>
         <Text style={styles.text}>
-          Bedankt voor je registratie! Maak nu een adoptieprofiel aan om te
-          ontdekken welke hond bij jou past.
+          Je profiel is aangemaakt! Laten we nu ontdekken welk hondenras écht
+          bij jou past.
         </Text>
         <Text style={styles.text}>
-          Vul je voorkeuren en gewoontes in en ontvang gepersonaliseerde
-          aanbevelingen. Start vandaag nog en maak een weloverwogen keuze voor
-          een nieuwe huisgenoot.
+          Beantwoord een paar korte vragen en ontvang een persoonlijke
+          aanbeveling.
         </Text>
       </View>
 
       {/* buttons */}
-      <Link style={styles.button} href="/livingSituation1">
-        <Text style={styles.buttonText}>adoptieprofiel opzetten</Text>
-      </Link>
+      <TouchableOpacity
+        style={styles.button}
+        onPress={() => router.push("/livingSituation")}
+      >
+        <Text style={styles.buttonText}>Vind jouw perfecte ras</Text>
+      </TouchableOpacity>
 
-      <Link style={styles.button} href="/homepage">
+      <TouchableOpacity style={styles.buttonTransparent}>
         <Text style={styles.buttonText}>overslaan</Text>
-      </Link>
+      </TouchableOpacity>
     </View>
   );
 }
@@ -70,7 +72,7 @@ const styles = StyleSheet.create({
     marginBottom: 50,
     textAlign: "center",
     alignSelf: "center",
-    fontFamily: "nunitoBold",
+    fontFamily: "NunitoBold",
     width: "100%",
   },
 
@@ -82,11 +84,25 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: "#183A36",
     marginBottom: 15,
-    fontFamily: "nunitoRegular",
+    fontFamily: "NunitoRegular",
   },
 
   button: {
     backgroundColor: "#97B8A5",
+    paddingVertical: 15,
+    borderRadius: 20,
+    marginBottom: 20,
+    width: "100%",
+    alignItems: "center",
+    justifyContent: "center",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+  },
+
+  buttonTransparent: {
+    borderColor: "#97B8A5",
+    borderWidth: 2,
     paddingVertical: 15,
     borderRadius: 20,
     marginBottom: 20,
@@ -105,7 +121,7 @@ const styles = StyleSheet.create({
     textTransform: "uppercase",
     textAlign: "center",
     width: "100%",
-    fontFamily: "nunitoBold",
+    fontFamily: "NunitoBold",
   },
 });
 

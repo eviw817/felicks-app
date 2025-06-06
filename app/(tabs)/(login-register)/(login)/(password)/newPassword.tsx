@@ -241,7 +241,7 @@ const styles = StyleSheet.create({
   registerLink: {
     fontWeight: "bold",
   },
-      passwordContainer: {
+  passwordContainer: {
   width: "100%",
   marginBottom: -3,
   position: "relative",

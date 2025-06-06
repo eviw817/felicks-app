@@ -1,6 +1,6 @@
 import { Stack } from 'expo-router';
 
-export default function AdoptionProfileLayout() {
+export default function ProfileLayout() {
   return (
     <Stack
       screenOptions={{
@@ -13,8 +13,9 @@ export default function AdoptionProfileLayout() {
           fontWeight: 'bold',
         },
       }}>
-      <Stack.Screen name="dogInfo" options={{ title: "Dog info" }} />
-      <Stack.Screen name="suitableDogs" options={{ title: "Suitable dogs" }} />
+      <Stack.Screen name="adoptionIndex" options={{ title: "Adoptie Index" }} />
+      <Stack.Screen name="missingAdoptionProfile" options={{ title: "Missing Adoption Profile" }} />
+      <Stack.Screen name="adoptionChoice" options={{ title: "Adoption Choice" }} />
     </Stack>
   );
 }
