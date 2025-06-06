@@ -157,7 +157,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    marginTop: 75,
+    marginTop: 60,
     marginBottom: 36,
   },
   backButton: {
@@ -177,7 +177,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 10,
     borderRadius: 12,
-    fontSize: 14,
+    fontSize: 16,
     marginBottom: 24,
     fontFamily: 'NunitoRegular',
     borderColor: '#ccc',
@@ -203,11 +203,11 @@ const styles = StyleSheet.create({
     right: 32,                  
     backgroundColor: '#F18B7E',
     color: '#183A36',
-    fontFamily: 'NunitoSemiBold',
+    fontFamily: 'NunitoBold',
     paddingHorizontal: 8,
     paddingVertical: 4,
     borderRadius: 12,
-    fontSize: 12,
+    fontSize: 14,
     zIndex: 10,                  
   },
   
@@ -223,14 +223,14 @@ const styles = StyleSheet.create({
   },
   
   title: {
-    fontSize: 20,
+    fontSize: 22,
     fontFamily: 'SireniaSemiBold',
     marginTop: 4,
     marginBottom: 4,
     color: '#183A36',
   },
   summary: {
-    fontSize: 14,
+    fontSize: 16,
     fontFamily: 'NunitoRegular',
     color: '#183A36',
   },
