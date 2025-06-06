@@ -110,7 +110,7 @@ export default function Energy() {
           activeOpacity={0.8}
         >
           <RadioButton selected={trainingImportance === opt.value} />
-          <BaseText>{opt.label}</BaseText>
+          <BaseText style={styles.answerText}>{opt.label}</BaseText>
         </TouchableOpacity>
       ))}
 
@@ -126,7 +126,7 @@ export default function Energy() {
           activeOpacity={0.8}
         >
           <RadioButton selected={energyPreference === opt.value} />
-          <BaseText>{opt.label}</BaseText>
+          <BaseText style={styles.answerText}>{opt.label}</BaseText>
         </TouchableOpacity>
       ))}
 
@@ -135,7 +135,9 @@ export default function Energy() {
         onPress={handleAnswer}
         disabled={!canContinue}
       >
-        <BaseText variant="button">VOLGENDE</BaseText>
+        <BaseText variant="button" style={styles.buttonText}>
+          VOLGENDE
+        </BaseText>
       </TouchableOpacity>
     </SafeAreaView>
   );
@@ -174,6 +176,8 @@ const styles = StyleSheet.create({
   },
   question: {
     fontSize: 18,
+    fontWeight: "bold",
+    color: "#183A36",
     marginBottom: 12,
   },
   radioRow: {
@@ -197,6 +201,10 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     backgroundColor: "#97B8A5",
   },
+  answerText: {
+    fontSize: 16,
+    color: "#183A36",
+  },
   button: {
     marginTop: 40,
     backgroundColor: "#97B8A5",
@@ -206,5 +214,10 @@ const styles = StyleSheet.create({
   },
   buttonDisabled: {
     opacity: 0.5,
+  },
+  buttonText: {
+    fontWeight: "bold",
+    color: "#183A36",
+    fontSize: 16,
   },
 });

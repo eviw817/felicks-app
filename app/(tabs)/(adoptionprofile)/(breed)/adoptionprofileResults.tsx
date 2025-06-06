@@ -14,6 +14,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import { supabase } from "@/lib/supabase";
 import BaseText from "@/components/BaseText";
+import { useFonts } from "expo-font";
 
 interface Prefs {
   living_situation: string;
@@ -53,6 +54,15 @@ interface Breed {
 }
 
 export default function AdoptieprofielResults() {
+const [fontsLoaded] = useFonts({
+      NunitoBold: require("@/assets/fonts/Nunito/NunitoBold.ttf"),
+      SireniaRegular: require("@/assets/fonts/Sirenia/SireniaRegular.ttf"),
+    });
+
+      if (!fontsLoaded) {
+        return <View />;
+      }
+
   const router = useRouter();
   const [prefs, setPrefs] = useState<Prefs | null>(null);
   const [breeds, setBreeds] = useState<Breed[]>([]);

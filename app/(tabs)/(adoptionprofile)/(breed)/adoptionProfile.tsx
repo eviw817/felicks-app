@@ -1,10 +1,16 @@
 import React from "react";
-import { View, StyleSheet, TouchableOpacity } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { useRouter } from "expo-router";
+import { useFonts } from "expo-font";
 import { Ionicons } from "@expo/vector-icons";
 import BaseText from "@/components/BaseText";
 
-function AdoptionprofileScreen() {
+function AdoptionProfileScreen() {
+  const [fontsLoaded] = useFonts({
+    NunitoBold: require("@/assets/fonts/Nunito/NunitoBold.ttf"),
+    NunitoRegular: require("@/assets/fonts/Nunito/NunitoRegular.ttf"),
+  });
+
   const router = useRouter();
 
   return (
@@ -26,6 +32,21 @@ function AdoptionprofileScreen() {
           Beantwoord een paar korte vragen en ontvang een persoonlijke
           aanbeveling.
         </BaseText>
+      </View>
+
+      {/* titel */}
+      <Text style={styles.title}>Adoptieprofiel</Text>
+
+      {/* text */}
+      <View style={styles.textContainer}>
+        <Text style={styles.text}>
+          Je profiel is aangemaakt! Laten we nu ontdekken welk hondenras écht
+          bij jou past.
+        </Text>
+        <Text style={styles.text}>
+          Beantwoord een paar korte vragen en ontvang een persoonlijke
+          aanbeveling.
+        </Text>
       </View>
 
       <TouchableOpacity
@@ -62,17 +83,17 @@ const styles = StyleSheet.create({
     marginBottom: 50,
     textAlign: "center",
     alignSelf: "center",
-    fontFamily: "Nunito-Bold",
+    fontFamily: "NunitoBold",
     width: "100%",
   },
   textContainer: {
-    marginBottom: 50,
+    marginBottom: 50, // alleen ruimte tussen de tekst en de buttons
   },
   text: {
     fontSize: 16,
     color: "#183A36",
     marginBottom: 15,
-    fontFamily: "Nunito-Regular",
+    fontFamily: "NunitoRegular",
   },
   button: {
     backgroundColor: "#97B8A5",
@@ -106,8 +127,8 @@ const styles = StyleSheet.create({
     textTransform: "uppercase",
     textAlign: "center",
     width: "100%",
-    fontFamily: "Nunito-Bold",
+    fontFamily: "NunitoBold",
   },
 });
 
-export default AdoptionprofileScreen;
+export default AdoptionProfileScreen;

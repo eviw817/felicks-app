@@ -8,6 +8,7 @@ import {
 } from "react-native";
 import { useRouter } from "expo-router";
 import { supabase } from "@/lib/supabase";
+import { useFonts } from "expo-font";
 import { Ionicons } from "@expo/vector-icons";
 import BaseText from "@/components/BaseText";
 
@@ -23,6 +24,12 @@ export default function FamilyEnvironment() {
   const [answers, setAnswers] = useState({
     children: "",
     otherPets: "",
+  });
+
+  const [fontsLoaded] = useFonts({
+    NunitoRegular: require("@/assets/fonts/Nunito/NunitoRegular.ttf"),
+    NunitoBold: require("@/assets/fonts/Nunito/NunitoBold.ttf"),
+    SireniaRegular: require("@/assets/fonts/Sirenia/SireniaRegular.ttf"),
   });
 
   useEffect(() => {
@@ -47,6 +54,8 @@ export default function FamilyEnvironment() {
       }
     })();
   }, []);
+
+  if (!fontsLoaded) return null;
 
   const handleAnswer = async (
     question: "children" | "otherPets",
@@ -162,6 +171,9 @@ const styles = StyleSheet.create({
   },
   headerTitle: {
     textAlign: "center",
+    fontFamily: "SireniaRegular",
+    fontSize: 20,
+    color: "#183A36",
   },
   progressBar: {
     width: "100%",

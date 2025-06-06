@@ -4,9 +4,10 @@ import { useRouter } from "expo-router";
 import {
   SafeAreaView,
   View,
-  TouchableOpacity,
+  Text,
   StyleSheet,
   Platform,
+  TouchableOpacity,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import BaseText from "@/components/BaseText";

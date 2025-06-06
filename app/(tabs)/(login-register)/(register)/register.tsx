@@ -10,8 +10,8 @@ import {
   SafeAreaView,
   ScrollView,
 } from "react-native";
-import { supabase } from "../../../../lib/supabase";
-import Auth from "../../../../components/Auth";
+import { supabase } from "@/lib/supabase";
+import Auth from "@/components/Auth";
 import { Session } from "@supabase/supabase-js";
 import { useRouter, Link } from "expo-router";
 import { Picker } from "@react-native-picker/picker";
@@ -226,11 +226,11 @@ export default function Registeren() {
         keyboardShouldPersistTaps="handled"
         style={{ width: "100%" }}
       >
-        {session ? (
-          <Auth key={session.user.id} session={session} />
-        ) : (
-          <>
-            <BaseText style={styles.title}>Registreren</BaseText>
+      {session ? (
+        <Auth key={session.user.id} session={session} />
+      ) : (
+        <>
+          <BaseText style={styles.title}>Registreren</BaseText>
 
             {/* Voornaam input */}
             <Text style={styles.label}>Voornaam</Text>
@@ -338,26 +338,25 @@ export default function Registeren() {
               value={email}
             />
 
-            {/* Wachtwoord input */}
-            {/* Wachtwoord input */}
-            <Text style={styles.label}>Wachtwoord</Text>
-            <View style={styles.passwordContainer}>
-              <TextInput
-                style={[
-                  styles.input,
-                  { flex: 1 },
-                  passwordFocus || isPasswordFilled
-                    ? styles.focusedInput
-                    : styles.unfocusedInput,
-                ]}
-                placeholder="Wachtwoord"
-                placeholderTextColor="rgba(151, 184, 165, 0.5)"
-                secureTextEntry={!showPassword}
-                onFocus={() => setPasswordFocus(true)}
-                onBlur={() => setPasswordFocus(false)}
-                onChangeText={setPassword}
-                value={password}
-              />
+          {/* Wachtwoord input */}
+          <Text style={styles.label}>Wachtwoord</Text>
+          <View style={styles.passwordContainer}>
+            <TextInput
+              style={[
+                styles.input,
+                passwordFocus || isPasswordFilled
+                  ? styles.focusedInput
+                  : styles.unfocusedInput,
+              ]}
+              placeholder="Wachtwoord"
+              placeholderTextColor="rgba(151, 184, 165, 0.5)"
+              secureTextEntry={!showPassword}
+              onFocus={() => setPasswordFocus(true)}
+              onBlur={() => setPasswordFocus(false)}
+              onChangeText={setPassword}
+              value={password}
+            />
+
               <TouchableOpacity
                 style={styles.eyeIcon}
                 onPress={() => setShowPassword((prev) => !prev)}

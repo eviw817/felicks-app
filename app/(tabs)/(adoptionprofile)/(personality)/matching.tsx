@@ -10,6 +10,7 @@ import {
   ActivityIndicator,
   Image,
   Platform,
+  Text,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
@@ -165,7 +166,10 @@ export default function Matching() {
         <TouchableOpacity style={styles.back} onPress={() => router.back()}>
           <Ionicons name="arrow-back" size={24} color="#183A36" />
         </TouchableOpacity>
-        <BaseText variant="title">Jouw matches</BaseText>
+        {/* Use BaseText component for title */}
+        <BaseText variant="title" style={styles.title}>
+          Jouw matches
+        </BaseText>
       </View>
 
       {matches.length === 0 ? (
@@ -234,6 +238,11 @@ const styles = StyleSheet.create({
   back: {
     position: "absolute",
     left: 0,
+  },
+  title: {
+    fontSize: 22,
+    fontFamily: "Sirenia-Regular",
+    color: "#183A36",
   },
   noMatches: {
     fontSize: 16,

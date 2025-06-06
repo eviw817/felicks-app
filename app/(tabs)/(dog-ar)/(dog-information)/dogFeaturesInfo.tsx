@@ -8,25 +8,37 @@ import {
   Switch,
   Animated,
   Easing,
-  Pressable
+  Pressable,
 } from "react-native";
 import { useRouter, useLocalSearchParams } from "expo-router";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import { Link } from "expo-router";
 import { supabase } from "@/lib/supabase"; // adjust if your path is different
 import NavBar from "@/components/NavigationBar";
-import { useNavigation } from '@react-navigation/native'
-import { Ionicons } from '@expo/vector-icons'
+import { useNavigation } from "@react-navigation/native";
+import { Ionicons } from "@expo/vector-icons";
+import { useFonts } from "expo-font";
 
 export default function DogFeature() {
+  const [fontsLoaded] = useFonts({
+    NunitoRegular: require("@/assets/fonts/Nunito/NunitoRegular.ttf"),
+    NunitoSemiBold: require("@/assets/fonts/Nunito/NunitoSemiBold.ttf"),
+    NunitoBold: require("@/assets/fonts/Nunito/NunitoBold.ttf"),
+    SireniaMedium: require("@/assets/fonts/Sirenia/SireniaMedium.ttf"),
+  });
+
   const router = useRouter();
-  const navigation = useNavigation()
+  const navigation = useNavigation();
 
   const { petId } = useLocalSearchParams();
 
   const [dogName, setDogName] = React.useState("");
   const [loading, setLoading] = React.useState(true);
   const [fetchError, setFetchError] = React.useState("");
+
+  if (!fontsLoaded) {
+    return <View />;
+  }
 
   React.useEffect(() => {
     console.log("DogInformation petId:", petId); // <-- Debug: log petId here
@@ -79,20 +91,19 @@ export default function DogFeature() {
           justifyContent: "flex-start",
         }}
       >
-        <Pressable
-            onPress={() => navigation.goBack()}
-            style={{
-              position: "absolute",
-              top: 68,
-              left: 40,
-            }}
-          >
-            <Ionicons name="arrow-back" size={24} color="#183A36" />
-          </Pressable>
+        <TouchableOpacity
+          onPress={() => router.push(`/dogNotifications?petId=${petId}`)}
+          style={{
+            position: "absolute",
+            top: 68,
+            left: 40,
+          }}
+        >
+          <Ionicons name="arrow-back" size={24} color="#183A36" />
+        </TouchableOpacity>
         <Text
           style={{
-            fontFamily: "Nunito",
-            fontWeight: "bold",
+            fontFamily: "NunitoBold",
             fontSize: 20,
             padding: 20,
             paddingHorizontal: 60,
@@ -103,8 +114,7 @@ export default function DogFeature() {
         </Text>
         <Text
           style={{
-            fontFamily: "Nunito",
-            fontWeight: "bold",
+            fontFamily: "NunitoBold",
             fontSize: 16,
             padding: 20,
             paddingRight: 40,
@@ -120,8 +130,7 @@ export default function DogFeature() {
         >
           <Text
             style={{
-              fontFamily: "Nunito",
-              fontWeight: "bold",
+              fontFamily: "NunitoBold",
               fontSize: 18,
               padding: 20,
               paddingTop: 20,
@@ -132,8 +141,7 @@ export default function DogFeature() {
           </Text>
           <Text
             style={{
-              fontFamily: "Nunito",
-              fontWeight: "normal",
+              fontFamily: "NunitoRegular",
               fontSize: 16,
               paddingRight: 40,
               marginLeft: 20,
@@ -144,8 +152,7 @@ export default function DogFeature() {
           </Text>
           <Text
             style={{
-              fontFamily: "Nunito",
-              fontWeight: "normal",
+              fontFamily: "NunitoRegular",
               fontSize: 16,
               paddingRight: 12,
               marginRight: 10,
@@ -161,8 +168,7 @@ export default function DogFeature() {
         <View>
           <Text
             style={{
-              fontFamily: "Nunito",
-              fontWeight: "bold",
+              fontFamily: "NunitoBold",
               fontSize: 18,
               padding: 20,
               paddingTop: 20,
@@ -173,8 +179,7 @@ export default function DogFeature() {
           </Text>
           <Text
             style={{
-              fontFamily: "Nunito",
-              fontWeight: "normal",
+              fontFamily: "NunitoRegular",
               fontSize: 16,
               paddingRight: 20,
               marginRight: 20,
@@ -187,8 +192,7 @@ export default function DogFeature() {
           </Text>
           <Text
             style={{
-              fontFamily: "Nunito",
-              fontWeight: "normal",
+              fontFamily: "NunitoRegular",
               fontSize: 16,
               paddingRight: 12,
               marginRight: 20,
@@ -203,8 +207,7 @@ export default function DogFeature() {
         <View>
           <Text
             style={{
-              fontFamily: "Nunito",
-              fontWeight: "bold",
+              fontFamily: "NunitoBold",
               fontSize: 18,
               padding: 20,
               paddingTop: 20,
@@ -215,8 +218,7 @@ export default function DogFeature() {
           </Text>
           <Text
             style={{
-              fontFamily: "Nunito",
-              fontWeight: "normal",
+              fontFamily: "NunitoRegular",
               fontSize: 16,
               paddingRight: 8,
               paddingHorizontal: 20,
@@ -225,12 +227,12 @@ export default function DogFeature() {
             }}
           >
             {dogName || "nog geen naam"} reageert op jouw aandacht. Verzorg je
-            hem goed? Dan straalt hij. Vergeet je hem?
+            {dogName || "nog geen naam"} goed? Dan straalt die. Vergeet je{" "}
+            {dogName || "nog geen naam"}?
           </Text>
           <Text
             style={{
-              fontFamily: "Nunito",
-              fontWeight: "normal",
+              fontFamily: "NunitoRegular",
               fontSize: 16,
               paddingRight: 40,
               paddingHorizontal: 20,
@@ -238,13 +240,12 @@ export default function DogFeature() {
               marginLeft: 20,
             }}
           >
-            Dan wordt hij verdrietig.
+            Dan wordt die verdrietig.
           </Text>
         </View>
         <Text
           style={{
-            fontFamily: "Nunito",
-            fontWeight: "bold",
+            fontFamily: "NunitoBold",
             fontSize: 16,
             paddingTop: 20,
             paddingLeft: 20,
@@ -256,8 +257,7 @@ export default function DogFeature() {
         </Text>
         <Text
           style={{
-            fontFamily: "Nunito",
-            fontWeight: "normal",
+            fontFamily: "NunitoRegular",
             fontSize: 16,
             paddingLeft: 20,
             paddingRight: 40,
@@ -268,8 +268,7 @@ export default function DogFeature() {
         </Text>
         <Text
           style={{
-            fontFamily: "Nunito",
-            fontWeight: "bold",
+            fontFamily: "NunitoBold",
             fontSize: 16,
             paddingTop: 20,
             paddingLeft: 20,
@@ -281,8 +280,7 @@ export default function DogFeature() {
         </Text>
         <Text
           style={{
-            fontFamily: "Nunito",
-            fontWeight: "normal",
+            fontFamily: "NunitoRegular",
             fontSize: 16,
             paddingLeft: 20,
             paddingRight: 40,
@@ -298,7 +296,7 @@ export default function DogFeature() {
             margin: 20,
             marginRight: 20,
             backgroundColor: "#97B8A5",
-            fontWeight: "bold",
+            fontFamily: "NunitoBold",
             borderRadius: 15,
             textAlign: "center",
           }}

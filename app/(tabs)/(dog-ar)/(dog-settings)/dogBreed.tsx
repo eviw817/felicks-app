@@ -5,25 +5,37 @@ import {
   Text,
   TouchableOpacity,
   Alert,
-  Pressable
+  Pressable,
 } from "react-native";
 import { useRouter, Link } from "expo-router";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import { Picker } from "@react-native-picker/picker";
 import NavBar from "@/components/NavigationBar";
-import { useNavigation } from '@react-navigation/native'
-import { Ionicons } from '@expo/vector-icons'
+import { useNavigation } from "@react-navigation/native";
+import { Ionicons } from "@expo/vector-icons";
 
 import { supabase } from "@/lib/supabase"; // adjust path if needed
 import { useEffect } from "react";
-import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
-import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
+import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import BaseText from "@/components/BaseText";
+import { useFonts } from "expo-font";
 
 export default function DogBreed() {
+  const [fontsLoaded] = useFonts({
+    NunitoRegular: require("@/assets/fonts/Nunito/NunitoRegular.ttf"),
+    NunitoSemiBold: require("@/assets/fonts/Nunito/NunitoSemiBold.ttf"),
+    NunitoBold: require("@/assets/fonts/Nunito/NunitoBold.ttf"),
+    SireniaMedium: require("@/assets/fonts/Sirenia/SireniaMedium.ttf"),
+  });
+
   const router = useRouter();
   const [dogBreed, setdogBreed] = useState<string | null>(null);
-    const navigation = useNavigation()
+  const navigation = useNavigation();
+
+  if (!fontsLoaded) {
+    return <View />;
+  }
 
   const handleBreedSubmit = async () => {
     if (!dogBreed) return;
@@ -103,30 +115,64 @@ export default function DogBreed() {
 
   return (
     <SafeAreaView
-      style={{ flex: 1, alignItems: "center", backgroundColor: "#FFFDF9", paddingTop: 100, }}
+      style={{
+        flex: 1,
+        alignItems: "center",
+        backgroundColor: "#FFFDF9",
+        paddingTop: 100,
+      }}
     >
       <View style={{ width: "100%", paddingHorizontal: 20 }}>
-      <View style={{flexDirection: "row",
-                    alignItems: "center",
-                    justifyContent: "center", 
-                    width: "100%",
-                    position: "relative", 
-                    paddingVertical: 10,}}
+        <View
+          style={{
+            flexDirection: "row",
+            alignItems: "center",
+            justifyContent: "center",
+            width: "100%",
+            position: "relative",
+            paddingVertical: 10,
+          }}
         >
-           <TouchableOpacity onPress={() => router.push("/dogStart")} style={{position: "absolute", left: 5, top:7,}}>
-           <FontAwesomeIcon icon={faArrowLeft} size={30} color={'#183A36'} style={{position: "absolute", left: 5, top:7,}} />
+          <TouchableOpacity
+            onPress={() => router.push("/dogStart")}
+            style={{ position: "absolute", left: 5, top: 7, zIndex: 10 }}
+          >
+            <FontAwesomeIcon
+              icon={faArrowLeft}
+              size={30}
+              color={"#183A36"}
+              style={{ position: "absolute", left: 5, top: 7 }}
+            />
           </TouchableOpacity>
-          <BaseText style={{ fontSize: 28,
-            fontFamily: 'SireniaMedium',
-            textAlign: "center",
-            marginBottom: 20,}}>
-              Virtuele hond
+          <BaseText
+            style={{
+              fontSize: 28,
+              fontFamily: "SireniaMedium",
+              textAlign: "center",
+              marginBottom: 20,
+            }}
+          >
+            Virtuele hond
           </BaseText>
-      </View>
-        <Text style={{ fontFamily: "Nunito", fontSize: 16, marginTop: 20, color: "#183A36", }}>
+        </View>
+        <Text
+          style={{
+            fontFamily: "NunitoRegular",
+            fontSize: 16,
+            marginTop: 20,
+            color: "#183A36",
+          }}
+        >
           Denk aan jouw favoriete hond...
         </Text>
-        <Text style={{ fontFamily: "Nunito", fontSize: 16, marginTop: 12,  color: "#183A36", }}>
+        <Text
+          style={{
+            fontFamily: "NunitoRegular",
+            fontSize: 16,
+            marginTop: 12,
+            color: "#183A36",
+          }}
+        >
           Welk ras schiet er als eerste te binnen? Dat wordt jouw virtuele
           maatje!
         </Text>
@@ -174,7 +220,7 @@ export default function DogBreed() {
           >
             <Text
               style={{
-                fontWeight: "bold",
+                fontFamily: "NunitoBold",
                 fontSize: 15,
                 color: "#183A36",
                 textAlign: "center",
@@ -183,7 +229,7 @@ export default function DogBreed() {
               DOORGAAN
             </Text>
           </TouchableOpacity>
-      </View>
+        </View>
       </View>
       {/* Fixed navbar onderaan scherm */}
       <View

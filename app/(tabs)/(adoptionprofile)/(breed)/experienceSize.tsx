@@ -9,7 +9,7 @@ import {
 import { useRouter } from "expo-router";
 import { supabase } from "@/lib/supabase";
 import { Ionicons } from "@expo/vector-icons";
-import BaseText from "@/components/BaseText";
+import BaseText from "@/components/BaseText"; // ✅ Retain BaseText for styling consistency
 
 const RadioButton: React.FC<{ selected: boolean }> = ({ selected }) => (
   <View style={styles.radioOuter}>

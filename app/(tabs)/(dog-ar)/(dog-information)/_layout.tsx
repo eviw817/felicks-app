@@ -26,6 +26,10 @@ export default function DemoLayout() {
         name="dogFeaturesInfo"
         options={{ title: "Dog Features Information" }}
       />
+      <Stack.Screen
+        name="dogPermissionsCheck"
+        options={{ title: "dog Permissions Check" }}
+      />
     </Stack>
   );
 }

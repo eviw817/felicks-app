@@ -10,9 +10,10 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { supabase } from "@/lib/supabase";
+import { Session } from '@supabase/supabase-js';
 import { FontAwesome } from "@expo/vector-icons";
 import AntDesign from "@expo/vector-icons/AntDesign";
-import { useRouter } from "expo-router";
+import { useRouter, Link } from "expo-router";
 import NavBar from "@/components/NavigationBar";
 
 type Notification = {
@@ -126,15 +127,25 @@ export default function NotificationsScreen() {
   };
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: "#FFFDF9" }}>
+    <SafeAreaView
+      style={{
+        flex: 1,
+        justifyContent: "center",
+        backgroundColor: "#FFFDF9",
+      }}
+    >
       <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
         <TouchableOpacity
-          style={{ position: "absolute", top: 98, left: 16 }}
+          style={{
+            position: "absolute",
+            top: 98,
+            left: 16,
+            maxWidth: "100%",
+          }}
           onPress={() => router.back()}
         >
           <AntDesign name="arrowleft" size={24} color="black" />
         </TouchableOpacity>
-
         <View style={{ alignItems: "center", marginTop: 70 }}>
           <Text style={{ fontFamily: "SireniaMedium", fontSize: 24, padding: 20 }}>
             Meldingen
@@ -152,7 +163,6 @@ export default function NotificationsScreen() {
           >
             Recente meldingen
           </Text>
-
           {loading ? (
             <ActivityIndicator size="large" color="#97B8A5" />
           ) : (

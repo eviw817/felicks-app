@@ -31,21 +31,17 @@ export default function AdoptionChoice() {
       </BaseText>
 
       <TouchableOpacity
-        style={styles.secondaryButton}
+        style={styles.optionButton}
         onPress={() => router.push("/personalityTraits")}
       >
-        <BaseText variant="button" style={styles.secondaryText}>
-          PERSOONLIJKHEID
-        </BaseText>
+        <BaseText style={styles.optionText}>PERSOONLIJKHEID</BaseText>
       </TouchableOpacity>
 
       <TouchableOpacity
-        style={styles.secondaryButton}
-        onPress={() => router.push("/personalityTraits")}
+        style={styles.optionButton}
+        onPress={() => router.push("/livingSituation")}
       >
-        <BaseText variant="button" style={styles.secondaryText}>
-          RAS
-        </BaseText>
+        <BaseText style={styles.optionText}>RAS</BaseText>
       </TouchableOpacity>
     </SafeAreaView>
   );
@@ -72,6 +68,7 @@ const styles = StyleSheet.create({
     fontSize: 22,
     color: "#183A36",
     textAlign: "center",
+    fontFamily: "Nunito-Regular",
   },
   question: {
     fontSize: 16,
@@ -79,6 +76,7 @@ const styles = StyleSheet.create({
     lineHeight: 24,
     marginBottom: 32,
     fontFamily: "Nunito-Regular",
+    textAlign: "center",
   },
   optionButton: {
     borderColor: "#183A36",
@@ -92,16 +90,7 @@ const styles = StyleSheet.create({
   optionText: {
     fontSize: 16,
     color: "#183A36",
-    textTransform: "uppercase",
     fontFamily: "Nunito-Bold",
+    textTransform: "uppercase",
   },
-  secondaryButton: {
-    borderColor: "#97B8A5",
-    borderWidth: 1,
-    borderRadius: 20,
-    paddingVertical: 16,
-    alignItems: "center",
-    marginBottom: 16,
-  },
-  secondaryText: {},
 });

@@ -1,26 +1,42 @@
 import React from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { ScrollView, View, Text, TouchableOpacity, Pressable } from "react-native";
+import {
+  ScrollView,
+  View,
+  Text,
+  TouchableOpacity,
+  Pressable,
+} from "react-native";
 import { useRouter, useLocalSearchParams } from "expo-router";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import { Link } from "expo-router";
 import { supabase } from "@/lib/supabase"; // adjust if your path is different
 import NavBar from "@/components/NavigationBar";
-import { useNavigation } from '@react-navigation/native'
-import { Ionicons } from '@expo/vector-icons'
+import { useNavigation } from "@react-navigation/native";
+import { Ionicons } from "@expo/vector-icons";
+import { useFonts } from "expo-font";
 
 export default function DogInformation() {
+  const [fontsLoaded] = useFonts({
+    NunitoRegular: require("@/assets/fonts/Nunito/NunitoRegular.ttf"),
+    NunitoSemiBold: require("@/assets/fonts/Nunito/NunitoSemiBold.ttf"),
+    NunitoBold: require("@/assets/fonts/Nunito/NunitoBold.ttf"),
+    SireniaMedium: require("@/assets/fonts/Sirenia/SireniaMedium.ttf"),
+  });
+
   const router = useRouter();
-  const navigation = useNavigation()
+  const navigation = useNavigation();
 
   const { petId } = useLocalSearchParams();
-
-
 
   const [dogName, setDogName] = React.useState("");
   const [dogBreed, setDogBreed] = React.useState("");
   const [loading, setLoading] = React.useState(true);
   const [fetchError, setFetchError] = React.useState("");
+
+  if (!fontsLoaded) {
+    return <View />;
+  }
 
   React.useEffect(() => {
     console.log("DogInformation petId:", petId); // Debug
@@ -82,16 +98,16 @@ export default function DogInformation() {
           paddingBottom: 100,
         }}
       >
-        <Pressable
-            onPress={() => navigation.goBack()}
-            style={{
-              position: "absolute",
-              top: 68,
-              left: 40,
-            }}
-          >
-            <Ionicons name="arrow-back" size={24} color="#183A36" />
-          </Pressable>
+        <TouchableOpacity
+          onPress={() => router.push(`/arInformation?petId=${petId}`)}
+          style={{
+            position: "absolute",
+            top: 68,
+            left: 40,
+          }}
+        >
+          <Ionicons name="arrow-back" size={24} color="#183A36" />
+        </TouchableOpacity>
         <View
           style={{
             top: 1,
@@ -102,8 +118,7 @@ export default function DogInformation() {
         >
           <Text
             style={{
-              fontFamily: "Nunito",
-              fontWeight: "bold",
+              fontFamily: "NunitoBold",
               fontSize: 20,
               padding: 20,
               textAlign: "center",
@@ -113,8 +128,7 @@ export default function DogInformation() {
           </Text>
           <Text
             style={{
-              fontFamily: "Nunito",
-              fontWeight: "bold",
+              fontFamily: "NunitoBold",
               fontSize: 16,
               paddingTop: 20,
               paddingLeft: 20,
@@ -125,8 +139,7 @@ export default function DogInformation() {
           </Text>
           <Text
             style={{
-              fontFamily: "Nunito",
-              fontWeight: "bold",
+              fontFamily: "NunitoBold",
               fontSize: 16,
               paddingTop: 0,
               paddingLeft: 20,
@@ -136,8 +149,7 @@ export default function DogInformation() {
           </Text>
           <Text
             style={{
-              fontFamily: "Nunito",
-              fontWeight: "normal",
+              fontFamily: "NunitoRegular",
               fontSize: 16,
               padding: 20,
               paddingTop: 8,
@@ -151,8 +163,7 @@ export default function DogInformation() {
           </Text>
           <Text
             style={{
-              fontFamily: "Nunito",
-              fontWeight: "bold",
+              fontFamily: "NunitoBold",
               fontSize: 16,
               paddingTop: 0,
               paddingLeft: 20,
@@ -168,8 +179,7 @@ export default function DogInformation() {
           >
             <Text
               style={{
-                fontFamily: "Nunito",
-                fontWeight: "normal",
+                fontFamily: "NunitoRegular",
                 fontSize: 36,
                 paddingRight: 8,
                 lineHeight: 36,
@@ -179,8 +189,7 @@ export default function DogInformation() {
             </Text>
             <Text
               style={{
-                fontFamily: "Nunito",
-                fontWeight: "normal",
+                fontFamily: "NunitoRegular",
                 fontSize: 16,
                 paddingRight: 40,
                 lineHeight: 28,
@@ -197,8 +206,7 @@ export default function DogInformation() {
           >
             <Text
               style={{
-                fontFamily: "Nunito",
-                fontWeight: "normal",
+                fontFamily: "NunitoRegular",
                 fontSize: 36,
                 paddingRight: 8,
                 lineHeight: 36,
@@ -208,8 +216,7 @@ export default function DogInformation() {
             </Text>
             <Text
               style={{
-                fontFamily: "Nunito",
-                fontWeight: "normal",
+                fontFamily: "NunitoRegular",
                 fontSize: 16,
                 paddingRight: 20,
                 lineHeight: 28,
@@ -226,8 +233,7 @@ export default function DogInformation() {
           >
             <Text
               style={{
-                fontFamily: "Nunito",
-                fontWeight: "normal",
+                fontFamily: "NunitoRegular",
                 fontSize: 36,
                 paddingRight: 8,
                 lineHeight: 36,
@@ -237,8 +243,7 @@ export default function DogInformation() {
             </Text>
             <Text
               style={{
-                fontFamily: "Nunito",
-                fontWeight: "normal",
+                fontFamily: "NunitoRegular",
                 fontSize: 16,
                 paddingRight: 40,
                 lineHeight: 28,
@@ -251,8 +256,7 @@ export default function DogInformation() {
 
           <Text
             style={{
-              fontFamily: "Nunito",
-              fontWeight: "normal",
+              fontFamily: "NunitoRegular",
               fontSize: 16,
               padding: 20,
               paddingRight: 30,
@@ -270,11 +274,11 @@ export default function DogInformation() {
               paddingHorizontal: 20,
               marginRight: 46,
               backgroundColor: "#97B8A5",
-              fontWeight: "bold",
+              fontFamily: "NunitoBold",
               borderRadius: 15,
               textAlign: "center",
             }}
-            href={`/demo?petId=${petId}`}
+            href={`/demo?petId=${petId}&fromArInfo=true`}
           >
             DOORGAAN
           </Link>

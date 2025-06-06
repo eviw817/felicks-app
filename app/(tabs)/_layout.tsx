@@ -47,7 +47,7 @@ export default function TabLayout() {
       <Stack.Screen
         name="(adoptionprofile)" // Verwijst naar de map app/(tabs)/(adoptionprofile)
         options={{
-          title: "Adoption profile",
+          title: "Adoption",
           headerShown: false,
         }}
       />

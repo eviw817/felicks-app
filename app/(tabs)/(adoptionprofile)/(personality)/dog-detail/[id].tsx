@@ -4,115 +4,16 @@ import { useLocalSearchParams, useRouter } from "expo-router";
 import { useEffect, useState } from "react";
 import {
   SafeAreaView,
+  Text,
   StyleSheet,
   View,
   ScrollView,
   Image,
   TouchableOpacity,
 } from "react-native";
-import { supabase } from "../../../../../lib/supabase";
-import { Ionicons } from "@expo/vector-icons";
 import BaseText from "@/components/BaseText";
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#FFFDF9",
-    padding: 16,
-    paddingTop: 50,
-    paddingBottom: 50,
-  },
-  headerRow: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    marginBottom: 12,
-  },
-  back: {
-    position: "absolute",
-    left: 0,
-  },
-  title: {
-    fontSize: 24,
-    textAlign: "center",
-  },
-  avatar: {
-    width: 120,
-    height: 120,
-    borderRadius: 60,
-    alignSelf: "center",
-    marginVertical: 12,
-  },
-  iconRow: {
-    flexDirection: "row",
-    justifyContent: "center",
-    flexWrap: "wrap",
-    gap: 8,
-    marginBottom: 20,
-  },
-  iconTag: {
-    flexDirection: "row",
-    alignItems: "center",
-    backgroundColor: "#FDE4D2",
-    borderRadius: 16,
-    paddingHorizontal: 10,
-    paddingVertical: 4,
-    margin: 4,
-  },
-  iconTagText: {
-    marginLeft: 6,
-    color: "#183A36",
-    fontSize: 14,
-  },
-  section: {
-    marginBottom: 24,
-  },
-  subtitle: {
-    fontSize: 18,
-    marginBottom: 6,
-  },
-  detail: {
-    fontSize: 15,
-    color: "#444",
-    marginBottom: 2,
-  },
-  desc: {
-    fontSize: 15,
-    color: "#4A4A4A",
-    lineHeight: 22,
-  },
-  attrRow: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    paddingVertical: 6,
-    borderBottomWidth: 0.5,
-    borderColor: "#DDD",
-  },
-  attrLabel: {
-    fontSize: 15,
-    color: "#183A36",
-  },
-  adoptButton: {
-    backgroundColor: "#97B8A5",
-    paddingVertical: 16,
-    paddingHorizontal: 24,
-    borderRadius: 25,
-    alignItems: "center",
-    justifyContent: "center",
-    minHeight: 48,
-    marginBottom: 24,
-  },
-  gallerySection: {
-    marginTop: 12,
-    gap: 12,
-  },
-  galleryImage: {
-    width: "100%",
-    aspectRatio: 1.2,
-    borderRadius: 10,
-    marginBottom: 10,
-  },
-});
+import { supabase } from "@/lib/supabase";
+import { Ionicons } from "@expo/vector-icons";
 
 function IconTag({ label, icon }: { label: string; icon: any }) {
   return (
@@ -262,3 +163,116 @@ export default function DogDetail() {
     </SafeAreaView>
   );
 }
+
+
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "#FFFDF9",
+    padding: 16,
+    paddingTop: 50,
+    paddingBottom: 50,
+  },
+  headerRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    marginBottom: 12,
+  },
+  back: {
+    position: "absolute",
+    left: 0,
+  },
+  title: {
+    fontSize: 24,
+    fontFamily: "Sirenia-Regular",
+    color: "#183A36",
+    textAlign: "center",
+  },
+  avatar: {
+    width: 120,
+    height: 120,
+    borderRadius: 60,
+    alignSelf: "center",
+    marginVertical: 12,
+  },
+  iconRow: {
+    flexDirection: "row",
+    justifyContent: "center",
+    flexWrap: "wrap",
+    gap: 8,
+    marginBottom: 20,
+  },
+  iconTag: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "#FDE4D2",
+    borderRadius: 16,
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+    margin: 4,
+  },
+  iconTagText: {
+    marginLeft: 6,
+    color: "#183A36",
+    fontSize: 14,
+  },
+  section: {
+    marginBottom: 24,
+  },
+  subtitle: {
+    fontSize: 18,
+    fontWeight: "bold",
+    color: "#183A36",
+    marginBottom: 6,
+  },
+  detail: {
+    fontSize: 15,
+    color: "#444",
+    marginBottom: 2,
+  },
+  desc: {
+    fontSize: 15,
+    color: "#4A4A4A",
+    lineHeight: 22,
+  },
+  attrRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    paddingVertical: 6,
+    borderBottomWidth: 0.5,
+    borderColor: "#DDD",
+  },
+  attrLabel: {
+    fontSize: 15,
+    color: "#183A36",
+  },
+  adoptButton: {
+    backgroundColor: "#97B8A5",
+    paddingVertical: 16,
+    paddingHorizontal: 24,
+    borderRadius: 25,
+    alignItems: "center",
+    justifyContent: "center",
+    minHeight: 48,
+    marginBottom: 24,
+  },
+  adoptButtonText: {
+    fontSize: 16,
+    color: "#183A36",
+    fontWeight: "bold",
+    textTransform: "uppercase",
+    textAlign: "center",
+  },
+  gallerySection: {
+    marginTop: 12,
+    gap: 12,
+  },
+  galleryImage: {
+    width: "100%",
+    aspectRatio: 1.2,
+    borderRadius: 10,
+    marginBottom: 10,
+  },
+});
