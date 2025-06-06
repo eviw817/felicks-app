@@ -1,6 +1,6 @@
 "use client";
 
-import { useRouter } from "expo-router";
+import { useEffect, useState } from "react";
 import {
   SafeAreaView,
   View,
@@ -9,10 +9,105 @@ import {
   Platform,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
+import { useRouter } from "expo-router";
+import { supabase } from "@/lib/supabase";
 import BaseText from "@/components/BaseText";
 
 export default function AdoptionChoice() {
   const router = useRouter();
+  const [isPersonalityProfileComplete, setIsPersonalityProfileComplete] = useState<boolean | null>(null);
+  const [isBreedProfileComplete, setIsBreedProfileComplete] = useState(false);
+
+  useEffect(() => {
+    const checkPersonalityProfileCompletion = async () => {
+      try {
+        const {
+          data: { session },
+          error: sessionError,
+        } = await supabase.auth.getSession();
+
+        if (sessionError || !session?.user?.id) {
+          console.log("No valid session found", sessionError);
+          setIsPersonalityProfileComplete(false);
+          return;
+        }
+
+        const { data, error } = await supabase
+          .from("adoption_dog_preferences")
+          .select("*")
+          .eq("user_id", session.user.id)
+          .single();
+
+        if (error || !data) {
+          console.log("No adoption_dog_preferences row found", error);
+          setIsPersonalityProfileComplete(false);
+          return;
+        }
+
+        const isComplete = Object.values(data).every(
+          (value) => value !== null && value !== "" && value !== undefined
+        );
+
+        setIsPersonalityProfileComplete(isComplete);
+      } catch (err) {
+        console.error("Error checking personality profile data:", err);
+        setIsPersonalityProfileComplete(false);
+      }
+    };
+
+    const checkBreedProfileCompletion = async () => {
+      try {
+        const {
+          data: { session },
+          error: sessionError,
+        } = await supabase.auth.getSession();
+
+        if (sessionError || !session?.user?.id) {
+          console.log("No valid session found", sessionError);
+          return;
+        }
+
+        const { data, error } = await supabase
+          .from("adoption_profiles")
+          .select("shedding")
+          .eq("user_id", session.user.id)
+          .single();
+
+        if (error || !data) {
+          setIsBreedProfileComplete(false);
+          return;
+        }
+
+        const allFieldsFilled = Object.values(data).every(
+          (value) => value !== null && value !== "" && value !== undefined
+        );
+
+        setIsBreedProfileComplete(allFieldsFilled);
+      } catch (err) {
+        console.error("Error checking breed profile data:", err);
+        setIsBreedProfileComplete(false);
+      }
+    };
+
+    checkPersonalityProfileCompletion();
+    checkBreedProfileCompletion();
+  }, []);
+
+  const handlePressPersonality = () => {
+    if (isPersonalityProfileComplete) {
+      router.push("/matching");
+    } else {
+      router.push("/personalityTraits");
+    }
+  };
+
+  const handlePressBreed = () => {
+    if (isBreedProfileComplete) {
+      router.push("/adoptionProfileResults");
+    } else {
+      router.push("/livingSituation");
+    }
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -32,14 +127,14 @@ export default function AdoptionChoice() {
 
       <TouchableOpacity
         style={styles.optionButton}
-        onPress={() => router.push("/personalityTraits")}
+        onPress={handlePressPersonality}
       >
         <BaseText style={styles.optionText}>PERSOONLIJKHEID</BaseText>
       </TouchableOpacity>
 
       <TouchableOpacity
         style={styles.optionButton}
-        onPress={() => router.push("/livingSituation")}
+        onPress={handlePressBreed}
       >
         <BaseText style={styles.optionText}>RAS</BaseText>
       </TouchableOpacity>

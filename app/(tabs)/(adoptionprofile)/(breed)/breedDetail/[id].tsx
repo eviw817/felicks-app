@@ -13,7 +13,7 @@ import {
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useLocalSearchParams, useRouter } from "expo-router";
-import { supabase } from "../../../../../lib/supabase";
+import { supabase } from "@/lib/supabase";
 import BaseText from "@/components/BaseText";
 
 const windowWidth = Dimensions.get("window").width;
