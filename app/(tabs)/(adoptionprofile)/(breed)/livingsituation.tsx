@@ -4,33 +4,36 @@ import React, { useState, useEffect } from "react";
 import {
   SafeAreaView,
   View,
-  Text,
   StyleSheet,
   TouchableOpacity,
   Platform,
 } from "react-native";
-import { useRouter } from "expo-router";
-import { supabase } from "@/lib/supabase";
-import { useFonts } from "expo-font";
 import { Ionicons } from "@expo/vector-icons";
+import { useRouter } from "expo-router";
+import BaseText from "@/components/BaseText";
+import { useFonts } from "expo-font";
+import { supabase } from "@/lib/supabase";
 
-// ✅ Herbruikbare radiobutton component
-const RadioButtonOption: React.FC<{
+// ✅ Reusable radio button
+const RadioButtonOption = ({
+  selected,
+  label,
+  onPress,
+}: {
   selected: boolean;
   label: string;
   onPress: () => void;
-}> = ({ selected, label, onPress }) => (
+}) => (
   <TouchableOpacity style={styles.radioRow} onPress={onPress}>
     <View style={styles.radioOuter}>
       {selected && <View style={styles.radioInner} />}
     </View>
-    <Text style={styles.answerText}>{label}</Text>
+    <BaseText style={styles.answerText}>{label}</BaseText>
   </TouchableOpacity>
 );
 
 export default function LivingSituation() {
   const router = useRouter();
-
   const [userId, setUserId] = useState<string | null>(null);
   const [answers, setAnswers] = useState({
     livingSituation: "",
@@ -46,24 +49,21 @@ export default function LivingSituation() {
 
   useEffect(() => {
     (async () => {
-      const { data: userData, error: userError } =
-        await supabase.auth.getUser();
-
-      if (userError || !userData?.user?.id) return;
-
+      const { data: userData } = await supabase.auth.getUser();
+      if (!userData?.user?.id) return;
       const uid = userData.user.id;
       setUserId(uid);
 
-      const { data: existingProfile } = await supabase
+      const { data } = await supabase
         .from("adoption_profiles")
         .select("living_situation, home_frequency")
         .eq("user_id", uid)
         .single();
 
-      if (existingProfile) {
+      if (data) {
         setAnswers({
-          livingSituation: existingProfile.living_situation || "",
-          homeFrequency: existingProfile.home_frequency || "",
+          livingSituation: data.living_situation || "",
+          homeFrequency: data.home_frequency || "",
         });
       }
     })();
@@ -72,94 +72,75 @@ export default function LivingSituation() {
   if (!fontsLoaded) return null;
 
   const handleAnswer = async (
-    question: "livingSituation" | "homeFrequency",
+    key: "livingSituation" | "homeFrequency",
     value: string
   ) => {
-    const newAnswers = { ...answers, [question]: value };
+    const newAnswers = { ...answers, [key]: value };
     setAnswers(newAnswers);
 
     if (!userId) return;
 
-    const payload = {
-      user_id: userId,
-      living_situation: newAnswers.livingSituation,
-      home_frequency: newAnswers.homeFrequency,
-    };
-
-    await supabase.from("adoption_profiles").upsert([payload], {
-      onConflict: "user_id",
-    });
+    await supabase.from("adoption_profiles").upsert(
+      [
+        {
+          user_id: userId,
+          living_situation: newAnswers.livingSituation,
+          home_frequency: newAnswers.homeFrequency,
+        },
+      ],
+      { onConflict: "user_id" }
+    );
   };
 
   const canNext =
     answers.livingSituation !== "" && answers.homeFrequency !== "";
 
   const livingOptions = [
-    {
-      label: "In een gezellig appartement – knus en compact",
-      value: "apartment",
-    },
-    {
-      label: "Een huis zonder tuin, maar met wandelopties",
-      value: "house_no_garden",
-    },
-    {
-      label: "We hebben een tuin waar de hond kan snuffelen",
-      value: "garden",
-    },
-    {
-      label: "Veel ruimte, veel natuur – buiten zijn vanzelfsprekend",
-      value: "nature",
-    },
+    { label: "In een gezellig appartement – knus en compact", value: "apartment" },
+    { label: "Een huis zonder tuin, maar met wandelopties", value: "house_no_garden" },
+    { label: "We hebben een tuin waar de hond kan snuffelen", value: "garden" },
+    { label: "Veel ruimte, veel natuur – buiten zijn vanzelfsprekend", value: "nature" },
   ];
 
   const homeOptions = [
-    {
-      label: "Bijna altijd, ik werk thuis of ben vaak thuis",
-      value: "mostly_home",
-    },
+    { label: "Bijna altijd, ik werk thuis of ben vaak thuis", value: "mostly_home" },
     { label: "Gedeeld – soms thuis, soms weg", value: "mixed" },
-    {
-      label: "Vaak van huis – hond moet alleen kunnen zijn",
-      value: "often_away",
-    },
+    { label: "Vaak van huis – hond moet alleen kunnen zijn", value: "often_away" },
   ];
 
   return (
     <SafeAreaView style={styles.container}>
-      {/* Header met pijl en titel gecentreerd */}
-      <View style={styles.headerContainer}>
-        <TouchableOpacity
-          style={styles.backButton}
-          onPress={() => router.back()}
-        >
+      <View style={styles.header}>
+        <TouchableOpacity onPress={() => router.back()} style={styles.back}>
           <Ionicons name="arrow-back" size={24} color="#183A36" />
         </TouchableOpacity>
-        <Text style={styles.headerTitle}>Woonsituatie</Text>
+        <BaseText variant="title" style={styles.headerTitle}>
+          Woonsituatie
+        </BaseText>
       </View>
 
       <View style={styles.progressBar}>
-        <View style={styles.progressFill1} />
+        <View style={styles.progressFill} />
       </View>
 
-      <Text style={styles.question}>Waar woon je?</Text>
+      <BaseText style={styles.question}>Waar woon je?</BaseText>
       {livingOptions.map((opt) => (
         <RadioButtonOption
           key={opt.value}
-          label={opt.label}
           selected={answers.livingSituation === opt.value}
+          label={opt.label}
           onPress={() => handleAnswer("livingSituation", opt.value)}
         />
       ))}
 
-      <Text style={[styles.question, { marginTop: 32 }]}>
+      <BaseText style={[styles.question, { marginTop: 32 }]}>
         Hoe vaak ben je thuis?
-      </Text>
+      </BaseText>
       {homeOptions.map((opt) => (
         <RadioButtonOption
           key={opt.value}
-          label={opt.label}
           selected={answers.homeFrequency === opt.value}
+          label={opt.label}
           onPress={() => handleAnswer("homeFrequency", opt.value)}
         />
       ))}
@@ -169,7 +150,9 @@ export default function LivingSituation() {
         onPress={() => router.push("/experienceSize")}
         disabled={!canNext}
       >
-        <Text style={styles.buttonText}>VOLGENDE</Text>
+        <BaseText variant="button" style={styles.buttonText}>
+          VOLGENDE
+        </BaseText>
       </TouchableOpacity>
     </SafeAreaView>
   );
@@ -178,55 +161,46 @@ export default function LivingSituation() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#F8F8F8",
-    paddingHorizontal: 16,
-    paddingTop: Platform.OS === "ios" ? 20 : 50,
+    backgroundColor: "#FFFDF9",
+    paddingHorizontal: 20,
+    paddingTop: Platform.OS === "ios" ? 50 : 40,
   },
-  headerContainer: {
-    position: "relative",
-    justifyContent: "center",
+  header: {
     alignItems: "center",
     marginBottom: 16,
-    height: 40,
+    position: "relative",
   },
-  backButton: {
+  back: {
     position: "absolute",
     left: 0,
     top: 0,
-    bottom: 0,
-    justifyContent: "center",
-    paddingHorizontal: 8,
   },
   headerTitle: {
-    fontFamily: "SireniaRegular",
-    fontSize: 20,
-    color: "#183A36",
     textAlign: "center",
+    fontSize: 22,
   },
   progressBar: {
-    width: "100%",
     height: 6,
-    borderColor: "#FFD87E",
-    borderWidth: 1,
     borderRadius: 3,
+    backgroundColor: "#FFD87E55",
     overflow: "hidden",
-    marginBottom: 20,
+    marginVertical: 16,
   },
-  progressFill1: {
+  progressFill: {
     width: "14.28%",
     height: "100%",
     backgroundColor: "#FFD87E",
   },
   question: {
-    fontFamily: "NunitoBold",
-    fontSize: 18,
+    fontSize: 16,
+    fontFamily: "Nunito-Bold",
     color: "#183A36",
-    marginBottom: 8,
+    marginBottom: 12,
   },
   radioRow: {
     flexDirection: "row",
     alignItems: "center",
-    marginBottom: 12,
+    marginBottom: 14,
   },
   radioOuter: {
     width: 20,
@@ -245,8 +219,8 @@ const styles = StyleSheet.create({
     backgroundColor: "#97B8A5",
   },
   answerText: {
-    fontFamily: "NunitoRegular",
     fontSize: 16,
+    fontFamily: "NunitoRegular",
     color: "#183A36",
     flex: 1,
   },
@@ -257,7 +231,9 @@ const styles = StyleSheet.create({
     borderRadius: 25,
     alignItems: "center",
   },
-  buttonDisabled: { opacity: 0.5 },
+  buttonDisabled: {
+    opacity: 0.5,
+  },
   buttonText: {
     fontFamily: "NunitoBold",
     fontSize: 16,

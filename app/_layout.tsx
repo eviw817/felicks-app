@@ -1,5 +1,5 @@
 import { SplashScreen, Stack } from "expo-router";
-import { AdoptionProfileProvider } from "../context/AdoptionProfileContext";
+import { AdoptionprofileProvider } from "../context/AdoptionProfileContext"; // importeren
 import { StatusBar } from "react-native";
 import { useFonts } from "expo-font";
 import { useEffect } from "react";
@@ -10,13 +10,11 @@ import { registerForPushNotificationsAsync } from "@/lib/notificationSetup";
 import { supabase } from "@/lib/supabase";
 
 export default function RootLayout() {
-
   console.log("Layout geladen");
 
   const [loaded] = useFonts({
     SpaceMono: require("@/assets/fonts/SpaceMonoRegular.ttf"),
   });
-
 
   useEffect(() => {
     if (loaded) {
@@ -60,17 +58,15 @@ export default function RootLayout() {
     };
   }, []);
 
-
   if (!loaded) return null;
 
-
   return (
-    <AdoptionProfileProvider>
+    <AdoptionprofileProvider>
       <Stack screenOptions={{ headerShown: false }}>
         <Stack.Screen name="(tabs)" />
         <Stack.Screen name="+not-found" />
       </Stack>
       <StatusBar />
-    </AdoptionProfileProvider>
+    </AdoptionprofileProvider>
   );
 }

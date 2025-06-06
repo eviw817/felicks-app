@@ -4,7 +4,6 @@ import React, { useEffect, useState } from "react";
 import {
   SafeAreaView,
   View,
-  Text,
   StyleSheet,
   TouchableOpacity,
   Platform,
@@ -13,6 +12,7 @@ import {
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import { supabase } from "@/lib/supabase";
+import BaseText from "@/components/BaseText";
 
 const RadioButton = ({ selected }: { selected: boolean }) => (
   <View style={styles.radioOuter}>
@@ -20,10 +20,11 @@ const RadioButton = ({ selected }: { selected: boolean }) => (
   </View>
 );
 
-export default function TrainingLevel() {
+export default function Energy() {
   const router = useRouter();
   const [userId, setUserId] = useState<string | null>(null);
-  const [trainingLevel, setTrainingLevel] = useState<string>("");
+  const [trainingImportance, setTrainingImportance] = useState<string>("");
+  const [energyPreference, setEnergyPreference] = useState<string>("");
 
   useEffect(() => {
     (async () => {
@@ -32,16 +33,20 @@ export default function TrainingLevel() {
         error,
       } = await supabase.auth.getUser();
       if (error || !user) return;
+
       setUserId(user.id);
 
       const { data } = await supabase
         .from("adoption_dog_preferences")
-        .select("training_level")
+        .select("training_importance, energy_preference")
         .eq("user_id", user.id)
         .single();
 
-      if (data?.training_level) {
-        setTrainingLevel(data.training_level);
+      if (data?.training_importance) {
+        setTrainingImportance(data.training_importance);
+      }
+      if (data?.energy_preference) {
+        setEnergyPreference(data.energy_preference);
       }
     })();
   }, []);
@@ -52,26 +57,31 @@ export default function TrainingLevel() {
     const { error } = await supabase.from("adoption_dog_preferences").upsert(
       {
         user_id: userId,
-        training_level: trainingLevel,
+        training_importance: trainingImportance,
+        energy_preference: energyPreference,
       },
       { onConflict: "user_id" }
     );
 
     if (error) {
-      Alert.alert("Fout", "Kon voorkeur niet opslaan.");
+      Alert.alert("Fout", "Kon voorkeuren niet opslaan.");
     } else {
-      router.push("/interaction");
+      router.push("/matching");
     }
   };
 
-  const options = [
-    { label: "Geen training nodig", value: "geen" },
-    { label: "Basiscommando’s", value: "basis" },
-    { label: "Gehoorzaam en sociaal", value: "gehoorzaam" },
-    { label: "Gevorderd", value: "gevorderd" },
-    { label: "Volledig getraind", value: "volledig" },
-    { label: "Geen voorkeur", value: "geen_voorkeur" },
+  const trainingOptions = [
+    { label: "Zeer goed getraind", value: "zeer_goed" },
+    { label: "Goed getraind", value: "goed" },
+    { label: "Niet van toepassing", value: "niet_van_toepassing" },
   ];
+
+  const energyOptions = [
+    { label: "Enthousiasme", value: "enthousiasme" },
+    { label: "Ontspanning", value: "ontspanning" },
+  ];
+
+  const canContinue = trainingImportance !== "" && energyPreference !== "";
 
   return (
     <SafeAreaView style={styles.container}>
@@ -79,36 +89,55 @@ export default function TrainingLevel() {
         <TouchableOpacity onPress={() => router.back()}>
           <Ionicons name="arrow-back" size={24} color="#183A36" />
         </TouchableOpacity>
-        <Text style={styles.title}>Training</Text>
+        <BaseText variant="title" style={styles.title}>
+          Training en energie
+        </BaseText>
         <View style={{ width: 24 }} />
       </View>
 
       <View style={styles.progressBar}>
-        <View style={[styles.progressFill, { width: "37.5%" }]} />
+        <View style={[styles.progressFill, { width: "62.5%" }]} />
       </View>
 
-      <Text style={styles.question}>
-        In hoeverre moet de hond getraind zijn?
-      </Text>
-
-      {options.map((opt) => (
+      <BaseText style={styles.question}>
+        Hoe belangrijk is het voor u dat de hond getraind is?
+      </BaseText>
+      {trainingOptions.map((opt) => (
         <TouchableOpacity
           key={opt.value}
           style={styles.radioRow}
-          onPress={() => setTrainingLevel(opt.value)}
+          onPress={() => setTrainingImportance(opt.value)}
           activeOpacity={0.8}
         >
-          <RadioButton selected={trainingLevel === opt.value} />
-          <Text style={styles.answerText}>{opt.label}</Text>
+          <RadioButton selected={trainingImportance === opt.value} />
+          <BaseText style={styles.answerText}>{opt.label}</BaseText>
+        </TouchableOpacity>
+      ))}
+
+      <BaseText style={[styles.question, { marginTop: 32 }]}>
+        Zoek je een hond die veel enthousiasme toont bij wandelingen en
+        activiteiten, of eentje die liever binnen ontspant?
+      </BaseText>
+      {energyOptions.map((opt) => (
+        <TouchableOpacity
+          key={opt.value}
+          style={styles.radioRow}
+          onPress={() => setEnergyPreference(opt.value)}
+          activeOpacity={0.8}
+        >
+          <RadioButton selected={energyPreference === opt.value} />
+          <BaseText style={styles.answerText}>{opt.label}</BaseText>
         </TouchableOpacity>
       ))}
 
       <TouchableOpacity
-        style={[styles.button, !trainingLevel && styles.buttonDisabled]}
+        style={[styles.button, !canContinue && styles.buttonDisabled]}
         onPress={handleAnswer}
-        disabled={!trainingLevel}
+        disabled={!canContinue}
       >
-        <Text style={styles.buttonText}>VOLGENDE</Text>
+        <BaseText variant="button" style={styles.buttonText}>
+          VOLGENDE
+        </BaseText>
       </TouchableOpacity>
     </SafeAreaView>
   );
@@ -129,8 +158,6 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 20,
-    fontFamily: "Sirenia-Regular",
-    color: "#183A36",
     textAlign: "center",
   },
   progressBar: {
@@ -151,7 +178,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: "bold",
     color: "#183A36",
-    marginBottom: 16,
+    marginBottom: 12,
   },
   radioRow: {
     flexDirection: "row",
@@ -189,8 +216,8 @@ const styles = StyleSheet.create({
     opacity: 0.5,
   },
   buttonText: {
-    fontSize: 16,
-    color: "#183A36",
     fontWeight: "bold",
+    color: "#183A36",
+    fontSize: 16,
   },
 });

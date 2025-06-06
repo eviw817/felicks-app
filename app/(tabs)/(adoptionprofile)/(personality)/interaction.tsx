@@ -4,7 +4,6 @@ import React, { useEffect, useState } from "react";
 import {
   SafeAreaView,
   View,
-  Text,
   StyleSheet,
   TouchableOpacity,
   Platform,
@@ -12,7 +11,8 @@ import {
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
-import { supabase } from "@/lib/supabase";
+import { supabase } from "../../../../lib/supabase";
+import BaseText from "@/components/BaseText";
 
 const RadioButton = ({ selected }: { selected: boolean }) => (
   <View style={styles.radioOuter}>
@@ -20,10 +20,11 @@ const RadioButton = ({ selected }: { selected: boolean }) => (
   </View>
 );
 
-export default function DogAge() {
+export default function Interaction() {
   const router = useRouter();
   const [userId, setUserId] = useState<string | null>(null);
-  const [preferredAge, setPreferredAge] = useState<string>("");
+  const [childInteraction, setChildInteraction] = useState<string>("");
+  const [dogInteraction, setDogInteraction] = useState<string>("");
 
   useEffect(() => {
     (async () => {
@@ -37,12 +38,14 @@ export default function DogAge() {
 
       const { data } = await supabase
         .from("adoption_dog_preferences")
-        .select("preferred_age")
+        .select("interaction_children, interaction_dogs")
         .eq("user_id", user.id)
         .single();
 
-      if (data?.preferred_age) {
-        setPreferredAge(data.preferred_age);
+      if (data) {
+        if (data.interaction_children)
+          setChildInteraction(data.interaction_children);
+        if (data.interaction_dogs) setDogInteraction(data.interaction_dogs);
       }
     })();
   }, []);
@@ -53,25 +56,31 @@ export default function DogAge() {
     const { error } = await supabase.from("adoption_dog_preferences").upsert(
       {
         user_id: userId,
-        preferred_age: preferredAge,
+        interaction_children: childInteraction,
+        interaction_dogs: dogInteraction,
       },
       { onConflict: "user_id" }
     );
 
     if (error) {
-      Alert.alert("Fout", "Kon voorkeur niet opslaan.");
+      Alert.alert("Fout", "Kon voorkeuren niet opslaan.");
     } else {
-      router.push("/trainingLevel");
+      router.push("/energy");
     }
   };
 
-  const options = [
-    { label: "Geen voorkeur", value: "geen_voorkeur" },
-    { label: "Puppy", value: "puppy" },
-    { label: "Jonge hond", value: "jong_volwassen" },
-    { label: "Volwassen hond", value: "volwassen" },
-    { label: "Senior", value: "senior" },
+  const interactionOptionsChildren = [
+    { label: "Goed", value: "goed" },
+    { label: "Niet van toepassing", value: "niet van toepassing" },
   ];
+
+  const interactionOptionsDogs = [
+    { label: "Goed", value: "goed" },
+    { label: "Beetje", value: "beetje" },
+    { label: "Niet van toepassing", value: "niet van toepassing" },
+  ];
+
+  const canContinue = childInteraction !== "" && dogInteraction !== "";
 
   return (
     <SafeAreaView style={styles.container}>
@@ -79,34 +88,52 @@ export default function DogAge() {
         <TouchableOpacity onPress={() => router.back()}>
           <Ionicons name="arrow-back" size={24} color="#183A36" />
         </TouchableOpacity>
-        <Text style={styles.title}>Leeftijd</Text>
+        <BaseText variant="title" style={styles.title}>
+          Interactie
+        </BaseText>
         <View style={{ width: 24 }} />
       </View>
 
       <View style={styles.progressBar}>
-        <View style={[styles.progressFill, { width: "25%" }]} />
+        <View style={[styles.progressFill, { width: "50%" }]} />
       </View>
 
-      <Text style={styles.question}>Welke leeftijd heeft je ideale hond?</Text>
-
-      {options.map((opt) => (
+      <BaseText style={styles.question}>
+        Hoe moet de interactie zijn tegenover kinderen?
+      </BaseText>
+      {interactionOptionsChildren.map((opt) => (
         <TouchableOpacity
           key={opt.value}
           style={styles.radioRow}
-          onPress={() => setPreferredAge(opt.value)}
+          onPress={() => setChildInteraction(opt.value)}
           activeOpacity={0.8}
         >
-          <RadioButton selected={preferredAge === opt.value} />
-          <Text style={styles.answerText}>{opt.label}</Text>
+          <RadioButton selected={childInteraction === opt.value} />
+          <BaseText>{opt.label}</BaseText>
+        </TouchableOpacity>
+      ))}
+
+      <BaseText style={[styles.question, { marginTop: 32 }]}>
+        Hoe moet de interactie zijn tegenover andere honden?
+      </BaseText>
+      {interactionOptionsDogs.map((opt) => (
+        <TouchableOpacity
+          key={opt.value}
+          style={styles.radioRow}
+          onPress={() => setDogInteraction(opt.value)}
+          activeOpacity={0.8}
+        >
+          <RadioButton selected={dogInteraction === opt.value} />
+          <BaseText>{opt.label}</BaseText>
         </TouchableOpacity>
       ))}
 
       <TouchableOpacity
-        style={[styles.button, !preferredAge && styles.buttonDisabled]}
+        style={[styles.button, !canContinue && styles.buttonDisabled]}
         onPress={handleAnswer}
-        disabled={!preferredAge}
+        disabled={!canContinue}
       >
-        <Text style={styles.buttonText}>VOLGENDE</Text>
+        <BaseText style={styles.buttonText}>VOLGENDE</BaseText>
       </TouchableOpacity>
     </SafeAreaView>
   );
@@ -127,8 +154,6 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 20,
-    fontFamily: "Sirenia-Regular",
-    color: "#183A36",
     textAlign: "center",
   },
   progressBar: {
@@ -147,9 +172,7 @@ const styles = StyleSheet.create({
   },
   question: {
     fontSize: 18,
-    fontWeight: "bold",
-    color: "#183A36",
-    marginBottom: 16,
+    marginBottom: 12,
   },
   radioRow: {
     flexDirection: "row",
@@ -171,10 +194,6 @@ const styles = StyleSheet.create({
     height: 20,
     borderRadius: 10,
     backgroundColor: "#97B8A5",
-  },
-  answerText: {
-    fontSize: 16,
-    color: "#183A36",
   },
   button: {
     marginTop: 40,

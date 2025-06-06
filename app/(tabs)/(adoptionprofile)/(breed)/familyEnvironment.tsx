@@ -1,10 +1,7 @@
-"use client";
-
 import React, { useState, useEffect } from "react";
 import {
   SafeAreaView,
   View,
-  Text,
   StyleSheet,
   TouchableOpacity,
   Platform,
@@ -13,6 +10,7 @@ import { useRouter } from "expo-router";
 import { supabase } from "@/lib/supabase";
 import { useFonts } from "expo-font";
 import { Ionicons } from "@expo/vector-icons";
+import BaseText from "@/components/BaseText";
 
 const RadioButton: React.FC<{ selected: boolean }> = ({ selected }) => (
   <View style={styles.radioOuter}>
@@ -20,17 +18,18 @@ const RadioButton: React.FC<{ selected: boolean }> = ({ selected }) => (
   </View>
 );
 
-export default function SoundBehavior() {
+export default function FamilyEnvironment() {
   const router = useRouter();
   const [userId, setUserId] = useState<string | null>(null);
   const [answers, setAnswers] = useState({
-    barking: "",
-    training: "",
+    children: "",
+    otherPets: "",
   });
 
   const [fontsLoaded] = useFonts({
-    "NunitoRegular": require("@/assets/fonts/Nunito/NunitoRegular.ttf"),
-    "NunitoBold": require("@/assets/fonts/Nunito/NunitoBold.ttf"),
+    NunitoRegular: require("@/assets/fonts/Nunito/NunitoRegular.ttf"),
+    NunitoBold: require("@/assets/fonts/Nunito/NunitoBold.ttf"),
+    SireniaRegular: require("@/assets/fonts/Sirenia/SireniaRegular.ttf"),
   });
 
   useEffect(() => {
@@ -38,27 +37,20 @@ export default function SoundBehavior() {
       const {
         data: { user },
       } = await supabase.auth.getUser();
+      if (!user) return;
+      setUserId(user.id);
 
-      if (user) {
-        setUserId(user.id);
+      const { data } = await supabase
+        .from("adoption_profiles")
+        .select("has_children, has_pets")
+        .eq("user_id", user.id)
+        .single();
 
-        const { data, error } = await supabase
-          .from("adoption_profiles")
-          .select("barking, training")
-          .eq("user_id", user.id)
-          .single();
-
-        if (error) {
-          console.error(
-            "❌ Ophalen bestaande antwoorden mislukt:",
-            error.message
-          );
-        } else if (data) {
-          setAnswers({
-            barking: data.barking || "",
-            training: data.training || "",
-          });
-        }
+      if (data) {
+        setAnswers({
+          children: data.has_children || "",
+          otherPets: data.has_pets || "",
+        });
       }
     })();
   }, []);
@@ -66,51 +58,38 @@ export default function SoundBehavior() {
   if (!fontsLoaded) return null;
 
   const handleAnswer = async (
-    question: "barking" | "training",
+    question: "children" | "otherPets",
     value: string
   ) => {
-    const updatedAnswers = { ...answers, [question]: value };
-    setAnswers(updatedAnswers);
-
+    const newAnswers = { ...answers, [question]: value };
+    setAnswers(newAnswers);
     if (!userId) return;
 
     const payload = {
       user_id: userId,
-      barking: updatedAnswers.barking,
-      training: updatedAnswers.training,
+      has_children: newAnswers.children,
+      has_pets: newAnswers.otherPets,
     };
 
     const { error } = await supabase
       .from("adoption_profiles")
       .upsert(payload, { onConflict: "user_id" });
 
-    if (error) console.error("❌ DB save error:", error.message);
-    else console.log("✅ Antwoorden opgeslagen:", payload);
+    if (error) console.error("DB save error:", error.message);
   };
 
-  const canNext = answers.barking !== "" && answers.training !== "";
+  const canNext = answers.children !== "" && answers.otherPets !== "";
 
-  const barkingOptions = [
-    { label: "Liever zo stil mogelijk", value: "quiet" },
-    { label: "Een beetje blaffen hoort erbij", value: "some" },
-    { label: "Een praatgrage hond is geen probleem", value: "talkative" },
+  const childrenOptions = [
+    { label: "Ja, met jonge kinderen", value: "young" },
+    { label: "Ja, met tieners of oudere kinderen", value: "teens" },
+    { label: "Nee, er zijn geen kinderen in huis", value: "none" },
   ];
 
-  const trainingOptions = [
-    {
-      label:
-        "Heel belangrijk – ik wil een hond die snel leert en goed luistert",
-      value: "very",
-    },
-    {
-      label: "Belangrijk, maar het hoeft geen perfect gehoorzame hond te zijn",
-      value: "moderate",
-    },
-    {
-      label:
-        "Niet zo belangrijk – ik heb geduld en waardeer een zelfstandige hond",
-      value: "independent",
-    },
+  const otherPetsOptions = [
+    { label: "Ja, één of meerdere honden", value: "dogs" },
+    { label: "Ja, katten of andere dieren", value: "cats" },
+    { label: "Nee, dit wordt ons eerste huisdier", value: "first_pet" },
   ];
 
   return (
@@ -122,45 +101,47 @@ export default function SoundBehavior() {
         >
           <Ionicons name="arrow-back" size={24} color="#183A36" />
         </TouchableOpacity>
-        <Text style={styles.headerTitle}>Geluid & gedrag</Text>
+        <BaseText style={styles.headerTitle} variant="title">
+          Gezin & omgeving
+        </BaseText>
       </View>
 
       <View style={styles.progressBar}>
-        <View style={styles.progressFill5} />
+        <View style={styles.progressFill3} />
       </View>
 
-      <Text style={styles.question}>Hoeveel mag je hond blaffen?</Text>
-      {barkingOptions.map((opt) => (
+      <BaseText style={styles.question}>Woon je samen met kinderen?</BaseText>
+      {childrenOptions.map((opt) => (
         <TouchableOpacity
           key={opt.value}
           style={styles.radioRow}
-          onPress={() => handleAnswer("barking", opt.value)}
+          onPress={() => handleAnswer("children", opt.value)}
         >
-          <RadioButton selected={answers.barking === opt.value} />
-          <Text style={styles.answerText}>{opt.label}</Text>
+          <RadioButton selected={answers.children === opt.value} />
+          <BaseText style={styles.answerText}>{opt.label}</BaseText>
         </TouchableOpacity>
       ))}
 
-      <Text style={[styles.question, { marginTop: 32 }]}>
-        Hoe belangrijk is training voor jou?
-      </Text>
-      {trainingOptions.map((opt) => (
+      <BaseText style={[styles.question, { marginTop: 32 }]}>
+        Heb je al andere huisdieren?
+      </BaseText>
+      {otherPetsOptions.map((opt) => (
         <TouchableOpacity
           key={opt.value}
           style={styles.radioRow}
-          onPress={() => handleAnswer("training", opt.value)}
+          onPress={() => handleAnswer("otherPets", opt.value)}
         >
-          <RadioButton selected={answers.training === opt.value} />
-          <Text style={styles.answerText}>{opt.label}</Text>
+          <RadioButton selected={answers.otherPets === opt.value} />
+          <BaseText style={styles.answerText}>{opt.label}</BaseText>
         </TouchableOpacity>
       ))}
 
       <TouchableOpacity
         style={[styles.button, !canNext && styles.buttonDisabled]}
-        onPress={() => router.push("/groomingCoat")}
+        onPress={() => router.push("/activityPersonality")}
         disabled={!canNext}
       >
-        <Text style={styles.buttonText}>VOLGENDE</Text>
+        <BaseText style={styles.buttonText}>VOLGENDE</BaseText>
       </TouchableOpacity>
     </SafeAreaView>
   );
@@ -189,10 +170,10 @@ const styles = StyleSheet.create({
     paddingHorizontal: 8,
   },
   headerTitle: {
+    textAlign: "center",
     fontFamily: "SireniaRegular",
     fontSize: 20,
     color: "#183A36",
-    textAlign: "center",
   },
   progressBar: {
     width: "100%",
@@ -203,8 +184,8 @@ const styles = StyleSheet.create({
     overflow: "hidden",
     marginBottom: 20,
   },
-  progressFill5: {
-    width: "71.42%",
+  progressFill3: {
+    width: "42.84%",
     height: "100%",
     backgroundColor: "#FFD87E",
     borderTopRightRadius: 3,

@@ -2,17 +2,25 @@ import React, { useEffect, useState } from "react";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import { useRouter, usePathname, useLocalSearchParams } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
-import { supabase } from "../lib/supabase";
+import { supabase } from "@/lib/supabase";
+import { useFonts } from "expo-font";
 
 const tabs = [
   { name: "homepage", label: "Home", icon: "home" },
-  { name: "adoptie", label: "Adoptie", icon: "list" },
+  { name: "adoptionChoice", label: "Adoptie", icon: "list" },
   { name: "dogStart", label: "Virtuele\nhond", icon: "paw" },
   { name: "bewustzijnIndex", label: "Bewustzijn", icon: "bulb" },
   { name: "profile", label: "Profiel", icon: "person" },
 ];
 
 export default function NavBar() {
+  const [fontsLoaded] = useFonts({
+    NunitoRegular: require("@/assets/fonts/Nunito/NunitoRegular.ttf"),
+  });
+  if (!fontsLoaded) {
+    return <View />;
+  }
+
   const router = useRouter();
   const pathname = usePathname();
   const { petId } = useLocalSearchParams();
@@ -45,7 +53,6 @@ export default function NavBar() {
           setHasDogData(true);
           setDogId(data.id); // <--- store it in state
         }
-
       } catch (err) {
         console.error("Error in fetchDogData:", err);
         setHasDogData(false);
@@ -55,13 +62,12 @@ export default function NavBar() {
     fetchDogData();
   }, []);
 
-
   const handlePress = (name: string) => {
     if (name === "dogStart") {
       if (hasDogData === true) {
         router.push({
-          pathname: "/demo",         // or whatever page you're going to
-          params: { petId: dogId },  // pass petId here!
+          pathname: "/demo", // or whatever page you're going to
+          params: { petId: dogId }, // pass petId here!
         });
       } else {
         router.push("/dogStart");
@@ -69,7 +75,7 @@ export default function NavBar() {
     } else {
       // Optional: double-check route exists before pushing
       try {
-        router.push("/" + name as any);
+        router.push(("/" + name) as any);
       } catch (err) {
         console.error("Invalid route:", name, err);
       }
@@ -91,12 +97,14 @@ export default function NavBar() {
               size={32}
               color={isActive ? "#FDE4D2" : "#FFFDF9"}
             />
-            <Text style={{
-              color: isActive ? "#FDE4D2" : "#FFFDF9",
-              textAlign: "center",
-              fontSize: 14,
-              fontFamily: "Nunito"
-            }}>
+            <Text
+              style={{
+                color: isActive ? "#FDE4D2" : "#FFFDF9",
+                textAlign: "center",
+                fontSize: 14,
+                fontFamily: "NunitoRegular",
+              }}
+            >
               {tab.label}
             </Text>
           </TouchableOpacity>

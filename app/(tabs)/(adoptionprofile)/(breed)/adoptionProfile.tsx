@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { useRouter } from "expo-router";
 import { useFonts } from "expo-font";
 import { Ionicons } from "@expo/vector-icons";
+import BaseText from "@/components/BaseText";
 
 function AdoptionProfileScreen() {
   const [fontsLoaded] = useFonts({
@@ -14,10 +15,24 @@ function AdoptionProfileScreen() {
 
   return (
     <View style={styles.container} className="bg-baby-powder">
-      {/* pijltje*/}
       <TouchableOpacity style={styles.backButton} onPress={() => router.back()}>
         <Ionicons name="arrow-back" size={24} color="#183A36" />
       </TouchableOpacity>
+
+      <BaseText style={styles.title} variant="title">
+        Adoptieprofiel
+      </BaseText>
+
+      <View style={styles.textContainer}>
+        <BaseText style={styles.text}>
+          Je profiel is aangemaakt! Laten we nu ontdekken welk hondenras écht
+          bij jou past.
+        </BaseText>
+        <BaseText style={styles.text}>
+          Beantwoord een paar korte vragen en ontvang een persoonlijke
+          aanbeveling.
+        </BaseText>
+      </View>
 
       {/* titel */}
       <Text style={styles.title}>Adoptieprofiel</Text>
@@ -34,16 +49,15 @@ function AdoptionProfileScreen() {
         </Text>
       </View>
 
-      {/* buttons */}
       <TouchableOpacity
         style={styles.button}
         onPress={() => router.push("/livingSituation")}
       >
-        <Text style={styles.buttonText}>Vind jouw perfecte ras</Text>
+        <BaseText style={styles.buttonText}>adoptieprofiel opzetten</BaseText>
       </TouchableOpacity>
 
       <TouchableOpacity style={styles.buttonTransparent}>
-        <Text style={styles.buttonText}>overslaan</Text>
+        <BaseText style={styles.buttonText}>overslaan</BaseText>
       </TouchableOpacity>
     </View>
   );
@@ -57,17 +71,14 @@ const styles = StyleSheet.create({
     padding: 20,
     paddingTop: 50,
   },
-
   backButton: {
     position: "absolute",
     top: 50,
     left: 20,
     zIndex: 10,
   },
-
   title: {
     fontSize: 20,
-    // fontWeight: 'bold',
     color: "#183A36",
     marginBottom: 50,
     textAlign: "center",
@@ -75,18 +86,15 @@ const styles = StyleSheet.create({
     fontFamily: "NunitoBold",
     width: "100%",
   },
-
   textContainer: {
     marginBottom: 50, // alleen ruimte tussen de tekst en de buttons
   },
-
   text: {
     fontSize: 16,
     color: "#183A36",
     marginBottom: 15,
     fontFamily: "NunitoRegular",
   },
-
   button: {
     backgroundColor: "#97B8A5",
     paddingVertical: 15,
@@ -99,7 +107,6 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 4,
   },
-
   buttonTransparent: {
     borderColor: "#97B8A5",
     borderWidth: 2,
@@ -113,7 +120,6 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 4,
   },
-
   buttonText: {
     color: "#183A36",
     fontSize: 14,

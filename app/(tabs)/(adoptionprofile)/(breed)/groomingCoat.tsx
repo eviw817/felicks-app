@@ -1,20 +1,16 @@
-"use client";
-
 import React, { useState, useEffect } from "react";
 import {
   SafeAreaView,
   View,
-  Text,
   StyleSheet,
   TouchableOpacity,
   Platform,
 } from "react-native";
 import { useRouter } from "expo-router";
 import { supabase } from "@/lib/supabase";
-import { useFonts } from "expo-font";
 import { Ionicons } from "@expo/vector-icons";
+import BaseText from "@/components/BaseText";
 
-// Alleen visuele radiobutton
 const RadioButton: React.FC<{ selected: boolean }> = ({ selected }) => (
   <View style={styles.radioOuter}>
     {selected && <View style={styles.radioInner} />}
@@ -27,12 +23,6 @@ export default function GroomingCoat() {
   const [answers, setAnswers] = useState({
     grooming: "",
     shedding: "",
-  });
-
-  const [fontsLoaded] = useFonts({
-    "NunitoRegular": require("@/assets/fonts/Nunito/NunitoRegular.ttf"),
-    "NunitoBold": require("@/assets/fonts/Nunito/NunitoBold.ttf"),
-    "SireniaRegular": require("@/assets/fonts/Sirenia/SireniaRegular.ttf"),
   });
 
   useEffect(() => {
@@ -63,8 +53,6 @@ export default function GroomingCoat() {
       }
     })();
   }, []);
-
-  if (!fontsLoaded) return null;
 
   const handleAnswer = async (
     question: "grooming" | "shedding",
@@ -117,14 +105,18 @@ export default function GroomingCoat() {
         >
           <Ionicons name="arrow-back" size={24} color="#183A36" />
         </TouchableOpacity>
-        <Text style={styles.headerTitle}>Verzorging & vacht</Text>
+        <BaseText style={styles.headerTitle} variant="title">
+          Verzorging & vacht
+        </BaseText>
       </View>
 
       <View style={styles.progressBar}>
         <View style={styles.progressFill6} />
       </View>
 
-      <Text style={styles.question}>Hoeveel verzorging wil je geven?</Text>
+      <BaseText style={styles.question}>
+        Hoeveel verzorging wil je geven?
+      </BaseText>
       {groomingOptions.map((opt) => (
         <TouchableOpacity
           key={opt.value}
@@ -132,13 +124,13 @@ export default function GroomingCoat() {
           onPress={() => handleAnswer("grooming", opt.value)}
         >
           <RadioButton selected={answers.grooming === opt.value} />
-          <Text style={styles.answerText}>{opt.label}</Text>
+          <BaseText style={styles.answerText}>{opt.label}</BaseText>
         </TouchableOpacity>
       ))}
 
-      <Text style={[styles.question, { marginTop: 32 }]}>
+      <BaseText style={[styles.question, { marginTop: 32 }]}>
         Wat vind je van hondenhaar in huis?
-      </Text>
+      </BaseText>
       {sheddingOptions.map((opt) => (
         <TouchableOpacity
           key={opt.value}
@@ -146,7 +138,7 @@ export default function GroomingCoat() {
           onPress={() => handleAnswer("shedding", opt.value)}
         >
           <RadioButton selected={answers.shedding === opt.value} />
-          <Text style={styles.answerText}>{opt.label}</Text>
+          <BaseText style={styles.answerText}>{opt.label}</BaseText>
         </TouchableOpacity>
       ))}
 
@@ -155,7 +147,9 @@ export default function GroomingCoat() {
         onPress={() => router.push("/adoptionProfileResults")}
         disabled={!canNext}
       >
-        <Text style={styles.buttonText}>VOLGENDE</Text>
+        <BaseText style={styles.buttonText} variant="button">
+          VOLGENDE
+        </BaseText>
       </TouchableOpacity>
     </SafeAreaView>
   );
@@ -206,8 +200,8 @@ const styles = StyleSheet.create({
     borderBottomRightRadius: 3,
   },
   question: {
-    fontFamily: "NunitoBold",
     fontSize: 18,
+    fontFamily: "NunitoBold",
     color: "#183A36",
     marginBottom: 8,
   },

@@ -4,7 +4,6 @@ import React, { useEffect, useState } from "react";
 import {
   SafeAreaView,
   View,
-  Text,
   StyleSheet,
   TouchableOpacity,
   Platform,
@@ -13,6 +12,7 @@ import {
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import { supabase } from "@/lib/supabase";
+import BaseText from "@/components/BaseText";
 
 const RadioButton = ({ selected }: { selected: boolean }) => (
   <View style={styles.radioOuter}>
@@ -20,11 +20,10 @@ const RadioButton = ({ selected }: { selected: boolean }) => (
   </View>
 );
 
-export default function Energy() {
+export default function DogAge() {
   const router = useRouter();
   const [userId, setUserId] = useState<string | null>(null);
-  const [trainingImportance, setTrainingImportance] = useState<string>("");
-  const [energyPreference, setEnergyPreference] = useState<string>("");
+  const [preferredAge, setPreferredAge] = useState<string>("");
 
   useEffect(() => {
     (async () => {
@@ -38,15 +37,12 @@ export default function Energy() {
 
       const { data } = await supabase
         .from("adoption_dog_preferences")
-        .select("training_importance, energy_preference")
+        .select("preferred_age")
         .eq("user_id", user.id)
         .single();
 
-      if (data?.training_importance) {
-        setTrainingImportance(data.training_importance);
-      }
-      if (data?.energy_preference) {
-        setEnergyPreference(data.energy_preference);
+      if (data?.preferred_age) {
+        setPreferredAge(data.preferred_age);
       }
     })();
   }, []);
@@ -57,33 +53,25 @@ export default function Energy() {
     const { error } = await supabase.from("adoption_dog_preferences").upsert(
       {
         user_id: userId,
-        training_importance: trainingImportance,
-        energy_preference: energyPreference,
+        preferred_age: preferredAge,
       },
-      {
-        onConflict: "user_id",
-      }
+      { onConflict: "user_id" }
     );
 
     if (error) {
-      Alert.alert("Fout", "Kon voorkeuren niet opslaan.");
+      Alert.alert("Fout", "Kon voorkeur niet opslaan.");
     } else {
-      router.push("/matching");
+      router.push("/trainingLevel");
     }
   };
 
-  const trainingOptions = [
-    { label: "Zeer goed getraind", value: "zeer_goed" },
-    { label: "Goed getraind", value: "goed" },
-    { label: "Niet van toepassing", value: "niet_van_toepassing" },
+  const options = [
+    { label: "Geen voorkeur", value: "geen_voorkeur" },
+    { label: "Puppy", value: "puppy" },
+    { label: "Jonge hond", value: "jong_volwassen" },
+    { label: "Volwassen hond", value: "volwassen" },
+    { label: "Senior", value: "senior" },
   ];
-
-  const energyOptions = [
-    { label: "Enthousiasme", value: "enthousiasme" },
-    { label: "Ontspanning", value: "ontspanning" },
-  ];
-
-  const canContinue = trainingImportance !== "" && energyPreference !== "";
 
   return (
     <SafeAreaView style={styles.container}>
@@ -91,51 +79,40 @@ export default function Energy() {
         <TouchableOpacity onPress={() => router.back()}>
           <Ionicons name="arrow-back" size={24} color="#183A36" />
         </TouchableOpacity>
-        <Text style={styles.title}>Training en energie</Text>
+        <BaseText variant="title" style={styles.title}>
+          Leeftijd
+        </BaseText>
         <View style={{ width: 24 }} />
       </View>
 
       <View style={styles.progressBar}>
-        <View style={[styles.progressFill, { width: "62.5%" }]} />
+        <View style={[styles.progressFill, { width: "25%" }]} />
       </View>
 
-      <Text style={styles.question}>
-        Hoe belangrijk is het voor u dat de hond getraind is?
-      </Text>
-      {trainingOptions.map((opt) => (
-        <TouchableOpacity
-          key={opt.value}
-          style={styles.radioRow}
-          onPress={() => setTrainingImportance(opt.value)}
-          activeOpacity={0.8}
-        >
-          <RadioButton selected={trainingImportance === opt.value} />
-          <Text style={styles.answerText}>{opt.label}</Text>
-        </TouchableOpacity>
-      ))}
+      <BaseText style={styles.question}>
+        Welke leeftijd heeft je ideale hond?
+      </BaseText>
 
-      <Text style={[styles.question, { marginTop: 32 }]}>
-        Zoek je een hond die veel enthousiasme toont bij wandelingen en
-        activiteiten, of eentje die liever binnen ontspant?
-      </Text>
-      {energyOptions.map((opt) => (
+      {options.map((opt) => (
         <TouchableOpacity
           key={opt.value}
           style={styles.radioRow}
-          onPress={() => setEnergyPreference(opt.value)}
+          onPress={() => setPreferredAge(opt.value)}
           activeOpacity={0.8}
         >
-          <RadioButton selected={energyPreference === opt.value} />
-          <Text style={styles.answerText}>{opt.label}</Text>
+          <RadioButton selected={preferredAge === opt.value} />
+          <BaseText style={styles.answerText}>{opt.label}</BaseText>
         </TouchableOpacity>
       ))}
 
       <TouchableOpacity
-        style={[styles.button, !canContinue && styles.buttonDisabled]}
+        style={[styles.button, !preferredAge && styles.buttonDisabled]}
         onPress={handleAnswer}
-        disabled={!canContinue}
+        disabled={!preferredAge}
       >
-        <Text style={styles.buttonText}>VOLGENDE</Text>
+        <BaseText style={styles.buttonText} variant="button">
+          VOLGENDE
+        </BaseText>
       </TouchableOpacity>
     </SafeAreaView>
   );
@@ -155,8 +132,8 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   title: {
-    fontSize: 20,
     fontFamily: "Sirenia-Regular",
+    fontSize: 20,
     color: "#183A36",
     textAlign: "center",
   },
@@ -178,7 +155,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: "bold",
     color: "#183A36",
-    marginBottom: 12,
+    marginBottom: 16,
   },
   radioRow: {
     flexDirection: "row",

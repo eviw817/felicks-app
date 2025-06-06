@@ -5,13 +5,14 @@ import {
   SafeAreaView,
   View,
   Text,
-  TouchableOpacity,
   StyleSheet,
   Platform,
+  TouchableOpacity,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
+import BaseText from "@/components/BaseText";
 
-export default function AdoptionChoice() {
+export default function MissingAdoptionProfile() {
   const router = useRouter();
 
   return (
@@ -20,28 +21,22 @@ export default function AdoptionChoice() {
         <TouchableOpacity onPress={() => router.back()} style={styles.back}>
           <Ionicons name="arrow-back" size={24} color="#183A36" />
         </TouchableOpacity>
-        <Text style={styles.title}>Adoptie</Text>
+        <BaseText style={styles.title} variant="title">
+          Adoptie
+        </BaseText>
       </View>
 
-      <Text style={styles.question}>
-        Wil je een hond die meer op jouw persoonlijkheid gebaseerd is of ga je
-        liever voor een bepaald ras?
-      </Text>
+      <BaseText style={styles.text}>
+        Je had nog geen adoptieprofiel opgezet bij het registreren van jouw
+        account. Voordat je naar de adoptiepagina gaat moet je deze eerst
+        invullen.
+      </BaseText>
 
       <TouchableOpacity
-        style={styles.optionButton}
-        onPress={() =>
-          router.push("/personalityTraits")
-        }
+        style={styles.button}
+        onPress={() => router.push("/adoptionChoice")}
       >
-        <Text style={styles.optionText}>PERSOONLIJKHEID</Text>
-      </TouchableOpacity>
-
-      <TouchableOpacity
-        style={styles.optionButton}
-        onPress={() => router.push("/livingSituation")}
-      >
-        <Text style={styles.optionText}>RAS</Text>
+        <BaseText style={styles.buttonText}>GA NAAR ADOPTIEPROFIEL</BaseText>
       </TouchableOpacity>
     </SafeAreaView>
   );
@@ -53,43 +48,38 @@ const styles = StyleSheet.create({
     backgroundColor: "#FFFDF9",
     padding: 24,
     paddingTop: Platform.OS === "ios" ? 60 : 40,
+    justifyContent: "flex-start",
   },
   headerRow: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
-    marginBottom: 32,
+    marginBottom: 24,
   },
   back: {
     position: "absolute",
     left: 0,
   },
   title: {
-    fontSize: 22,
-    fontFamily: "Sirenia-Regular",
-    color: "#183A36",
     textAlign: "center",
   },
-  question: {
+  text: {
     fontSize: 16,
     color: "#183A36",
     lineHeight: 24,
-    marginBottom: 32,
-    textAlign: "center",
+    marginBottom: 40,
   },
-  optionButton: {
-    borderColor: "#183A36",
-    borderWidth: 1,
-    borderRadius: 25,
+  button: {
+    backgroundColor: "#97B8A5",
     paddingVertical: 16,
-    paddingHorizontal: 24,
-    marginBottom: 16,
+    borderRadius: 25,
     alignItems: "center",
   },
-  optionText: {
+  buttonText: {
     fontSize: 16,
     color: "#183A36",
     fontWeight: "bold",
     textTransform: "uppercase",
+    textAlign: "center",
   },
 });

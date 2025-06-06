@@ -10,8 +10,8 @@ import {
 import { useRouter } from "expo-router";
 import { supabase } from "@/lib/supabase";
 import BaseText from "@/components/BaseText";
-import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
-import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
+import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 
 const ForgetPasswordScreen = () => {
   const router = useRouter();
@@ -45,11 +45,19 @@ const ForgetPasswordScreen = () => {
 
   return (
     <View style={styles.container}>
-       <View style={styles.header}>
-          <TouchableOpacity onPress={() => router.push("/login")} style={styles.backButton}>
-                  <FontAwesomeIcon icon={faArrowLeft} size={30} color={'#183A36'} style={styles.backButton} />
-          </TouchableOpacity>
-          <BaseText style={styles.title}>Wachtwoord vergeten</BaseText>
+      <View style={styles.header}>
+        <TouchableOpacity
+          onPress={() => router.push("/login")}
+          style={styles.backButton}
+        >
+          <FontAwesomeIcon
+            icon={faArrowLeft}
+            size={30}
+            color={"#183A36"}
+            style={styles.backButton}
+          />
+        </TouchableOpacity>
+        <BaseText style={styles.title}>Wachtwoord vergeten</BaseText>
       </View>
 
       {/* E-mail input */}
@@ -134,22 +142,21 @@ const styles = StyleSheet.create({
     borderBottomColor: "#183A36",
   },
   unfocusedInput: {
-    borderBottomColor: "#97B8A5", 
+    borderBottomColor: "#97B8A5",
   },
-   backButton: {
-      position: "absolute",
-      left: 5,
-      top:7,
-    },
-    header: {
-        flexDirection: "row",
-        alignItems: "center",
-        justifyContent: "center", 
-        width: "100%",
-        position: "relative", 
-        paddingVertical: 10,
-      },
-  
+  backButton: {
+    position: "absolute",
+    left: 5,
+    top: 7,
+  },
+  header: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    width: "100%",
+    position: "relative",
+    paddingVertical: 10,
+  },
 });
 
 export default ForgetPasswordScreen;

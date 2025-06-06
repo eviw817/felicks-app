@@ -46,7 +46,6 @@ export default function Registeren() {
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
-
   // Geboortedatum state
   const [day, setDay] = useState("01");
   const [month, setMonth] = useState("01");
@@ -212,7 +211,8 @@ export default function Registeren() {
       setYear("2000");
 
       // Redirect to adoptionProfileStart page
-      router.push("/homepage");
+      console.log("Router naar adoptionIntro");
+      router.push("/adoptionBreed");
     }
 
     setLoading(false);
@@ -401,7 +401,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 28,
-    fontFamily: 'SireniaMedium',
+    fontFamily: "SireniaMedium",
     marginBottom: 60,
     textAlign: "center",
   },
@@ -477,23 +477,22 @@ const styles = StyleSheet.create({
   registerText: {
     fontSize: 14,
     color: "#183A36",
-    alignSelf: "center",      
-    textAlign: "center", 
+    alignSelf: "center",
+    textAlign: "center",
   },
   registerLink: {
     fontWeight: "bold",
-     alignSelf: "center",      
-    textAlign: "center", 
+    alignSelf: "center",
+    textAlign: "center",
   },
-    passwordContainer: {
-      width: "100%",
-      marginBottom: 25,
-      position: "relative",
-},
-eyeIcon: {
-  position: "absolute",
-  right: 10,
-  top: 12,
-},
-
+  passwordContainer: {
+    width: "100%",
+    marginBottom: 25,
+    position: "relative",
+  },
+  eyeIcon: {
+    position: "absolute",
+    right: 10,
+    top: 12,
+  },
 });

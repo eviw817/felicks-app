@@ -1,8 +1,7 @@
 import React, { useEffect } from "react";
 import { View, Image, StyleSheet } from "react-native";
 
-import { useRouter } from "expo-router"; 
-
+import { useRouter } from "expo-router";
 
 export default function Index() {
   const router = useRouter();
@@ -38,5 +37,5 @@ const styles = StyleSheet.create({
     height: 340,
     resizeMode: "contain",
   },
-
 });
+

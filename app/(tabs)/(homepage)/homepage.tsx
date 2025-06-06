@@ -1,46 +1,42 @@
+"use client";
+
 import React, { useEffect, useState, useCallback } from "react";
 import {
   ScrollView,
   SafeAreaView,
   Text,
   View,
+  ActivityIndicator,
   TouchableOpacity,
   Alert,
   Image,
-  ActivityIndicator,
 } from "react-native";
-import { useFonts } from "expo-font";
 import { Session } from "@supabase/supabase-js";
 import { supabase } from "@/lib/supabase";
 import { useRouter, Link } from "expo-router";
 import NavBar from "@/components/NavigationBar";
-import { Ionicons, FontAwesome } from "@expo/vector-icons";
-import { useFocusEffect } from '@react-navigation/native';
+
+import { Ionicons } from "@expo/vector-icons";
+import { FontAwesome } from "@expo/vector-icons";
+import { useFocusEffect } from "@react-navigation/native";
 import BaseText from "@/components/BaseText";
 
 export default function HomepageScreen() {
-
   const [session, setSession] = useState<Session | null>(null);
-  const [firstname, setFirstname] = useState("Gast");
+  const [firstname, setFirstname] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(true);
   const [matchedDogs, setMatchedDogs] = useState<any[]>([]);
   const [likedDogIds, setLikedDogIds] = useState<string[]>([]);
-  const router = useRouter();
-
-  const [fontsLoaded] = useFonts({
-    NunitoSemiBold: require("@/assets/fonts/Nunito/NunitoSemiBold.ttf"),
-    NunitoRegular: require("@/assets/fonts/Nunito/NunitoRegular.ttf"),
-    NunitoBold: require("@/assets/fonts/Nunito/NunitoBold.ttf"),
-    SireniaSemiBold: require("@/assets/fonts/Sirenia/SireniaSemiBold.ttf"),
-  });
-
   const [unreadCount, setUnreadCount] = useState<number>(0);
   const [isFilled, setIsFilled] = useState<boolean>(false);
 
+  const router = useRouter();
   const handleHeartClick = () => setIsFilled(!isFilled);
 
   const fetchUnreadNotifications = useCallback(async () => {
-    const { data: { user } } = await supabase.auth.getUser();
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
     const { data: dog } = await supabase
       .from("ar_dog")
       .select("id")
@@ -67,10 +63,11 @@ export default function HomepageScreen() {
   );
 
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchSession = async () => {
       const {
         data: { session },
       } = await supabase.auth.getSession();
+
       setSession(session);
 
       if (!session?.user?.id) return setLoading(false);
@@ -109,46 +106,17 @@ export default function HomepageScreen() {
       setLoading(false);
     };
 
-    fetchData();
+    fetchSession();
+
+    const { data: authListener } = supabase.auth.onAuthStateChange(
+      (_, session) => {
+        setSession(session);
+        setLoading(false);
+      }
+    );
+
+    return () => authListener?.subscription?.unsubscribe();
   }, []);
-
-  const getAgeInYears = (birthdate: string): number => {
-    const birth = new Date(birthdate);
-    const now = new Date();
-    return Math.floor(
-      (now.getTime() - birth.getTime()) / (1000 * 60 * 60 * 24 * 365.25)
-    );
-  };
-
-  useEffect(() => {
-    if (session?.user) {
-      const getFirstname = async () => {
-        try {
-          const { data, error } = await supabase
-            .from("profiles")
-            .select("firstname")
-            .eq("id", session.user.id)
-            .single();
-
-          if (error) throw error;
-          setFirstname(data?.firstname || "Guest");
-        } catch (error: any) {
-          Alert.alert("Error", error.message || "Kon profiel niet laden");
-        }
-      };
-      getFirstname();
-    } else {
-      setFirstname("Guest");
-    }
-  }, [session]);
-
-  if (loading) {
-    return (
-      <View style={{ flex: 1, justifyContent: "center", alignItems: "center", backgroundColor: "#FFFDF9" }}>
-        <ActivityIndicator size="large" color="#183A36" />
-      </View>
-    );
-  };
 
   const toggleLike = async (dogId: string) => {
     const userId = session?.user?.id;
@@ -166,10 +134,9 @@ export default function HomepageScreen() {
         setLikedDogIds((prev) => prev.filter((id) => id !== dogId));
       }
     } else {
-      const { error } = await supabase.from("liked_dogs").insert({
-        user_id: userId,
-        dog_id: dogId,
-      });
+      const { error } = await supabase
+        .from("liked_dogs")
+        .insert({ user_id: userId, dog_id: dogId });
 
       if (!error) {
         setLikedDogIds((prev) => [...prev, dogId]);
@@ -177,7 +144,30 @@ export default function HomepageScreen() {
     }
   };
 
-  if (!fontsLoaded) return null;
+  const getAgeInYears = (birthdate: string) => {
+    const birth = new Date(birthdate);
+    const now = new Date();
+    const age = now.getFullYear() - birth.getFullYear();
+    const m = now.getMonth() - birth.getMonth();
+    return m < 0 || (m === 0 && now.getDate() < birth.getDate())
+      ? age - 1
+      : age;
+  };
+
+  if (loading) {
+    return (
+      <View
+        style={{
+          flex: 1,
+          justifyContent: "center",
+          alignItems: "center",
+          backgroundColor: "#FFFDF9",
+        }}
+      >
+        <ActivityIndicator size="large" color="#183A36" />
+      </View>
+    );
+  }
 
   return (
     <SafeAreaView
@@ -185,7 +175,7 @@ export default function HomepageScreen() {
         flex: 1,
         backgroundColor: "#cbdacf",
         position: "relative",
-        paddingBottom: 80,
+
       }}
     >
       <View
@@ -195,46 +185,62 @@ export default function HomepageScreen() {
       >
         <BaseText
           style={{
-            fontFamily: "SireniaSemiBold",
-            fontSize: 24,
+            fontFamily: "SireniaMedium",
+            fontSize: 28,
             padding: 20,
             marginTop: 50,
-            marginBottom: 30,
           }}
         >
           Welkom {firstname || "guest"}!
         </BaseText>
       </View>
-      <View
-        style={{
-          position: "absolute",
-          top: 70,
-          right: 30,
-        }}
-      >
+      <View style={{ position: "absolute", top: 70, right: 30 }}>
         <Link href="/notificationsIndex">
-          <FontAwesome
-            name="envelope-o"
-            size={30} // Icon size
-            color="#183A36" // Icon color
-          />
+          <View style={{ position: "relative" }}>
+            <FontAwesome name="envelope-o" size={30} color="#183A36" />
+            {unreadCount > 0 && (
+              <View
+                style={{
+                  position: "absolute",
+                  top: -6,
+                  right: -6,
+                  backgroundColor: "#F18B7E",
+                  borderRadius: 10,
+                  paddingHorizontal: 5,
+                  minWidth: 20,
+                  height: 20,
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <Text
+                  style={{ color: "#183A36", fontSize: 12, fontWeight: "bold" }}
+                >
+                  {unreadCount}
+                </Text>
+              </View>
+            )}
+          </View>
         </Link>
       </View>
+
       <ScrollView
-        contentContainerStyle={{ flexGrow: 1, paddingBottom: 80 }}
+        contentContainerStyle={{ paddingBottom: 100 }}
         style={{
           backgroundColor: "#FFFDF9",
           borderTopLeftRadius: 20,
           borderTopRightRadius: 20,
-          maxWidth: "100%",
-          paddingVertical: 20,
+          padding: 20,
+          marginTop: 50,
         }}
       >
+        {/* Quiz */}
         <View>
           <Text
             style={{
-              fontFamily: "NunitoSemiBold",
-              fontSize: 20,
+              fontFamily: "Nunito",
+              fontWeight: "bold",
+              fontSize: 18,
               padding: 20,
               paddingRight: 40,
               marginRight: 10,
@@ -245,7 +251,8 @@ export default function HomepageScreen() {
           </Text>
           <Text
             style={{
-              fontFamily: "NunitoRegular",
+              fontFamily: "Nunito",
+              fontWeight: "normal",
               fontSize: 16,
               paddingLeft: 20,
               paddingRight: 40,
@@ -257,7 +264,8 @@ export default function HomepageScreen() {
           </Text>
           <Text
             style={{
-              fontFamily: "NunitoRegular",
+              fontFamily: "Nunito",
+              fontWeight: "normal",
               fontSize: 16,
               paddingLeft: 20,
               paddingRight: 40,
@@ -290,11 +298,13 @@ export default function HomepageScreen() {
           </Link>
         </View>
 
+        {/* EHBO Artikel */}
         <View>
           <Text
             style={{
-              fontFamily: "NunitoSemiBold",
-              fontSize: 20,
+              fontFamily: "Nunito",
+              fontWeight: "bold",
+              fontSize: 18,
               padding: 20,
               marginRight: 10,
               color: "#183A36",
@@ -304,7 +314,8 @@ export default function HomepageScreen() {
           </Text>
           <Text
             style={{
-              fontFamily: "NunitoRegular",
+              fontFamily: "Nunito",
+              fontWeight: "normal",
               fontSize: 16,
               paddingLeft: 20,
               paddingRight: 40,
@@ -339,8 +350,9 @@ export default function HomepageScreen() {
             <View>
               <Text
                 style={{
-                  fontFamily: "NunitoBold",
-                  fontSize: 16,
+                  fontFamily: "Nunito",
+                  fontWeight: "semibold",
+                  fontSize: 18,
                   paddingLeft: 20,
                   paddingRight: 150,
                   paddingBottom: 8,
@@ -351,8 +363,9 @@ export default function HomepageScreen() {
               </Text>
               <Text
                 style={{
-                  fontFamily: "NunitoRegular",
-                  fontSize: 12,
+                  fontFamily: "Nunito",
+                  fontWeight: "normal",
+                  fontSize: 14,
                   paddingLeft: 20,
                   paddingRight: 160,
                   color: "#183A36",
@@ -365,8 +378,9 @@ export default function HomepageScreen() {
           </View>
           <Text
             style={{
-              fontFamily: "NunitoRegular",
-              fontSize: 14,
+              fontFamily: "Nunito",
+              fontWeight: "normal",
+              fontSize: 16,
               paddingLeft: 20,
               color: "#183A36",
               marginTop: 10,
@@ -377,7 +391,7 @@ export default function HomepageScreen() {
           <Link
             href="/artikelsIndex"
             style={{
-             padding: 12,
+              padding: 12,
               margin: 20,
               paddingHorizontal: 20,
               paddingVertical: 15,
@@ -397,197 +411,169 @@ export default function HomepageScreen() {
             LEES MEER TIPS
           </Link>
         </View>
+
+        {/* Hondenmatches */}
         <View>
           <Text
             style={{
-              fontFamily: "NunitoBold",
-              fontSize: 20,
-              marginBottom: 10,
+              fontFamily: "Nunito",
+              fontWeight: "bold",
+              fontSize: 18,
               padding: 20,
+              paddingRight: 40,
+              marginRight: 10,
               color: "#183A36",
             }}
           >
-            Deze honden passen bij jouw profiel:
+            Deze honden passen bij jou profiel:
           </Text>
+
           {matchedDogs.length === 0 ? (
             <>
               <Text
                 style={{
-                  fontFamily: "NunitoRegular",
-                  fontSize: 16,
-                  marginBottom: 10,
+                  fontFamily: "Nunito",
+                  fontWeight: "normal",
+                  fontSize: 14,
+                  paddingLeft: 20,
+                  paddingRight: 20,
                   color: "#183A36",
-                  marginHorizontal: 20,
                 }}
               >
-                Geen matches gevonden.
+                Je hebt nog geen profiel ingevuld of er zijn nog geen geschikte
+                matches.
               </Text>
-              <TouchableOpacity
+              <Link
+                href="/adoptionChoice"
                 style={{
-                  backgroundColor: "#97B8A5",
                   padding: 12,
+                  margin: 20,
+                  paddingHorizontal: 20,
+                  paddingVertical: 15,
+                  backgroundColor: "#97B8A5",
+                  fontWeight: "bold",
+                  fontSize: 15,
                   borderRadius: 15,
+                  textAlign: "center",
+                  color: "#FFFDF9",
+                  width: "90%",
                   alignItems: "center",
-                  marginBottom: 20,
-                  marginTop: 10,
-                  flexDirection: "row",
-                  gap: 4,
-                  marginHorizontal: 20,
+                  shadowOffset: { width: 0, height: 2 },
+                  shadowOpacity: 0.1,
+                  shadowRadius: 4,
                 }}
-                onPress={() => router.push("/homepage")}
               >
                 <Text
                   style={{
                     color: "#183A36",
-                    fontFamily: "NunitoBold",
+                    fontFamily: "Nunito-Bold",
                     textTransform: "uppercase",
                   }}
                 >
-                  Vul je adoptieprofiel in
+                  Vul je profiel in
                 </Text>
-              </TouchableOpacity>
+              </Link>
             </>
           ) : (
             matchedDogs.map((dog) => (
               <View
                 key={dog.id}
                 style={{
-                  flexDirection: "row",
                   backgroundColor: "#FDE4D2",
-                  borderRadius: 15,
-                  padding: 12,
-                  marginBottom: 16,
+                  borderRadius: 20,
+                  marginBottom: 24,
+                  padding: 16,
+                  flexDirection: "row",
                   alignItems: "center",
-                  position: "relative",
+                  width: "95%",
+                  alignSelf: "center",
+                  shadowColor: "#000",
+                  shadowOpacity: 0.05,
+                  shadowOffset: { width: 0, height: 2 },
+                  shadowRadius: 4,
                 }}
               >
-                <TouchableOpacity
-                  onPress={() => router.push("/homepage")}
-                  style={{ flexDirection: "row", flex: 1 }}
+                <View
+                  style={{
+                    width: 100,
+                    height: 100,
+                    borderRadius: 12,
+                    overflow: "hidden",
+                    marginRight: 16,
+                    backgroundColor: "#FFFDF9",
+                  }}
                 >
-                  <View
-                    style={{
-                      width: 110,
-                      height: 110,
-                      backgroundColor: "#FFFDF9",
-                      borderRadius: 10,
-                      marginRight: 12,
-                      justifyContent: "center", // logo mooi centreren
-                      alignItems: "center",
-                      overflow: "hidden",
-                    }}
-                  >
-                    {dog.images?.length ? (
-                      <Image
-                        source={{
-                          uri: `https://vgbuoxdfrbzqbqltcelz.supabase.co/storage/v1/object/public/${dog.images[0]}`,
-                        }}
-                        resizeMode="cover"
-                        style={{
-                          width: "100%",
-                          height: "100%",
-                        }}
-                      />
-                    ) : (
-                      <Image
-                        source={require("@/assets/images/logo_felicks.png")}
-                        resizeMode="contain"
-                        style={{
-                          width: 50,
-                          height: 50,
-                          borderRadius: 8,
-                        }}
-                      />
-                    )}
-                  </View>
+                  {dog.images?.length ? (
+                    <Image
+                      source={{
+                        uri: dog.images[0],
+                      }}
+                      resizeMode="cover"
+                      style={{ width: "100%", height: "100%" }}
+                    />
+                  ) : (
+                    <Image
+                      source={require("@/assets/images/logo_felicks.png")}
+                      resizeMode="contain"
+                      style={{ width: "100%", height: "100%" }}
+                    />
+                  )}
+                </View>
 
-                  <View style={{ flex: 1 }}>
-                    <Text
-                      style={{
-                        fontFamily: "NunitoBold",
-                        fontSize: 18,
-                        marginBottom: 4,
-                        color: "#183A36",
-                      }}
-                    >
-                      {dog.name}
-                    </Text>
-                    <Text
-                      style={{
-                        fontFamily: "NunitoRegular",
-                        fontSize: 14,
-                        marginBottom: 2,
-                        color: "#183A36",
-                      }}
-                    >
+                <View style={{ flex: 1 }}>
+                  <Link href={`/dog-detail/${dog.id}`} asChild>
+                    <TouchableOpacity>
                       <Text
                         style={{
-                          fontFamily: "NunitoMedium",
+                          fontFamily: "NunitoBold",
+                          fontSize: 18,
+                          marginBottom: 4,
                           color: "#183A36",
                         }}
                       >
-                        Geboren op:{" "}
+                        {dog.name}
                       </Text>
-                      {new Date(dog.birthdate).toLocaleDateString("nl-BE")} –{" "}
-                      {getAgeInYears(dog.birthdate)} jaar
-                    </Text>
-                    <Text
-                      style={{
-                        fontFamily: "NunitoRegular",
-                        fontSize: 14,
-                        marginBottom: 2,
-                        color: "#183A36",
-                      }}
-                    >
                       <Text
                         style={{
-                          fontFamily: "NunitoMedium",
+                          fontFamily: "NunitoRegular",
+                          fontSize: 14,
                           color: "#183A36",
                         }}
                       >
-                        Ras:{" "}
+                        <Text style={{ fontFamily: "NunitoMedium" }}>
+                          Geboren op:{" "}
+                        </Text>
+                        {new Date(dog.birthdate).toLocaleDateString("nl-BE")} –{" "}
+                        {getAgeInYears(dog.birthdate)} jaar
                       </Text>
-                      {dog.breed}
-                    </Text>
-                    <Text
-                      style={{
-                        fontFamily: "NunitoRegular",
-                        fontSize: 14,
-                        marginBottom: 2,
-                        color: "#183A36",
-                      }}
-                    >
                       <Text
                         style={{
-                          fontFamily: "NunitoMedium",
+                          fontFamily: "Nunito-Regular",
+                          fontSize: 14,
                           color: "#183A36",
                         }}
                       >
-                        Geslacht:{" "}
+                        <Text style={{ fontFamily: "NunitoMedium" }}>
+                          Ras:{" "}
+                        </Text>
+                        {dog.breed}
                       </Text>
-                      {dog.gender === "male" ? "Reu" : "Teef"}
-                    </Text>
-                    <Text
-                      style={{
-                        fontFamily: "NunitoRegular",
-                        fontSize: 14,
-                        color: "#183A36",
-                      }}
-                    >
                       <Text
                         style={{
-                          fontFamily: "NunitoMedium",
+                          fontFamily: "NunitoRegular",
+                          fontSize: 14,
                           color: "#183A36",
                         }}
                       >
-                        Asiel:{" "}
+                        <Text style={{ fontFamily: "NunitoMedium" }}>
+                          Asiel:{" "}
+                        </Text>
+                        {dog.shelter}
                       </Text>
-                      {dog.shelter}
-                    </Text>
-                  </View>
-                </TouchableOpacity>
-
-                <View style={{ position: "absolute", top: 10, right: 12 }}>
+                    </TouchableOpacity>
+                  </Link>
+                </View>
+                <View style={{ position: "absolute", top: 10, right: 10 }}>
                   <TouchableOpacity onPress={() => toggleLike(dog.id)}>
                     <Ionicons
                       name={
@@ -603,17 +589,8 @@ export default function HomepageScreen() {
           )}
         </View>
       </ScrollView>
-      {/* Fixed navbar onderaan scherm */}
-      <View
-        style={{
-          position: "absolute",
-          bottom: 0,
-          left: 0,
-          right: 0,
-        }}
-      >
-        <NavBar />
-      </View>
+
+      <NavBar />
     </SafeAreaView>
   );
 }

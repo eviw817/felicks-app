@@ -11,8 +11,31 @@ import {
   Image,
   TouchableOpacity,
 } from "react-native";
+import BaseText from "@/components/BaseText";
 import { supabase } from "@/lib/supabase";
 import { Ionicons } from "@expo/vector-icons";
+
+function IconTag({ label, icon }: { label: string; icon: any }) {
+  return (
+    <View style={styles.iconTag}>
+      <Ionicons name={icon} size={18} color="#183A36" />
+      <BaseText style={styles.iconTagText}>{label}</BaseText>
+    </View>
+  );
+}
+
+function renderAttribute(label: string, value: boolean) {
+  return (
+    <View style={styles.attrRow}>
+      <BaseText style={styles.attrLabel}>{label}</BaseText>
+      <Ionicons
+        name={value ? "checkmark-circle" : "close-circle"}
+        size={20}
+        color={value ? "#6AB04C" : "#D64545"}
+      />
+    </View>
+  );
+}
 
 export default function DogDetail() {
   const { id } = useLocalSearchParams();
@@ -28,8 +51,6 @@ export default function DogDetail() {
         .single();
 
       console.log("🐶 Gevonden hond:", data);
-      console.log("🖼️ Images:", data?.images);
-
       setDog(data);
     })();
   }, [id]);
@@ -40,6 +61,7 @@ export default function DogDetail() {
   try {
     imageList =
       typeof dog.images === "string" ? JSON.parse(dog.images) : dog.images;
+    console.log("📷 ImageList:", imageList);
   } catch (e) {
     console.error("❌ Fout bij parsen van images:", e);
   }
@@ -51,16 +73,22 @@ export default function DogDetail() {
           <TouchableOpacity onPress={() => router.back()} style={styles.back}>
             <Ionicons name="arrow-back" size={24} color="#183A36" />
           </TouchableOpacity>
-          <Text style={styles.title}>{dog.name}</Text>
+          <BaseText variant="title" style={styles.title}>
+            {dog.name}
+          </BaseText>
         </View>
 
-        {imageList && imageList.length > 0 && (
+        {imageList?.length > 0 && imageList[0] ? (
           <Image
-            source={{
-              uri: `https://vgbuoxdfrbzqbqltcelz.supabase.co/storage/v1/object/public/${imageList[0]}`,
-            }}
+            source={{ uri: imageList[0] }}
             style={styles.avatar}
             resizeMode="cover"
+          />
+        ) : (
+          <Image
+            source={require("@/assets/images/logo_felicks.png")}
+            style={styles.avatar}
+            resizeMode="contain"
           />
         )}
 
@@ -76,21 +104,21 @@ export default function DogDetail() {
         </View>
 
         <View style={styles.section}>
-          <Text style={styles.subtitle}>Info</Text>
-          <Text style={styles.detail}>Ras: {dog.breed}</Text>
-          <Text style={styles.detail}>
+          <BaseText style={styles.subtitle}>Info</BaseText>
+          <BaseText style={styles.detail}>Ras: {dog.breed}</BaseText>
+          <BaseText style={styles.detail}>
             Geboortedatum: {new Date(dog.birthdate).toLocaleDateString("nl-BE")}
-          </Text>
-          <Text style={styles.detail}>Asiel: {dog.shelter}</Text>
+          </BaseText>
+          <BaseText style={styles.detail}>Asiel: {dog.shelter}</BaseText>
         </View>
 
         <View style={styles.section}>
-          <Text style={styles.subtitle}>Beschrijving</Text>
-          <Text style={styles.desc}>{dog.description}</Text>
+          <BaseText style={styles.subtitle}>Beschrijving</BaseText>
+          <BaseText style={styles.desc}>{dog.description}</BaseText>
         </View>
 
         <View style={styles.section}>
-          <Text style={styles.subtitle}>Eigenschappen</Text>
+          <BaseText style={styles.subtitle}>Eigenschappen</BaseText>
           {renderAttribute(
             "Kindvriendelijk < 6 jaar",
             dog.child_friendly_under_6
@@ -106,51 +134,37 @@ export default function DogDetail() {
           {renderAttribute("Hypoallergeen", dog.hypoallergenic)}
         </View>
 
-        {imageList && imageList.length > 0 && (
+        {imageList?.length > 0 && (
           <View style={styles.gallerySection}>
-            <Text style={styles.subtitle}>Foto's</Text>
-            {imageList.map((path, index) => (
-              <Image
-                key={index}
-                source={{
-                  uri: `https://vgbuoxdfrbzqbqltcelz.supabase.co/storage/v1/object/public/${path}`,
-                }}
-                style={styles.galleryImage}
-                resizeMode="cover"
-              />
-            ))}
+            <BaseText style={styles.subtitle}>Foto's</BaseText>
+            {imageList.map((path, index) =>
+              path ? (
+                <Image
+                  key={index}
+                  source={{ uri: path }}
+                  style={styles.galleryImage}
+                  resizeMode="cover"
+                />
+              ) : (
+                <Image
+                  key={index}
+                  source={require("@/assets/images/logo_felicks.png")}
+                  style={styles.galleryImage}
+                  resizeMode="contain"
+                />
+              )
+            )}
           </View>
         )}
-
         <TouchableOpacity style={styles.adoptButton}>
-          <Text style={styles.adoptButtonText}>Contacteer het asiel</Text>
+          <BaseText variant="button">Contacteer het asiel</BaseText>
         </TouchableOpacity>
       </ScrollView>
     </SafeAreaView>
   );
 }
 
-function IconTag({ label, icon }: { label: string; icon: any }) {
-  return (
-    <View style={styles.iconTag}>
-      <Ionicons name={icon} size={18} color="#183A36" />
-      <Text style={styles.iconTagText}>{label}</Text>
-    </View>
-  );
-}
 
-function renderAttribute(label: string, value: boolean) {
-  return (
-    <View style={styles.attrRow}>
-      <Text style={styles.attrLabel}>{label}</Text>
-      <Ionicons
-        name={value ? "checkmark-circle" : "close-circle"}
-        size={20}
-        color={value ? "#6AB04C" : "#D64545"}
-      />
-    </View>
-  );
-}
 
 const styles = StyleSheet.create({
   container: {
@@ -258,7 +272,7 @@ const styles = StyleSheet.create({
   galleryImage: {
     width: "100%",
     aspectRatio: 1.2,
-    borderRadius: 0,
+    borderRadius: 10,
     marginBottom: 10,
   },
 });
