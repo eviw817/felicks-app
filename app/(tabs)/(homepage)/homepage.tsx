@@ -24,28 +24,54 @@ export default function HomepageScreen() {
   const [unreadCount, setUnreadCount] = useState<number>(0);
   const [isFilled, setIsFilled] = useState<boolean>(false);
 
+    const [dogId, setDogId] = useState<string | null>(null);
   const handleHeartClick = () => setIsFilled(!isFilled);
 
   const fetchUnreadNotifications = useCallback(async () => {
-    const { data: { user } } = await supabase.auth.getUser();
-    const { data: dog } = await supabase
-      .from("ar_dog")
-      .select("id")
-      .eq("user_id", user?.id)
-      .single();
+  // 1) Haal ingelogde gebruiker op
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) return;               // als er geen user is, stop
 
-    if (dog) {
-      const { data, error } = await supabase
-        .from("notifications")
-        .select("id")
-        .eq("pet_id", dog.id)
-        .eq("is_read", false);
+  // 2) Haal AR-hond-id op
+  const { data: dog, error: dogError } = await supabase
+    .from("ar_dog")
+    .select("id")
+    .eq("user_id", user.id)
+    .single();
+  if (dogError || !dog) {
+    // Als er geen hond gevonden is, zet dogId op null en stop
+    setDogId(null);
+    setUnreadCount(0);
+    return;
+  }
 
-      if (!error && data) {
-        setUnreadCount(data.length);
-      }
-    }
-  }, []);
+  // Sla dogId op in state (zodat de realtime‐useEffect het kan gebruiken)
+  setDogId(dog.id);
+
+  // 3) Tel ongelezen meldingen:
+  //    - pet_id = dog.id
+  //    - Óf (category = 'adoption_status' én user_id = user.id)
+  const { data, error } = await supabase
+    .from("notifications")
+    .select("id", { count: "exact" })
+    .or(
+      `pet_id.eq.${dog.id},and(category.eq.adoption_status,user_id.eq.${user.id})`
+    )
+    .eq("is_read", false);
+
+  if (error || !data) {
+    // Fallback: als er iets misgaat, zet unreadCount op 0
+    setUnreadCount(0);
+    return;
+  }
+
+  // Toon in de badge het aantal ongelezen meldingen
+  setUnreadCount(data.length);
+}, []);
+
+
 
   useFocusEffect(
     useCallback(() => {
@@ -93,6 +119,62 @@ export default function HomepageScreen() {
       setFirstname("Guest");
     }
   }, [session]);
+
+    // ===== Nieuwe useEffect: realtime-subscription op notifications =====
+  useEffect(() => {
+    if (!dogId || !session?.user) return;
+
+    // Maak een nieuw kanaal (naam mag vrij kiezen)
+    const channel = supabase
+      .channel("home_notifications_channel")
+      // Luister naar INSERT op notifications
+      .on(
+        "postgres_changes",
+        {
+          event: "INSERT",
+          schema: "public",
+          table: "notifications",
+        },
+        (payload) => {
+          const newNotif = (payload as any).new;
+          const forThisDog = newNotif.pet_id === dogId;
+          const isAdoptieVoorUser =
+            newNotif.category === "adoption_status" &&
+            newNotif.user_id === session.user?.id;
+
+          if ((forThisDog || isAdoptieVoorUser) && !newNotif.is_read) {
+            fetchUnreadNotifications();
+          }
+        }
+      )
+      // Luister naar UPDATE: bijvoorbeeld als is_read op true wordt gezet
+      .on(
+        "postgres_changes",
+        {
+          event: "UPDATE",
+          schema: "public",
+          table: "notifications",
+        },
+        (payload) => {
+          const updatedNotif = (payload as any).new;
+          const forThisDog = updatedNotif.pet_id === dogId;
+          const isAdoptieVoorUser =
+            updatedNotif.category === "adoption_status" &&
+            updatedNotif.user_id === session.user?.id;
+
+          if (forThisDog || isAdoptieVoorUser) {
+            fetchUnreadNotifications();
+          }
+        }
+      )
+      .subscribe();
+
+    // Cleanup: un-subscribe wanneer dogId verandert of component unmount
+    return () => {
+      channel.unsubscribe();
+    };
+  }, [dogId]);
+
 
   if (loading) {
     return (

@@ -1,5 +1,3 @@
-// app/(tabs)/notifications/NotificationsScreen.tsx
-
 import React, { useEffect, useState } from "react";
 import {
   ScrollView,
@@ -13,13 +11,17 @@ import {
   StyleSheet,
 } from "react-native";
 import { supabase } from "@/lib/supabase";
+import {
+  RealtimeChannel,
+  RealtimePostgresInsertPayload,
+  RealtimePostgresUpdatePayload,
+} from "@supabase/supabase-js";
 import { FontAwesome } from "@expo/vector-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import { useRouter } from "expo-router";
 import NavBar from "@/components/NavigationBar";
 import BaseText from "@/components/BaseText";
-
 
 type Notification = {
   id: string;
@@ -36,13 +38,7 @@ type Notification = {
   | "is_running"
   | "is_toilet"
   | "adoption_status";
-  imageUrl?: string; // supabase image url
-};
-
-
-type ArDog = {
-  id: string;
-  name: string;
+  imageUrl?: string;
 };
 
 export default function NotificationsScreen() {
@@ -57,33 +53,37 @@ export default function NotificationsScreen() {
     "https://vgbuoxdfrbzqbqltcelz.supabase.co/storage/v1/object/public";
 
   useEffect(() => {
+    let notificationsChannel: RealtimeChannel | null = null;
+
     const loadNotifications = async () => {
       setLoading(true);
+
 
       const {
         data: { user },
         error: userError,
       } = await supabase.auth.getUser();
-
       if (userError || !user) {
         Alert.alert("Fout", "Kon ingelogde gebruiker niet ophalen");
         setLoading(false);
         return;
       }
+
       const { data: arDog, error: arDogError } = await supabase
         .from("ar_dog")
         .select("id, name")
         .eq("user_id", user.id)
         .single();
-
       if (arDogError || !arDog) {
         Alert.alert("Fout", "Kon AR-hond niet ophalen");
         setLoading(false);
         return;
       }
+
+      console.log("AR-hond (uit ar_dog) opgehaald:", arDog);
+
       setDogName(arDog.name);
       setDogId(arDog.id);
-
 
       const { data: rawNotifications, error: notifError } = await supabase
         .from("notifications")
@@ -93,37 +93,51 @@ export default function NotificationsScreen() {
         .or(`user_id.eq.${user.id},pet_id.eq.${arDog.id}`)
         .order("created_at", { ascending: false });
 
-      if (notifError || !rawNotifications) {
+      if (notifError) {
         Alert.alert(
           "Fout bij ophalen meldingen",
-          notifError?.message || "Onbekende fout"
+          notifError.message || "Onbekende fout"
         );
         setLoading(false);
         return;
       }
 
-      const enriched: Notification[] = await Promise.all(
-        rawNotifications.map(async (notif) => {
 
-          const title = notif.title.replace("{name}", arDog.name);
-          const description = notif.description.replace("{name}", arDog.name);
+      const enriched: Notification[] = await Promise.all(
+        (rawNotifications || []).map(async (notif) => {
+          const title = (notif.title ?? "").replace("{name}", arDog.name);
+          const description = (notif.description ?? "").replace("{name}", arDog.name);
+
 
           let posterImage: string | undefined = undefined;
+
+
           if (notif.category === "adoption_status") {
-            const {
-              data: rows,
-              error: viewError,
-            } = await supabase
+            console.log("Bezig met adoptie-notificatie:", notif);
+
+            const { data: rows, error: viewError } = await supabase
               .from("requests_with_user_and_dog")
               .select("images")
               .eq("user_id", user.id)
               .order("created_at", { ascending: false })
               .limit(1);
 
-            if (!viewError && rows && rows.length > 0) {
+            if (viewError) {
+              console.warn("Fout bij ophalen adoptiedata uit view:", viewError);
+            } else {
+              console.log(
+                "Resultaat van requests_with_user_and_dog voor adoptie:",
+                rows
+              );
+            }
+
+            if (rows && rows.length > 0) {
               const arr = rows[0].images;
               if (Array.isArray(arr) && arr.length > 0) {
                 const rawPath = arr[0];
+                // Log welke rawPath we vinden
+                console.log("Eerste rawPath uit images-array:", rawPath);
+
                 if (
                   rawPath.startsWith("http://") ||
                   rawPath.startsWith("https://")
@@ -132,10 +146,15 @@ export default function NotificationsScreen() {
                 } else {
                   posterImage = `${STORAGE_PUBLIC_BASE}/${rawPath}`;
                 }
+
+                console.log("Uiteindelijke posterImage URL voor adoptie:", posterImage);
+              } else {
+                console.log(
+                  "Geen afbeeldingen gevonden in rows[0].images voor adoptie"
+                );
               }
             }
           }
-
 
           return {
             ...notif,
@@ -148,9 +167,76 @@ export default function NotificationsScreen() {
 
       setNotifications(enriched);
       setLoading(false);
+
+      // 5) Zet de v2-realtime-subscription op
+      notificationsChannel = supabase
+        .channel("public:notifications")
+        .on(
+          "postgres_changes",
+          {
+            event: "INSERT",
+            schema: "public",
+            table: "notifications",
+          },
+          (payload: RealtimePostgresInsertPayload<Notification>) => {
+            const newNotif = payload.new;
+            if (!newNotif) return;
+
+            if (newNotif.user_id === user.id || newNotif.pet_id === arDog.id) {
+              const title = newNotif.title.replace("{name}", arDog.name);
+              const description = newNotif.description.replace(
+                "{name}",
+                arDog.name
+              );
+
+
+              if (newNotif.category === "adoption_status") {
+                console.log("Nieuwe adoptie-notificatie binnengekomen:", newNotif);
+              }
+
+              const toAdd: Notification = {
+                ...newNotif,
+                title,
+                description,
+                imageUrl:
+                  newNotif.category === "adoption_status" ? undefined : undefined,
+              };
+
+              setNotifications((prev) => [toAdd, ...prev]);
+            }
+          }
+        )
+        .on(
+          "postgres_changes",
+          {
+            event: "UPDATE",
+            schema: "public",
+            table: "notifications",
+          },
+          (payload: RealtimePostgresUpdatePayload<Notification>) => {
+            const updatedNotif = payload.new;
+            if (!updatedNotif) return;
+
+            setNotifications((prev) =>
+              prev.map((n) =>
+                n.id === updatedNotif.id
+                  ? { ...n, is_read: updatedNotif.is_read }
+                  : n
+              )
+            );
+          }
+        )
+        .subscribe();
     };
 
     loadNotifications();
+
+    // Cleanup: bij unmount de channel unsubscriben
+    return () => {
+      if (notificationsChannel) {
+        notificationsChannel.unsubscribe();
+      }
+    };
   }, []);
 
   const markAsRead = async (id: string) => {
@@ -168,7 +254,6 @@ export default function NotificationsScreen() {
     }
   };
 
-
   const formatDate = (timestamp: string) => {
     const date = new Date(timestamp);
     const day = date.getDate().toString().padStart(2, "0");
@@ -178,7 +263,6 @@ export default function NotificationsScreen() {
     const minute = date.getMinutes().toString().padStart(2, "0");
     return `${day}-${month}-${year} ${hour}:${minute}`;
   };
-
 
   if (loading) {
     return (
@@ -213,9 +297,6 @@ export default function NotificationsScreen() {
             </Text>
           ) : (
             notifications.map((notif) => {
-              // Kies afbeeldingbron:
-              // adoptie = image database
-              // Anders → Cooper‐placeholder
               const uriSource = notif.imageUrl
                 ? { uri: notif.imageUrl }
                 : require("@/assets/images/cooper-profile.png");
@@ -225,7 +306,6 @@ export default function NotificationsScreen() {
                   key={notif.id}
                   style={styles.notificationRow}
                   onPress={async () => {
-
                     if (notif.category === "adoption_status") {
                       if (!notif.is_read) {
                         await markAsRead(notif.id);
@@ -250,7 +330,7 @@ export default function NotificationsScreen() {
                     });
                   }}
                 >
-                  {/* Ongelezen‐bolletje */}
+                  {/* Ongelezen-bolletje */}
                   {!notif.is_read && <View style={styles.unreadDot} />}
 
                   {/* Afbeelding */}
