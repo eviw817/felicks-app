@@ -1,35 +1,48 @@
-// components/NotificationListener.tsx
-import React, { useEffect, useState, useCallback } from "react";
+/*// components/NotificationListener.tsx
+import React, { useEffect, useState, useRef } from "react";
 import { supabase } from "@/lib/supabase";
-import { Session } from "@supabase/supabase-js";
+import { Session, RealtimeChannel } from "@supabase/supabase-js";
 
 type NotificationListenerProps = {
   onNotify: (title: string, body: string) => void;
 };
 
+// ── Module‐level guard: zolang deze true blijft, wordt niet opnieuw gesubscribed ─────────────────
+let globalSubscribed = false;
+
 export default function NotificationListener({ onNotify }: NotificationListenerProps) {
   const [session, setSession] = useState<Session | null>(null);
   const [dogId, setDogId] = useState<string | null>(null);
 
+  // Ref om de laatst getoonde notificatie ID bij te houden
+  const lastSeenNotifId = useRef<string | null>(null);
+  // Ref om de channel‐instance op te slaan zodat we die in cleanup kunnen un‐subscriben (indien nodig)
+  const channelRef = useRef<RealtimeChannel | null>(null);
 
+  //
+  // ── Stap A: haal Supabase‐session op en luister naar auth‐wijzigingen ──────────────────────────────────
+  //
   useEffect(() => {
     const getSession = async () => {
-      const { data: { session } } = await supabase.auth.getSession();
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
       setSession(session);
     };
     getSession();
 
-    const { data: authListener } = supabase.auth.onAuthStateChange(
-      (_, newSession) => {
-        setSession(newSession);
-      }
-    );
+    const { data: authListener } = supabase.auth.onAuthStateChange((_, newSession) => {
+      setSession(newSession);
+    });
+
     return () => {
       authListener?.subscription.unsubscribe();
     };
   }, []);
 
-
+  //
+  // ── Stap B: zodra session.user.id bekend is, haal dogId uit ar_dog ─────────────────────────────────
+  //
   useEffect(() => {
     if (!session?.user?.id) {
       setDogId(null);
@@ -48,13 +61,25 @@ export default function NotificationListener({ onNotify }: NotificationListenerP
       }
     };
     getDog();
-  }, [session]);
+  }, [session?.user?.id]);
 
-
+  //
+  // ── Stap C: subscribe EENMALIG op real‐time notificaties zodra dogId & session.user.id beschikbaar zijn ──
+  //
   useEffect(() => {
-    if (!dogId || !session?.user?.id) return;
+    // Pas alléén subscribe‐logica toe als:
+    // 1) We een geldige ingelogde user hebben
+    // 2) We een geldige dogId hebben
+    // 3) We nog niet eerder globalSubscribed hebben gedaan
+    if (!session?.user?.id || !dogId || globalSubscribed) {
+      return;
+    }
 
-    const channel = supabase
+    // Markeer direct dat we nu subscribed hebben (module‐level)
+    globalSubscribed = true;
+
+    // Maak het channel en subscribe:
+    const channel: RealtimeChannel = supabase
       .channel("global_notifications_channel")
       .on(
         "postgres_changes",
@@ -63,18 +88,22 @@ export default function NotificationListener({ onNotify }: NotificationListenerP
           schema: "public",
           table: "notifications",
         },
-        (payload) => {
-          const newNotif = (payload as any).new;
+        (payload: any) => {
+          const newNotif = payload.new;
           const forThisDog = newNotif.pet_id === dogId;
-          const isAdoptieVoorUser =
+          const isAdoptieForUser =
             newNotif.category === "adoption_status" &&
             newNotif.user_id === session.user.id;
 
-          if ((forThisDog || isAdoptieVoorUser) && !newNotif.is_read) {
-            onNotify(
-              newNotif.title ?? "Nieuwe melding",
-              newNotif.description ?? ""
-            );
+          if ((forThisDog || isAdoptieForUser) && !newNotif.is_read) {
+            // Toon alleen als we deze notificatie-ID nog niet eerder geshowd hebben
+            if (newNotif.id !== lastSeenNotifId.current) {
+              lastSeenNotifId.current = newNotif.id;
+              onNotify(
+                newNotif.title ?? "Nieuwe melding",
+                newNotif.description ?? ""
+              );
+            }
           }
         }
       )
@@ -85,27 +114,38 @@ export default function NotificationListener({ onNotify }: NotificationListenerP
           schema: "public",
           table: "notifications",
         },
-        (payload) => {
-          const updatedNotif = (payload as any).new;
+        (payload: any) => {
+          const updatedNotif = payload.new;
           const forThisDog = updatedNotif.pet_id === dogId;
-          const isAdoptieVoorUser =
+          const isAdoptieForUser =
             updatedNotif.category === "adoption_status" &&
             updatedNotif.user_id === session.user.id;
 
-          if (forThisDog || isAdoptieVoorUser) {
-            onNotify(
-              updatedNotif.title ?? "Melding bijgewerkt",
-              updatedNotif.description ?? ""
-            );
+          if (forThisDog || isAdoptieForUser) {
+            if (updatedNotif.id !== lastSeenNotifId.current) {
+              lastSeenNotifId.current = updatedNotif.id;
+              onNotify(
+                updatedNotif.title ?? "Melding bijgewerkt",
+                updatedNotif.description ?? ""
+              );
+            }
           }
         }
       )
       .subscribe();
 
+    channelRef.current = channel;
+
+    // Cleanup: als het component unmount of dogId verandert (in zeldzame gevallen) unsubscriben we:
     return () => {
-      channel.unsubscribe();
+      if (channelRef.current) {
+        channelRef.current.unsubscribe();
+        channelRef.current = null;
+      }
+      // We laten globalSubscribed deliberately op true staan zodat er nooit opnieuw gesubscribed wordt
     };
-  }, [dogId, session, onNotify]);
+  }, [dogId, session?.user?.id, onNotify]);
 
   return null;
 }
+*/

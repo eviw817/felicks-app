@@ -1,3 +1,4 @@
+// app/(tabs)/(homepage)/homepage.tsx
 import React, { useEffect, useState, useCallback } from "react";
 import {
   ScrollView,
@@ -9,13 +10,16 @@ import {
   Image,
 } from "react-native";
 import { supabase } from "@/lib/supabase";
-import { Session } from "@supabase/supabase-js";
+import type { Session } from "@supabase/supabase-js";
 import { FontAwesome } from "@expo/vector-icons";
 import { TouchableOpacity } from "react-native";
 import { Link } from "expo-router";
 import NavBar from "@/components/NavigationBar";
-import { useFocusEffect } from '@react-navigation/native';
+import { useFocusEffect } from "@react-navigation/native";
 import BaseText from "@/components/BaseText";
+
+// ** Importeren we de functie om de badge‐update‐callback te registreren **
+import { registerBadgeCallback } from "@/app/_layout";
 
 export default function HomepageScreen() {
   const [firstname, setFirstname] = useState<string>("");
@@ -24,75 +28,90 @@ export default function HomepageScreen() {
   const [unreadCount, setUnreadCount] = useState<number>(0);
   const [isFilled, setIsFilled] = useState<boolean>(false);
 
-    const [dogId, setDogId] = useState<string | null>(null);
+  const [dogId, setDogId] = useState<string | null>(null);
   const handleHeartClick = () => setIsFilled(!isFilled);
 
+  // ─── Functie: (opnieuw) tellen ongelezen meldingen
   const fetchUnreadNotifications = useCallback(async () => {
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-  if (!user) return;        
+    console.log("[Homepage] fetchUnreadNotifications() start");
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+    if (!user) return;
 
+    // Haal dogId
+    const { data: dog, error: dogError } = await supabase
+      .from("ar_dog")
+      .select("id")
+      .eq("user_id", user.id)
+      .single();
+    if (dogError || !dog) {
+      console.warn("[Homepage] Geen ar_dog gevonden:", dogError);
+      setDogId(null);
+      setUnreadCount(0);
+      return;
+    }
+    setDogId(dog.id);
 
-  const { data: dog, error: dogError } = await supabase
-    .from("ar_dog")
-    .select("id")
-    .eq("user_id", user.id)
-    .single();
-  if (dogError || !dog) {
-    setDogId(null);
-    setUnreadCount(0);
-    return;
-  }
+    // Tel ongelezen meldingen:
+    const { data, error } = await supabase
+      .from("notifications")
+      .select("id", { count: "exact" })
+      .or(
+        `pet_id.eq.${dog.id},and(category.eq.adoption_status,user_id.eq.${user.id})`
+      )
+      .eq("is_read", false);
 
+    if (error || !data) {
+      console.warn("[Homepage] Fout bij ophalen ongelezen:", error);
+      setUnreadCount(0);
+      return;
+    }
+    console.log("[Homepage] ongelezen teller:", data.length);
+    setUnreadCount(data.length);
+  }, []);
 
-  setDogId(dog.id);
-
-  const { data, error } = await supabase
-    .from("notifications")
-    .select("id", { count: "exact" })
-    .or(
-      `pet_id.eq.${dog.id},and(category.eq.adoption_status,user_id.eq.${user.id})`
-    )
-    .eq("is_read", false);
-
-  if (error || !data) {
-
-    setUnreadCount(0);
-    return;
-  }
-
-
-  setUnreadCount(data.length);
-}, []);
-
-
-
+  // ─── TEL ongelezen MELDINGEN telkens dit scherm focus krijgt ────────────────
   useFocusEffect(
     useCallback(() => {
       fetchUnreadNotifications();
     }, [fetchUnreadNotifications])
   );
 
+  // ─── REGISTREER de badge‐update‐callback (zodat helper het kan aanroepen)
+  useEffect(() => {
+    console.log("[Homepage] registerBadgeCallback gestart");
+    registerBadgeCallback(fetchUnreadNotifications);
+
+    // **Nieuw:** direct 1× fetchUnreadNotifications, zodat badge up‐todate is na herstart
+    fetchUnreadNotifications();
+
+    // (optioneel: cleanup) return () => registerBadgeCallback(() => {});
+  }, [fetchUnreadNotifications]);
+
+  // ─── Haal session op ──────────────────────────────────────────────────────
   useEffect(() => {
     const fetchSession = async () => {
-      const { data: { session } } = await supabase.auth.getSession();
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
       setSession(session);
       setLoading(false);
     };
-
     fetchSession();
 
     const { data: authListener } = supabase.auth.onAuthStateChange(
-      (_, session) => {
-        setSession(session);
+      (_, newSession) => {
+        setSession(newSession);
         setLoading(false);
       }
     );
-
-    return () => authListener?.subscription?.unsubscribe();
+    return () => {
+      authListener?.subscription?.unsubscribe();
+    };
   }, []);
 
+  // ─── Haal voornaam op ──────────────────────────────────────────────────────
   useEffect(() => {
     if (session?.user) {
       const getFirstname = async () => {
@@ -102,11 +121,10 @@ export default function HomepageScreen() {
             .select("firstname")
             .eq("id", session.user.id)
             .single();
-
           if (error) throw error;
           setFirstname(data?.firstname || "Guest");
-        } catch (error: any) {
-          Alert.alert("Error", error.message || "Kon profiel niet laden");
+        } catch (err: any) {
+          Alert.alert("Error", err.message || "Kon profiel niet laden");
         }
       };
       getFirstname();
@@ -115,64 +133,17 @@ export default function HomepageScreen() {
     }
   }, [session]);
 
-    // realtime subscription via supabase
-  useEffect(() => {
-    if (!dogId || !session?.user) return;
-
-
-    const channel = supabase
-      .channel("home_notifications_channel")
-      .on(
-        "postgres_changes",
-        {
-          event: "INSERT",
-          schema: "public",
-          table: "notifications",
-        },
-        (payload) => {
-          const newNotif = (payload as any).new;
-          const forThisDog = newNotif.pet_id === dogId;
-          const isAdoptieVoorUser =
-            newNotif.category === "adoption_status" &&
-            newNotif.user_id === session.user?.id;
-
-          if ((forThisDog || isAdoptieVoorUser) && !newNotif.is_read) {
-            fetchUnreadNotifications();
-          }
-        }
-      )
-  
-      .on(
-        "postgres_changes",
-        {
-          event: "UPDATE",
-          schema: "public",
-          table: "notifications",
-        },
-        (payload) => {
-          const updatedNotif = (payload as any).new;
-          const forThisDog = updatedNotif.pet_id === dogId;
-          const isAdoptieVoorUser =
-            updatedNotif.category === "adoption_status" &&
-            updatedNotif.user_id === session.user?.id;
-
-          if (forThisDog || isAdoptieVoorUser) {
-            fetchUnreadNotifications();
-          }
-        }
-      )
-      .subscribe();
-
-
-    return () => {
-      channel.unsubscribe();
-    };
-  }, [dogId]);
-
-
+  // ** Belangrijk: er staat écht geen eigen subscribe() meer in deze file **
   if (loading) {
     return (
-      <View style={{ flex: 1, justifyContent: "center", alignItems: "center", backgroundColor: "#FFFDF9" }}>
+      <View
+        style={{
+          flex: 1,
+          justifyContent: "center",
+          alignItems: "center",
+          backgroundColor: "#FFFDF9",
+        }}
+      >
         <ActivityIndicator size="large" color="#183A36" />
       </View>
     );
@@ -187,14 +158,10 @@ export default function HomepageScreen() {
         paddingBottom: 80,
       }}
     >
-      <View
-        style={{
-          alignItems: "center",
-        }}
-      >
+      <View style={{ alignItems: "center" }}>
         <BaseText
           style={{
-            fontFamily: 'SireniaMedium',
+            fontFamily: "SireniaMedium",
             fontSize: 28,
             padding: 20,
             marginTop: 50,
@@ -210,19 +177,27 @@ export default function HomepageScreen() {
           <View style={{ position: "relative" }}>
             <FontAwesome name="envelope-o" size={30} color="#183A36" />
             {unreadCount > 0 && (
-              <View style={{
-                position: "absolute",
-                top: -6,
-                right: -6,
-                backgroundColor: "#F18B7E",
-                borderRadius: 10,
-                paddingHorizontal: 5,
-                minWidth: 20,
-                height: 20,
-                alignItems: "center",
-                justifyContent: "center"
-              }}>
-                <Text style={{ color: "#183A36", fontSize: 12, fontWeight: "bold" }}>
+              <View
+                style={{
+                  position: "absolute",
+                  top: -6,
+                  right: -6,
+                  backgroundColor: "#F18B7E",
+                  borderRadius: 10,
+                  paddingHorizontal: 5,
+                  minWidth: 20,
+                  height: 20,
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <Text
+                  style={{
+                    color: "#183A36",
+                    fontSize: 12,
+                    fontWeight: "bold",
+                  }}
+                >
                   {unreadCount}
                 </Text>
               </View>
@@ -230,6 +205,7 @@ export default function HomepageScreen() {
           </View>
         </Link>
       </View>
+
       <ScrollView
         contentContainerStyle={{ flexGrow: 1, paddingBottom: 80 }}
         style={{
@@ -240,6 +216,7 @@ export default function HomepageScreen() {
           paddingVertical: 20,
         }}
       >
+        {/* ─── jouw bestaande homepage‐content (quiz, bewustzijn, lijst, enz.) ─── */}
         <View>
           <Text
             style={{
@@ -395,7 +372,7 @@ export default function HomepageScreen() {
           <Link
             href="/artikelsIndex"
             style={{
-             padding: 12,
+              padding: 12,
               margin: 20,
               paddingHorizontal: 20,
               paddingVertical: 15,
@@ -415,6 +392,7 @@ export default function HomepageScreen() {
             LEES MEER TIPS
           </Link>
         </View>
+
         <View>
           <Text
             style={{
@@ -446,9 +424,9 @@ export default function HomepageScreen() {
               style={{ position: "absolute", top: 20, right: 20 }}
             >
               <FontAwesome
-                name={isFilled ? "heart" : "heart-o"} // Conditional rendering for filled/outline heart
+                name={isFilled ? "heart" : "heart-o"}
                 size={20}
-                color={isFilled ? "#183A36" : "#183A36"} // Color for filled and outlined hearts
+                color="#183A36"
               />
             </TouchableOpacity>
             <Image
@@ -468,7 +446,6 @@ export default function HomepageScreen() {
                   alignItems: "center",
                   flexDirection: "row",
                   gap: 4,
-                  
                 }}
               >
                 <Text
@@ -479,7 +456,7 @@ export default function HomepageScreen() {
                 >
                   Naam:
                 </Text>
-                <Text style={{color: "#183A36"}}>Basiel</Text>
+                <Text style={{ color: "#183A36" }}>Basiel</Text>
               </View>
               <View
                 style={{
@@ -492,12 +469,12 @@ export default function HomepageScreen() {
                 <Text
                   style={{
                     fontWeight: "bold",
-                    color: "#183A36"
+                    color: "#183A36",
                   }}
                 >
                   leeftijd:
                 </Text>
-                <Text style={{color: "#183A36"}}>4 jaar</Text>
+                <Text style={{ color: "#183A36" }}>4 jaar</Text>
               </View>
               <View
                 style={{
@@ -510,12 +487,12 @@ export default function HomepageScreen() {
                 <Text
                   style={{
                     fontWeight: "bold",
-                    color: "#183A36"
+                    color: "#183A36",
                   }}
                 >
                   Ras:
                 </Text>
-                <Text style={{color: "#183A36"}}>Labrador retriever</Text>
+                <Text style={{ color: "#183A36" }}>Labrador retriever</Text>
               </View>
               <View
                 style={{
@@ -528,7 +505,7 @@ export default function HomepageScreen() {
                 <Text
                   style={{
                     fontWeight: "bold",
-                    color: "#183A36"
+                    color: "#183A36",
                   }}
                 >
                   Asiel:
@@ -536,7 +513,7 @@ export default function HomepageScreen() {
                 <Text
                   style={{
                     paddingRight: 150,
-                    color: "#183A36"
+                    color: "#183A36",
                   }}
                 >
                   Dierenbescherming Mechelen
@@ -544,6 +521,7 @@ export default function HomepageScreen() {
               </View>
             </View>
           </View>
+
           <View
             style={{
               position: "relative",
@@ -564,9 +542,9 @@ export default function HomepageScreen() {
               style={{ position: "absolute", top: 20, right: 20 }}
             >
               <FontAwesome
-                name={isFilled ? "heart" : "heart-o"} // Conditional rendering for filled/outline heart
+                name={isFilled ? "heart" : "heart-o"}
                 size={20}
-                color={isFilled ? "#183A36" : "#183A36"} // Color for filled and outlined hearts
+                color="#183A36"
               />
             </TouchableOpacity>
             <Image
@@ -586,18 +564,17 @@ export default function HomepageScreen() {
                   alignItems: "center",
                   flexDirection: "row",
                   gap: 4,
-         
                 }}
               >
                 <Text
                   style={{
                     fontWeight: "bold",
-                    color: "#183A36"
+                    color: "#183A36",
                   }}
                 >
                   Naam:
                 </Text>
-                <Text style={{color: "#183A36"}}>Ollie</Text>
+                <Text style={{ color: "#183A36" }}>Ollie</Text>
               </View>
               <View
                 style={{
@@ -610,12 +587,12 @@ export default function HomepageScreen() {
                 <Text
                   style={{
                     fontWeight: "bold",
-                    color: "#183A36"
+                    color: "#183A36",
                   }}
                 >
                   leeftijd:
                 </Text>
-                <Text style={{color: "#183A36"}}>4 jaar</Text>
+                <Text style={{ color: "#183A36" }}>4 jaar</Text>
               </View>
               <View
                 style={{
@@ -628,12 +605,14 @@ export default function HomepageScreen() {
                 <Text
                   style={{
                     fontWeight: "bold",
-                    color: "#183A36"
+                    color: "#183A36",
                   }}
                 >
                   Ras:
                 </Text>
-                <Text style={{color: "#183A36"}}>Basset Fauve de Bretagne</Text>
+                <Text style={{ color: "#183A36" }}>
+                  Basset Fauve de Bretagne
+                </Text>
               </View>
               <View
                 style={{
@@ -646,16 +625,13 @@ export default function HomepageScreen() {
                 <Text
                   style={{
                     fontWeight: "bold",
-                    color: "#183A36"
+                    color: "#183A36",
                   }}
                 >
                   Asiel:
                 </Text>
                 <Text
-                  style={{
-                    paddingRight: 150,
-                    color: "#183A36"
-                  }}
+                  style={{ paddingRight: 150, color: "#183A36" }}
                 >
                   Dierenbescherming Mechelen
                 </Text>
@@ -664,7 +640,8 @@ export default function HomepageScreen() {
           </View>
         </View>
       </ScrollView>
-      {/* Fixed navbar onderaan scherm */}
+
+      {/* Navbar onderaan */}
       <View
         style={{
           position: "absolute",
