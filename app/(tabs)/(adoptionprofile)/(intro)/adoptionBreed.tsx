@@ -36,7 +36,7 @@ export default function AdoptionChoice() {
 
       <TouchableOpacity
         style={styles.primaryButton}
-        onPress={() => router.push("/livingsituation")}
+        onPress={() => router.push("/livingSituation")}
       >
         <BaseText variant="button" style={styles.primaryText}>
           VIND JOUW PERFECTE RAS

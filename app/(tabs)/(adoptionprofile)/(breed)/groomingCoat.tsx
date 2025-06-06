@@ -7,7 +7,7 @@ import {
   Platform,
 } from "react-native";
 import { useRouter } from "expo-router";
-import { supabase } from "../../../../lib/supabase";
+import { supabase } from "@/lib/supabase";
 import { Ionicons } from "@expo/vector-icons";
 import BaseText from "@/components/BaseText";
 
@@ -144,7 +144,7 @@ export default function GroomingCoat() {
 
       <TouchableOpacity
         style={[styles.button, !canNext && styles.buttonDisabled]}
-        onPress={() => router.push("/adoptionprofileResults")}
+        onPress={() => router.push("/adoptionProfileResults")}
         disabled={!canNext}
       >
         <BaseText style={styles.buttonText} variant="button">

@@ -13,7 +13,7 @@ import {
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
-import { supabase } from "../../../../lib/supabase";
+import { supabase } from "@/lib/supabase";
 import BaseText from "@/components/BaseText";
 
 interface Dog {
@@ -181,7 +181,7 @@ export default function Matching() {
               style={styles.card}
               onPress={() =>
                 router.push({
-                  pathname: "/dogDetail/[id]",
+                  pathname: "/dog-detail/[id]",
                   params: { id: item.dog.id },
                 })
               }

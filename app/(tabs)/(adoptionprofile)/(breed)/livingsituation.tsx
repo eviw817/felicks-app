@@ -157,7 +157,7 @@ export default function LivingSituation() {
       <TouchableOpacity
         style={[styles.button, !canNext && styles.buttonDisabled]}
         onPress={() =>
-          router.push("/(tabs)/(adoptionprofile)/(breed)/experienceSize")
+          router.push("experienceSize")
         }
         disabled={!canNext}
       >

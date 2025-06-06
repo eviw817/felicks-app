@@ -522,7 +522,7 @@ export default function HomepageScreen() {
                 </View>
 
                 <View style={{ flex: 1 }}>
-                  <Link href={`/dogDetail/${dog.id}`} asChild>
+                  <Link href={`/dog-detail/${dog.id}`} asChild>
                     <TouchableOpacity>
                       <Text
                         style={{
