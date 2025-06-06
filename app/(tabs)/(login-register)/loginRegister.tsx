@@ -15,7 +15,7 @@ function LoginRegisterScreen() {
   return (
     <SafeAreaView style={styles.container}>
       <Image
-        source={require("../../../assets/images/logo_felicks.png")}
+        source={require("@/assets/images/logo_felicks.png")}
         style={styles.logo}
       />
       <Text style={styles.title} className="semibold">

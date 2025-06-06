@@ -1,7 +1,7 @@
 // context/AdoptionProfileContext.tsx
 import React, { createContext, useContext, useState, ReactNode } from "react";
 
-interface AdoptionProfileData {
+interface AdoptionprofileData {
   housingType: string | null;
   garden: string | null;
   environment: string | null;
@@ -25,7 +25,7 @@ interface AdoptionProfileData {
   motivation: string;
 }
 
-const defaultProfileData: AdoptionProfileData = {
+const defaultProfileData: AdoptionprofileData = {
   housingType: null,
   garden: null,
   environment: null,
@@ -49,21 +49,21 @@ const defaultProfileData: AdoptionProfileData = {
   motivation: "",
 };
 
-const AdoptionProfileContext = createContext({
+const AdoptionprofileContext = createContext({
   profileData: defaultProfileData,
-  updateProfile: (data: Partial<AdoptionProfileData>) => {},
+  updateProfile: (data: Partial<AdoptionprofileData>) => {},
   resetProfile: () => {},
 });
 
-export const AdoptionProfileProvider = ({
+export const AdoptionprofileProvider = ({
   children,
 }: {
   children: ReactNode;
 }) => {
   const [profileData, setProfileData] =
-    useState<AdoptionProfileData>(defaultProfileData);
+    useState<AdoptionprofileData>(defaultProfileData);
 
-  const updateProfile = (data: Partial<AdoptionProfileData>) => {
+  const updateProfile = (data: Partial<AdoptionprofileData>) => {
     setProfileData((prev) => ({ ...prev, ...data }));
   };
 
@@ -72,12 +72,12 @@ export const AdoptionProfileProvider = ({
   };
 
   return (
-    <AdoptionProfileContext.Provider
+    <AdoptionprofileContext.Provider
       value={{ profileData, updateProfile, resetProfile }}
     >
       {children}
-    </AdoptionProfileContext.Provider>
+    </AdoptionprofileContext.Provider>
   );
 };
 
-export const useAdoptionProfile = () => useContext(AdoptionProfileContext);
+export const useAdoptionprofile = () => useContext(AdoptionprofileContext);

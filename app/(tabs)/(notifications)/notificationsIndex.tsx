@@ -273,7 +273,13 @@ export default function NotificationsScreen() {
   }
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: "#FFFDF9" }}>
+    <SafeAreaView
+      style={{
+        flex: 1,
+        justifyContent: "center",
+        backgroundColor: "#FFFDF9",
+      }}
+    >
       <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
         {/* Terug-knop */}
         <TouchableOpacity

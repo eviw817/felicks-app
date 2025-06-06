@@ -1,8 +1,7 @@
 import React, { useEffect } from "react";
 import { View, Image, StyleSheet } from "react-native";
 
-import { useRouter } from "expo-router"; 
-
+import { useRouter } from "expo-router";
 
 export default function Index() {
   const router = useRouter();
@@ -10,7 +9,7 @@ export default function Index() {
   useEffect(() => {
     const timer = setTimeout(() => {
 
-      router.replace("../../loginRegister");
+      router.replace("/loginRegister");
 
     }, 3000);
 
@@ -20,7 +19,7 @@ export default function Index() {
   return (
     <View style={styles.container}>
       <Image
-        source={require("../assets/images/logo_felicks.png")}
+        source={require("@/assets/images/logo_felicks.png")}
         style={styles.logo}
       />
     </View>
@@ -38,6 +37,5 @@ const styles = StyleSheet.create({
     height: 340,
     resizeMode: "contain",
   },
-
 });
 

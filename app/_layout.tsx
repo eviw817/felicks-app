@@ -1,10 +1,9 @@
 "use client";
 
 import React, { useState, useCallback, useEffect } from "react";
-import { AdoptionProfileProvider } from "../context/AdoptionProfileContext";
+import { SplashScreen, Stack, Slot, useRouter, usePathname } from "expo-router";
 import { StatusBar } from "react-native";
 import { useFonts } from "expo-font";
-import { Slot, useRouter, usePathname } from "expo-router";
 import InAppBanner from "@/components/InAppBanner";
 import { initRealtimeNotifications } from "@/lib/realtimeNotifications";
 import { supabase } from "@/lib/supabase"; 
@@ -16,12 +15,13 @@ export function registerBadgeCallback(cb: () => void) {
 }
 
 export default function RootLayout() {
-  const [fontsLoaded] = useFonts({
+  console.log("Layout geladen");
+
+  const [loaded] = useFonts({
     SpaceMono: require("@/assets/fonts/SpaceMonoRegular.ttf"),
     Nunito: require("@/assets/fonts/Nunito/NunitoRegular.ttf"),
     SireniaMedium: require("@/assets/fonts/Sirenia/SireniaMedium.ttf"),
   });
-
 
   const [bannerTitle, setBannerTitle] = useState<string | null>(null);
   const [bannerBody, setBannerBody] = useState<string>("");
@@ -29,19 +29,16 @@ export default function RootLayout() {
   const router = useRouter();
   const pathname = usePathname();
 
-
   const handleBannerNotify = useCallback((title: string, body: string) => {
     console.log("[RootLayout][handleBannerNotify] ► Showing banner:", title, "|", body);
     setBannerTitle(title);
     setBannerBody(body);
   }, []);
 
-
   const handleBadgeUpdate = useCallback(() => {
     console.log("[RootLayout][handleBadgeUpdate] ► forceren fetchUnreadNotifications");
     badgeUpdateCallback();
   }, []);
-
 
   const handleBannerHide = useCallback(() => {
     console.log("[RootLayout][handleBannerHide] ► Hiding banner");
@@ -49,7 +46,6 @@ export default function RootLayout() {
     setBannerBody("");
   }, []);
 
- 
   const handleBannerPress = useCallback(() => {
     console.log("[RootLayout][handleBannerPress] ► Navigating to /notificationsIndex");
     if (pathname !== "/notificationsIndex") {
@@ -58,7 +54,6 @@ export default function RootLayout() {
     setBannerTitle(null);
     setBannerBody("");
   }, [pathname, router]);
-
 
   useEffect(() => {
     const fetchSessionAndStartRealtime = async () => {
@@ -74,7 +69,6 @@ export default function RootLayout() {
     fetchSessionAndStartRealtime();
   }, [handleBannerNotify, handleBadgeUpdate]);
 
-
   useEffect(() => {
     const { data: authListener } = supabase.auth.onAuthStateChange((_event, session) => {
       if (session?.user) {
@@ -88,20 +82,20 @@ export default function RootLayout() {
     };
   }, [handleBannerNotify, handleBadgeUpdate]);
 
-  if (!fontsLoaded) return null;
+  if (!loaded) return null;
 
   return (
-    <AdoptionProfileProvider>
+    <>
       {bannerTitle !== null && (
-        <InAppBanner
-          title={bannerTitle}
-          body={bannerBody}
-          onHide={handleBannerHide}
-          onPress={handleBannerPress}
-        />
+      <InAppBanner
+        title={bannerTitle}
+        body={bannerBody}
+        onHide={handleBannerHide}
+        onPress={handleBannerPress}
+      />
       )}
       <Slot />
       <StatusBar />
-    </AdoptionProfileProvider>
+    </>
   );
 }

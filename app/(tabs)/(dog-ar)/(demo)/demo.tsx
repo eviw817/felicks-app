@@ -5,7 +5,8 @@ import {
   Text,
   TouchableOpacity,
   ActivityIndicator,
-  Pressable
+  Pressable,
+  Alert,
 } from "react-native";
 import { BeagleScene } from "@/components/augumented-dog/scenes/BeagleScene";
 import { ViroARSceneNavigator } from "@reactvision/react-viro";
@@ -13,8 +14,10 @@ import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import { supabase } from "@/lib/supabase";
 import { useLocalSearchParams } from "expo-router";
 import NavBar from "@/components/NavigationBar";
-import { useNavigation } from '@react-navigation/native'
-import { Ionicons } from '@expo/vector-icons'
+import { useNavigation } from "@react-navigation/native";
+import { Ionicons } from "@expo/vector-icons";
+import { useRouter } from "expo-router";
+import { useFonts } from "expo-font";
 
 
 type DogStatus = {
@@ -37,11 +40,27 @@ type NotificationSummary = {
 };
 
 const AugmentedDog: React.FC = () => {
-  const navigation = useNavigation()
-  const { petId, notificationId } = useLocalSearchParams<{
+  const [fontsLoaded] = useFonts({
+    NunitoRegular: require("@/assets/fonts/Nunito/NunitoRegular.ttf"),
+    NunitoSemiBold: require("@/assets/fonts/Nunito/NunitoSemiBold.ttf"),
+    NunitoBold: require("@/assets/fonts/Nunito/NunitoBold.ttf"),
+    SireniaMedium: require("@/assets/fonts/Sirenia/SireniaMedium.ttf"),
+  });
+
+  if (!fontsLoaded) {
+    return <View />;
+  }
+
+  const router = useRouter();
+  const navigation = useNavigation();
+  const { petId, notificationId, fromArInfo } = useLocalSearchParams<{
     petId: string;
     notificationId?: string;
+    fromArInfo?: string;
   }>();
+
+  const cameFromArInfo = fromArInfo === "true";
+  const [showOverlay, setShowOverlay] = useState(false);
 
   const [status, setStatus] = useState<DogStatus | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
@@ -62,7 +81,7 @@ const AugmentedDog: React.FC = () => {
 
   const getStatusMessages = (dogName: string) => ({
     is_eating: {
-      true: `${dogName} heeft flink zijn eten opgegeten!`,
+      true: `${dogName} heeft flink hun eten opgegeten!`,
     },
     is_playing: {
       true: `${dogName} heeft kunnen spelen!`,
@@ -71,7 +90,7 @@ const AugmentedDog: React.FC = () => {
       true: `${dogName} vond het wandelen heel leuk!`,
     },
     is_toilet: {
-      true: `${dogName} heeft zijn behoefte kunnen doen!`,
+      true: `${dogName} heeft hun behoefte kunnen doen!`,
     },
   });
 
@@ -98,6 +117,11 @@ const AugmentedDog: React.FC = () => {
       console.warn("petId ontbreekt!");
       setLoading(false);
       return;
+    }
+
+    if (cameFromArInfo) {
+      console.log("User came from arInformation screen");
+      setShowOverlay(true); // show the alert overlay
     }
 
     const fetchStatusEnNotifications = async () => {
@@ -162,7 +186,7 @@ const AugmentedDog: React.FC = () => {
     };
 
     fetchStatusEnNotifications();
-  }, [petId, notificationId]);
+  }, [petId, notificationId, cameFromArInfo]);
 
   const getCurrentMessages = (): string[] => {
     if (
@@ -239,12 +263,52 @@ const AugmentedDog: React.FC = () => {
     );
   }
 
+  const goToSettings = () => {
+    router.push("/settings");
+  };
+
   const messagesToShow = getCurrentMessages();
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
-      
-      
+      {showOverlay && (
+        <Pressable
+          style={{
+            position: "absolute",
+            top: 0,
+            bottom: 0,
+            left: 0,
+            right: 0,
+            backgroundColor: "rgba(0, 0, 0, 0.5)",
+            justifyContent: "center",
+            alignItems: "center",
+            zIndex: 100,
+          }}
+          onPress={() => setShowOverlay(false)} // close when tapped anywhere
+        >
+          <View
+            style={{
+              backgroundColor: "#fff",
+              padding: 24,
+              borderRadius: 12,
+              maxWidth: "80%",
+            }}
+          >
+            <Text
+              style={{
+                textAlign: "center",
+                fontSize: 16,
+                fontFamily: "NunitoRegular",
+                color: "#183A36",
+              }}
+            >
+              Scan de kamer zodat je vriend weet waar jij bent!
+              {"\n\n"}Klik op het scherm om deze melding te sluiten.
+            </Text>
+          </View>
+        </Pressable>
+      )}
+
       <ViroARSceneNavigator
         autofocus={true}
         initialScene={{
@@ -254,18 +318,17 @@ const AugmentedDog: React.FC = () => {
       >
         <BeagleScene style={{ width: "100%", height: 1000 }} />
       </ViroARSceneNavigator>
-     
-
-      <Pressable
+      <TouchableOpacity
         onPress={() => navigation.goBack()}
         style={{
           position: "absolute",
           top: 68,
-          left: 40,
+          left: 20,
+          zIndex: 100,
         }}
       >
-        <Ionicons name="arrow-back" size={24} color="#183A36" />
-      </Pressable>
+        <Ionicons name="arrow-back" size={24} color="#ffffff" />
+      </TouchableOpacity>
 
       {/* ─── Tekstballon ─── */}
       <View
@@ -290,7 +353,7 @@ const AugmentedDog: React.FC = () => {
               backgroundColor: "#FDE4D2",
               borderRadius: 10,
               padding: 12,
-              fontFamily: "Nunito",
+              fontFamily: "NunitoRegular",
               fontSize: 16,
               color: "#183A36",
               textAlign: "center",
@@ -300,6 +363,18 @@ const AugmentedDog: React.FC = () => {
           </Text>
         ))}
       </View>
+
+      <TouchableOpacity
+        onPress={goToSettings}
+        style={{
+          position: "absolute",
+          top: 68,
+          right: 20,
+          zIndex: 10,
+        }}
+      >
+        <Ionicons name="settings-outline" size={32} color="#ffffff" />
+      </TouchableOpacity>
 
       {/* ─── Buttons ─── */}
       <View

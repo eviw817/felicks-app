@@ -289,7 +289,7 @@ const ProfileScreen = () => {
 
 
         <View style={styles.section}>
-          <Text style={styles.sectionSubtile}>Deze honden passen bij jouw profiel:</Text>
+          <Text style={styles.sectionSubtitle}>Deze honden passen bij jouw profiel:</Text>
           {matches.length > 0 && (
             <Text style={styles.sectionText}>
               Dit zijn enkele honden die bij jouw profiel passen. Wil je weten waarom? Klik dan op een hond.
@@ -387,97 +387,97 @@ const styles = StyleSheet.create({
     textAlign: "center",
     marginBottom: 30,
 
-  },
-  header: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    width: "100%",
-    position: "relative",
-    paddingVertical: 10,
-  },
-  settingsicon: {
-    position: "absolute",
-    right: 15,
-    top: 12,
-  },
-  profileSection: {
-    alignItems: "center",
-    marginBottom: 30
-  },
-  profileInfoContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 10,
-  },
-  profileImage: {
-    width: 80,
-    height: 80,
-    borderRadius: 40,
-    backgroundColor: "#ddd",
-    marginRight: 60,
-  },
-  profileInfo: {
-    flexDirection: 'column',
-  },
-  profileName: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: '#183A36',
-  },
-  textprofileEmail: {
-    fontSize: 15,
-    color: 'gray',
-    marginTop: 5,
-  },
-  profileEmail: {
-    fontSize: 15,
-    color: '#183A36',
-    marginBottom: 10,
-  },
-  editButton: {
-    backgroundColor: "#8AB89D",
-    marginTop: 25,
-    paddingVertical: 10,
-    paddingHorizontal: 90,
-    borderRadius: 20
-  },
-  editButtonText: {
-    color: '#183A36',
-    fontWeight: "bold",
-    fontSize: 14,
-  },
-  section: {
-    marginBottom: 20,
-    alignSelf: 'stretch',
-    alignItems: 'flex-start',
-    paddingHorizontal: 10,
-  },
-  sectionTitle: {
-    fontSize: 24,
-    color: '#183A36',
-    fontWeight: "semibold",
-    marginBottom: 5
-  },
-  sectionSubtile: {
-    fontSize: 18,
-    color: '#183A36',
-    fontWeight: "semibold",
-    marginBottom: 5
-  },
-  sectionText: {
-    fontSize: 15,
-    color: '#183A36',
-  },
-  sectionTextStatus: {
-    fontSize: 16,
-    color: '#183A36',
-    backgroundColor: '#97B8A5',
-    borderRadius: 15,
-    padding: 20,
-    marginTop: 10,
-
-  },
-});
-
-export default ProfileScreen;
+    },
+    header: {
+        flexDirection: "row",
+        alignItems: "center",
+        justifyContent: "center", 
+        width: "100%",
+        position: "relative", 
+        paddingVertical: 10,
+      },
+    settingsicon: {
+      position: "absolute",
+      right: 15, 
+      top: 12,
+    },
+    profileSection: { 
+        alignItems: "center", 
+        marginBottom: 30 
+    },
+    profileInfoContainer: {
+        flexDirection: 'row', 
+        alignItems: 'center', 
+        marginBottom: 10, 
+    },
+    profileImage: {
+        width: 80, 
+        height: 80,
+        borderRadius: 40, 
+        backgroundColor: "#ddd",
+        marginRight: 60,
+    },
+    profileInfo: {
+        flexDirection: 'column', 
+    },
+    profileName: {
+        fontSize: 24,
+        fontWeight: 'bold',
+        color: '#183A36',
+    },
+        textprofileEmail: {
+        fontSize: 15,
+        color: 'gray',  
+        marginTop: 5,    
+    },
+    profileEmail: { 
+        fontSize: 15, 
+        color: '#183A36',
+        marginBottom: 10, 
+    },
+    editButton: { 
+        backgroundColor: "#8AB89D",
+        marginTop: 25,
+        paddingVertical: 10, 
+        paddingHorizontal: 90, 
+        borderRadius: 20 
+    },
+    editButtonText: { 
+        color: '#183A36',
+        fontWeight: "bold", 
+        fontSize: 14,
+    },
+    section: { 
+        marginBottom: 20, 
+        alignSelf: 'stretch',  
+        alignItems: 'flex-start', 
+        paddingHorizontal: 10, 
+    },
+    sectionTitle: { 
+        fontSize: 24, 
+        color: '#183A36',
+        fontWeight: "semibold", 
+        marginBottom: 5 
+    },
+    sectionSubtitle:{
+        fontSize: 18, 
+        color: '#183A36',
+        fontWeight: "semibold", 
+        marginBottom: 5 
+    },
+    sectionText: { 
+        fontSize: 15,
+        color: '#183A36',
+    },
+    sectionTextStatus: { 
+        fontSize: 16, 
+        color: '#183A36',
+        backgroundColor: '#97B8A5',
+        borderRadius: 15,
+        padding: 20,
+        marginTop: 10,
+   
+    },
+  });
+  
+  export default ProfileScreen;

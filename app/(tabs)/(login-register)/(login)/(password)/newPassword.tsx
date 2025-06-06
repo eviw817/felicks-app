@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from "react";
 import { View, Text, StyleSheet, TouchableOpacity, TextInput, Alert } from "react-native";
 import { useRouter, useLocalSearchParams } from "expo-router";
@@ -242,7 +241,7 @@ const styles = StyleSheet.create({
   registerLink: {
     fontWeight: "bold",
   },
-      passwordContainer: {
+  passwordContainer: {
   width: "100%",
   marginBottom: -3,
   position: "relative",
@@ -255,4 +254,3 @@ eyeIcon: {
 });
 
 export default NewPasswordScreen;
-

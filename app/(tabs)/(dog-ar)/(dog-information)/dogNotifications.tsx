@@ -9,18 +9,26 @@ import {
   Animated,
   Easing,
   Alert,
-  Pressable
+  Pressable,
 } from "react-native";
 import { useRouter, useLocalSearchParams } from "expo-router";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import { supabase } from "@/lib/supabase";
 import NavBar from "@/components/NavigationBar";
-import { useNavigation } from '@react-navigation/native'
-import { Ionicons } from '@expo/vector-icons'
+import { useNavigation } from "@react-navigation/native";
+import { Ionicons } from "@expo/vector-icons";
+import { useFonts } from "expo-font";
 
 export default function UserPermissions() {
+  const [fontsLoaded] = useFonts({
+    NunitoRegular: require("@/assets/fonts/Nunito/NunitoRegular.ttf"),
+    NunitoSemiBold: require("@/assets/fonts/Nunito/NunitoSemiBold.ttf"),
+    NunitoBold: require("@/assets/fonts/Nunito/NunitoBold.ttf"),
+    SireniaMedium: require("@/assets/fonts/Sirenia/SireniaMedium.ttf"),
+  });
+
   const router = useRouter();
-  const navigation = useNavigation()
+  const navigation = useNavigation();
 
   const [loading, setLoading] = useState(true);
   const [fetchError, setFetchError] = useState("");
@@ -37,8 +45,12 @@ export default function UserPermissions() {
 
   const [dogName, setDogName] = React.useState("");
 
+  if (!fontsLoaded) {
+    return <View />;
+  }
+
   React.useEffect(() => {
-    console.log("DogInformation petId:", petId); // <-- Debug: log petId here
+    console.log("DogInformation petId:", petId);
 
     if (petId && typeof petId === "string" && petId.length > 0) {
       const fetchDogName = async () => {
@@ -51,7 +63,7 @@ export default function UserPermissions() {
           .eq("id", petId)
           .single();
 
-        console.log("Supabase fetch result:", { data, error }); // <-- Debug: log result
+        console.log("Supabase fetch result:", { data, error });
 
         if (error) {
           console.log("Error fetching dog name:", error.message);
@@ -66,13 +78,11 @@ export default function UserPermissions() {
 
       fetchDogName();
     } else {
-      // If petId is invalid or missing
       setLoading(false);
       setFetchError("Ongeldig of ontbrekend petId.");
     }
   }, [petId]);
 
-  // Animate toggle press
   const animateToggle = (anim: Animated.Value) => {
     Animated.sequence([
       Animated.timing(anim, {
@@ -90,7 +100,6 @@ export default function UserPermissions() {
     ]).start();
   };
 
-  // Toggle handlers
   const toggleSoundSwitch = () => {
     animateToggle(soundAnim);
     setIsSoundEnabled((prev) => !prev);
@@ -104,7 +113,6 @@ export default function UserPermissions() {
     setIsNotificationEnabled((prev) => !prev);
   };
 
-  // Load user settings on mount
   useEffect(() => {
     const fetchSettings = async () => {
       setLoading(true);
@@ -129,10 +137,8 @@ export default function UserPermissions() {
           .single();
 
         if (error && error.code !== "PGRST116") {
-          // PGRST116 = no rows found
           setFetchError(error.message);
         } else {
-          // If data is missing, default to true
           setIsNotificationEnabled(
             data?.push_notifications !== null &&
               data?.push_notifications !== undefined
@@ -162,7 +168,6 @@ export default function UserPermissions() {
     fetchSettings();
   }, []);
 
-  // Save settings
   const handleSave = async () => {
     setLoading(true);
     setFetchError("");
@@ -186,7 +191,6 @@ export default function UserPermissions() {
     };
 
     try {
-      // Upsert: Insert or update the user settings
       const { error } = await supabase
         .from("user_settings")
         .upsert(settingsPayload, { onConflict: "user_id" });
@@ -195,8 +199,15 @@ export default function UserPermissions() {
         setFetchError(error.message);
         Alert.alert("Error", "Failed to save settings.");
       } else {
-        // Navigate forward on success
-        router.push(`/dogFeaturesInfo?petId=${petId}`); // replace with your next screen route
+        // 👇 Check if any toggle is disabled
+        const anyDisabled =
+          !isNotificationEnabled || !isSoundEnabled || !isCameraEnabled;
+
+        if (anyDisabled) {
+          router.push(`/dogPermissionsCheck?petId=${petId}`);
+        } else {
+          router.push(`/dogFeaturesInfo?petId=${petId}`);
+        }
       }
     } catch (e) {
       setFetchError("Error saving settings");
@@ -223,16 +234,16 @@ export default function UserPermissions() {
           marginRight: 20,
         }}
       >
-        <Pressable
-            onPress={() => navigation.goBack()}
-            style={{
-              position: "absolute",
-              top: 68,
-              left: 40,
-            }}
-          >
-            <Ionicons name="arrow-back" size={24} color="#183A36" />
-          </Pressable>
+        <TouchableOpacity
+          onPress={() => router.push(`/dogInformation?petId=${petId}`)}
+          style={{
+            position: "absolute",
+            top: 68,
+            left: 40,
+          }}
+        >
+          <Ionicons name="arrow-back" size={24} color="#183A36" />
+        </TouchableOpacity>
         <Text
           style={{
             fontFamily: "Nunito",
@@ -417,13 +428,17 @@ export default function UserPermissions() {
             flexDirection: "row",
             justifyContent: "space-between",
             paddingHorizontal: 20,
+            paddingVertical: 10,
           }}
         >
           <Text
             style={{
               fontFamily: "Nunito",
+              fontWeight: "normal",
               fontSize: 16,
-              paddingVertical: 12,
+              paddingLeft: 8,
+              marginTop: 8,
+              flexShrink: 1,
             }}
           >
             Geluid
@@ -432,9 +447,9 @@ export default function UserPermissions() {
             <Switch
               trackColor={{ false: "#cac5c5", true: "#97b8a5" }}
               thumbColor={isSoundEnabled ? "#ececeb" : "#ececeb"}
+              ios_backgroundColor="#ececeb"
               onValueChange={toggleSoundSwitch}
               value={isSoundEnabled}
-              disabled={loading}
             />
           </Animated.View>
         </View>
@@ -444,13 +459,17 @@ export default function UserPermissions() {
             flexDirection: "row",
             justifyContent: "space-between",
             paddingHorizontal: 20,
+            paddingVertical: 10,
           }}
         >
           <Text
             style={{
               fontFamily: "Nunito",
+              fontWeight: "normal",
               fontSize: 16,
-              paddingVertical: 12,
+              paddingLeft: 8,
+              marginTop: 8,
+              flexShrink: 1,
             }}
           >
             Camera
@@ -459,9 +478,9 @@ export default function UserPermissions() {
             <Switch
               trackColor={{ false: "#cac5c5", true: "#97b8a5" }}
               thumbColor={isCameraEnabled ? "#ececeb" : "#ececeb"}
+              ios_backgroundColor="#ececeb"
               onValueChange={toggleCameraSwitch}
               value={isCameraEnabled}
-              disabled={loading}
             />
           </Animated.View>
         </View>
@@ -471,13 +490,17 @@ export default function UserPermissions() {
             flexDirection: "row",
             justifyContent: "space-between",
             paddingHorizontal: 20,
+            paddingVertical: 10,
           }}
         >
           <Text
             style={{
               fontFamily: "Nunito",
+              fontWeight: "normal",
               fontSize: 16,
-              paddingVertical: 12,
+              paddingLeft: 8,
+              marginTop: 8,
+              flexShrink: 1,
             }}
           >
             Meldingen
@@ -486,29 +509,52 @@ export default function UserPermissions() {
             <Switch
               trackColor={{ false: "#cac5c5", true: "#97b8a5" }}
               thumbColor={isNotificationEnabled ? "#ececeb" : "#ececeb"}
+              ios_backgroundColor="#ececeb"
               onValueChange={toggleNotificationSwitch}
               value={isNotificationEnabled}
-              disabled={loading}
             />
           </Animated.View>
         </View>
 
         <TouchableOpacity
+          onPress={handleSave}
           style={{
             backgroundColor: "#97B8A5",
-            margin: 20,
-            borderRadius: 15,
-            paddingVertical: 12,
-            paddingHorizontal: 20,
+            marginVertical: 20,
+            marginHorizontal: 50,
+            borderRadius: 50,
+            paddingVertical: 15,
+            paddingHorizontal: 40,
             alignItems: "center",
           }}
-          onPress={handleSave}
           disabled={loading}
         >
-          <Text style={{ color: "black", fontWeight: "bold", fontSize: 16 }}>
-            OPSLAAN
+          <Text
+            style={{
+              fontFamily: "Nunito",
+              fontWeight: "bold",
+              fontSize: 18,
+              color: "black",
+            }}
+          >
+            {loading ? "Bezig met opslaan..." : "OPSLAAN"}
           </Text>
         </TouchableOpacity>
+
+        {fetchError ? (
+          <Text
+            style={{
+              fontFamily: "Nunito",
+              fontWeight: "bold",
+              fontSize: 16,
+              padding: 20,
+              color: "red",
+              textAlign: "center",
+            }}
+          >
+            {fetchError}
+          </Text>
+        ) : null}
       </ScrollView>
       {/* Fixed navbar onderaan scherm */}
       <View

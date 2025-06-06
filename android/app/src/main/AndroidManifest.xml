@@ -1,4 +1,3 @@
-
 <manifest xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools">
   <uses-permission android:name="android.permission.CAMERA"/>
   <uses-permission android:name="android.permission.INTERNET"/>
@@ -13,8 +12,8 @@
   <uses-feature android:name="android.hardware.sensor.accelerometer" android:required="false" tools:replace="required"/>
   <uses-feature android:name="android.hardware.sensor.gyroscope" android:required="false" tools:replace="required"/>
   <queries>
-    <package android:name="com.google.ar.core"/>
-      <intent>
+  <package android:name="com.google.ar.core"/>
+    <intent>
       <action android:name="android.intent.action.VIEW"/>
       <category android:name="android.intent.category.BROWSABLE"/>
       <data android:scheme="https"/>
@@ -38,8 +37,8 @@
         <category android:name="android.intent.category.BROWSABLE"/>
         <data android:scheme="com.anonymous.felicksapp"/>
         <data android:scheme="com.anonymous.felicksapp"/>
+        <data android:scheme="exp+felicks-app"/>
       </intent-filter>
     </activity>
   </application>
-
 </manifest>

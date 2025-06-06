@@ -10,8 +10,8 @@ import {
   SafeAreaView,
   ScrollView,
 } from "react-native";
-import { supabase } from "../../../../lib/supabase";
-import Auth from "../../../../components/Auth";
+import { supabase } from "@/lib/supabase";
+import Auth from "@/components/Auth";
 import { Session } from "@supabase/supabase-js";
 import { useRouter, Link } from "expo-router";
 import { Picker } from "@react-native-picker/picker";
@@ -45,7 +45,6 @@ export default function Registeren() {
   const [birthdate, setBirthdate] = useState("");
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-
 
   // Geboortedatum state
   const [day, setDay] = useState("01");
@@ -212,7 +211,8 @@ export default function Registeren() {
       setYear("2000");
 
       // Redirect to adoptionProfileStart page
-      router.push("/homepage");
+      console.log("Router naar adoptionIntro");
+      router.push("/adoptionBreed");
     }
 
     setLoading(false);
@@ -226,12 +226,12 @@ export default function Registeren() {
         keyboardShouldPersistTaps="handled"
         style={{ width: "100%" }}
       >
-
         {session ? (
           <Auth key={session.user.id} session={session} />
         ) : (
           <>
-            <BaseText style={styles.title}>Registreren</BaseText>
+            <Text style={styles.title}>Registreren</Text>
+
             {/* Voornaam input */}
             <Text style={styles.label}>Voornaam</Text>
             <TextInput
@@ -301,7 +301,6 @@ export default function Registeren() {
                 ))}
               </Picker>
 
-
               {/* Jaar picker */}
               <Picker
                 selectedValue={year}
@@ -320,41 +319,38 @@ export default function Registeren() {
                 })}
               </Picker>
             </View>
-
-            {/* Wachtwoord input */}
-            {/* Wachtwoord input */}
-            <Text style={styles.label}>Wachtwoord</Text>
-            <View style={styles.passwordContainer}>
-              <TextInput
-                style={[
-                  styles.input,
-                  { flex: 1 },
-                  passwordFocus || isPasswordFilled
-                    ? styles.focusedInput
-                    : styles.unfocusedInput,
-                ]}
-                placeholder="Wachtwoord"
-                placeholderTextColor="rgba(151, 184, 165, 0.5)"
-                secureTextEntry={!showPassword}
-                onFocus={() => setPasswordFocus(true)}
-                onBlur={() => setPasswordFocus(false)}
-                onChangeText={setPassword}
-                value={password}
-              />
-              <TouchableOpacity
-                style={styles.eyeIcon}
-                onPress={() => setShowPassword((prev) => !prev)}
-              >
-                <Ionicons
-                  name={showPassword ? "eye-outline" : "eye-off-outline"}
-                  size={28}
-                  color="#183A36"
-                  style={{ marginLeft: 10 }}
-                />
-              </TouchableOpacity>
-            </View>
-
-
+          {/* Wachtwoord input */}
+         {/* Wachtwoord input */}
+        <Text style={styles.label}>Wachtwoord</Text>
+        <View style={styles.passwordContainer}>
+          <TextInput
+            style={[
+              styles.input,
+              { flex: 1 },
+              passwordFocus || isPasswordFilled
+                ? styles.focusedInput
+                : styles.unfocusedInput,
+            ]}
+            placeholder="Wachtwoord"
+            placeholderTextColor="rgba(151, 184, 165, 0.5)"
+            secureTextEntry={!showPassword}
+            onFocus={() => setPasswordFocus(true)}
+            onBlur={() => setPasswordFocus(false)}
+            onChangeText={setPassword}
+            value={password}
+          />
+            <TouchableOpacity
+                    style={styles.eyeIcon}
+                    onPress={() => setShowPassword((prev) => !prev)}
+                  >
+            <Ionicons
+              name={showPassword ? "eye-outline" : "eye-off-outline"}
+              size={28}
+              color="#183A36"
+              style={{ marginLeft: 10 }}
+            />
+          </TouchableOpacity>
+        </View>
 
             {/* E-mail input */}
             <Text style={styles.label}>E-mail</Text>
@@ -374,40 +370,30 @@ export default function Registeren() {
               value={email}
             />
 
-
-
-            {/* Wachtwoord input */}
             {/* Wachtwoord input */}
             <Text style={styles.label}>Wachtwoord</Text>
-            <View style={styles.passwordContainer}>
-              <TextInput
-                style={[
-                  styles.input,
-                  { flex: 1 },
-                  passwordFocus || isPasswordFilled
-                    ? styles.focusedInput
-                    : styles.unfocusedInput,
-                ]}
-                placeholder="Wachtwoord"
-                placeholderTextColor="rgba(151, 184, 165, 0.5)"
-                secureTextEntry={!showPassword}
-                onFocus={() => setPasswordFocus(true)}
-                onBlur={() => setPasswordFocus(false)}
-                onChangeText={setPassword}
-                value={password}
-              />
-              <TouchableOpacity
-                style={styles.eyeIcon}
-                onPress={() => setShowPassword((prev) => !prev)}
-              >
-                <Ionicons
-                  name={showPassword ? "eye-outline" : "eye-off-outline"}
-                  size={28}
-                  color="#183A36"
-                  style={{ marginLeft: 10 }}
-                />
-              </TouchableOpacity>
-            </View>
+            <TextInput
+              style={[
+                styles.input,
+                passwordFocus || isPasswordFilled
+                  ? styles.focusedInput
+                  : styles.unfocusedInput,
+              ]}
+              placeholder="Wachtwoord"
+              placeholderTextColor="rgba(151, 184, 165, 0.5)"
+              secureTextEntry
+              onFocus={() => setPasswordFocus(true)}
+              onBlur={() => setPasswordFocus(false)}
+              onChangeText={setPassword}
+              value={password}
+            />
+
+            <TouchableOpacity
+              style={styles.button}
+              onPress={async () => await signUpWithEmail()}
+            >
+              <Text style={styles.buttonText}>REGISTREER</Text>
+            </TouchableOpacity>
 
             {/* Inloggen link */}
             <Text style={styles.registerText}>
@@ -433,7 +419,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 28,
-    fontFamily: 'SireniaMedium',
+    fontFamily: "SireniaMedium",
     marginBottom: 60,
     textAlign: "center",
   },
@@ -517,15 +503,15 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     textAlign: "center",
   },
-  passwordContainer: {
-    width: "100%",
-    marginBottom: 25,
-    position: "relative",
-  },
-  eyeIcon: {
-    position: "absolute",
-    right: 10,
-    top: 12,
-  },
+    passwordContainer: {
+      width: "100%",
+      marginBottom: 25,
+      position: "relative",
+},
+eyeIcon: {
+  position: "absolute",
+  right: 10,
+  top: 12,
+},
 
 });
