@@ -4,7 +4,7 @@
     "slug": "felicks-app",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/icon.png",
+    "icon": "./assets/images/logo_felicks.png",
     "scheme": "com.anonymous.felicksapp",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
@@ -43,8 +43,7 @@
         }
       ],
       "expo-font",
-      "expo-secure-store",
-      "@reactvision/react-viro"
+      "expo-secure-store"
     ],
     "experiments": {
       "typedRoutes": true

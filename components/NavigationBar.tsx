@@ -14,7 +14,6 @@ const tabs = [
   { name: "bewustzijnIndex", label: "Bewustzijn", icon: "bulb" },
   { name: "profile", label: "Profiel", icon: "person" },
 ];
-
 export default function NavBar() {
   const router = useRouter();
   const pathname = usePathname();
@@ -34,6 +33,7 @@ export default function NavBar() {
               size={32}
               color={isActive ? "#FDE4D2" : "#FFFDF9"}
             />
+
             <Text
               style={{
                 color: isActive ? "#FDE4D2" : "#FFFDF9",
@@ -59,6 +59,7 @@ const styles = StyleSheet.create({
     borderTopWidth: 3,
     borderTopColor: "#FDE4D2",
     backgroundColor: "#2F4D4A",
+    zIndex: 9999,
   },
   tab: {
     alignItems: "center",

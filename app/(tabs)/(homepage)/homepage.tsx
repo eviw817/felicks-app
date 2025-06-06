@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import {
   ScrollView,
   SafeAreaView,
@@ -15,22 +15,59 @@ import { Session } from "@supabase/supabase-js";
 import { supabase } from "@/lib/supabase";
 import { useRouter, Link } from "expo-router";
 import NavBar from "@/components/NavigationBar";
+
 import { Ionicons } from "@expo/vector-icons";
 import { FontAwesome } from "@expo/vector-icons";
+import { useFocusEffect } from "@react-navigation/native";
+import BaseText from "@/components/BaseText";
 
 export default function HomepageScreen() {
   const [session, setSession] = useState<Session | null>(null);
-  const [firstname, setFirstname] = useState("Gast");
-  const [loading, setLoading] = useState(true);
+  const [firstname, setFirstname] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(true);
   const [matchedDogs, setMatchedDogs] = useState<any[]>([]);
   const [likedDogIds, setLikedDogIds] = useState<string[]>([]);
+  const [unreadCount, setUnreadCount] = useState<number>(0);
+  const [isFilled, setIsFilled] = useState<boolean>(false);
+
   const router = useRouter();
+  const handleHeartClick = () => setIsFilled(!isFilled);
+
+  const fetchUnreadNotifications = useCallback(async () => {
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+    const { data: dog } = await supabase
+      .from("ar_dog")
+      .select("id")
+      .eq("user_id", user?.id)
+      .single();
+
+    if (dog) {
+      const { data, error } = await supabase
+        .from("notifications")
+        .select("id")
+        .eq("pet_id", dog.id)
+        .eq("is_read", false);
+
+      if (!error && data) {
+        setUnreadCount(data.length);
+      }
+    }
+  }, []);
+
+  useFocusEffect(
+    useCallback(() => {
+      fetchUnreadNotifications();
+    }, [fetchUnreadNotifications])
+  );
 
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchSession = async () => {
       const {
         data: { session },
       } = await supabase.auth.getSession();
+
       setSession(session);
 
       if (!session?.user?.id) return setLoading(false);
@@ -69,7 +106,16 @@ export default function HomepageScreen() {
       setLoading(false);
     };
 
-    fetchData();
+    fetchSession();
+
+    const { data: authListener } = supabase.auth.onAuthStateChange(
+      (_, session) => {
+        setSession(session);
+        setLoading(false);
+      }
+    );
+
+    return () => authListener?.subscription?.unsubscribe();
   }, []);
 
   const toggleLike = async (dogId: string) => {
@@ -88,10 +134,9 @@ export default function HomepageScreen() {
         setLikedDogIds((prev) => prev.filter((id) => id !== dogId));
       }
     } else {
-      const { error } = await supabase.from("liked_dogs").insert({
-        user_id: userId,
-        dog_id: dogId,
-      });
+      const { error } = await supabase
+        .from("liked_dogs")
+        .insert({ user_id: userId, dog_id: dogId });
 
       if (!error) {
         setLikedDogIds((prev) => [...prev, dogId]);
@@ -125,34 +170,59 @@ export default function HomepageScreen() {
   }
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: "#cadace" }}>
+    <SafeAreaView
+      style={{
+        flex: 1,
+        backgroundColor: "#cbdacf",
+        position: "relative",
+        paddingBottom: 80,
+      }}
+    >
       <View
         style={{
-          position: "absolute",
-          top: 70,
-          left: 0,
-          right: 0,
-          paddingHorizontal: 20,
-          flexDirection: "row",
           alignItems: "center",
-          justifyContent: "center",
         }}
       >
-        <Text
+        <BaseText
           style={{
             fontFamily: "SireniaMedium",
-            fontSize: 22,
-            color: "#183A36",
+            fontSize: 28,
+            padding: 20,
+            marginTop: 50,
+            marginBottom: 30,
           }}
         >
-          Welkom {firstname}!
-        </Text>
-
-        <View style={{ position: "absolute", right: 20 }}>
-          <Link href="/">
-            <FontAwesome name="envelope-o" size={24} color="#183A36" />
-          </Link>
-        </View>
+          Welkom {firstname || "guest"}!
+        </BaseText>
+      </View>
+      <View style={{ position: "absolute", top: 70, right: 30 }}>
+        <Link href="/notificationsIndex">
+          <View style={{ position: "relative" }}>
+            <FontAwesome name="envelope-o" size={30} color="#183A36" />
+            {unreadCount > 0 && (
+              <View
+                style={{
+                  position: "absolute",
+                  top: -6,
+                  right: -6,
+                  backgroundColor: "#F18B7E",
+                  borderRadius: 10,
+                  paddingHorizontal: 5,
+                  minWidth: 20,
+                  height: 20,
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <Text
+                  style={{ color: "#183A36", fontSize: 12, fontWeight: "bold" }}
+                >
+                  {unreadCount}
+                </Text>
+              </View>
+            )}
+          </View>
+        </Link>
       </View>
 
       <ScrollView
