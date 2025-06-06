@@ -70,17 +70,40 @@ export default function RootLayout() {
   }, [handleBannerNotify, handleBadgeUpdate]);
 
   useEffect(() => {
-    const { data: authListener } = supabase.auth.onAuthStateChange((_event, session) => {
-      if (session?.user) {
-        console.log("[RootLayout] Nieuwe login gedetecteerd → realtime opnieuw starten");
-        initRealtimeNotifications(handleBannerNotify, handleBadgeUpdate);
-      }
-    });
+  const initSession = async () => {
+    const { data: { session }, error } = await supabase.auth.getSession();
+    if (error) {
+      console.log("[RootLayout][initSession] Fout bij ophalen sessie:", error.message);
+      return;
+    }
 
-    return () => {
-      authListener?.subscription?.unsubscribe();
-    };
-  }, [handleBannerNotify, handleBadgeUpdate]);
+    if (session) {
+      console.log("[RootLayout][initSession] Sessie gevonden bij opstart.");
+      supabase.auth.startAutoRefresh();
+      initRealtimeNotifications(handleBannerNotify, handleBadgeUpdate);
+    } else {
+      console.log("[RootLayout][initSession] Geen sessie bij opstart.");
+      supabase.auth.stopAutoRefresh();
+    }
+  };
+
+  initSession();
+
+  const { data: authListener } = supabase.auth.onAuthStateChange((_event, session) => {
+    if (session) {
+      console.log("[RootLayout][onAuthStateChange] Sessie actief → startAutoRefresh + realtime");
+      supabase.auth.startAutoRefresh();
+      initRealtimeNotifications(handleBannerNotify, handleBadgeUpdate);
+    } else {
+      console.log("[RootLayout][onAuthStateChange] Geen sessie meer → stopAutoRefresh");
+      supabase.auth.stopAutoRefresh();
+    }
+  });
+
+  return () => {
+    authListener?.subscription?.unsubscribe();
+  };
+}, [handleBannerNotify, handleBadgeUpdate]);
 
   if (!loaded) return null;
 

@@ -16,7 +16,7 @@ export default function BreedLayout() {
     >
       <Stack.Screen name="activityPersonality" options={{ title: "Activity Personality" }} />
       <Stack.Screen name="adoptionProfileResults" options={{ title: "Adoption Profile Results" }} />
-      <Stack.Screen name="Experience Size" options={{ title: "Experience Size" }} />
+      <Stack.Screen name="experienceSize" options={{ title: "Experience Size" }} />
       <Stack.Screen name="familyEnvironment" options={{ title: "Family Environment" }} />
       <Stack.Screen name="groomingCoat" options={{ title: "Grooming Coat" }} />
       <Stack.Screen name="livingSituation" options={{ title: "Activity Personality" }} />
