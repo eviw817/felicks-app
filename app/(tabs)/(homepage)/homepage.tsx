@@ -175,7 +175,7 @@ export default function HomepageScreen() {
         flex: 1,
         backgroundColor: "#cbdacf",
         position: "relative",
-        paddingBottom: 80,
+
       }}
     >
       <View
@@ -189,7 +189,6 @@ export default function HomepageScreen() {
             fontSize: 28,
             padding: 20,
             marginTop: 50,
-            marginBottom: 30,
           }}
         >
           Welkom {firstname || "guest"}!
@@ -232,7 +231,7 @@ export default function HomepageScreen() {
           borderTopLeftRadius: 20,
           borderTopRightRadius: 20,
           padding: 20,
-          marginTop: 120,
+          marginTop: 50,
         }}
       >
         {/* Quiz */}

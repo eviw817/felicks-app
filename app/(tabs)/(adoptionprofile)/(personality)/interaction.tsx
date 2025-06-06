@@ -1,92 +1,140 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   SafeAreaView,
   View,
   StyleSheet,
+  TouchableOpacity,
   Platform,
-  Pressable,
-  FlatList,
+  Alert,
 } from "react-native";
+import { Ionicons } from "@expo/vector-icons";
+import { useRouter } from "expo-router";
+import { supabase } from "../../../../lib/supabase";
 import BaseText from "@/components/BaseText";
 
-export default function Interaction({ onComplete }: { onComplete: () => void }) {
-  const [interactionStep, setInteractionStep] = useState(0);
+const RadioButton = ({ selected }: { selected: boolean }) => (
+  <View style={styles.radioOuter}>
+    {selected && <View style={styles.radioInner} />}
+  </View>
+);
 
-  const questions = [
-    {
-      question: "How active is your future pet?",
-      options: [
-        { label: "Very active", value: "very_active" },
-        { label: "Moderately active", value: "moderate" },
-        { label: "Calm and relaxed", value: "calm" },
-      ],
-    },
-    {
-      question: "How much time can you spend daily with your pet?",
-      options: [
-        { label: "Several hours", value: "several_hours" },
-        { label: "About an hour", value: "one_hour" },
-        { label: "Less than an hour", value: "less_than_hour" },
-      ],
-    },
-    // Add more questions here...
-  ];
+export default function Interaction() {
+  const router = useRouter();
+  const [userId, setUserId] = useState<string | null>(null);
+  const [childInteraction, setChildInteraction] = useState<string>("");
+  const [dogInteraction, setDogInteraction] = useState<string>("");
 
   useEffect(() => {
-    if (interactionStep >= questions.length) {
-      onComplete();
+    (async () => {
+      const {
+        data: { user },
+        error,
+      } = await supabase.auth.getUser();
+      if (error || !user) return;
+
+      setUserId(user.id);
+
+      const { data } = await supabase
+        .from("adoption_dog_preferences")
+        .select("interaction_children, interaction_dogs")
+        .eq("user_id", user.id)
+        .single();
+
+      if (data) {
+        if (data.interaction_children)
+          setChildInteraction(data.interaction_children);
+        if (data.interaction_dogs) setDogInteraction(data.interaction_dogs);
+      }
+    })();
+  }, []);
+
+  const handleAnswer = async () => {
+    if (!userId) return;
+
+    const { error } = await supabase.from("adoption_dog_preferences").upsert(
+      {
+        user_id: userId,
+        interaction_children: childInteraction,
+        interaction_dogs: dogInteraction,
+      },
+      { onConflict: "user_id" }
+    );
+
+    if (error) {
+      Alert.alert("Fout", "Kon voorkeuren niet opslaan.");
+    } else {
+      router.push("/energy");
     }
-  }, [interactionStep, questions.length, onComplete]);
+  };
 
-  function renderOption(opt: { label: string; value: string }) {
-    return (
-      <Pressable
-        style={styles.button}
-        onPress={() => setInteractionStep((prev) => prev + 1)}
-      >
-        <BaseText style={styles.buttonText}>{opt.label}</BaseText>
-      </Pressable>
-    );
-  }
+  const interactionOptionsChildren = [
+    { label: "Goed", value: "goed" },
+    { label: "Niet van toepassing", value: "niet van toepassing" },
+  ];
 
-  if (interactionStep >= questions.length) {
-    return (
-      <SafeAreaView style={styles.container}>
-        <BaseText style={styles.title}>Thank you for completing the questions!</BaseText>
-      </SafeAreaView>
-    );
-  }
+  const interactionOptionsDogs = [
+    { label: "Goed", value: "goed" },
+    { label: "Beetje", value: "beetje" },
+    { label: "Niet van toepassing", value: "niet van toepassing" },
+  ];
+
+  const canContinue = childInteraction !== "" && dogInteraction !== "";
 
   return (
-    <SafeAreaView
-      style={[
-        styles.container,
-        { paddingTop: Platform.OS === "android" ? 20 : 40 },
-      ]}
-    >
-      <View style={styles.progressBar}>
-        <View
-          style={[
-            styles.progress,
-            { width: `${(interactionStep / questions.length) * 100}%` },
-          ]}
-        />
+    <SafeAreaView style={styles.container}>
+      <View style={styles.header}>
+        <TouchableOpacity onPress={() => router.back()}>
+          <Ionicons name="arrow-back" size={24} color="#183A36" />
+        </TouchableOpacity>
+        <BaseText variant="title" style={styles.title}>
+          Interactie
+        </BaseText>
+        <View style={{ width: 24 }} />
       </View>
 
-      <BaseText style={styles.title}>Personality & Lifestyle</BaseText>
+      <View style={styles.progressBar}>
+        <View style={[styles.progressFill, { width: "50%" }]} />
+      </View>
 
       <BaseText style={styles.question}>
-        {questions[interactionStep].question}
+        Hoe moet de interactie zijn tegenover kinderen?
       </BaseText>
+      {interactionOptionsChildren.map((opt) => (
+        <TouchableOpacity
+          key={opt.value}
+          style={styles.radioRow}
+          onPress={() => setChildInteraction(opt.value)}
+          activeOpacity={0.8}
+        >
+          <RadioButton selected={childInteraction === opt.value} />
+          <BaseText>{opt.label}</BaseText>
+        </TouchableOpacity>
+      ))}
 
-      <FlatList
-        data={questions[interactionStep].options}
-        keyExtractor={(item) => item.value}
-        renderItem={({ item }) => renderOption(item)}
-        contentContainerStyle={{ gap: 10 }}
-      />
+      <BaseText style={[styles.question, { marginTop: 32 }]}>
+        Hoe moet de interactie zijn tegenover andere honden?
+      </BaseText>
+      {interactionOptionsDogs.map((opt) => (
+        <TouchableOpacity
+          key={opt.value}
+          style={styles.radioRow}
+          onPress={() => setDogInteraction(opt.value)}
+          activeOpacity={0.8}
+        >
+          <RadioButton selected={dogInteraction === opt.value} />
+          <BaseText>{opt.label}</BaseText>
+        </TouchableOpacity>
+      ))}
+
+      <TouchableOpacity
+        style={[styles.button, !canContinue && styles.buttonDisabled]}
+        onPress={handleAnswer}
+        disabled={!canContinue}
+      >
+        <BaseText style={styles.buttonText}>VOLGENDE</BaseText>
+      </TouchableOpacity>
     </SafeAreaView>
   );
 }
@@ -94,43 +142,72 @@ export default function Interaction({ onComplete }: { onComplete: () => void }) 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingHorizontal: 20,
+    backgroundColor: "#FFFDF9",
+    paddingHorizontal: 16,
+    paddingTop: Platform.OS === "ios" ? 20 : 50,
   },
-  progressBar: {
-    height: 6,
-    backgroundColor: "#d0e7e4",
-    borderRadius: 3,
-    marginBottom: 12,
-    marginTop: 10,
-  },
-  progress: {
-    height: 6,
-    backgroundColor: "#183A36",
-    borderRadius: 3,
+  header: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    marginBottom: 10,
   },
   title: {
     fontSize: 20,
     textAlign: "center",
-    fontFamily: "Sirenia-Regular",
-    color: "#183A36",
+  },
+  progressBar: {
+    width: "100%",
+    height: 6,
+    backgroundColor: "#F8F8F8",
+    borderRadius: 3,
+    overflow: "hidden",
+    marginBottom: 24,
+    borderColor: "#FFD87E",
+    borderWidth: 1,
+  },
+  progressFill: {
+    height: "100%",
+    backgroundColor: "#FFD87E",
   },
   question: {
     fontSize: 18,
     marginBottom: 12,
-    fontWeight: "bold",
-    color: "#183A36",
+  },
+  radioRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 12,
+  },
+  radioOuter: {
+    width: 22,
+    height: 22,
+    borderRadius: 11,
+    borderWidth: 2,
+    borderColor: "#97B8A5",
+    justifyContent: "center",
+    alignItems: "center",
+    marginRight: 12,
+  },
+  radioInner: {
+    width: 20,
+    height: 20,
+    borderRadius: 10,
+    backgroundColor: "#97B8A5",
   },
   button: {
-    backgroundColor: "#d0e7e4",
-    padding: 16,
-    borderRadius: 8,
+    marginTop: 40,
+    backgroundColor: "#97B8A5",
+    paddingVertical: 14,
+    borderRadius: 25,
+    alignItems: "center",
+  },
+  buttonDisabled: {
+    opacity: 0.5,
   },
   buttonText: {
-    color: "#183A36",
-    fontWeight: "bold",
-  },
-  answerText: {
     fontSize: 16,
     color: "#183A36",
+    fontWeight: "bold",
   },
 });
