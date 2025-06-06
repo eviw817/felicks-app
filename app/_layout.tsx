@@ -7,9 +7,9 @@ import { useFonts } from "expo-font";
 import { Slot, useRouter, usePathname } from "expo-router";
 import InAppBanner from "@/components/InAppBanner";
 import { initRealtimeNotifications } from "@/lib/realtimeNotifications";
-import { supabase } from "@/lib/supabase"; // <-- vergeet deze import niet!
+import { supabase } from "@/lib/supabase"; 
 
-// ─── VOOR DE BADGE UPDATERS ───────────────────────────────────────────────
+// BADGE UPDATERS HOMEPAGE
 export let badgeUpdateCallback: () => void = () => {};
 export function registerBadgeCallback(cb: () => void) {
   badgeUpdateCallback = cb;
@@ -22,34 +22,34 @@ export default function RootLayout() {
     SireniaMedium: require("@/assets/fonts/Sirenia/SireniaMedium.ttf"),
   });
 
-  // Banner state
+
   const [bannerTitle, setBannerTitle] = useState<string | null>(null);
   const [bannerBody, setBannerBody] = useState<string>("");
 
   const router = useRouter();
   const pathname = usePathname();
 
-  // Callback om banner in te stellen
+
   const handleBannerNotify = useCallback((title: string, body: string) => {
     console.log("[RootLayout][handleBannerNotify] ► Showing banner:", title, "|", body);
     setBannerTitle(title);
     setBannerBody(body);
   }, []);
 
-  // Callback om badge in Homepage bij te werken
+
   const handleBadgeUpdate = useCallback(() => {
     console.log("[RootLayout][handleBadgeUpdate] ► forceren fetchUnreadNotifications");
     badgeUpdateCallback();
   }, []);
 
-  // Banner sluiten (X‐knop)
+
   const handleBannerHide = useCallback(() => {
     console.log("[RootLayout][handleBannerHide] ► Hiding banner");
     setBannerTitle(null);
     setBannerBody("");
   }, []);
 
-  // Tap op banner → navigeer naar /notificationsIndex
+ 
   const handleBannerPress = useCallback(() => {
     console.log("[RootLayout][handleBannerPress] ► Navigating to /notificationsIndex");
     if (pathname !== "/notificationsIndex") {
@@ -59,7 +59,7 @@ export default function RootLayout() {
     setBannerBody("");
   }, [pathname, router]);
 
-  // Init realtime zodra er een geldige sessie is
+
   useEffect(() => {
     const fetchSessionAndStartRealtime = async () => {
       const { data: { session } } = await supabase.auth.getSession();
@@ -74,7 +74,7 @@ export default function RootLayout() {
     fetchSessionAndStartRealtime();
   }, [handleBannerNotify, handleBadgeUpdate]);
 
-  // Extra fallback: luister op nieuwe login
+
   useEffect(() => {
     const { data: authListener } = supabase.auth.onAuthStateChange((_event, session) => {
       if (session?.user) {
