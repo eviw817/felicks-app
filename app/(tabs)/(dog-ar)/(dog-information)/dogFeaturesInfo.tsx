@@ -16,7 +16,8 @@ import { Link } from "expo-router";
 import { supabase } from "@/lib/supabase"; // adjust if your path is different
 import NavBar from "@/components/NavigationBar";
 import { useNavigation } from "@react-navigation/native";
-import { Ionicons } from "@expo/vector-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
+import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import { useFonts } from "expo-font";
 
 export default function DogFeature() {
@@ -95,16 +96,17 @@ export default function DogFeature() {
           onPress={() => router.push(`/dogNotifications?petId=${petId}`)}
           style={{
             position: "absolute",
-            top: 68,
-            left: 40,
+            top: 64,
+            left: 20,
+            zIndex: 10,
           }}
         >
-          <Ionicons name="arrow-back" size={24} color="#183A36" />
+          <FontAwesomeIcon icon={faArrowLeft} size={30} color="#183A36" />
         </TouchableOpacity>
         <Text
           style={{
-            fontFamily: "NunitoBold",
-            fontSize: 20,
+            fontFamily: "SireniaRegular",
+            fontSize: 24,
             padding: 20,
             paddingHorizontal: 60,
             textAlign: "center",

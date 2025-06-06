@@ -16,7 +16,8 @@ import AntDesign from "@expo/vector-icons/AntDesign";
 import { supabase } from "@/lib/supabase";
 import NavBar from "@/components/NavigationBar";
 import { useNavigation } from "@react-navigation/native";
-import { Ionicons } from "@expo/vector-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
+import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import { useFonts } from "expo-font";
 
 export default function UserPermissions() {
@@ -237,18 +238,18 @@ export default function UserPermissions() {
         contentContainerStyle={{
           paddingVertical: 40,
           justifyContent: "flex-start",
-          marginRight: 20,
         }}
       >
         <TouchableOpacity
           onPress={() => router.push(`/dogNotifications?petId=${petId}`)}
           style={{
             position: "absolute",
-            top: 68,
-            left: 40,
+            top: 64,
+            left: 20,
+            zIndex: 10,
           }}
         >
-          <Ionicons name="arrow-back" size={24} color="#183A36" />
+          <FontAwesomeIcon icon={faArrowLeft} size={30} color="#183A36" />
         </TouchableOpacity>
         <Text
           style={{
@@ -256,6 +257,7 @@ export default function UserPermissions() {
             fontSize: 20,
             padding: 20,
             textAlign: "center",
+            color: "#183A36",
           }}
         >
           Toestemming
@@ -267,10 +269,11 @@ export default function UserPermissions() {
             paddingTop: 20,
             paddingLeft: 20,
             paddingRight: 40,
+            color: "#183A36",
           }}
         >
-          U duidde aan om geen meldingen en camera toe te staan. Wij kunnen
-          hierdoor jou niet Cooper maken.
+          Je duidde aan om geen meldingen en camera toe te staan. Wij kunnen
+          hierdoor jou niet {dogName || "nog geen naam"} maken.
         </Text>
         <Text
           style={{
@@ -279,9 +282,10 @@ export default function UserPermissions() {
             paddingBottom: 20,
             paddingLeft: 20,
             paddingRight: 40,
+            color: "#183A36",
           }}
         >
-          Als u toch twijfelt kunt hier ook weg gaan via de navigatiebalk.
+          Als je toch twijfelt kan je hier ook weg gaan via de navigatiebalk.
         </Text>
         <Text
           style={{
@@ -289,6 +293,7 @@ export default function UserPermissions() {
             fontSize: 16,
             padding: 20,
             paddingBottom: 8,
+            color: "#183A36",
           }}
         >
           Toestemmingen
@@ -320,6 +325,7 @@ export default function UserPermissions() {
               fontFamily: "NunitoRegylar",
               fontSize: 16,
               paddingVertical: 12,
+              color: "#183A36",
             }}
           >
             Geluid
@@ -347,6 +353,7 @@ export default function UserPermissions() {
               fontFamily: "NunitoRegular",
               fontSize: 16,
               paddingVertical: 12,
+              color: "#183A36",
             }}
           >
             Camera
@@ -374,6 +381,7 @@ export default function UserPermissions() {
               fontFamily: "NunitoRegular",
               fontSize: 16,
               paddingVertical: 12,
+              color: "#183A36",
             }}
           >
             Meldingen
@@ -403,8 +411,8 @@ export default function UserPermissions() {
         >
           <Text
             style={{
-              color: "black",
-              fontFamily: "Nunitobold",
+              color: "#183A36",
+              fontFamily: "NunitoBold",
               fontSize: 16,
             }}
           >

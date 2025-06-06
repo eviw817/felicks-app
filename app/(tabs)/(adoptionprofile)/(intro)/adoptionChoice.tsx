@@ -11,11 +11,24 @@ import {
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import { supabase } from "@/lib/supabase";
+import { useFonts } from "expo-font";
 import BaseText from "@/components/BaseText";
 
 export default function AdoptionChoice() {
+  const [fontsLoaded] = useFonts({
+    NunitoRegular: require("@/assets/fonts/Nunito/NunitoRegular.ttf"),
+    NunitoSemiBold: require("@/assets/fonts/Nunito/NunitoSemiBold.ttf"),
+    NunitoBold: require("@/assets/fonts/Nunito/NunitoBold.ttf"),
+    SireniaMedium: require("@/assets/fonts/Sirenia/SireniaMedium.ttf"),
+  });
+
+  if (!fontsLoaded) {
+    return <View />;
+  }
+
   const router = useRouter();
-  const [isPersonalityProfileComplete, setIsPersonalityProfileComplete] = useState<boolean | null>(null);
+  const [isPersonalityProfileComplete, setIsPersonalityProfileComplete] =
+    useState<boolean | null>(null);
   const [isBreedProfileComplete, setIsBreedProfileComplete] = useState(false);
 
   useEffect(() => {
@@ -132,10 +145,7 @@ export default function AdoptionChoice() {
         <BaseText style={styles.optionText}>PERSOONLIJKHEID</BaseText>
       </TouchableOpacity>
 
-      <TouchableOpacity
-        style={styles.optionButton}
-        onPress={handlePressBreed}
-      >
+      <TouchableOpacity style={styles.optionButton} onPress={handlePressBreed}>
         <BaseText style={styles.optionText}>RAS</BaseText>
       </TouchableOpacity>
     </SafeAreaView>
@@ -163,19 +173,19 @@ const styles = StyleSheet.create({
     fontSize: 22,
     color: "#183A36",
     textAlign: "center",
-    fontFamily: "Nunito-Regular",
+    fontFamily: "SireniaMedium",
   },
   question: {
     fontSize: 16,
     color: "#183A36",
     lineHeight: 24,
     marginBottom: 32,
-    fontFamily: "Nunito-Regular",
-    textAlign: "center",
+    fontFamily: "NunitoBold",
+    textAlign: "left",
   },
   optionButton: {
-    borderColor: "#183A36",
-    borderWidth: 1,
+    borderColor: "#97B8A5",
+    borderWidth: 2,
     borderRadius: 25,
     paddingVertical: 16,
     paddingHorizontal: 24,
@@ -185,7 +195,7 @@ const styles = StyleSheet.create({
   optionText: {
     fontSize: 16,
     color: "#183A36",
-    fontFamily: "Nunito-Bold",
+    fontFamily: "NunitoBold",
     textTransform: "uppercase",
   },
 });

@@ -11,7 +11,8 @@ import {
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
-import { supabase } from "../../../../lib/supabase";
+import { supabase } from "@/lib/supabase";
+import { useFonts } from "expo-font";
 import BaseText from "@/components/BaseText";
 
 const RadioButton = ({ selected }: { selected: boolean }) => (
@@ -21,6 +22,17 @@ const RadioButton = ({ selected }: { selected: boolean }) => (
 );
 
 export default function Interaction() {
+  const [fontsLoaded] = useFonts({
+    NunitoRegular: require("@/assets/fonts/Nunito/NunitoRegular.ttf"),
+    NunitoSemiBold: require("@/assets/fonts/Nunito/NunitoSemiBold.ttf"),
+    NunitoBold: require("@/assets/fonts/Nunito/NunitoBold.ttf"),
+    SireniaMedium: require("@/assets/fonts/Sirenia/SireniaMedium.ttf"),
+  });
+
+  if (!fontsLoaded) {
+    return <View />;
+  }
+
   const router = useRouter();
   const [userId, setUserId] = useState<string | null>(null);
   const [childInteraction, setChildInteraction] = useState<string>("");
@@ -173,6 +185,8 @@ const styles = StyleSheet.create({
   question: {
     fontSize: 18,
     marginBottom: 12,
+    fontFamily: "NunitoBold",
+    color: "#183A36",
   },
   radioRow: {
     flexDirection: "row",

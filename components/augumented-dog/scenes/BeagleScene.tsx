@@ -25,11 +25,15 @@ export const BeagleScene = ({ children, ...rest }: BeagleSceneProps) => {
   return (
     <ViroARScene onTrackingUpdated={onInitialized} {...rest}>
       <ViroAmbientLight color="#FFFFFF" />
-      <ViroARPlaneSelector maxPlanes={1}>
+      <ViroARPlaneSelector
+        maxPlanes={1}
+        pauseUpdates={false}
+        alignment="Horizontal"
+      >
         <BeagleObject
           scale={[0.2, 0.2, 0.2]}
           position={[0, -5, -20]}
-          rotation={[0, 0, 10]}
+          rotation={[0, 0, 0]}
           onLoadStart={() => console.log("Loading ShibaInu model...")}
           onLoadEnd={() => console.log("Finished loading ShibaInu model")}
           onError={({ nativeEvent }) =>

@@ -79,6 +79,7 @@ const styles = StyleSheet.create({
         fontFamily: 'SireniaMedium',
         textAlign: "center",
         marginRight: 50, 
+        color: "#183A36",
     },
     goodbyeText: {
         fontSize: 20,

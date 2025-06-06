@@ -1,24 +1,20 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   SafeAreaView,
   View,
   Text,
   TouchableOpacity,
   Alert,
-  Pressable,
+  StyleSheet,
 } from "react-native";
-import { useRouter, Link } from "expo-router";
-import AntDesign from "@expo/vector-icons/AntDesign";
+import { useRouter } from "expo-router";
 import { Picker } from "@react-native-picker/picker";
-import NavBar from "@/components/NavigationBar";
-import { useNavigation } from "@react-navigation/native";
-import { Ionicons } from "@expo/vector-icons";
-
-import { supabase } from "@/lib/supabase"; // adjust path if needed
-import { useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
+
+import NavBar from "@/components/NavigationBar";
 import BaseText from "@/components/BaseText";
+import { supabase } from "@/lib/supabase";
 import { useFonts } from "expo-font";
 
 export default function DogBreed() {
@@ -31,7 +27,6 @@ export default function DogBreed() {
 
   const router = useRouter();
   const [dogBreed, setdogBreed] = useState<string | null>(null);
-  const navigation = useNavigation();
 
   if (!fontsLoaded) {
     return <View />;
@@ -40,7 +35,6 @@ export default function DogBreed() {
   const handleBreedSubmit = async () => {
     if (!dogBreed) return;
 
-    // Get the current user
     const {
       data: { user },
       error: userError,
@@ -52,11 +46,7 @@ export default function DogBreed() {
       return;
     }
 
-    console.log("User ID:", user.id);
-    console.log("Selected breed:", dogBreed);
-
     try {
-      // Check if dog already exists for this user
       const { data: existingDog, error: fetchError } = await supabase
         .from("ar_dog")
         .select("*")
@@ -64,7 +54,6 @@ export default function DogBreed() {
         .single();
 
       if (fetchError && fetchError.code !== "PGRST116") {
-        // PGRST116 means no rows found, so ignore that error
         console.log("Fetch existing dog error:", fetchError);
         Alert.alert("Fout", "Kon hond niet ophalen.");
         return;
@@ -73,7 +62,6 @@ export default function DogBreed() {
       let dogId = existingDog?.id;
 
       if (dogId) {
-        // Dog exists, update it
         const { data, error } = await supabase
           .from("ar_dog")
           .update({ breed: dogBreed })
@@ -87,10 +75,8 @@ export default function DogBreed() {
           return;
         }
 
-        console.log("Update succeeded:", data);
         router.push({ pathname: "/dogName", params: { petId: data.id } });
       } else {
-        // Dog does not exist, insert new
         const { data, error } = await supabase
           .from("ar_dog")
           .insert({ user_id: user.id, breed: dogBreed })
@@ -103,145 +89,144 @@ export default function DogBreed() {
           return;
         }
 
-        console.log("Insert succeeded:", data);
         router.push({ pathname: "/dogName", params: { petId: data.id } });
       }
     } catch (err) {
-      console.log("Caught error:", err);
       const message = err instanceof Error ? err.message : "Onbekende fout";
       Alert.alert("Kon hond niet opslaan", message);
     }
   };
 
   return (
-    <SafeAreaView
-      style={{
-        flex: 1,
-        alignItems: "center",
-        backgroundColor: "#FFFDF9",
-        paddingTop: 100,
-      }}
-    >
-      <View style={{ width: "100%", paddingHorizontal: 20 }}>
-        <View
-          style={{
-            flexDirection: "row",
-            alignItems: "center",
-            justifyContent: "center",
-            width: "100%",
-            position: "relative",
-            paddingVertical: 10,
-          }}
-        >
+    <SafeAreaView style={styles.container}>
+      <View style={styles.content}>
+        <View style={styles.header}>
           <TouchableOpacity
             onPress={() => router.push("/dogStart")}
-            style={{ position: "absolute", left: 5, top: 7, zIndex: 10 }}
+            style={styles.backButton}
           >
-            <FontAwesomeIcon
-              icon={faArrowLeft}
-              size={30}
-              color={"#183A36"}
-              style={{ position: "absolute", left: 5, top: 7 }}
-            />
+            <FontAwesomeIcon icon={faArrowLeft} size={30} color="#183A36" />
           </TouchableOpacity>
-          <BaseText
-            style={{
-              fontSize: 28,
-              fontFamily: "SireniaMedium",
-              textAlign: "center",
-              marginBottom: 20,
-            }}
-          >
-            Virtuele hond
-          </BaseText>
+          <BaseText style={styles.title}>Virtuele hond</BaseText>
         </View>
-        <Text
-          style={{
-            fontFamily: "NunitoRegular",
-            fontSize: 16,
-            marginTop: 20,
-            color: "#183A36",
-          }}
-        >
+
+        <Text style={styles.subtext}>
           Denk aan jouw favoriete hond...
         </Text>
-        <Text
-          style={{
-            fontFamily: "NunitoRegular",
-            fontSize: 16,
-            marginTop: 12,
-            color: "#183A36",
-          }}
-        >
-          Welk ras schiet er als eerste te binnen? Dat wordt jouw virtuele
-          maatje!
+        <Text style={styles.subtext}>
+          Welk ras schiet er als eerste te binnen? Dat wordt jouw virtuele maatje!
         </Text>
-        <View
-          style={{
-            backgroundColor: "#FFF",
-            borderRadius: 10,
-            borderWidth: 1,
-            borderColor: "#97B8A5",
-            marginTop: 20,
-          }}
-        >
+
+        <View style={styles.pickerWrapper}>
           <Picker
             selectedValue={dogBreed}
             onValueChange={(itemValue) => setdogBreed(itemValue)}
-            style={{ height: 56, width: "100%" }}
+            style={styles.picker}
           >
             <Picker.Item label="Selecteer een optie" value={null} />
-            {/* <Picker.Item label="Engelse cocker spaniël" value="engelse cocker spaniël" />
-            <Picker.Item label="Golden retriever" value="golden retriever" />
-            <Picker.Item label="Witte zwitserse herder" value="witte zwitserse herder" />
-            <Picker.Item label="Border collie" value="border collie" />
-            <Picker.Item label="Jack russel" value="jack russel" /> */}
             <Picker.Item label="Labrador" value="labrador" />
           </Picker>
         </View>
-        <View style={{ width: "100%", alignItems: "center" }}>
+
+        <View style={styles.buttonWrapper}>
           <TouchableOpacity
             onPress={handleBreedSubmit}
             disabled={!dogBreed}
-            style={{
-              margin: 20,
-              marginTop: 40,
-              paddingHorizontal: 20,
-              paddingVertical: 15,
-              backgroundColor: "#97B8A5",
-              borderRadius: 15,
-              width: "100%",
-              alignItems: "center",
-              shadowOffset: { width: 0, height: 2 },
-              shadowOpacity: 0.1,
-              shadowRadius: 4,
-              opacity: !dogBreed ? 0.5 : 1,
-            }}
+            style={[
+              styles.button,
+              !dogBreed && styles.buttonDisabled,
+            ]}
           >
-            <Text
-              style={{
-                fontFamily: "NunitoBold",
-                fontSize: 15,
-                color: "#183A36",
-                textAlign: "center",
-              }}
-            >
-              DOORGAAN
-            </Text>
+            <Text style={styles.buttonText}>DOORGAAN</Text>
           </TouchableOpacity>
         </View>
       </View>
-      {/* Fixed navbar onderaan scherm */}
-      <View
-        style={{
-          position: "absolute",
-          bottom: 0,
-          left: 0,
-          right: 0,
-        }}
-      >
+
+      <View style={styles.navbar}>
         <NavBar />
       </View>
     </SafeAreaView>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    alignItems: "center",
+    backgroundColor: "#FFFDF9",
+    paddingTop: 80,
+  },
+  content: {
+    width: "100%",
+    paddingHorizontal: 20,
+  },
+  header: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    width: "100%",
+    position: "relative",
+    paddingVertical: 4,
+  },
+  backButton: {
+    position: "absolute",
+    left: 5,
+    top: 7,
+    zIndex: 10,
+  },
+  title: {
+    fontSize: 28,
+    fontFamily: "SireniaMedium",
+    textAlign: "center",
+    marginBottom: 20,
+  },
+  subtext: {
+    fontFamily: "NunitoRegular",
+    fontSize: 16,
+    marginTop: 12,
+    color: "#183A36",
+  },
+  pickerWrapper: {
+    backgroundColor: "#FFF",
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: "#97B8A5",
+    marginTop: 20,
+  },
+  picker: {
+    height: 56,
+    width: "100%",
+  },
+  buttonWrapper: {
+    width: "100%",
+    alignItems: "center",
+  },
+  button: {
+    margin: 20,
+    marginTop: 40,
+    paddingHorizontal: 20,
+    paddingVertical: 15,
+    backgroundColor: "#97B8A5",
+    borderRadius: 15,
+    width: "100%",
+    alignItems: "center",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+  },
+  buttonDisabled: {
+    opacity: 0.5,
+  },
+  buttonText: {
+    fontFamily: "NunitoBold",
+    fontSize: 15,
+    color: "#183A36",
+    textAlign: "center",
+  },
+  navbar: {
+    position: "absolute",
+    bottom: 0,
+    left: 0,
+    right: 0,
+  },
+});

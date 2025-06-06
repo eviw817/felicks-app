@@ -1,5 +1,5 @@
 import { SafeAreaView } from "react-native-safe-area-context";
-import { View, Text, Image, ScrollView } from "react-native";
+import { View, Text, Image, ScrollView, StyleSheet } from "react-native";
 import { Link } from "expo-router";
 import NavBar from "@/components/NavigationBar";
 import { useFonts } from "expo-font";
@@ -19,204 +19,165 @@ export default function DogStart() {
   }
 
   return (
-    <SafeAreaView
-      style={{
-        flex: 1,
-        justifyContent: "center",
-        alignItems: "center",
-        backgroundColor: "#FFFDF9",
-        paddingTop: 20,
-      }}
-    >
-      <ScrollView
-        contentContainerStyle={{
-          top: 1,
-          marginTop: 40,
-          justifyContent: "flex-start",
-          paddingRight: 140,
-        }}
-      >
-        <BaseText
-          style={{
-            fontSize: 28,
-            fontFamily: "SireniaMedium",
-            textAlign: "center",
-            padding: 20,
-          }}
-        >
-          Welkom bij de virtuele hond
-        </BaseText>
-        <Text
-          style={{
-            fontFamily: "NunitoBold",
-            fontSize: 16,
-            paddingHorizontal: 20,
-            color: "#183A36",
-            marginBottom: 10,
-          }}
-        >
+    <SafeAreaView style={styles.container}>
+      <ScrollView contentContainerStyle={styles.scrollContent}>
+        <BaseText style={styles.title}>Welkom bij de virtuele hond</BaseText>
+
+        <Text style={styles.subtitle}>
           Altijd al gedroomd van een trouwe viervoeter in huis?
         </Text>
-        <Text
-          style={{
-            fontFamily: "NunitoRegular",
-            fontSize: 16,
-            paddingHorizontal: 20,
-            color: "#183A36",
-          }}
-        >
+        <Text style={styles.description}>
           Maar ben jij er klaar voor? {"\n"}
-          Dan is deze ervaring precies wat je nodig hebt om daar achter te
-          komen!
+          Dan is deze ervaring precies wat je nodig hebt om daar achter te komen!
         </Text>
-        <View
-          style={{
-            flexDirection: "row",
-            alignItems: "center",
-            margin: 20,
-          }}
-        >
+
+        <View style={styles.stepContainer}>
           <Image
-            style={{
-              width: 120,
-              height: 120,
-              borderRadius: 15,
-              marginBottom: 10,
-              borderWidth: 1,
-              borderColor: "#97B8A5",
-            }}
+            style={styles.stepImage}
             source={require("@/assets/images/step1.png")}
           />
           <View>
-            <Text
-              style={{
-                fontFamily: "NunitoBold",
-                fontSize: 16,
-                paddingHorizontal: 20,
-                color: "#183A36",
-              }}
-            >
-              Step 1
-            </Text>
-            <Text
-              style={{
-                fontFamily: "NunitoRegular",
-                fontSize: 16,
-                paddingHorizontal: 20,
-                marginRight: 100,
-                color: "#183A36",
-              }}
-            >
-              Maak jouw virtuele hond aan.
-            </Text>
+            <Text style={styles.stepTitle}>Step 1</Text>
+            <Text style={styles.stepText}>Maak jouw virtuele hond aan.</Text>
           </View>
         </View>
-        <View
-          style={{
-            flexDirection: "row",
-            justifyContent: "space-between",
-            alignItems: "center",
-          }}
-        >
+
+        <View style={styles.stepContainerRight}>
           <Image
-            style={{
-              width: 120,
-              height: 120,
-              borderRadius: 15,
-              marginBottom: 10,
-              borderWidth: 1,
-              borderColor: "#97B8A5",
-              marginLeft: 20,
-            }}
+            style={[styles.stepImage, styles.stepImageRight]}
             source={require("@/assets/images/step2.png")}
           />
-          <View
-            style={{
-              marginRight: 20,
-            }}
-          >
-            <Text
-              style={{
-                fontFamily: "NunitoBold",
-                fontSize: 16,
-                paddingHorizontal: 20,
-                color: "#183A36",
-              }}
-            >
-              Step 2
-            </Text>
-            <Text
-              style={{
-                fontFamily: "NunitoRegular",
-                fontSize: 16,
-                paddingHorizontal: 20,
-                marginRight: 120,
-                color: "#183A36",
-              }}
-            >
+          <View style={styles.stepTextContainer}>
+            <Text style={styles.stepTitle}>Step 2</Text>
+            <Text style={styles.stepText}>
               Ga op avontuur met jouw viervoeter en ontdek het zelf!
             </Text>
           </View>
         </View>
 
-        <Text
-          style={{
-            fontFamily: "Nunito",
-            fontWeight: "bold",
-            fontSize: 16,
-            paddingHorizontal: 20,
-            color: "#183A36",
-            marginTop: 20,
-          }}
-        >
-          Niet te vergeten!
-        </Text>
-        <Text
-          style={{
-            fontFamily: "Nunito",
-            fontWeight: "regular",
-            fontSize: 16,
-            paddingHorizontal: 20,
-            color: "#183A36",
-          }}
-        >
+        <Text style={styles.noticeTitle}>Niet te vergeten!</Text>
+        <Text style={styles.noticeText}>
           Het is leerzaam, leuk én helemaal gratis!
         </Text>
-        <Link
-          style={{
-            padding: 12,
-            margin: 20,
-            paddingHorizontal: 20,
-            paddingVertical: 15,
-            backgroundColor: "#97B8A5",
-            fontWeight: "bold",
-            fontSize: 15,
-            borderRadius: 15,
-            textAlign: "center",
-            color: "#183A36",
-            width: "90%",
-            alignItems: "center",
-            shadowOffset: { width: 0, height: 2 },
-            shadowOpacity: 0.1,
-            shadowRadius: 4,
-          }}
-          href="/dogBreed"
-        >
+
+        <Link style={styles.ctaButton} href="/dogBreed">
           BEGIN NU
         </Link>
       </ScrollView>
 
-      {/* Fixed navbar onderaan scherm */}
-      <View
-        style={{
-          position: "absolute",
-          bottom: 0,
-          left: 0,
-          right: 0,
-        }}
-      >
+      <View style={styles.navbarWrapper}>
         <NavBar />
       </View>
     </SafeAreaView>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#FFFDF9",
+    paddingTop: 20,
+  },
+  scrollContent: {
+    top: 1,
+    marginTop: 40,
+    justifyContent: "flex-start",
+    paddingRight: 140,
+  },
+  title: {
+    fontSize: 28,
+    fontFamily: "SireniaMedium",
+    textAlign: "center",
+    padding: 20,
+  },
+  subtitle: {
+    fontFamily: "NunitoBold",
+    fontSize: 16,
+    paddingHorizontal: 20,
+    color: "#183A36",
+    marginBottom: 10,
+  },
+  description: {
+    fontFamily: "NunitoRegular",
+    fontSize: 16,
+    paddingHorizontal: 20,
+    color: "#183A36",
+  },
+  stepContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    margin: 20,
+  },
+  stepContainerRight: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+  stepImage: {
+    width: 120,
+    height: 120,
+    borderRadius: 15,
+    marginBottom: 10,
+    borderWidth: 1,
+    borderColor: "#97B8A5",
+  },
+  stepImageRight: {
+    marginLeft: 20,
+  },
+  stepTextContainer: {
+    marginRight: 20,
+  },
+  stepTitle: {
+    fontFamily: "NunitoBold",
+    fontSize: 16,
+    paddingHorizontal: 20,
+    color: "#183A36",
+  },
+  stepText: {
+    fontFamily: "NunitoRegular",
+    fontSize: 16,
+    paddingHorizontal: 20,
+    marginRight: 100,
+    color: "#183A36",
+  },
+  noticeTitle: {
+    fontFamily: "Nunito",
+    fontWeight: "bold",
+    fontSize: 16,
+    paddingHorizontal: 20,
+    color: "#183A36",
+    marginTop: 20,
+  },
+  noticeText: {
+    fontFamily: "NunitoRegular",
+    fontWeight: "400",
+    fontSize: 16,
+    paddingHorizontal: 20,
+    color: "#183A36",
+  },
+  ctaButton: {
+    padding: 12,
+    margin: 20,
+    paddingHorizontal: 20,
+    paddingVertical: 15,
+    backgroundColor: "#97B8A5",
+    fontFamily: "NunitoBold",
+    fontSize: 15,
+    borderRadius: 15,
+    textAlign: "center",
+    color: "#183A36",
+    width: "90%",
+    alignItems: "center",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+  },
+  navbarWrapper: {
+    position: "absolute",
+    bottom: 0,
+    left: 0,
+    right: 0,
+  },
+});

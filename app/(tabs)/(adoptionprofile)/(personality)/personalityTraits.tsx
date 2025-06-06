@@ -11,7 +11,8 @@ import {
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
-import { supabase } from "../../../../lib/supabase";
+import { supabase } from "@/lib/supabase";
+import { useFonts } from "expo-font";
 import BaseText from "@/components/BaseText";
 
 const Checkbox = ({ selected }: { selected: boolean }) => (
@@ -21,6 +22,17 @@ const Checkbox = ({ selected }: { selected: boolean }) => (
 );
 
 export default function PersonalityTraits() {
+  const [fontsLoaded] = useFonts({
+    NunitoRegular: require("@/assets/fonts/Nunito/NunitoRegular.ttf"),
+    NunitoSemiBold: require("@/assets/fonts/Nunito/NunitoSemiBold.ttf"),
+    NunitoBold: require("@/assets/fonts/Nunito/NunitoBold.ttf"),
+    SireniaMedium: require("@/assets/fonts/Sirenia/SireniaMedium.ttf"),
+  });
+
+  if (!fontsLoaded) {
+    return <View />;
+  }
+
   const router = useRouter();
   const [userId, setUserId] = useState<string | null>(null);
   const [selectedTraits, setSelectedTraits] = useState<string[]>([]);
@@ -90,7 +102,7 @@ export default function PersonalityTraits() {
           <Ionicons name="arrow-back" size={24} color="#183A36" />
         </TouchableOpacity>
         <BaseText style={styles.title} variant="title">
-          Adoptie
+          Algemene persoonlijkheid
         </BaseText>
       </View>
 
@@ -147,7 +159,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 22,
-    fontFamily: "Sirenia-Regular",
+    fontFamily: "SireniaRegular",
     color: "#183A36",
     textAlign: "center",
   },
@@ -167,7 +179,7 @@ const styles = StyleSheet.create({
   },
   question: {
     fontSize: 18,
-    fontWeight: "bold",
+    fontFamily: "NunitoBold",
     color: "#183A36",
     marginBottom: 16,
   },
@@ -209,6 +221,6 @@ const styles = StyleSheet.create({
   buttonText: {
     fontSize: 16,
     color: "#183A36",
-    fontWeight: "bold",
+    fontFamily: "NunitoBold",
   },
 });

@@ -319,38 +319,6 @@ export default function Registeren() {
                 })}
               </Picker>
             </View>
-          {/* Wachtwoord input */}
-         {/* Wachtwoord input */}
-        <Text style={styles.label}>Wachtwoord</Text>
-        <View style={styles.passwordContainer}>
-          <TextInput
-            style={[
-              styles.input,
-              { flex: 1 },
-              passwordFocus || isPasswordFilled
-                ? styles.focusedInput
-                : styles.unfocusedInput,
-            ]}
-            placeholder="Wachtwoord"
-            placeholderTextColor="rgba(151, 184, 165, 0.5)"
-            secureTextEntry={!showPassword}
-            onFocus={() => setPasswordFocus(true)}
-            onBlur={() => setPasswordFocus(false)}
-            onChangeText={setPassword}
-            value={password}
-          />
-            <TouchableOpacity
-                    style={styles.eyeIcon}
-                    onPress={() => setShowPassword((prev) => !prev)}
-                  >
-            <Ionicons
-              name={showPassword ? "eye-outline" : "eye-off-outline"}
-              size={28}
-              color="#183A36"
-              style={{ marginLeft: 10 }}
-            />
-          </TouchableOpacity>
-        </View>
 
             {/* E-mail input */}
             <Text style={styles.label}>E-mail</Text>
@@ -372,21 +340,35 @@ export default function Registeren() {
 
             {/* Wachtwoord input */}
             <Text style={styles.label}>Wachtwoord</Text>
-            <TextInput
-              style={[
-                styles.input,
-                passwordFocus || isPasswordFilled
-                  ? styles.focusedInput
-                  : styles.unfocusedInput,
-              ]}
-              placeholder="Wachtwoord"
-              placeholderTextColor="rgba(151, 184, 165, 0.5)"
-              secureTextEntry
-              onFocus={() => setPasswordFocus(true)}
-              onBlur={() => setPasswordFocus(false)}
-              onChangeText={setPassword}
-              value={password}
-            />
+            <View style={styles.passwordContainer}>
+              <TextInput
+                style={[
+                  styles.input,
+                  { flex: 1 },
+                  passwordFocus || isPasswordFilled
+                    ? styles.focusedInput
+                    : styles.unfocusedInput,
+                ]}
+                placeholder="Wachtwoord"
+                placeholderTextColor="rgba(151, 184, 165, 0.5)"
+                secureTextEntry={!showPassword}
+                onFocus={() => setPasswordFocus(true)}
+                onBlur={() => setPasswordFocus(false)}
+                onChangeText={setPassword}
+                value={password}
+              />
+              <TouchableOpacity
+                style={styles.eyeIcon}
+                onPress={() => setShowPassword((prev) => !prev)}
+              >
+                <Ionicons
+                  name={showPassword ? "eye-outline" : "eye-off-outline"}
+                  size={28}
+                  color="#183A36"
+                  style={{ marginLeft: 10 }}
+                />
+              </TouchableOpacity>
+            </View>
 
             <TouchableOpacity
               style={styles.button}
@@ -422,6 +404,7 @@ const styles = StyleSheet.create({
     fontFamily: "SireniaMedium",
     marginBottom: 60,
     textAlign: "center",
+    color: "#183A36",
   },
   text: {
     fontSize: 20,
@@ -503,15 +486,14 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     textAlign: "center",
   },
-    passwordContainer: {
-      width: "100%",
-      marginBottom: 25,
-      position: "relative",
-},
-eyeIcon: {
-  position: "absolute",
-  right: 10,
-  top: 12,
-},
-
+  passwordContainer: {
+    width: "100%",
+    marginBottom: 25,
+    position: "relative",
+  },
+  eyeIcon: {
+    position: "absolute",
+    right: 10,
+    top: 12,
+  },
 });

@@ -132,7 +132,7 @@ const NewPasswordScreen = () => {
         value={nieuwpassword}
       />
         <TouchableOpacity onPress={() => setShowPassword(prev => !prev)} style={styles.eyeIcon}>
-          <Ionicons name={showPassword ? "eye-off-outline" : "eye-outline"} size={24} color="#183A36" />
+          <Ionicons name={showPassword ? "eye-outline" : "eye-off-outline"} size={24} color="#183A36" />
         </TouchableOpacity>
       </View>
 

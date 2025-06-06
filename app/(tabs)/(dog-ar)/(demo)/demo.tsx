@@ -15,10 +15,11 @@ import { supabase } from "@/lib/supabase";
 import { useLocalSearchParams } from "expo-router";
 import NavBar from "@/components/NavigationBar";
 import { useNavigation } from "@react-navigation/native";
+import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
+import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import { useFonts } from "expo-font";
-
 
 type DogStatus = {
   id: string;
@@ -324,10 +325,10 @@ const AugmentedDog: React.FC = () => {
           position: "absolute",
           top: 68,
           left: 20,
-          zIndex: 100,
+          zIndex: 10,
         }}
       >
-        <Ionicons name="arrow-back" size={24} color="#ffffff" />
+        <FontAwesomeIcon icon={faArrowLeft} size={30} color="#ffffff" />
       </TouchableOpacity>
 
       {/* ─── Tekstballon ─── */}
@@ -429,6 +430,7 @@ const AugmentedDog: React.FC = () => {
           bottom: 0,
           left: 0,
           right: 0,
+          zIndex: 10,
         }}
       >
         <NavBar />

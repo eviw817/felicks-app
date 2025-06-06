@@ -16,7 +16,8 @@ import AntDesign from "@expo/vector-icons/AntDesign";
 import { supabase } from "@/lib/supabase";
 import NavBar from "@/components/NavigationBar";
 import { useNavigation } from "@react-navigation/native";
-import { Ionicons } from "@expo/vector-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
+import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import { useFonts } from "expo-font";
 
 export default function UserPermissions() {
@@ -238,19 +239,20 @@ export default function UserPermissions() {
           onPress={() => router.push(`/dogInformation?petId=${petId}`)}
           style={{
             position: "absolute",
-            top: 68,
-            left: 40,
+            top: 64,
+            left: 20,
+            zIndex: 10,
           }}
         >
-          <Ionicons name="arrow-back" size={24} color="#183A36" />
+          <FontAwesomeIcon icon={faArrowLeft} size={30} color="#183A36" />
         </TouchableOpacity>
         <Text
           style={{
-            fontFamily: "Nunito",
-            fontWeight: "bold",
-            fontSize: 20,
+            fontFamily: "SireniaRegular",
+            fontSize: 24,
             padding: 20,
             textAlign: "center",
+            color: "#183A36",
           }}
         >
           Toestemming
@@ -263,6 +265,7 @@ export default function UserPermissions() {
             paddingTop: 20,
             paddingLeft: 20,
             paddingRight: 40,
+            color: "#183A36",
           }}
         >
           Geef toestemming voor camera, geluid en meldingen.
@@ -275,6 +278,7 @@ export default function UserPermissions() {
             paddingBottom: 20,
             paddingLeft: 20,
             paddingRight: 40,
+            color: "#183A36",
           }}
         >
           Zo kunnen we jou helpen goed voor {dogName || "nog geen naam"} te
@@ -288,6 +292,7 @@ export default function UserPermissions() {
             padding: 20,
             paddingTop: 20,
             paddingBottom: 0,
+            color: "#183A36",
           }}
         >
           Met deze instellingen kunnen we:
@@ -306,6 +311,7 @@ export default function UserPermissions() {
               fontSize: 36,
               paddingRight: 8,
               lineHeight: 36,
+              color: "#183A36",
             }}
           >
             -
@@ -317,6 +323,7 @@ export default function UserPermissions() {
               fontSize: 16,
               paddingRight: 50,
               lineHeight: 32,
+              color: "#183A36",
             }}
           >
             {dogName || "nog geen naam"} tot leven brengen in AR
@@ -336,6 +343,7 @@ export default function UserPermissions() {
               fontSize: 36,
               paddingRight: 8,
               lineHeight: 36,
+              color: "#183A36",
             }}
           >
             -
@@ -347,6 +355,7 @@ export default function UserPermissions() {
               fontSize: 16,
               paddingRight: 12,
               lineHeight: 32,
+              color: "#183A36",
             }}
           >
             Geluid gebruiken voor leuke interacties
@@ -366,6 +375,7 @@ export default function UserPermissions() {
               fontSize: 36,
               paddingRight: 8,
               lineHeight: 36,
+              color: "#183A36",
             }}
           >
             -
@@ -377,6 +387,7 @@ export default function UserPermissions() {
               fontSize: 16,
               paddingRight: 40,
               lineHeight: 32,
+              color: "#183A36",
             }}
           >
             Je waarschuwen als {dogName || "nog geen naam"} honger heeft, wil
@@ -394,8 +405,7 @@ export default function UserPermissions() {
             paddingTop: 12,
           }}
         >
-          Klaar om {dogName || "nog geen naam"} de beste zorg te geven? Zet de
-          schuifjes aan en druk op 'Opslaan' om verder te gaan!
+          Zet de schuifjes aan en druk op 'Opslaan' om verder te gaan!
         </Text>
         <Text
           style={{
@@ -404,6 +414,7 @@ export default function UserPermissions() {
             fontSize: 16,
             padding: 20,
             paddingBottom: 8,
+            color: "#183A36",
           }}
         >
           Toestemming
@@ -439,6 +450,7 @@ export default function UserPermissions() {
               paddingLeft: 8,
               marginTop: 8,
               flexShrink: 1,
+              color: "#183A36",
             }}
           >
             Geluid
@@ -470,6 +482,7 @@ export default function UserPermissions() {
               paddingLeft: 8,
               marginTop: 8,
               flexShrink: 1,
+              color: "#183A36",
             }}
           >
             Camera
@@ -501,6 +514,7 @@ export default function UserPermissions() {
               paddingLeft: 8,
               marginTop: 8,
               flexShrink: 1,
+              color: "#183A36",
             }}
           >
             Meldingen
@@ -521,8 +535,8 @@ export default function UserPermissions() {
           style={{
             backgroundColor: "#97B8A5",
             marginVertical: 20,
-            marginHorizontal: 50,
-            borderRadius: 50,
+            marginHorizontal: 20,
+            borderRadius: 15,
             paddingVertical: 15,
             paddingHorizontal: 40,
             alignItems: "center",
@@ -531,10 +545,9 @@ export default function UserPermissions() {
         >
           <Text
             style={{
-              fontFamily: "Nunito",
-              fontWeight: "bold",
-              fontSize: 18,
-              color: "black",
+              backgroundColor: "#97B8A5",
+              fontFamily: "NunitoBold",
+              textAlign: "center",
             }}
           >
             {loading ? "Bezig met opslaan..." : "OPSLAAN"}

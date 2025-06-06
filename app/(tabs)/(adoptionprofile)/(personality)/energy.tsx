@@ -12,6 +12,7 @@ import {
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import { supabase } from "@/lib/supabase";
+import { useFonts } from "expo-font";
 import BaseText from "@/components/BaseText";
 
 const RadioButton = ({ selected }: { selected: boolean }) => (
@@ -21,6 +22,17 @@ const RadioButton = ({ selected }: { selected: boolean }) => (
 );
 
 export default function Energy() {
+  const [fontsLoaded] = useFonts({
+    NunitoRegular: require("@/assets/fonts/Nunito/NunitoRegular.ttf"),
+    NunitoSemiBold: require("@/assets/fonts/Nunito/NunitoSemiBold.ttf"),
+    NunitoBold: require("@/assets/fonts/Nunito/NunitoBold.ttf"),
+    SireniaMedium: require("@/assets/fonts/Sirenia/SireniaMedium.ttf"),
+  });
+
+  if (!fontsLoaded) {
+    return <View />;
+  }
+
   const router = useRouter();
   const [userId, setUserId] = useState<string | null>(null);
   const [trainingImportance, setTrainingImportance] = useState<string>("");
@@ -157,7 +169,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   title: {
-    fontSize: 20,
+    fontSize: 24,
     textAlign: "center",
   },
   progressBar: {
@@ -176,7 +188,7 @@ const styles = StyleSheet.create({
   },
   question: {
     fontSize: 18,
-    fontWeight: "bold",
+    fontFamily: "NunitoBold",
     color: "#183A36",
     marginBottom: 12,
   },
@@ -216,7 +228,7 @@ const styles = StyleSheet.create({
     opacity: 0.5,
   },
   buttonText: {
-    fontWeight: "bold",
+    fontFamily: "NunitoBold",
     color: "#183A36",
     fontSize: 16,
   },

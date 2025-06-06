@@ -291,6 +291,7 @@ export default function HomepageScreen() {
       <ScrollView
         contentContainerStyle={{ paddingBottom: 100 }}
         style={{
+          flex: 1,
           backgroundColor: "#FFFDF9",
           borderTopLeftRadius: 20,
           borderTopRightRadius: 20,
@@ -351,12 +352,14 @@ export default function HomepageScreen() {
               elevation: 2,
             }}
           >
-            <Text style={{
-              fontFamily: "NunitoBold",
-              fontSize: 15,
-              textAlign: "center",
-              color: "#FFFDF9",
-            }}>
+            <Text
+              style={{
+                fontFamily: "NunitoBold",
+                fontSize: 15,
+                textAlign: "center",
+                color: "#FFFDF9",
+              }}
+            >
               START DE QUIZ
             </Text>
           </Link>
@@ -412,7 +415,6 @@ export default function HomepageScreen() {
               }}
             />
             <View style={{ flex: 1 }}>
-              
               {/* Allow text block to take remaining space */}
               <Text
                 style={{
@@ -466,18 +468,24 @@ export default function HomepageScreen() {
               elevation: 2,
             }}
           >
-            <Text style={{
-              fontFamily: "NunitoBold",
-              fontSize: 15,
-              textAlign: "center",
-              color: "#183A36",
-            }}>
+            <Text
+              style={{
+                fontFamily: "NunitoBold",
+                fontSize: 15,
+                textAlign: "center",
+                color: "#183A36",
+              }}
+            >
               LEES MEER TIPS
             </Text>
           </Link>
         </View>
 
-        <View>
+        <View
+          style={{
+            marginBottom: 40, // Added margin for spacing
+          }}
+        >
           <Text
             style={{
               fontFamily: "NunitoBold",
@@ -490,53 +498,24 @@ export default function HomepageScreen() {
           >
             Jouw matches
           </Text>
-            <>
-              <Text
-                style={{
-                  fontFamily: "NunitoRegular",
-                  fontSize: 14,
-                  paddingHorizontal: 20, // Added horizontal padding
-                  color: "#183A36",
-                  textAlign: "left", // Center this text
-                  marginBottom: 10,
-                }}
-              >
-                Je hebt nog geen profiel ingevuld of er zijn nog geen geschikte
-                matches.
-              </Text>
-              <Link
-                href="/adoptionChoice"
-                style={{
-                  paddingVertical: 15, // Combined padding
-                  marginHorizontal: 20, // Horizontal margin
-                  marginBottom: 20, // Bottom margin
-                  backgroundColor: "#97B8A5",
-                  borderRadius: 15,
-                  width: "90%",
-                  alignSelf: "center",
-                  shadowOffset: { width: 0, height: 2 },
-                  shadowOpacity: 0.1,
-                  shadowRadius: 4,
-                  elevation: 2,
-                }}
-              >
-                {/* Text component for styling Link content */}
-                <Text
-                  style={{
-                    color: "#FFFDF9", // Moved color here
-                    fontFamily: "NunitoBold",
-                    textTransform: "uppercase",
-                    // Ensure fontSize and textAlign are here if needed for the text itself
-                    fontSize: 15,
-                    textAlign: "center",
-                  }}
-                >
-                  Vul je profiel in
-                </Text>
-              </Link>
-            </>
-          
-          {matchedDogs.map((dog) => (
+          {matchedDogs.length === 0 ? (
+          <>
+            <Text
+              style={{
+                fontFamily: "NunitoRegular",
+                fontSize: 14,
+                paddingHorizontal: 20, // Added horizontal padding
+                color: "#183A36",
+                textAlign: "left", // Center this text
+                marginBottom: 10,
+              }}
+            >
+              Je hebt nog geen profiel ingevuld of er zijn nog geen geschikte
+              matches.
+            </Text>
+          </>
+          ) : (
+          matchedDogs.map((dog) => (
             <View
               key={dog.id}
               style={{
@@ -659,7 +638,37 @@ export default function HomepageScreen() {
                 </TouchableOpacity>
               </View>
             </View>
-          ))}
+          )))}
+          <Link
+            href="/adoptionChoice"
+            style={{
+              paddingVertical: 15, // Combined padding
+              marginHorizontal: 20, // Horizontal margin
+              marginBottom: 20, // Bottom margin
+              backgroundColor: "#97B8A5",
+              borderRadius: 15,
+              width: "90%",
+              alignSelf: "center",
+              shadowOffset: { width: 0, height: 2 },
+              shadowOpacity: 0.1,
+              shadowRadius: 4,
+              elevation: 2,
+            }}
+          >
+            {/* Text component for styling Link content */}
+            <Text
+              style={{
+                color: "#FFFDF9", // Moved color here
+                fontFamily: "NunitoBold",
+                textTransform: "uppercase",
+                // Ensure fontSize and textAlign are here if needed for the text itself
+                fontSize: 15,
+                textAlign: "center",
+              }}
+            >
+              Vul je profiel in
+            </Text>
+          </Link>
         </View>
       </ScrollView>
       <NavBar />
