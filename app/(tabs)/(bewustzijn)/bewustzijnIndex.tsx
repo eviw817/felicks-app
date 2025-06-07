@@ -36,7 +36,7 @@ export default function BewustzijnScreen() {
             gap: 25,
             paddingBottom: 120, // extra space for navbar
             backgroundColor: "#FFFDF9",
-            paddingTop: 100,
+            paddingTop: 60,
           }}
           showsVerticalScrollIndicator={false}
         >
@@ -98,6 +98,7 @@ const styles = StyleSheet.create({
     gap: 25,
     color: "#183A36",
     paddingBottom: 80,
+    
     
   },
 
