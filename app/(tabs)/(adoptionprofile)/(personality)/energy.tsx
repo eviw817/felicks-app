@@ -14,6 +14,8 @@ import { useRouter } from "expo-router";
 import { supabase } from "@/lib/supabase";
 import { useFonts } from "expo-font";
 import BaseText from "@/components/BaseText";
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
+import { faArrowLeft, faChevronRight } from "@fortawesome/free-solid-svg-icons";
 
 const RadioButton = ({ selected }: { selected: boolean }) => (
   <View style={styles.radioOuter}>
@@ -97,15 +99,13 @@ export default function Energy() {
 
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.header}>
-        <TouchableOpacity onPress={() => router.back()}>
-          <Ionicons name="arrow-back" size={24} color="#183A36" />
-        </TouchableOpacity>
-        <BaseText variant="title" style={styles.title}>
-          Training en energie
-        </BaseText>
-        <View style={{ width: 24 }} />
-      </View>
+            <View style={styles.header}>
+                <TouchableOpacity onPress={() => router.push("/interaction")} style={styles.backButton}>
+                    <FontAwesomeIcon icon={faArrowLeft} size={30} color={'#183A36'} style={styles.backButton} />
+                </TouchableOpacity>
+                <BaseText style={styles.title}>Training en energie</BaseText>
+            </View>
+      
 
       <View style={styles.progressBar}>
         <View style={[styles.progressFill, { width: "62.5%" }]} />
@@ -163,15 +163,25 @@ const styles = StyleSheet.create({
     paddingTop: Platform.OS === "ios" ? 20 : 50,
   },
   header: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    marginBottom: 10,
-  },
-  title: {
-    fontSize: 24,
-    textAlign: "center",
-  },
+        flexDirection: "row",
+        alignItems: "center",
+        justifyContent: "center", 
+        width: "100%",
+        position: "relative", 
+        paddingVertical: 10,
+      },
+    title: {
+        fontSize: 28,
+        fontFamily: 'SireniaMedium',
+        textAlign: "center",
+        marginBottom: 20,
+        marginLeft: 20,
+    },
+    backButton: {
+      position: "absolute",
+      left: 5,
+      top:7,
+    },
   progressBar: {
     width: "100%",
     height: 6,

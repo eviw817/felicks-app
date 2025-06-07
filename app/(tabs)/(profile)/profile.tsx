@@ -388,31 +388,95 @@ const ProfileScreen = () => {
               match voor je vinden!
             </Text>
           ) : (
-            matches.map((match) => (
-              <TouchableOpacity
-                key={match.dog.id}
-                style={{
-                  backgroundColor: "#E2F0E7",
-                  padding: 12,
-                  marginTop: 10,
-                  borderRadius: 10,
-                  width: "100%",
-                }}
-                onPress={() =>
-                  router.push({
-                    pathname: "/dog-detail/[id]",
-                    params: { id: match.dog.id },
-                  })
-                }
-              >
-                <Text
-                  style={{ fontSize: 16, fontWeight: "bold", color: "#183A36" }}
-                >
-                  {match.dog.name}
-                </Text>
-                <Text style={{ color: "#97B8A5" }}>{match.score}% match</Text>
-              </TouchableOpacity>
-            ))
+         matches.map((match) => (
+  <TouchableOpacity
+    key={match.dog.id}
+    style={{
+      backgroundColor: "#FDE4D2",
+      borderRadius: 20,
+      marginBottom: 24,
+      padding: 16,
+      flexDirection: "row",
+      alignItems: "center",
+      width: "95%",
+      alignSelf: "center",
+      shadowColor: "#000",
+      shadowOpacity: 0.05,
+      shadowOffset: { width: 0, height: 2 },
+      shadowRadius: 4,
+      elevation: 1,
+    }}
+    onPress={() =>
+      router.push({
+        pathname: "/dog-detail/[id]",
+        params: { id: match.dog.id },
+      })
+    }
+  >
+    <View
+      style={{
+        width: 100,
+        height: 100,
+        borderRadius: 12,
+        overflow: "hidden",
+        marginRight: 16,
+        backgroundColor: "#FFFDF9",
+      }}
+    >
+      {match.dog.images?.length ? (
+        <Image
+          source={{ uri: match.dog.images[0] }}
+          resizeMode="cover"
+          style={{ width: "100%", height: "100%" }}
+        />
+      ) : (
+        <Image
+          source={require("@/assets/images/logo_felicks.png")}
+          resizeMode="contain"
+          style={{
+            width: "80%",
+            height: "80%",
+            alignSelf: "center",
+            marginTop: "10%",
+          }}
+        />
+      )}
+    </View>
+
+    <View style={{ flex: 1, }}>
+      <Text
+        style={{
+          fontFamily: "NunitoBold",
+          fontSize: 18,
+          marginBottom: 4,
+          color: "#183A36",
+        }}
+      >
+        {match.dog.name}
+      </Text>
+      <Text
+        style={{
+          fontFamily: "NunitoRegular",
+          fontSize: 14,
+          color: "#183A36",
+        }}
+      >
+        <Text style={{ fontFamily: "NunitoSemiBold" }}>Matchscore: </Text>
+        {match.score}%
+      </Text>
+      <Text
+        style={{
+          fontFamily: "NunitoRegular",
+          fontSize: 14,
+          color: "#183A36",
+        }}
+      >
+        <Text style={{ fontFamily: "NunitoSemiBold" }}>Ras: </Text>
+        {match.dog.breed}
+      </Text>
+    </View>
+  </TouchableOpacity>
+))
           )}
         </View>
 
@@ -556,6 +620,7 @@ const styles = StyleSheet.create({
   sectionText: {
     fontSize: 15,
     color: "#183A36",
+    marginBottom: 14,
   },
   sectionTextStatus: {
     fontSize: 16,

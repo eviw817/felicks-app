@@ -19,7 +19,7 @@ export default function BreedLayout() {
         options={{ title: "Activity Personality" }}
       />
       <Stack.Screen
-        name="adoptionProfileResults"
+        name="adoptionprofileResults"
         options={{ title: "Adoption Profile Results" }}
       />
       <Stack.Screen
@@ -30,9 +30,12 @@ export default function BreedLayout() {
         name="familyEnvironment"
         options={{ title: "Family Environment" }}
       />
-      <Stack.Screen name="groomingCoat" options={{ title: "Grooming Coat" }} />
+      <Stack.Screen 
+          name="groomingCoat" 
+          options={{ title: "Grooming Coat" }} 
+      />
       <Stack.Screen
-        name="livingSituation"
+        name="livingsituation"
         options={{ title: "Activity Personality" }}
       />
       <Stack.Screen

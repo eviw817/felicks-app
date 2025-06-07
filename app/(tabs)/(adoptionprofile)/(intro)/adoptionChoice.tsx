@@ -13,6 +13,7 @@ import { useRouter } from "expo-router";
 import { supabase } from "@/lib/supabase";
 import { useFonts } from "expo-font";
 import BaseText from "@/components/BaseText";
+import NavBar from "@/components/NavigationBar";
 
 export default function AdoptionChoice() {
   const [fontsLoaded] = useFonts({
@@ -113,21 +114,16 @@ export default function AdoptionChoice() {
 
   const handlePressBreed = () => {
     if (isBreedProfileComplete) {
-      router.push("/adoptionProfileResults");
+      router.push("/adoptionprofileResults");
     } else {
-      router.push("/livingSituation");
+      router.push("/missingAdoptionProfile");
     }
   };
 
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.headerRow}>
-        <TouchableOpacity onPress={() => router.back()} style={styles.back}>
-          <Ionicons name="arrow-back" size={24} color="#183A36" />
-        </TouchableOpacity>
-        <BaseText variant="title" style={styles.title}>
-          Adoptie
-        </BaseText>
+       <View style={styles.header}>
+        <BaseText style={styles.title}>Adoptie</BaseText>
       </View>
 
       <BaseText style={styles.question}>
@@ -145,6 +141,16 @@ export default function AdoptionChoice() {
       <TouchableOpacity style={styles.optionButton} onPress={handlePressBreed}>
         <BaseText style={styles.optionText}>RAS</BaseText>
       </TouchableOpacity>
+       <View
+              style={{
+                position: "absolute",
+                bottom: 0,
+                left: 0,
+                right: 0,
+              }}
+            >
+              <NavBar />
+            </View>
     </SafeAreaView>
   );
 }
@@ -162,18 +168,8 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     marginBottom: 32,
   },
-  back: {
-    position: "absolute",
-    left: 0,
-  },
-  title: {
-    fontSize: 22,
-    color: "#183A36",
-    textAlign: "center",
-    fontFamily: "SireniaMedium",
-  },
   question: {
-    fontSize: 16,
+    fontSize: 18,
     color: "#183A36",
     lineHeight: 24,
     marginBottom: 32,
@@ -194,5 +190,24 @@ const styles = StyleSheet.create({
     color: "#183A36",
     fontFamily: "NunitoBold",
     textTransform: "uppercase",
+  },
+   title: {
+    fontSize: 28,
+    fontFamily: "SireniaMedium",
+    textAlign: "center",
+    marginBottom: 30,
+  },
+  header: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    width: "100%",
+    position: "relative",
+    paddingVertical: 10,
+  },
+  settingsicon: {
+    position: "absolute",
+    right: 15,
+    top: 12,
   },
 });

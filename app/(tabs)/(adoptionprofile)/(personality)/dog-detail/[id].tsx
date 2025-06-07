@@ -67,9 +67,9 @@ export default function DogDetail() {
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView>
-        <View style={styles.headerRow}>
-          <TouchableOpacity onPress={() => router.back()} style={styles.back}>
-            <Ionicons name="arrow-back" size={24} color="#183A36" />
+           <View style={styles.header}>
+                         <TouchableOpacity onPress={() => router.back()} style={styles.back}>
+            <Ionicons name="arrow-back" size={30} color="#183A36" />
           </TouchableOpacity>
           <BaseText variant="title" style={styles.title}>
             {dog.name}
@@ -154,7 +154,7 @@ export default function DogDetail() {
             )}
           </View>
         )}
-        <TouchableOpacity style={styles.adoptButton}>
+        <TouchableOpacity style={styles.adoptButton} onPress={() => router.push("/profile")}>
           <BaseText variant="button">Contacteer het asiel</BaseText>
         </TouchableOpacity>
       </ScrollView>
@@ -170,22 +170,26 @@ const styles = StyleSheet.create({
     paddingTop: 50,
     paddingBottom: 50,
   },
-  headerRow: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    marginBottom: 12,
-  },
+  header: {
+        flexDirection: "row",
+        alignItems: "center",
+        justifyContent: "center", 
+        width: "100%",
+        position: "relative", 
+        paddingVertical: 10,
+      },
   back: {
-    position: "absolute",
-    left: 0,
+     position: "absolute",
+      left: 5,
+      top:10,
   },
   title: {
-    fontSize: 24,
-    fontFamily: "Sirenia-Regular",
-    color: "#183A36",
-    textAlign: "center",
-  },
+        fontSize: 28,
+        fontFamily: 'SireniaMedium',
+        textAlign: "center",
+        marginBottom: 20,
+        marginLeft: 20,
+    },
   avatar: {
     width: 120,
     height: 120,
@@ -246,20 +250,19 @@ const styles = StyleSheet.create({
   },
   adoptButton: {
     backgroundColor: "#97B8A5",
-    paddingVertical: 16,
-    paddingHorizontal: 24,
-    borderRadius: 25,
+    paddingVertical: 15,
+    borderRadius: 20,
+    marginBottom: 20,
+    width: "97%",
     alignItems: "center",
-    justifyContent: "center",
-    minHeight: 48,
-    marginBottom: 24,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
   },
   adoptButtonText: {
+     color: "#183A36",
     fontSize: 16,
-    color: "#183A36",
-    fontWeight: "bold",
-    textTransform: "uppercase",
-    textAlign: "center",
+    fontFamily: "NunitoBold",
   },
   gallerySection: {
     marginTop: 12,

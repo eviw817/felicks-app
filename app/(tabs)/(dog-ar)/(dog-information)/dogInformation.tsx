@@ -65,32 +65,28 @@ export default function DogInformation() {
   return (
     <SafeAreaView style={styles.safeArea}>
       <ScrollView contentContainerStyle={styles.scrollContent}>
-        <TouchableOpacity
-          onPress={() => router.push(`/dogName?petId=${petId}`)}
-          style={{
-            position: "absolute",
-            top: 68,
-            left: 20,
-            zIndex: 10,
-          }}
-        >
-          <FontAwesomeIcon icon={faArrowLeft} size={30} color="#183A36" />
-        </TouchableOpacity>
 
         <View style={styles.content}>
           {loading && <Text style={styles.loadingText}>Laden...</Text>}
-
-          {fetchError ? (
-            <Text style={styles.errorText}>
-              Fout bij laden naam: {fetchError}
-            </Text>
-          ) : (
-            !loading && (
-              <Text style={styles.title}>
-                Tijd om voor {dogName || "nog geen naam"} te zorgen!
-              </Text>
-            )
-          )}
+  {fetchError ? (
+    <Text style={styles.errorText}>
+      Fout bij laden naam: {fetchError}
+    </Text>
+  ) : (
+    !loading && (
+      <View style={styles.headerRow}>
+        <TouchableOpacity
+          onPress={() => router.push(`/dogName?petId=${petId}`)}
+          style={styles.backButtonInline}
+        >
+          <FontAwesomeIcon icon={faArrowLeft} size={30} color="#183A36" />
+        </TouchableOpacity>
+        <Text style={styles.title}>
+          Tijd om voor {dogName || "nog geen naam"} te zorgen!
+        </Text>
+      </View>
+    )
+  )}
 
           <Text style={styles.description}>
             {dogName || "nog geen naam"} staat te trappelen om jouw nieuwe
@@ -157,10 +153,23 @@ const styles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: "#FFFDF9",
     paddingBottom: 140,
+    color: "#183A36",
   },
   scrollContent: {
     justifyContent: "flex-start",
   },
+  headerRow: {
+  flexDirection: 'row',
+  alignItems: 'center',
+  justifyContent: 'center',
+  marginBottom: 20,
+  paddingHorizontal: 20,
+},
+
+backButtonInline: {
+  marginRight: 10,
+},
+
   backButton: {
     position: "absolute",
     top: 68,
@@ -179,23 +188,26 @@ const styles = StyleSheet.create({
     color: "red",
   },
   title: {
-    fontFamily: "SireniaRegular",
-    fontSize: 24,
-    padding: 20,
-    paddingHorizontal: 80,
-    textAlign: "center",
+   fontSize: 28,
+        fontFamily: 'SireniaMedium',
+        textAlign: "center",
+        marginBottom: 20,
+        color: "#183A36",
+        marginTop: 20,
   },
   description: {
     fontFamily: "NunitoRegular",
     fontSize: 16,
     padding: 20,
     paddingBottom: 0,
+    color: "#183A36",
   },
   subtitle: {
     fontFamily: "NunitoBold",
     fontSize: 16,
     paddingBottom: 8,
     paddingLeft: 20,
+    color: "#183A36",
   },
   bold: {
     fontFamily: "NunitoBold",
@@ -221,6 +233,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     backgroundColor: "#97B8A5",
     fontFamily: "NunitoBold",
+    fontSize: 16,
     borderRadius: 15,
     textAlign: "center",
   },

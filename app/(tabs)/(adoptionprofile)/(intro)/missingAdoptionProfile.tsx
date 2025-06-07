@@ -11,19 +11,19 @@ import {
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import BaseText from "@/components/BaseText";
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
+import { faArrowLeft, faChevronRight } from "@fortawesome/free-solid-svg-icons";
 
 export default function MissingAdoptionProfile() {
   const router = useRouter();
 
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.headerRow}>
-        <TouchableOpacity onPress={() => router.back()} style={styles.back}>
-          <Ionicons name="arrow-back" size={24} color="#183A36" />
-        </TouchableOpacity>
-        <BaseText style={styles.title} variant="title">
-          Adoptie
-        </BaseText>
+      <View style={styles.header}>
+          <TouchableOpacity onPress={() => router.push("/adoptionChoice")} style={styles.backButton}>
+              <FontAwesomeIcon icon={faArrowLeft} size={30} color={'#183A36'} style={styles.backButton} />
+          </TouchableOpacity>
+          <BaseText style={styles.title}>Adoptieprofiel</BaseText>
       </View>
 
       <BaseText style={styles.text}>
@@ -34,7 +34,7 @@ export default function MissingAdoptionProfile() {
 
       <TouchableOpacity
         style={styles.button}
-        onPress={() => router.push("/adoptionChoice")}
+        onPress={() => router.push("/livingsituation")}
       >
         <BaseText style={styles.buttonText}>GA NAAR ADOPTIEPROFIEL</BaseText>
       </TouchableOpacity>
@@ -50,19 +50,25 @@ const styles = StyleSheet.create({
     paddingTop: Platform.OS === "ios" ? 60 : 40,
     justifyContent: "flex-start",
   },
-  headerRow: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    marginBottom: 24,
-  },
-  back: {
-    position: "absolute",
-    left: 0,
-  },
-  title: {
-    textAlign: "center",
-  },
+   header: {
+        flexDirection: "row",
+        alignItems: "center",
+        justifyContent: "center", 
+        width: "100%",
+        position: "relative", 
+        paddingVertical: 10,
+      },
+    title: {
+        fontSize: 28,
+        fontFamily: 'SireniaMedium',
+        textAlign: "center",
+        marginBottom: 20,
+    },
+    backButton: {
+      position: "absolute",
+      left: 5,
+      top:7,
+    },
   text: {
     fontSize: 16,
     color: "#183A36",
