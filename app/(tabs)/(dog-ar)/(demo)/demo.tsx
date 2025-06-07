@@ -121,7 +121,6 @@ const AugmentedDog: React.FC = () => {
     }
 
     if (cameFromArInfo) {
-      console.log("User came from arInformation screen");
       setShowOverlay(true); // show the alert overlay
     }
 

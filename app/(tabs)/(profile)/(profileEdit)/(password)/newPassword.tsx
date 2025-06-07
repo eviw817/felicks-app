@@ -29,9 +29,6 @@ const NewPasswordScreen = () => {
   useEffect(() => {
     const handleDeepLink = (event: { url: string }) => {
       const { url } = event;
-      // console.log("Deep link ontvangen:", url);
-  
-      // Verwerk de URL om zowel query als fragment parameters te verkrijgen
       const parsedUrl = new URL(url);
       const queryParams = new URLSearchParams(parsedUrl.search);
       const fragmentParams = new URLSearchParams(parsedUrl.hash.replace('#', ''));
@@ -40,17 +37,11 @@ const NewPasswordScreen = () => {
       const refreshToken = queryParams.get('refresh_token') || fragmentParams.get('refresh_token');
   
       if (accessToken) {
-        // console.log("Access token ontvangen:", accessToken);
-  
-        // Sla het token op in SecureStore
         SecureStore.setItemAsync('access_token', accessToken).then(() => {
-          // console.log("Access token opgeslagen!");
-          router.push('/newPassword'); // Navigeer naar de juiste pagina
+          router.push('/newPassword'); 
         }).catch(error => {
           console.log("Fout bij het opslaan van de token:", error);
         });
-      } else {
-        console.log("Geen access_token gevonden in deeplink.");
       }
     };
   

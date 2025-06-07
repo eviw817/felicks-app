@@ -35,7 +35,6 @@ export default function NavBar() {
         } = await supabase.auth.getSession();
 
         if (sessionError || !session?.user?.id) {
-          console.log("No valid session found", sessionError);
           setDogId(null);
           return;
         }

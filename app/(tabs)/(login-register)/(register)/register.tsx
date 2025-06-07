@@ -157,7 +157,6 @@ export default function Registeren() {
       password: password,
     });
     if (error) {
-      console.log("Error signing up:", error);
       Alert.alert(
         "Fout",
         "Er is een fout opgetreden bij het registreren. Probeer het opnieuw."
@@ -165,7 +164,6 @@ export default function Registeren() {
       setLoading(false);
       return;
     }
-    console.log("Sign-up successful, session:", session);
 
     if (!session) {
       Alert.alert("Check uw email voor verificatie");
@@ -218,8 +216,6 @@ export default function Registeren() {
       setMonth("01");
       setYear("2000");
 
-      // Redirect to adoptionProfileStart page
-      console.log("Router naar adoptionIntro");
       router.push("/adoptionBreed");
     }
 

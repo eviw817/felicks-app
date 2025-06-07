@@ -49,14 +49,12 @@ const ProbleemScreen = () => {
           ]);
       
         if (error) {
-          console.log("Supabase error:", error); 
           throw error;
         }
       
         setProbleem("");
         router.push("/sendProblem");
-      } catch (error) {
-        console.log("Error message:", error);  
+      } catch (error) { 
         Alert.alert("Fout", "Er is een fout opgetreden bij het verzenden van het probleem.");
       } finally {
         setLoading(false);

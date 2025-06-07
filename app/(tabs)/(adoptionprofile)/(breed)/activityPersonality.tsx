@@ -49,7 +49,6 @@ export default function ActivityPersonality() {
         .single();
 
       if (data) {
-        console.log("✅ Profiel geladen:", data);
         setAnswers({
           activity: data.activity_level || "",
           personality: data.personality || "",
@@ -68,7 +67,6 @@ export default function ActivityPersonality() {
   ) => {
     const newAnswers = { ...answers, [question]: value };
     setAnswers(newAnswers);
-    console.log("🔄 Antwoord bijgewerkt:", newAnswers);
 
     if (!userId) return;
 
@@ -84,8 +82,6 @@ export default function ActivityPersonality() {
         onConflict: "user_id",
       });
 
-    if (error) console.error("❌ Fout bij opslaan in DB:", error.message);
-    else console.log("✅ Antwoorden opgeslagen in DB:", payload);
   };
 
   const canNext = answers.activity !== "" && answers.personality !== "";

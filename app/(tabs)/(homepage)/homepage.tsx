@@ -45,7 +45,6 @@ export default function HomepageScreen() {
 
   // ─── Functie: (opnieuw) tellen ongelezen meldingen
   const fetchUnreadNotifications = useCallback(async () => {
-    console.log("[Homepage] fetchUnreadNotifications() start");
     const {
       data: { user },
     } = await supabase.auth.getUser();
@@ -77,7 +76,6 @@ export default function HomepageScreen() {
       setUnreadCount(0);
       return;
     }
-    console.log("[Homepage] ongelezen teller:", data.length);
     setUnreadCount(data.length);
   }, []); // Dependencies for useCallback: ensure they are stable or listed if they change
 

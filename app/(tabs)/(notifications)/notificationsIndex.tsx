@@ -80,8 +80,6 @@ export default function NotificationsScreen() {
         return;
       }
 
-      console.log("AR-hond (uit ar_dog) opgehaald:", arDog);
-
       setDogName(arDog.name);
       setDogId(arDog.id);
 
@@ -113,7 +111,6 @@ export default function NotificationsScreen() {
 
 
           if (notif.category === "adoption_status") {
-            console.log("Bezig met adoptie-notificatie:", notif);
 
             const { data: rows, error: viewError } = await supabase
               .from("requests_with_user_and_dog")
@@ -122,22 +119,10 @@ export default function NotificationsScreen() {
               .order("created_at", { ascending: false })
               .limit(1);
 
-            if (viewError) {
-              console.warn("Fout bij ophalen adoptiedata uit view:", viewError);
-            } else {
-              console.log(
-                "Resultaat van requests_with_user_and_dog voor adoptie:",
-                rows
-              );
-            }
-
             if (rows && rows.length > 0) {
               const arr = rows[0].images;
               if (Array.isArray(arr) && arr.length > 0) {
                 const rawPath = arr[0];
-                // Log welke rawPath we vinden
-                console.log("Eerste rawPath uit images-array:", rawPath);
-
                 if (
                   rawPath.startsWith("http://") ||
                   rawPath.startsWith("https://")
@@ -146,12 +131,6 @@ export default function NotificationsScreen() {
                 } else {
                   posterImage = `${STORAGE_PUBLIC_BASE}/${rawPath}`;
                 }
-
-                console.log("Uiteindelijke posterImage URL voor adoptie:", posterImage);
-              } else {
-                console.log(
-                  "Geen afbeeldingen gevonden in rows[0].images voor adoptie"
-                );
               }
             }
           }
@@ -188,11 +167,6 @@ export default function NotificationsScreen() {
                 "{name}",
                 arDog.name
               );
-
-
-              if (newNotif.category === "adoption_status") {
-                console.log("Nieuwe adoptie-notificatie binnengekomen:", newNotif);
-              }
 
               const toAdd: Notification = {
                 ...newNotif,

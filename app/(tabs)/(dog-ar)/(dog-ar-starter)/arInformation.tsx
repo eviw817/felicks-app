@@ -40,7 +40,6 @@ export default function DogInformation() {
   }
 
   React.useEffect(() => {
-    console.log("DogInformation petId:", petId); // Debug
 
     if (petId && typeof petId === "string" && petId.length > 0) {
       const fetchDogData = async () => {
@@ -53,10 +52,8 @@ export default function DogInformation() {
           .eq("id", petId)
           .single();
 
-        console.log("Supabase fetch result:", { data, error }); // Debug
 
         if (error) {
-          console.log("Error fetching dog data:", error.message);
           setFetchError(error.message);
           setDogName("");
           setDogBreed("");

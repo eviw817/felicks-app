@@ -118,10 +118,8 @@ const ProfileEditScreen = () => {
         return;
       }
 
-      // Update e-mail in Supabase Auth
       if (email !== session?.user.email) {
 
-        // console.log("Updating email:", cleanEmail);
         try {
             const { data, error } = await supabase.auth.updateUser({
               email: cleanEmail,
@@ -170,7 +168,6 @@ const ProfileEditScreen = () => {
         if (error) {
           console.error("Error fetching avatar:", error.message);
         } else {
-          //console.log("Fetched Avatar URL:", data?.avatar_url); 
           setAvatarUrl(data?.avatar_url);
         }
       }

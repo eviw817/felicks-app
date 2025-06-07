@@ -11,7 +11,6 @@ const DeleteScreen = () => {
     const [loading, setLoading] = useState(false);
 
     const handleDeleteAccount = async () => {
-        console.log("Verwijder account aangeroepen");
 
         try {
             setLoading(true);
@@ -39,7 +38,6 @@ const DeleteScreen = () => {
             }
 
             const responseBody = response.data;
-            console.log("Response body:", responseBody);
 
             // Controleer of de aanroep succesvol was
             if (responseBody?.message === 'User deleted successfully') {
@@ -52,7 +50,6 @@ const DeleteScreen = () => {
                 Alert.alert("Fout", "Er is iets misgegaan bij het verwijderen van je account.");
             }
         } catch (error) {
-            console.log("Fout bij verwijderen:", error);
             Alert.alert("Fout", "Er is iets misgegaan.");
         } finally {
             setLoading(false);

@@ -35,7 +35,6 @@ const EditPetScreen = () => {
     } = await supabase.auth.getUser();
 
     if (userError || !user) {
-      console.log("Error fetching user:", userError?.message);
       return;
     }
 
@@ -46,7 +45,6 @@ const EditPetScreen = () => {
       .single();
 
     if (error) {
-      console.log("Error fetching dog data:", error.message);
       return;
     }
 
@@ -66,9 +64,6 @@ const EditPetScreen = () => {
   const handleContinuePress = async () => {
     if (!dogName.trim()) return;
 
-    console.log("Entered name:", dogName);
-    console.log("Updating pet with ID:", petId);
-
     if (!petId || typeof petId !== "string") {
       Alert.alert("Fout", "Pet ID ontbreekt of is ongeldig.");
       return;
@@ -80,12 +75,9 @@ const EditPetScreen = () => {
       .eq("id", petId);
 
     if (error) {
-      console.log("Update error:", error.message);
       Alert.alert("Fout", "Naam kon niet opgeslagen worden.");
       return;
     }
-
-    console.log("Name update successful!");
     router.push(`/dogInformation?petId=${petId}`);
   };
 

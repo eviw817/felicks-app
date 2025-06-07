@@ -51,7 +51,6 @@ export default function UserPermissions() {
   }
 
   React.useEffect(() => {
-    console.log("DogInformation petId:", petId); // <-- Debug: log petId here
 
     if (petId && typeof petId === "string" && petId.length > 0) {
       const fetchDogName = async () => {
@@ -64,10 +63,7 @@ export default function UserPermissions() {
           .eq("id", petId)
           .single();
 
-        console.log("Supabase fetch result:", { data, error }); // <-- Debug: log result
-
         if (error) {
-          console.log("Error fetching dog name:", error.message);
           setFetchError(error.message);
           setDogName("");
         } else {

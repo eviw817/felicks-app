@@ -19,7 +19,6 @@ const NotficationEmailScreen = () => {
   useEffect(() => {
     const handleDeepLink = async (event: { url: string }) => {
       const { url } = event;
-      // console.log("Gevangen URL:", url); // Dit helpt je te debuggen
       if (url) {
         try {
           const parsedUrl = new URL(url);

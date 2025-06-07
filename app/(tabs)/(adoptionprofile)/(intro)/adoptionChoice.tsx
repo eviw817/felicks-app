@@ -40,7 +40,6 @@ export default function AdoptionChoice() {
         } = await supabase.auth.getSession();
 
         if (sessionError || !session?.user?.id) {
-          console.log("No valid session found", sessionError);
           setIsPersonalityProfileComplete(false);
           return;
         }
@@ -52,7 +51,6 @@ export default function AdoptionChoice() {
           .single();
 
         if (error || !data) {
-          console.log("No adoption_dog_preferences row found", error);
           setIsPersonalityProfileComplete(false);
           return;
         }
@@ -76,7 +74,6 @@ export default function AdoptionChoice() {
         } = await supabase.auth.getSession();
 
         if (sessionError || !session?.user?.id) {
-          console.log("No valid session found", sessionError);
           return;
         }
 

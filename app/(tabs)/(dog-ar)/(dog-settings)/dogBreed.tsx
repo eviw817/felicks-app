@@ -41,7 +41,6 @@ export default function DogBreed() {
     } = await supabase.auth.getUser();
 
     if (userError || !user) {
-      console.log("User fetch error:", userError);
       Alert.alert("Fout", "Kon gebruiker niet ophalen.");
       return;
     }
@@ -54,7 +53,6 @@ export default function DogBreed() {
         .single();
 
       if (fetchError && fetchError.code !== "PGRST116") {
-        console.log("Fetch existing dog error:", fetchError);
         Alert.alert("Fout", "Kon hond niet ophalen.");
         return;
       }
@@ -70,7 +68,6 @@ export default function DogBreed() {
           .single();
 
         if (error) {
-          console.log("Update error:", error);
           Alert.alert("Kon hond niet bijwerken", error.message);
           return;
         }
@@ -84,7 +81,6 @@ export default function DogBreed() {
           .single();
 
         if (error) {
-          console.log("Insert error:", error);
           Alert.alert("Kon hond niet opslaan", error.message);
           return;
         }

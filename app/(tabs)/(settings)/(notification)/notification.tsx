@@ -28,7 +28,6 @@ const NotificatiesScreen = () => {
     }
 
     const userId = session.user.id;
-    console.log("User ID:", userId);
 
     // Haal de gebruikersinstellingen op uit Supabase
     const { data, error } = await supabase
@@ -38,11 +37,8 @@ const NotificatiesScreen = () => {
         .single(); // We verwachten maar 1 rij terug te krijgen
 
     if (error && error.code === 'PGRST116') {
-        // Geen instellingen gevonden, maak standaardinstellingen aan
-        console.log("Geen instellingen gevonden, standaardinstellingen aanmaken");
         await createDefaultSettings(userId);
     } else if (error) {
-        console.log("Fout bij het ophalen van instellingen:", error);
         Alert.alert("Fout", "Er is een probleem opgetreden bij het ophalen van je instellingen.");
     } else {
         // Stel de voorkeuren in op basis van de gegevens
@@ -60,11 +56,10 @@ const createDefaultSettings = async (userId: string) => {
             .from('user_settings')
             .select("*")
             .eq('user_id', userId)
-            .single(); // Gebruik .single() om ervoor te zorgen dat je slechts één rij terugkrijgt
+            .single();
 
         if (data) {
-            console.log("Instellingen bestaan al voor deze gebruiker.");
-            return; // Geen actie nodig als de instellingen al bestaan
+            return;
         }
 
         // Voeg standaardinstellingen toe als ze niet bestaan
@@ -79,16 +74,11 @@ const createDefaultSettings = async (userId: string) => {
             }]);
 
         if (createError) {
-            // Log de fout bij het aanmaken van de standaardinstellingen
-            console.log("Fout bij het aanmaken van standaardinstellingen:", createError.message);
             Alert.alert("Fout", `Er is een probleem opgetreden bij het aanmaken van standaardinstellingen: ${createError.message}`);
         } else {
-            console.log('Standaardinstellingen aangemaakt:', newData); // Log de gegevens die zijn aangemaakt
-            fetchUserSettings();  // Haal instellingen op na het aanmaken
+            fetchUserSettings();
         }
     } catch (error) {
-        // Log de fout die optreedt bij het uitvoeren van de functie
-        console.log("Fout bij het aanmaken van standaardinstellingen:", error);
         Alert.alert("Fout", "Er is een probleem opgetreden bij het aanmaken van standaardinstellingen.");
     }
 };
@@ -122,10 +112,7 @@ const saveUserSettings = async () => {
     if (error) {
         Alert.alert("Fout", "Er is een probleem opgetreden bij het opslaan van de instellingen.");
     } else {
-        console.log('Instellingen opgeslagen:', data);
         Alert.alert("Instellingen opgeslagen", "Je voorkeuren zijn succesvol opgeslagen.");
-
-        // Haal de bijgewerkte instellingen op
         fetchUserSettings();
     }
 };

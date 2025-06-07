@@ -50,7 +50,6 @@ export default function DogDetail() {
         .eq("id", id)
         .single();
 
-      console.log("🐶 Gevonden hond:", data);
       setDog(data);
     })();
   }, [id]);
@@ -61,7 +60,6 @@ export default function DogDetail() {
   try {
     imageList =
       typeof dog.images === "string" ? JSON.parse(dog.images) : dog.images;
-    console.log("📷 ImageList:", imageList);
   } catch (e) {
     console.error("❌ Fout bij parsen van images:", e);
   }

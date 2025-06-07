@@ -44,7 +44,6 @@ export default function DogName() {
           .single();
 
         if (error) {
-          console.log("Error fetching dog data:", error.message);
           return;
         }
 
@@ -71,7 +70,6 @@ export default function DogName() {
       .eq("id", petId);
 
     if (error) {
-      console.log("Update error:", error.message);
       Alert.alert("Fout", "Naam kon niet opgeslagen worden.");
       return;
     }
