@@ -17,6 +17,7 @@ import { useRouter, Link } from "expo-router";
 import { Picker } from "@react-native-picker/picker";
 import { AppStateStatus } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
+import { useFonts } from "expo-font";
 import BaseText from "@/components/BaseText";
 
 // Tells Supabase Auth to continuously refresh the session automatically if
@@ -32,6 +33,13 @@ AppState.addEventListener("change", (state) => {
 });
 
 export default function Registeren() {
+  const [fontsLoaded] = useFonts({
+    NunitoRegular: require("@/assets/fonts/Nunito/NunitoRegular.ttf"),
+    NunitoSemiBold: require("@/assets/fonts/Nunito/NunitoSemiBold.ttf"),
+    NunitoBold: require("@/assets/fonts/Nunito/NunitoBold.ttf"),
+    SireniaMedium: require("@/assets/fonts/Sirenia/SireniaMedium.ttf"),
+  });
+
   const [session, setSession] = useState<Session | null>(null);
   const router = useRouter();
   const [firstnameFocus, setFirstnameFocus] = useState(false);
@@ -216,6 +224,10 @@ export default function Registeren() {
     }
 
     setLoading(false);
+  }
+
+  if (!fontsLoaded) {
+    return <View />;
   }
 
   return (
@@ -408,7 +420,7 @@ const styles = StyleSheet.create({
   },
   text: {
     fontSize: 20,
-    fontWeight: "bold",
+    fontFamily: "NunitoBold",
   },
   datePickerContainer: {
     flexDirection: "row",
@@ -438,7 +450,7 @@ const styles = StyleSheet.create({
   buttonText: {
     color: "#183A36",
     fontSize: 16,
-    fontWeight: "bold",
+    fontFamily: "NunitoBold",
   },
   label: {
     alignSelf: "flex-start",
@@ -446,6 +458,7 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     color: "#183A36",
     marginBottom: 5,
+    fontFamily: "NunitoBold",
   },
   input: {
     width: "100%",
@@ -480,9 +493,10 @@ const styles = StyleSheet.create({
     color: "#183A36",
     alignSelf: "center",
     textAlign: "center",
+    fontFamily: "NunitoRegular",
   },
   registerLink: {
-    fontWeight: "bold",
+    fontFamily: "NunitoBold",
     alignSelf: "center",
     textAlign: "center",
   },

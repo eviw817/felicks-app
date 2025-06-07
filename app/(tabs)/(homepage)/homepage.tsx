@@ -26,7 +26,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faEnvelopeOpen } from "@fortawesome/free-solid-svg-icons";
 
 export default function HomepageScreen() {
-  // --- ALL HOOKS MUST BE AT THE TOP ---
   const [fontsLoaded] = useFonts({
     NunitoRegular: require("@/assets/fonts/Nunito/NunitoRegular.ttf"),
     NunitoSemiBold: require("@/assets/fonts/Nunito/NunitoSemiBold.ttf"),

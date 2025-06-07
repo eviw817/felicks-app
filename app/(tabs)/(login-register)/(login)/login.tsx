@@ -13,9 +13,17 @@ import { supabase } from "../../../../lib/supabase";
 import { AppStateStatus } from "react-native";
 import { Session } from "@supabase/supabase-js";
 import { Ionicons } from "@expo/vector-icons";
+import { useFonts } from "expo-font";
 import BaseText from "@/components/BaseText";
 
 const LoginScreen = () => {
+  const [fontsLoaded] = useFonts({
+    NunitoRegular: require("@/assets/fonts/Nunito/NunitoRegular.ttf"),
+    NunitoSemiBold: require("@/assets/fonts/Nunito/NunitoSemiBold.ttf"),
+    NunitoBold: require("@/assets/fonts/Nunito/NunitoBold.ttf"),
+    SireniaMedium: require("@/assets/fonts/Sirenia/SireniaMedium.ttf"),
+  });
+
   const router = useRouter();
   const [emailFocus, setEmailFocus] = useState(false);
   const [passwordFocus, setPasswordFocus] = useState(false);
@@ -106,6 +114,10 @@ const LoginScreen = () => {
 
     router.push("/homepage");
     setLoading(false);
+  }
+
+  if (!fontsLoaded) {
+    return <View />;
   }
 
   return (
@@ -218,12 +230,12 @@ const styles = StyleSheet.create({
   buttonText: {
     color: "#183A36",
     fontSize: 16,
-    fontWeight: "bold",
+    fontFamily: "NunitoBold",
   },
   label: {
     alignSelf: "flex-start",
     fontSize: 16,
-    fontWeight: "600",
+    fontFamily: "NunitoBold",
     color: "#183A36",
     marginBottom: 5,
   },
@@ -249,6 +261,7 @@ const styles = StyleSheet.create({
     color: "#183A36",
     fontSize: 14,
     marginBottom: 5,
+    fontFamily: "NunitoRegular",
   },
   forgotPasswordContainer: {
     width: "100%",
@@ -258,9 +271,10 @@ const styles = StyleSheet.create({
   registerText: {
     fontSize: 14,
     color: "#183A36",
+    fontFamily: "NunitoRegular",
   },
   registerLink: {
-    fontWeight: "bold",
+    fontFamily: "NunitoBold",
   },
   passwordContainer: {
     width: "100%",

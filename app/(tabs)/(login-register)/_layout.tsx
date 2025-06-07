@@ -1,4 +1,4 @@
-import { Stack } from 'expo-router';
+import { Stack } from "expo-router";
 
 export default function PasswordLayout() {
   return (
@@ -6,14 +6,18 @@ export default function PasswordLayout() {
       screenOptions={{
         headerShown: false,
         headerStyle: {
-          backgroundColor: '#f4511e',
+          backgroundColor: "#f4511e",
         },
-        headerTintColor: '#fff',
+        headerTintColor: "#fff",
         headerTitleStyle: {
-          fontWeight: 'bold',
+          fontWeight: "bold",
         },
-      }}>
-      <Stack.Screen name="loginRegister" options={{ title: "Login or Register" }} />
+      }}
+    >
+      <Stack.Screen
+        name="loginRegister"
+        options={{ title: "Login or Register" }}
+      />
     </Stack>
   );
 }

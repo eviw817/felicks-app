@@ -12,8 +12,16 @@ import { supabase } from "@/lib/supabase";
 import BaseText from "@/components/BaseText";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
+import { useFonts } from "expo-font";
 
 const ForgetPasswordScreen = () => {
+  const [fontsLoaded] = useFonts({
+    NunitoRegular: require("@/assets/fonts/Nunito/NunitoRegular.ttf"),
+    NunitoSemiBold: require("@/assets/fonts/Nunito/NunitoSemiBold.ttf"),
+    NunitoBold: require("@/assets/fonts/Nunito/NunitoBold.ttf"),
+    SireniaMedium: require("@/assets/fonts/Sirenia/SireniaMedium.ttf"),
+  });
+
   const router = useRouter();
   const [emailFocus, setEmailFocus] = useState(false);
   const [email, setEmail] = useState("");
@@ -42,6 +50,10 @@ const ForgetPasswordScreen = () => {
 
     setLoading(false);
   };
+
+  if (!fontsLoaded) {
+    return <View />;
+  }
 
   return (
     <View style={styles.container}>
@@ -95,10 +107,12 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 28,
-    fontFamily: 'SireniaMedium',
-    color: '#183A36',
+    fontFamily: "SireniaMedium",
+    color: "#183A36",
     marginBottom: 60,
     textAlign: "center",
+    paddingHorizontal: 40,
+    marginTop: -15,
   },
   text: {
     fontSize: 20,
@@ -119,12 +133,12 @@ const styles = StyleSheet.create({
   buttonText: {
     color: "#183A36",
     fontSize: 16,
-    fontWeight: "bold",
+    fontFamily: "NunitoBold",
   },
   label: {
     alignSelf: "flex-start",
     fontSize: 16,
-    fontWeight: "600",
+    fontFamily: "NunitoBold",
     color: "#183A36",
     marginBottom: 5,
   },

@@ -8,9 +8,21 @@ import {
   Image,
   SafeAreaView,
 } from "react-native";
+import { useFonts } from "expo-font";
 
 function LoginRegisterScreen() {
   const router = useRouter();
+
+  const [fontsLoaded] = useFonts({
+    NunitoRegular: require("@/assets/fonts/Nunito/NunitoRegular.ttf"),
+    NunitoSemiBold: require("@/assets/fonts/Nunito/NunitoSemiBold.ttf"),
+    NunitoBold: require("@/assets/fonts/Nunito/NunitoBold.ttf"),
+    SireniaMedium: require("@/assets/fonts/Sirenia/SireniaMedium.ttf"),
+  });
+
+  if (!fontsLoaded) {
+    return <View />;
+  }
 
   return (
     <SafeAreaView style={styles.container}>
@@ -18,7 +30,7 @@ function LoginRegisterScreen() {
         source={require("@/assets/images/logo_felicks.png")}
         style={styles.logo}
       />
-      <Text style={styles.title} className="semibold">
+      <Text style={styles.title}>
         Welkom bij Felicks!
       </Text>
       <Text style={styles.subtitle}>
@@ -51,17 +63,19 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 18,
-    fontWeight: "bold",
     color: "#183A36",
     marginBottom: 10,
     textAlign: "center",
+    fontFamily: "NunitoBold",
+    paddingHorizontal: 30,
   },
   subtitle: {
     fontSize: 16,
     textAlign: "center",
     color: "#183A36",
     marginBottom: 50,
-    paddingHorizontal: 30,
+    paddingHorizontal: 10,
+    fontFamily: "NunitoRegular",
   },
   button: {
     backgroundColor: "#97B8A5",
@@ -77,7 +91,7 @@ const styles = StyleSheet.create({
   buttonText: {
     color: "#183A36",
     fontSize: 16,
-    fontWeight: "bold",
+    fontFamily: "NunitoBold",
     textTransform: "uppercase",
     textAlign: "center",
   },
