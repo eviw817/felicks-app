@@ -12,6 +12,8 @@ import { useRouter } from "expo-router";
 import { supabase } from "@/lib/supabase";
 import { Ionicons } from "@expo/vector-icons";
 import BaseText from "@/components/BaseText";
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
+import { faArrowLeft, faChevronRight } from "@fortawesome/free-solid-svg-icons";
 
 const RadioButton: React.FC<{ selected: boolean }> = ({ selected }) => (
   <View style={styles.radioOuter}>
@@ -82,42 +84,37 @@ export default function GroomingCoat() {
 
   const groomingOptions = [
     {
-      label: "Zo weinig mogelijk – ik hou het graag praktisch",
+      label: "Liever zo stil mogelijk",
       value: "minimal",
     },
-    { label: "Af en toe borstelen? Dat hoort erbij", value: "occasional" },
-    { label: "Dagelijks borstelen is voor mij qualitytime", value: "daily" },
+    { label: "Een beetje blaffen hoort erbij", value: "occasional" },
+    { label: "Een praatgrage hond is geen probleem", value: "daily" },
   ];
 
   const sheddingOptions = [
-    { label: "Ik hou m’n huis graag netjes en haarvrij", value: "no_hair" },
+    { label: "Heel belangrijk – ik wil een hond die snel leert en goed luistert", value: "no_hair" },
     {
-      label: "Een beetje haar? Daar lig ik niet van wakker",
+      label: "Belangrijk, maar het hoeft geen perfect gehoorzame hond te zijn",
       value: "some_hair",
     },
-    { label: "Ik accepteer dat het erbij hoort", value: "accept_hair" },
+    { label: "Niet zo belangrijk – ik heb geduld en waardeer een zelfstandige hond", value: "accept_hair" },
   ];
 
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.headerContainer}>
-        <TouchableOpacity
-          style={styles.backButton}
-          onPress={() => router.back()}
-        >
-          <Ionicons name="arrow-back" size={24} color="#183A36" />
-        </TouchableOpacity>
-        <BaseText style={styles.headerTitle} variant="title">
-          Verzorging & vacht
-        </BaseText>
-      </View>
+        <View style={styles.header}>
+            <TouchableOpacity onPress={() => router.push("/groomingCoat")} style={styles.backButton}>
+                <FontAwesomeIcon icon={faArrowLeft} size={30} color={'#183A36'} style={styles.backButton} />
+            </TouchableOpacity>
+            <BaseText style={styles.title}>Geluid & gedrag</BaseText>
+        </View>
 
       <View style={styles.progressBar}>
         <View style={styles.progressFill6} />
       </View>
 
       <BaseText style={styles.question}>
-        Hoeveel verzorging wil je geven?
+        Hoeveel mag je hond blaffen?
       </BaseText>
       {groomingOptions.map((opt) => (
         <TouchableOpacity
@@ -131,7 +128,7 @@ export default function GroomingCoat() {
       ))}
 
       <BaseText style={[styles.question, { marginTop: 32 }]}>
-        Wat vind je van hondenhaar in huis?
+        Hoe belangrijk is training voor jou?
       </BaseText>
       {sheddingOptions.map((opt) => (
         <TouchableOpacity
@@ -146,7 +143,7 @@ export default function GroomingCoat() {
 
       <TouchableOpacity
         style={[styles.button, !canNext && styles.buttonDisabled]}
-        onPress={() => router.push("/adoptionProfileResults")}
+        onPress={() => router.push("/groomingCoat")}
         disabled={!canNext}
       >
         <BaseText style={styles.buttonText}>VOLGENDE</BaseText>
@@ -162,24 +159,27 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingTop: Platform.OS === "ios" ? 20 : 50,
   },
-  headerContainer: {
-    position: "relative",
-    justifyContent: "center",
-    alignItems: "center",
-    height: 40,
-    marginBottom: 16,
-  },
-  headerTitle: {
-    textAlign: "center",
-  },
-  backButton: {
-    position: "absolute",
-    left: 0,
-    top: 0,
-    bottom: 0,
-    justifyContent: "center",
-    paddingHorizontal: 8,
-  },
+ header: {
+        flexDirection: "row",
+        alignItems: "center",
+        justifyContent: "center", 
+        width: "100%",
+        position: "relative", 
+        paddingVertical: 10,
+      },
+    title: {
+        fontSize: 28,
+        fontFamily: 'SireniaMedium',
+        textAlign: "center",
+        marginBottom: 20,
+        marginLeft: 25,
+    },
+    backButton: {
+      position: "absolute",
+      left: 5,
+      top:7,
+      
+    },
   progressBar: {
     width: "100%",
     height: 6,
@@ -197,8 +197,8 @@ const styles = StyleSheet.create({
     borderBottomRightRadius: 3,
   },
   question: {
-    fontFamily: "Nunito-Bold",
     fontSize: 18,
+    fontFamily: "NunitoBold",
     color: "#183A36",
     marginBottom: 8,
   },
@@ -224,8 +224,8 @@ const styles = StyleSheet.create({
     backgroundColor: "#97B8A5",
   },
   answerText: {
-    fontFamily: "Nunito-Regular",
     fontSize: 16,
+    fontFamily: "NunitoRegular",
     color: "#183A36",
     flex: 1,
   },
@@ -238,8 +238,8 @@ const styles = StyleSheet.create({
   },
   buttonDisabled: { opacity: 0.5 },
   buttonText: {
-    fontFamily: "Nunito-Bold",
     fontSize: 16,
+    fontFamily: "NunitoBold",
     color: "#183A36",
   },
 });

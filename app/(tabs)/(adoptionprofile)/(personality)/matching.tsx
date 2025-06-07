@@ -16,6 +16,8 @@ import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import { supabase } from "@/lib/supabase";
 import BaseText from "@/components/BaseText";
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
+import { faArrowLeft, faChevronRight } from "@fortawesome/free-solid-svg-icons";
 
 interface Dog {
   id: string;
@@ -162,15 +164,12 @@ export default function Matching() {
 
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.headerRow}>
-        <TouchableOpacity style={styles.back} onPress={() => router.back()}>
-          <Ionicons name="arrow-back" size={24} color="#183A36" />
-        </TouchableOpacity>
-        {/* Use BaseText component for title */}
-        <BaseText variant="title" style={styles.title}>
-          Jouw matches
-        </BaseText>
-      </View>
+      <View style={styles.header}>
+                <TouchableOpacity onPress={() => router.push("/adoptionChoice")} style={styles.backButton}>
+                    <FontAwesomeIcon icon={faArrowLeft} size={30} color={'#183A36'} style={styles.backButton} />
+                </TouchableOpacity>
+                <BaseText style={styles.title}>Topmatches </BaseText>
+            </View>
 
       {matches.length === 0 ? (
         <BaseText style={styles.noMatches}>
@@ -229,21 +228,25 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingTop: Platform.OS === "ios" ? 20 : 50,
   },
-  headerRow: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    marginBottom: 16,
-  },
-  back: {
-    position: "absolute",
-    left: 0,
-  },
-  title: {
-    fontSize: 22,
-    fontFamily: "Sirenia-Regular",
-    color: "#183A36",
-  },
+  header: {
+        flexDirection: "row",
+        alignItems: "center",
+        justifyContent: "center", 
+        width: "100%",
+        position: "relative", 
+        paddingVertical: 10,
+      },
+    title: {
+        fontSize: 28,
+        fontFamily: 'SireniaMedium',
+        textAlign: "center",
+        marginBottom: 20,
+    },
+    backButton: {
+      position: "absolute",
+      left: 5,
+      top:7,
+    },
   noMatches: {
     fontSize: 16,
     textAlign: "center",

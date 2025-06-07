@@ -106,8 +106,9 @@ export default function DogInformation() {
         >
           <Text
             style={{
-              fontFamily: "SireniaRegular",
-              fontSize: 24,
+              color: "#183A36",
+              fontSize: 28,
+              fontFamily: 'SireniaMedium',
               padding: 20,
               textAlign: "center",
             }}
@@ -121,6 +122,7 @@ export default function DogInformation() {
               paddingTop: 20,
               paddingLeft: 20,
               marginRight: 30,
+              color: "#183A36",
             }}
           >
             Jouw {dogBreed || "hond"} in een notendop:
@@ -131,6 +133,7 @@ export default function DogInformation() {
               fontSize: 16,
               paddingTop: 0,
               paddingLeft: 20,
+              color: "#183A36",
             }}
           >
             Karakter
@@ -142,6 +145,7 @@ export default function DogInformation() {
               padding: 20,
               paddingTop: 8,
               paddingRight: 30,
+              color: "#183A36",
             }}
           >
             {capitalizeFirstLetter(dogBreed || "hond")} zijn vriendelijk,
@@ -155,6 +159,7 @@ export default function DogInformation() {
               fontSize: 16,
               paddingTop: 0,
               paddingLeft: 20,
+              color: "#183A36",
             }}
           >
             Aandachtspunten:
@@ -171,6 +176,7 @@ export default function DogInformation() {
                 fontSize: 24,
                 paddingRight: 8,
                 lineHeight: 30,
+                color: "#183A36",
               }}
             >
               •
@@ -181,6 +187,7 @@ export default function DogInformation() {
                 fontSize: 16,
                 paddingRight: 40,
                 lineHeight: 28,
+                color: "#183A36",
               }}
             >
               Ze houden van eten… misschien iets té veel. Let op hun gewicht!
@@ -198,6 +205,7 @@ export default function DogInformation() {
                 fontSize: 24,
                 paddingRight: 8,
                 lineHeight: 30,
+                color: "#183A36",
               }}
             >
               •
@@ -208,6 +216,7 @@ export default function DogInformation() {
                 fontSize: 16,
                 paddingRight: 20,
                 lineHeight: 28,
+                color: "#183A36",
               }}
             >
               Bewegen is een must: minstens 30–60 minuten per dag.
@@ -225,6 +234,7 @@ export default function DogInformation() {
                 fontSize: 24,
                 paddingRight: 8,
                 lineHeight: 30,
+                color: "#183A36",
               }}
             >
               •
@@ -235,6 +245,7 @@ export default function DogInformation() {
                 fontSize: 16,
                 paddingRight: 40,
                 lineHeight: 28,
+                color: "#183A36",
               }}
             >
               Nieuwsgierig als ze zijn, snuffelen ze graag, zelfs in de
@@ -248,6 +259,7 @@ export default function DogInformation() {
               fontSize: 16,
               padding: 20,
               paddingRight: 30,
+              color: "#183A36",
             }}
           >
             Een {dogBreed || "hond"} is de ideale gezinshond voor actieve
@@ -262,7 +274,8 @@ export default function DogInformation() {
               paddingHorizontal: 20,
               marginRight: 46,
               backgroundColor: "#97B8A5",
-              fontFamily: "NunitoBold",
+                fontFamily: "NunitoBold",
+            fontSize: 16,
               borderRadius: 15,
               textAlign: "center",
             }}

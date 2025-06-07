@@ -15,6 +15,8 @@ import { useRouter } from "expo-router";
 import { supabase } from "@/lib/supabase";
 import BaseText from "@/components/BaseText";
 import { useFonts } from "expo-font";
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
+import { faArrowLeft, faChevronRight } from "@fortawesome/free-solid-svg-icons";
 
 interface Prefs {
   living_situation: string;
@@ -227,7 +229,7 @@ export default function AdoptieprofielResults() {
       style={styles.card}
       onPress={() =>
         router.push({
-          pathname: "/breedDetail/[id]",
+          pathname: "/breed-detail/[id]",
           params: { id: item.breed.id.toString() },
         } as any)
       }
@@ -258,17 +260,9 @@ export default function AdoptieprofielResults() {
 
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.header}>
-        <View style={styles.headerSide}>
-          <TouchableOpacity onPress={() => router.back()}>
-            <Ionicons name="arrow-back" size={24} color="#183A36" />
-          </TouchableOpacity>
+       <View style={styles.header}>
+                 <BaseText style={styles.title}>Topmatches</BaseText>
         </View>
-        <View style={styles.headerCenter}>
-          <BaseText style={styles.title}>🎯 Topmatches</BaseText>
-        </View>
-        <View style={styles.headerSide} />
-      </View>
 
       <ScrollView contentContainerStyle={{ paddingBottom: 80 }}>
         {topMatches.length === 0 ? (
@@ -290,28 +284,27 @@ export default function AdoptieprofielResults() {
 
 const styles = StyleSheet.create({
   container: { flex: 1, padding: 20, backgroundColor: "#fff" },
-  header: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    marginTop: 50,
-    marginBottom: 16,
-  },
-  headerSide: {
-    width: 40,
-    alignItems: "flex-start",
-  },
-  headerCenter: {
-    flex: 1,
-    alignItems: "center",
-  },
-  title: {
-    fontFamily: "SireniaRegular",
-    fontSize: 20,
-    color: "#183A36",
-    textAlign: "center",
-    marginBottom: 10,
-  },
+ header: {
+        flexDirection: "row",
+        alignItems: "center",
+        justifyContent: "center", 
+        width: "100%",
+        position: "relative", 
+        paddingVertical: 10,
+      },
+    title: {
+        fontSize: 28,
+        fontFamily: 'SireniaMedium',
+        textAlign: "center",
+        marginBottom: 20,
+        marginLeft: 25,
+    },
+    backButton: {
+      position: "absolute",
+      left: 5,
+      top:7,
+      
+    },
   breedRow: {
     flexDirection: "row",
     alignItems: "center",
@@ -321,7 +314,7 @@ const styles = StyleSheet.create({
   card: {
     marginBottom: 16,
     padding: 12,
-    backgroundColor: "#F0F5F3",
+    backgroundColor: "#FDE4D2",
     borderRadius: 10,
   },
   image: {

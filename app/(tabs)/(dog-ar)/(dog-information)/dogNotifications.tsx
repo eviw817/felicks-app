@@ -244,11 +244,13 @@ export default function UserPermissions() {
         </TouchableOpacity>
         <Text
           style={{
-            fontFamily: "SireniaRegular",
-            fontSize: 24,
+          
             padding: 20,
-            textAlign: "center",
-            color: "#183A36",
+     color: "#183A36",
+              fontSize: 28,
+        fontFamily: 'SireniaMedium',
+        textAlign: "center",
+        marginBottom: 20,
           }}
         >
           Toestemming
@@ -268,9 +270,8 @@ export default function UserPermissions() {
         </Text>
         <Text
           style={{
-            fontFamily: "Nunito",
-            fontWeight: "normal",
-            fontSize: 16,
+             fontFamily: "NunitoRegular",
+              fontSize: 16,
             paddingBottom: 20,
             paddingLeft: 20,
             paddingRight: 40,
@@ -282,9 +283,8 @@ export default function UserPermissions() {
         </Text>
         <Text
           style={{
-            fontFamily: "Nunito",
-            fontWeight: "bold",
-            fontSize: 16,
+            fontFamily: "NunitoBold",
+              fontSize: 18,
             padding: 20,
             paddingTop: 20,
             paddingBottom: 0,
@@ -405,9 +405,8 @@ export default function UserPermissions() {
         </Text>
         <Text
           style={{
-            fontFamily: "Nunito",
-            fontWeight: "bold",
-            fontSize: 16,
+            fontFamily: "NunitoBold",
+              fontSize: 18,
             padding: 20,
             paddingBottom: 8,
             color: "#183A36",
@@ -553,9 +552,8 @@ export default function UserPermissions() {
         {fetchError ? (
           <Text
             style={{
-              fontFamily: "Nunito",
-              fontWeight: "bold",
-              fontSize: 16,
+                 fontFamily: "NunitoBold",
+                fontSize: 16,
               padding: 20,
               color: "red",
               textAlign: "center",

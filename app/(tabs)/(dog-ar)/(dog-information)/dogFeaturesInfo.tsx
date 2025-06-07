@@ -101,8 +101,9 @@ export default function DogFeature() {
         </TouchableOpacity>
         <Text
           style={{
-            fontFamily: "SireniaRegular",
-            fontSize: 24,
+             color: "#183A36",
+              fontSize: 28,
+              fontFamily: 'SireniaMedium',
             padding: 20,
             paddingHorizontal: 60,
             textAlign: "center",
@@ -117,6 +118,7 @@ export default function DogFeature() {
             padding: 20,
             paddingRight: 40,
             marginRight: 10,
+            color: "#183A36",
           }}
         >
           Leer hoe je voor hem zorgt en hem blij houdt:
@@ -133,6 +135,7 @@ export default function DogFeature() {
               padding: 20,
               paddingTop: 20,
               paddingBottom: 0,
+              color: "#183A36",
             }}
           >
             1. Navigatie:
@@ -144,6 +147,7 @@ export default function DogFeature() {
               paddingRight: 40,
               marginLeft: 20,
               paddingHorizontal: 20,
+              color: "#183A36",
             }}
           >
             Tik op Home om terug te keren naar de start.
@@ -156,6 +160,7 @@ export default function DogFeature() {
               marginRight: 10,
               marginLeft: 20,
               paddingHorizontal: 20,
+              color: "#183A36",
             }}
           >
             Onderaan vind je opties om {dogName || "nog geen naam"} te voeren,
@@ -171,6 +176,7 @@ export default function DogFeature() {
               padding: 20,
               paddingTop: 20,
               paddingBottom: 0,
+              color: "#183A36",
             }}
           >
             2. Meldingen:
@@ -183,6 +189,7 @@ export default function DogFeature() {
               marginRight: 20,
               marginLeft: 20,
               paddingHorizontal: 20,
+              color: "#183A36",
             }}
           >
             Je krijgt een seintje als {dogName || "nog geen naam"} honger heeft
@@ -196,6 +203,7 @@ export default function DogFeature() {
               marginRight: 20,
               marginLeft: 20,
               paddingHorizontal: 20,
+              color: "#183A36",
             }}
           >
             Goede zorgen = blije {dogName || "nog geen naam"}!
@@ -210,6 +218,7 @@ export default function DogFeature() {
               padding: 20,
               paddingTop: 20,
               paddingBottom: 0,
+              color: "#183A36",
             }}
           >
             3. Realistisch & interactief:
@@ -222,6 +231,7 @@ export default function DogFeature() {
               paddingHorizontal: 20,
               marginRight: 20,
               marginLeft: 20,
+              color: "#183A36",
             }}
           >
             {dogName || "nog geen naam"} reageert op jouw aandacht. Verzorg je
@@ -236,6 +246,7 @@ export default function DogFeature() {
               paddingHorizontal: 20,
               marginRight: 20,
               marginLeft: 20,
+              color: "#183A36",
             }}
           >
             Dan wordt die verdrietig.
@@ -249,6 +260,7 @@ export default function DogFeature() {
             paddingLeft: 20,
             paddingRight: 40,
             marginRight: 10,
+            color: "#183A36",
           }}
         >
           Wil je stoppen?
@@ -260,6 +272,7 @@ export default function DogFeature() {
             paddingLeft: 20,
             paddingRight: 40,
             marginRight: 10,
+            color: "#183A36",
           }}
         >
           Dat kan via de instellingen – maar wie laat nou zo’n schatje achter?
@@ -272,6 +285,7 @@ export default function DogFeature() {
             paddingLeft: 20,
             paddingRight: 40,
             marginRight: 10,
+            color: "#183A36",
           }}
         >
           Klaar voor jullie avontuur?
@@ -283,6 +297,7 @@ export default function DogFeature() {
             paddingLeft: 20,
             paddingRight: 40,
             marginRight: 10,
+            color: "#183A36",
           }}
         >
           Druk op de knop hieronder en ontmoet {dogName || "nog geen naam"}!
@@ -294,9 +309,11 @@ export default function DogFeature() {
             margin: 20,
             marginRight: 20,
             backgroundColor: "#97B8A5",
-            fontFamily: "NunitoBold",
+             fontFamily: "NunitoBold",
+            fontSize: 16,
             borderRadius: 15,
             textAlign: "center",
+            color: "#183A36",
           }}
           href={`/arLoader?petId=${petId}`}
         >

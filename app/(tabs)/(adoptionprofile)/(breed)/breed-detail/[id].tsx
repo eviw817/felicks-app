@@ -60,7 +60,7 @@ export default function BreedDetail() {
             style={styles.backButton}
             onPress={() => router.back()}
           >
-            <Ionicons name="arrow-back" size={24} color="#183A36" />
+            <Ionicons name="arrow-back" size={30} color="#183A36" />
           </TouchableOpacity>
           <BaseText style={styles.headerTitle} variant="title">
             {breed.name}
@@ -119,12 +119,10 @@ export default function BreedDetail() {
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: "#F8F8F8", padding: 16 },
   headerContainer: {
-    position: "relative",
-    justifyContent: "center",
-    alignItems: "center",
-    height: 40,
-    marginBottom: 8,
-    marginTop: 16,
+   flex: 1,
+    padding: 16,
+    paddingTop: 50,
+    paddingBottom: 10,
   },
   backButton: {
     position: "absolute",
@@ -135,10 +133,11 @@ const styles = StyleSheet.create({
     paddingHorizontal: 8,
   },
   headerTitle: {
-    fontFamily: "SireniaRegular",
-    fontSize: 20,
-    color: "#183A36",
-    textAlign: "center",
+    fontSize: 28,
+        fontFamily: 'SireniaMedium',
+        textAlign: "center",
+        marginBottom: 20,
+        marginLeft: 20,
   },
   image: {
     width: windowWidth - 32,
@@ -148,15 +147,16 @@ const styles = StyleSheet.create({
     transform: [{ scale: 0.75 }],
   },
   label: {
-    fontSize: 16,
     fontWeight: "bold",
     marginTop: 20,
     marginBottom: 6,
+      fontSize: 18,
+    fontFamily: "NunitoBold",
     color: "#183A36",
   },
   text: {
-    fontSize: 14,
-    color: "#333",
+    fontFamily: "NunitoRegular",
+    fontSize: 16,
     marginBottom: 4,
   },
   button: {

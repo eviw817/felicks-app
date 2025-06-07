@@ -80,8 +80,9 @@ export default function DogInformation() {
         >
           <Text
             style={{
-              fontFamily: "NunitoBold",
-              fontSize: 20,
+              color: "#183A36",
+              fontSize: 28,
+              fontFamily: 'SireniaMedium',
               padding: 20,
               textAlign: "center",
             }}
@@ -104,6 +105,7 @@ export default function DogInformation() {
               fontSize: 16,
               padding: 20,
               paddingBottom: 0,
+                 color: "#183A36",
             }}
           >
             Dit is {dogName || "nog geen naam"}, jouw nieuwe hondenvriend!
@@ -114,6 +116,7 @@ export default function DogInformation() {
               fontSize: 16,
               padding: 20,
               paddingVertical: 0,
+                 color: "#183A36",
             }}
           >
             Vanaf nu ben jij verantwoordelijk voor hun zorg en geluk.
@@ -124,6 +127,7 @@ export default function DogInformation() {
               fontSize: 16,
               padding: 20,
               paddingVertical: 0,
+                 color: "#183A36",
             }}
           >
             Leer stap voor stap hoe je de beste hondenbaas wordt.
@@ -134,6 +138,7 @@ export default function DogInformation() {
               fontSize: 16,
               padding: 20,
               paddingBottom: 0,
+                 color: "#183A36",
             }}
           >
             Klaar om te beginnen?
@@ -144,6 +149,7 @@ export default function DogInformation() {
               fontSize: 20,
               padding: 20,
               paddingTop: 0,
+                 color: "#183A36",
             }}
           >
             Let's go!
@@ -154,7 +160,8 @@ export default function DogInformation() {
               margin: 20,
               paddingHorizontal: 20,
               backgroundColor: "#97B8A5",
-              fontFamily: "NunitoBold",
+                 fontFamily: "NunitoBold",
+            fontSize: 16,
               borderRadius: 15,
               textAlign: "center",
             }}

@@ -11,6 +11,8 @@ import {
 import { Ionicons } from "@expo/vector-icons";
 import BaseText from "@/components/BaseText";
 import { useFonts } from "expo-font";
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
+import { faArrowLeft, faChevronRight } from "@fortawesome/free-solid-svg-icons";
 
 export default function AdoptionChoice() {
   const [fontsLoaded] = useFonts({
@@ -28,14 +30,12 @@ export default function AdoptionChoice() {
 
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.headerRow}>
-        <TouchableOpacity onPress={() => router.back()} style={styles.back}>
-          <Ionicons name="arrow-back" size={24} color="#183A36" />
-        </TouchableOpacity>
-        <BaseText variant="title" style={styles.title}>
-          Adoptieprofiel
-        </BaseText>
-      </View>
+         <View style={styles.header}>
+              <TouchableOpacity onPress={() => router.push("/register")} style={styles.backButton}>
+                  <FontAwesomeIcon icon={faArrowLeft} size={30} color={'#183A36'} style={styles.backButton} />
+              </TouchableOpacity>
+              <BaseText style={styles.title}>Adoptieprofiel </BaseText>
+          </View>
 
       <BaseText variant="text" style={styles.description}>
         Je profiel is aangemaakt! Laten we nu ontdekken welk hondenras écht bij
@@ -48,7 +48,7 @@ export default function AdoptionChoice() {
 
       <TouchableOpacity
         style={styles.primaryButton}
-        onPress={() => router.push("/adoptionChoice")}
+        onPress={() => router.push("/livingsituation")}
       >
         <BaseText variant="button" style={styles.primaryText}>
           Adoptieprofiel opzetten
@@ -65,20 +65,25 @@ const styles = StyleSheet.create({
     padding: 24,
     paddingTop: Platform.OS === "ios" ? 60 : 40,
   },
-  headerRow: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    marginBottom: 32,
-  },
-  back: {
-    position: "absolute",
-    left: 0,
-  },
-  title: {
-    textAlign: "center",
-    color: "#183A36",
-  },
+  header: {
+        flexDirection: "row",
+        alignItems: "center",
+        justifyContent: "center", 
+        width: "100%",
+        position: "relative", 
+        paddingVertical: 10,
+      },
+    title: {
+        fontSize: 28,
+        fontFamily: 'SireniaMedium',
+        textAlign: "center",
+        marginBottom: 20,
+    },
+    backButton: {
+      position: "absolute",
+      left: 5,
+      top:7,
+    },
   description: {
     lineHeight: 24,
     marginBottom: 12,

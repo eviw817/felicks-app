@@ -89,6 +89,7 @@ export default function Index() {
           fontSize: 24,
           padding: 20,
           textAlign: "center",
+            color: "#183A36",
         }}
       >
         {capitalizeFirstLetter(dogName || "nog geen naam")} wordt op jouw

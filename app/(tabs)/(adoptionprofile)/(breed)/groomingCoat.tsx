@@ -10,6 +10,8 @@ import { useRouter } from "expo-router";
 import { supabase } from "@/lib/supabase";
 import { Ionicons } from "@expo/vector-icons";
 import BaseText from "@/components/BaseText";
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
+import { faArrowLeft, faChevronRight } from "@fortawesome/free-solid-svg-icons";
 
 const RadioButton: React.FC<{ selected: boolean }> = ({ selected }) => (
   <View style={styles.radioOuter}>
@@ -98,17 +100,12 @@ export default function GroomingCoat() {
 
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.headerContainer}>
-        <TouchableOpacity
-          style={styles.backButton}
-          onPress={() => router.back()}
-        >
-          <Ionicons name="arrow-back" size={24} color="#183A36" />
-        </TouchableOpacity>
-        <BaseText style={styles.headerTitle} variant="title">
-          Verzorging & vacht
-        </BaseText>
-      </View>
+      <View style={styles.header}>
+                <TouchableOpacity onPress={() => router.push("/soundBehavior")} style={styles.backButton}>
+                    <FontAwesomeIcon icon={faArrowLeft} size={30} color={'#183A36'} style={styles.backButton} />
+                </TouchableOpacity>
+                <BaseText style={styles.title}>Verzorging & vacht</BaseText>
+            </View>
 
       <View style={styles.progressBar}>
         <View style={styles.progressFill6} />
@@ -144,7 +141,7 @@ export default function GroomingCoat() {
 
       <TouchableOpacity
         style={[styles.button, !canNext && styles.buttonDisabled]}
-        onPress={() => router.push("/adoptionProfileResults")}
+        onPress={() => router.push("/adoptionprofileResults")}
         disabled={!canNext}
       >
         <BaseText style={styles.buttonText} variant="button">
@@ -162,27 +159,27 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingTop: Platform.OS === "ios" ? 20 : 50,
   },
-  headerContainer: {
-    position: "relative",
-    justifyContent: "center",
-    alignItems: "center",
-    height: 40,
-    marginBottom: 16,
-  },
-  backButton: {
-    position: "absolute",
-    left: 0,
-    top: 0,
-    bottom: 0,
-    justifyContent: "center",
-    paddingHorizontal: 8,
-  },
-  headerTitle: {
-    fontFamily: "SireniaRegular",
-    fontSize: 20,
-    color: "#183A36",
-    textAlign: "center",
-  },
+   header: {
+        flexDirection: "row",
+        alignItems: "center",
+        justifyContent: "center", 
+        width: "100%",
+        position: "relative", 
+        paddingVertical: 10,
+      },
+    title: {
+        fontSize: 28,
+        fontFamily: 'SireniaMedium',
+        textAlign: "center",
+        marginBottom: 20,
+        marginLeft: 25,
+    },
+    backButton: {
+      position: "absolute",
+      left: 5,
+      top:7,
+      
+    },
   progressBar: {
     width: "100%",
     height: 6,
