@@ -13,7 +13,6 @@ import {
 } from "react-native";
 import { supabase } from "@/lib/supabase";
 import type { Session } from "@supabase/supabase-js";
-import { FontAwesome } from "@expo/vector-icons";
 import { Link } from "expo-router";
 import NavBar from "@/components/NavigationBar";
 import { Ionicons } from "@expo/vector-icons";
@@ -23,6 +22,8 @@ import { useFonts } from "expo-font";
 import { useRouter } from "expo-router";
 
 import { registerBadgeCallback } from "@/app/_layout";
+import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
+import { faEnvelopeOpen } from "@fortawesome/free-solid-svg-icons";
 
 export default function HomepageScreen() {
   // --- ALL HOOKS MUST BE AT THE TOP ---
@@ -242,22 +243,32 @@ export default function HomepageScreen() {
       }}
     >
       {/* ... rest of your JSX ... */}
-      <View style={{ alignItems: "center" }}>
+      <View
+        style={{
+          flexDirection: "row",
+          justifyContent: 'center',
+          alignItems: 'center',
+          paddingHorizontal: 20,
+          marginTop: 50,
+          marginLeft: 20,
+          gap: 20,
+        }}
+      >
         <BaseText
-          style={{
-            fontFamily: "SireniaMedium",
-            fontSize: 28,
-            padding: 20,
-            marginTop: 50,
-          }}
+            style={{
+              fontFamily: "SireniaMedium",
+              fontSize: 28,
+              paddingVertical: 20,
+              textAlign: "center",
+            }}
+          >
+            Welkom {firstname || "guest"}!
+          </BaseText>
+
+        <Link
+          href="/notificationsIndex"
         >
-          Welkom {firstname || "guest"}!
-        </BaseText>
-      </View>
-      <View style={{ position: "absolute", top: 70, right: 30 }}>
-        <Link href="/notificationsIndex">
-          <View style={{ position: "relative" }}>
-            <FontAwesome name="envelope-o" size={30} color="#183A36" />
+         <FontAwesomeIcon icon={faEnvelopeOpen} size={30} color="#183A36" />
             {unreadCount > 0 && (
               <View
                 style={{
@@ -284,7 +295,6 @@ export default function HomepageScreen() {
                 </Text>
               </View>
             )}
-          </View>
         </Link>
       </View>
 
@@ -499,146 +509,147 @@ export default function HomepageScreen() {
             Jouw matches
           </Text>
           {matchedDogs.length === 0 ? (
-          <>
-            <Text
-              style={{
-                fontFamily: "NunitoRegular",
-                fontSize: 14,
-                paddingHorizontal: 20, // Added horizontal padding
-                color: "#183A36",
-                textAlign: "left", // Center this text
-                marginBottom: 10,
-              }}
-            >
-              Je hebt nog geen profiel ingevuld of er zijn nog geen geschikte
-              matches.
-            </Text>
-          </>
-          ) : (
-          matchedDogs.map((dog) => (
-            <View
-              key={dog.id}
-              style={{
-                backgroundColor: "#FDE4D2",
-                borderRadius: 20,
-                marginBottom: 24,
-                padding: 16,
-                flexDirection: "row",
-                alignItems: "center",
-                width: "95%",
-                alignSelf: "center",
-                shadowColor: "#000",
-                shadowOpacity: 0.05,
-                shadowOffset: { width: 0, height: 2 },
-                shadowRadius: 4,
-                elevation: 1, // For Android shadow
-              }}
-            >
-              <View
+            <>
+              <Text
                 style={{
-                  width: 100,
-                  height: 100,
-                  borderRadius: 12,
-                  overflow: "hidden",
-                  marginRight: 16,
-                  backgroundColor: "#FFFDF9", // Placeholder background
+                  fontFamily: "NunitoRegular",
+                  fontSize: 14,
+                  paddingHorizontal: 20, // Added horizontal padding
+                  color: "#183A36",
+                  textAlign: "left", // Center this text
+                  marginBottom: 10,
                 }}
               >
-                {dog.images?.length ? (
-                  <Image
-                    source={{
-                      uri: dog.images[0],
-                    }}
-                    resizeMode="cover"
-                    style={{ width: "100%", height: "100%" }}
-                  />
-                ) : (
-                  <Image // Fallback image
-                    source={require("@/assets/images/logo_felicks.png")} // Ensure this path is correct
-                    resizeMode="contain"
-                    style={{
-                      width: "80%",
-                      height: "80%",
-                      alignSelf: "center",
-                      marginTop: "10%",
-                    }} // Adjust for better display
-                  />
-                )}
-              </View>
+                Je hebt nog geen profiel ingevuld of er zijn nog geen geschikte
+                matches.
+              </Text>
+            </>
+          ) : (
+            matchedDogs.map((dog) => (
+              <View
+                key={dog.id}
+                style={{
+                  backgroundColor: "#FDE4D2",
+                  borderRadius: 20,
+                  marginBottom: 24,
+                  padding: 16,
+                  flexDirection: "row",
+                  alignItems: "center",
+                  width: "95%",
+                  alignSelf: "center",
+                  shadowColor: "#000",
+                  shadowOpacity: 0.05,
+                  shadowOffset: { width: 0, height: 2 },
+                  shadowRadius: 4,
+                  elevation: 1, // For Android shadow
+                }}
+              >
+                <View
+                  style={{
+                    width: 100,
+                    height: 100,
+                    borderRadius: 12,
+                    overflow: "hidden",
+                    marginRight: 16,
+                    backgroundColor: "#FFFDF9", // Placeholder background
+                  }}
+                >
+                  {dog.images?.length ? (
+                    <Image
+                      source={{
+                        uri: dog.images[0],
+                      }}
+                      resizeMode="cover"
+                      style={{ width: "100%", height: "100%" }}
+                    />
+                  ) : (
+                    <Image // Fallback image
+                      source={require("@/assets/images/logo_felicks.png")} // Ensure this path is correct
+                      resizeMode="contain"
+                      style={{
+                        width: "80%",
+                        height: "80%",
+                        alignSelf: "center",
+                        marginTop: "10%",
+                      }} // Adjust for better display
+                    />
+                  )}
+                </View>
 
-              <View style={{ flex: 1 }}>
-                <Link href={`/dog-detail/${dog.id}`} asChild>
-                  <TouchableOpacity>
-                    <Text
-                      style={{
-                        fontFamily: "NunitoBold",
-                        fontSize: 18,
-                        marginBottom: 4,
-                        color: "#183A36",
-                      }}
-                    >
-                      {dog.name}
-                    </Text>
-                    <Text
-                      style={{
-                        fontFamily: "NunitoRegular",
-                        fontSize: 14,
-                        color: "#183A36",
-                      }}
-                    >
-                      <Text style={{ fontFamily: "NunitoSemiBold" }}>
-                        {" "}
-                        {/* Changed to SemiBold */}
-                        Geboren op:{" "}
+                <View style={{ flex: 1 }}>
+                  <Link href={`/dog-detail/${dog.id}`} asChild>
+                    <TouchableOpacity>
+                      <Text
+                        style={{
+                          fontFamily: "NunitoBold",
+                          fontSize: 18,
+                          marginBottom: 4,
+                          color: "#183A36",
+                        }}
+                      >
+                        {dog.name}
                       </Text>
-                      {new Date(dog.birthdate).toLocaleDateString(
-                        "nl-BE"
-                      )} – {getAgeInYears(dog.birthdate)} jaar
-                    </Text>
-                    <Text
-                      style={{
-                        fontFamily: "NunitoRegular",
-                        fontSize: 14,
-                        color: "#183A36",
-                      }}
-                    >
-                      <Text style={{ fontFamily: "NunitoSemiBold" }}>
-                        {" "}
-                        {/* Changed to SemiBold */}
-                        Ras:{" "}
+                      <Text
+                        style={{
+                          fontFamily: "NunitoRegular",
+                          fontSize: 14,
+                          color: "#183A36",
+                        }}
+                      >
+                        <Text style={{ fontFamily: "NunitoSemiBold" }}>
+                          {" "}
+                          {/* Changed to SemiBold */}
+                          Geboren op:{" "}
+                        </Text>
+                        {new Date(dog.birthdate).toLocaleDateString(
+                          "nl-BE"
+                        )} – {getAgeInYears(dog.birthdate)} jaar
                       </Text>
-                      {dog.breed}
-                    </Text>
-                    <Text
-                      style={{
-                        fontFamily: "NunitoRegular",
-                        fontSize: 14,
-                        color: "#183A36",
-                      }}
-                    >
-                      <Text style={{ fontFamily: "NunitoSemiBold" }}>
-                        {" "}
-                        {/* Changed to SemiBold */}
-                        Asiel:{" "}
+                      <Text
+                        style={{
+                          fontFamily: "NunitoRegular",
+                          fontSize: 14,
+                          color: "#183A36",
+                        }}
+                      >
+                        <Text style={{ fontFamily: "NunitoSemiBold" }}>
+                          {" "}
+                          {/* Changed to SemiBold */}
+                          Ras:{" "}
+                        </Text>
+                        {dog.breed}
                       </Text>
-                      {dog.shelter}
-                    </Text>
+                      <Text
+                        style={{
+                          fontFamily: "NunitoRegular",
+                          fontSize: 14,
+                          color: "#183A36",
+                        }}
+                      >
+                        <Text style={{ fontFamily: "NunitoSemiBold" }}>
+                          {" "}
+                          {/* Changed to SemiBold */}
+                          Asiel:{" "}
+                        </Text>
+                        {dog.shelter}
+                      </Text>
+                    </TouchableOpacity>
+                  </Link>
+                </View>
+                <View style={{ position: "absolute", top: 10, right: 10 }}>
+                  <TouchableOpacity onPress={() => toggleLike(dog.id)}>
+                    <Ionicons
+                      name={
+                        likedDogIds.includes(dog.id) ? "heart" : "heart-outline"
+                      }
+                      size={22}
+                      color="#183A36" // Ensure good contrast
+                    />
                   </TouchableOpacity>
-                </Link>
+                </View>
               </View>
-              <View style={{ position: "absolute", top: 10, right: 10 }}>
-                <TouchableOpacity onPress={() => toggleLike(dog.id)}>
-                  <Ionicons
-                    name={
-                      likedDogIds.includes(dog.id) ? "heart" : "heart-outline"
-                    }
-                    size={22}
-                    color="#183A36" // Ensure good contrast
-                  />
-                </TouchableOpacity>
-              </View>
-            </View>
-          )))}
+            ))
+          )}
           <Link
             href="/adoptionChoice"
             style={{
