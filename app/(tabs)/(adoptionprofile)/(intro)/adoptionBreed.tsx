@@ -10,8 +10,20 @@ import {
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import BaseText from "@/components/BaseText";
+import { useFonts } from "expo-font";
 
 export default function AdoptionChoice() {
+  const [fontsLoaded] = useFonts({
+    NunitoRegular: require("@/assets/fonts/Nunito/NunitoRegular.ttf"),
+    NunitoSemiBold: require("@/assets/fonts/Nunito/NunitoSemiBold.ttf"),
+    NunitoBold: require("@/assets/fonts/Nunito/NunitoBold.ttf"),
+    SireniaMedium: require("@/assets/fonts/Sirenia/SireniaMedium.ttf"),
+  });
+
+  if (!fontsLoaded) {
+    return <View />;
+  }
+
   const router = useRouter();
 
   return (
@@ -36,19 +48,10 @@ export default function AdoptionChoice() {
 
       <TouchableOpacity
         style={styles.primaryButton}
-        onPress={() => router.push("/livingSituation")}
+        onPress={() => router.push("/adoptionChoice")}
       >
         <BaseText variant="button" style={styles.primaryText}>
-          VIND JOUW PERFECTE RAS
-        </BaseText>
-      </TouchableOpacity>
-
-      <TouchableOpacity
-        style={styles.secondaryButton}
-        onPress={() => router.push("/homepage")}
-      >
-        <BaseText variant="button" style={styles.secondaryText}>
-          OVERSLAAN
+          Adoptieprofiel opzetten
         </BaseText>
       </TouchableOpacity>
     </SafeAreaView>
@@ -74,6 +77,7 @@ const styles = StyleSheet.create({
   },
   title: {
     textAlign: "center",
+    color: "#183A36",
   },
   description: {
     lineHeight: 24,
@@ -92,7 +96,12 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginBottom: 16,
   },
-  primaryText: {},
+  primaryText: {
+    color: "#183A36",
+    fontSize: 16,
+    fontFamily: "NunitoBold",
+    textTransform: "uppercase",
+  },
   secondaryButton: {
     borderColor: "#97B8A5",
     borderWidth: 1,

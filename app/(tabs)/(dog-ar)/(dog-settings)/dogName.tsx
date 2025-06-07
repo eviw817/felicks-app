@@ -6,12 +6,10 @@ import {
   TouchableOpacity,
   TextInput,
   Alert,
-  ScrollView,
-  Pressable,
+  StyleSheet,
 } from "react-native";
 import { useLocalSearchParams, useRouter } from "expo-router";
-import AntDesign from "@expo/vector-icons/AntDesign";
-import { supabase } from "@/lib/supabase"; // adjust if your path is different
+import { supabase } from "@/lib/supabase";
 import NavBar from "@/components/NavigationBar";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
@@ -34,9 +32,7 @@ export default function DogName() {
   const [dogName, setDogName] = React.useState<string>("");
   const navigation = useNavigation();
 
-  if (!fontsLoaded) {
-    return <View />;
-  }
+  if (!fontsLoaded) return <View />;
 
   React.useEffect(() => {
     if (petId && typeof petId === "string" && petId.length > 0) {
@@ -48,13 +44,12 @@ export default function DogName() {
           .single();
 
         if (error) {
-          console.log("Error fetching dog data:", error.message);
           return;
         }
 
         setDogBreed(data?.breed || "");
         setDogName(data?.name || "");
-        onChangeText(data?.name || ""); // also fill the input with existing name
+        onChangeText(data?.name || "");
       };
 
       fetchDogData();
@@ -63,9 +58,6 @@ export default function DogName() {
 
   const handleContinuePress = async () => {
     if (!text.trim()) return;
-
-    console.log("Entered name:", text);
-    console.log("Updating pet with ID:", petId);
 
     if (!petId || typeof petId !== "string") {
       Alert.alert("Fout", "Pet ID ontbreekt of is ongeldig.");
@@ -78,155 +70,143 @@ export default function DogName() {
       .eq("id", petId);
 
     if (error) {
-      console.log("Update error:", error.message);
       Alert.alert("Fout", "Naam kon niet opgeslagen worden.");
       return;
     }
 
-    console.log("Name update successful!");
     setDogName(text.trim());
-
-    // ✅ Correct dynamic navigation:
     router.push(`/dogInformation?petId=${petId}`);
   };
 
   return (
-    <SafeAreaView
-      style={{
-        flex: 1,
-        backgroundColor: "#FFFDF9",
-        position: "relative",
-        paddingTop: 100,
-      }}
-    >
-      <View
-        style={{
-          flexDirection: "row",
-          alignItems: "center",
-          justifyContent: "center",
-          width: "100%",
-          position: "relative",
-          paddingVertical: 10,
-        }}
-      >
+    <SafeAreaView style={styles.container}>
+      <View style={styles.header}>
         <TouchableOpacity
           onPress={() => router.push(`/dogBreed?petId=${petId}`)}
-          style={{ position: "absolute", left: 5, top: 7, zIndex: 10 }}
+          style={styles.backButton}
         >
-          <FontAwesomeIcon
-            icon={faArrowLeft}
-            size={30}
-            color={"#183A36"}
-            style={{ position: "absolute", left: 10, top: 7 }}
-          />
+          <FontAwesomeIcon icon={faArrowLeft} size={30} color="#183A36" />
         </TouchableOpacity>
-        <BaseText
-          style={{
-            fontSize: 28,
-            fontFamily: "SireniaMedium",
-            textAlign: "center",
-            marginBottom: 20,
-          }}
-        >
-          Virtuele hond
-        </BaseText>
+        <BaseText style={styles.headerTitle}>Virtuele hond</BaseText>
       </View>
-      <Text
-        style={{
-          fontFamily: "NunitoBold",
-          fontSize: 20,
-          padding: 20,
-          color: "#183A36",
-        }}
-      >
-        Gefeliciteerd!
-      </Text>
-      <Text
-        style={{
-          fontFamily: "NunitoRegular",
-          fontSize: 16,
-          padding: 20,
-          paddingTop: 12,
-          color: "#183A36",
-        }}
-      >
+
+      <Text style={styles.congrats}>Gefeliciteerd!</Text>
+      <Text style={styles.intro}>
         Je hebt net een {dogBreed || "hond"} toegevoegd aan je gezin. Tijd voor
         een naam!
       </Text>
-      <Text
-        style={{
-          fontFamily: "NunitoBold",
-          fontSize: 16,
-          padding: 20,
-          paddingTop: 16,
-          paddingBottom: 0,
-          color: "#183A36",
-        }}
-      >
-        Naam
-      </Text>
-      <View
-        style={{
-          margin: 20,
-          marginTop: 8,
-          backgroundColor: "#FFFDF9",
-          borderRadius: 10,
-          borderColor: "#183A36",
-          borderWidth: 1,
-        }}
-      >
+      <Text style={styles.label}>Naam</Text>
+      <View style={styles.inputWrapper}>
         <TextInput
-          style={{
-            height: 20,
-            margin: 12,
-            borderRadius: 10,
-            fontSize: 16,
-            color: "#183A36",
-          }}
+          style={styles.textInput}
           placeholderTextColor="#183A36"
           onChangeText={onChangeText}
           value={text}
           placeholder="Geef je viervoeter een naam"
         />
       </View>
+
       <TouchableOpacity
         onPress={handleContinuePress}
         disabled={text.trim().length === 0}
-        style={{
-          opacity: text.trim().length > 0 ? 1 : 0.5,
-          backgroundColor: "#97B8A5",
-          paddingVertical: 15,
-          borderRadius: 20,
-          marginLeft: 20,
-          width: "90%",
-          alignItems: "center",
-          shadowOffset: { width: 0, height: 2 },
-          shadowOpacity: 0.1,
-          shadowRadius: 4,
-        }}
+        style={[
+          styles.saveButton,
+          { opacity: text.trim().length > 0 ? 1 : 0.5 },
+        ]}
       >
-        <Text
-          style={{
-            color: "#183A36",
-            fontSize: 16,
-            fontFamily: "NunitoBold",
-          }}
-        >
-          OPSLAAN
-        </Text>
+        <Text style={styles.saveButtonText}>OPSLAAN</Text>
       </TouchableOpacity>
 
-      {/* Fixed navbar onderaan scherm */}
-      <View
-        style={{
-          position: "absolute",
-          bottom: 0,
-          left: 0,
-          right: 0,
-        }}
-      >
+      <View style={styles.navbarWrapper}>
         <NavBar />
       </View>
     </SafeAreaView>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "#FFFDF9",
+    position: "relative",
+    paddingTop: 80,
+  },
+  header: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    width: "100%",
+    position: "relative",
+    paddingVertical: 4,
+  },
+  backButton: {
+    position: "absolute",
+    left: 20,
+    top: 7,
+    zIndex: 10,
+  },
+  headerTitle: {
+    fontSize: 28,
+    fontFamily: "SireniaMedium",
+    textAlign: "center",
+    marginBottom: 20,
+  },
+  congrats: {
+    fontFamily: "NunitoBold",
+    fontSize: 20,
+    padding: 20,
+    color: "#183A36",
+  },
+  intro: {
+    fontFamily: "NunitoRegular",
+    fontSize: 16,
+    padding: 20,
+    paddingTop: 12,
+    color: "#183A36",
+  },
+  label: {
+    fontFamily: "NunitoBold",
+    fontSize: 18,
+    padding: 20,
+    paddingTop: 16,
+    paddingBottom: 0,
+    color: "#183A36",
+  },
+  inputWrapper: {
+    margin: 20,
+    marginTop: 8,
+    backgroundColor: "#FFFDF9",
+    borderRadius: 10,
+    borderColor: "#183A36",
+    borderWidth: 1,
+  },
+  textInput: {
+    height: 20,
+    margin: 12,
+    borderRadius: 10,
+    fontSize: 16,
+    color: "#183A36",
+  },
+  saveButton: {
+    backgroundColor: "#97B8A5",
+    paddingVertical: 15,
+    borderRadius: 20,
+    marginLeft: 20,
+    width: "90%",
+    alignItems: "center",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+  },
+  saveButtonText: {
+    color: "#183A36",
+    fontSize: 16,
+    fontFamily: "NunitoBold",
+  },
+  navbarWrapper: {
+    position: "absolute",
+    bottom: 0,
+    left: 0,
+    right: 0,
+  },
+});

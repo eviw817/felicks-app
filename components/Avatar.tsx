@@ -78,7 +78,6 @@ export default function Avatar({ url, size = 150, onUpload, showUploadButton = t
     }
 
     if (result.canceled || !result.assets || result.assets.length === 0) {
-      console.log('User cancelled image picker.')
       return
     }
 

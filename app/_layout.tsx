@@ -15,7 +15,6 @@ export function registerBadgeCallback(cb: () => void) {
 }
 
 export default function RootLayout() {
-  console.log("Layout geladen");
 
   const [loaded] = useFonts({
     SpaceMono: require("@/assets/fonts/SpaceMonoRegular.ttf"),
@@ -30,24 +29,20 @@ export default function RootLayout() {
   const pathname = usePathname();
 
   const handleBannerNotify = useCallback((title: string, body: string) => {
-    console.log("[RootLayout][handleBannerNotify] ► Showing banner:", title, "|", body);
     setBannerTitle(title);
     setBannerBody(body);
   }, []);
 
   const handleBadgeUpdate = useCallback(() => {
-    console.log("[RootLayout][handleBadgeUpdate] ► forceren fetchUnreadNotifications");
     badgeUpdateCallback();
   }, []);
 
   const handleBannerHide = useCallback(() => {
-    console.log("[RootLayout][handleBannerHide] ► Hiding banner");
     setBannerTitle(null);
     setBannerBody("");
   }, []);
 
   const handleBannerPress = useCallback(() => {
-    console.log("[RootLayout][handleBannerPress] ► Navigating to /notificationsIndex");
     if (pathname !== "/notificationsIndex") {
       router.push("/notificationsIndex");
     }
@@ -59,28 +54,43 @@ export default function RootLayout() {
     const fetchSessionAndStartRealtime = async () => {
       const { data: { session } } = await supabase.auth.getSession();
       if (session?.user) {
-        console.log("[RootLayout] Geldige sessie, start realtime...");
         initRealtimeNotifications(handleBannerNotify, handleBadgeUpdate);
-      } else {
-        console.log("[RootLayout] Geen sessie gevonden.");
-      }
+      } 
     };
 
     fetchSessionAndStartRealtime();
   }, [handleBannerNotify, handleBadgeUpdate]);
 
   useEffect(() => {
-    const { data: authListener } = supabase.auth.onAuthStateChange((_event, session) => {
-      if (session?.user) {
-        console.log("[RootLayout] Nieuwe login gedetecteerd → realtime opnieuw starten");
-        initRealtimeNotifications(handleBannerNotify, handleBadgeUpdate);
-      }
-    });
+  const initSession = async () => {
+    const { data: { session }, error } = await supabase.auth.getSession();
+    if (error) {
+      return;
+    }
 
-    return () => {
-      authListener?.subscription?.unsubscribe();
-    };
-  }, [handleBannerNotify, handleBadgeUpdate]);
+    if (session) {
+      supabase.auth.startAutoRefresh();
+      initRealtimeNotifications(handleBannerNotify, handleBadgeUpdate);
+    } else {
+      supabase.auth.stopAutoRefresh();
+    }
+  };
+
+  initSession();
+
+  const { data: authListener } = supabase.auth.onAuthStateChange((_event, session) => {
+    if (session) {
+      supabase.auth.startAutoRefresh();
+      initRealtimeNotifications(handleBannerNotify, handleBadgeUpdate);
+    } else {
+      supabase.auth.stopAutoRefresh();
+    }
+  });
+
+  return () => {
+    authListener?.subscription?.unsubscribe();
+  };
+}, [handleBannerNotify, handleBadgeUpdate]);
 
   if (!loaded) return null;
 

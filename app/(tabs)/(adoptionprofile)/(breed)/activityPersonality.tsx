@@ -15,14 +15,14 @@ import BaseText from "@/components/BaseText";
 import { useFonts } from "expo-font";
 
 export default function ActivityPersonality() {
-const [fontsLoaded] = useFonts({
-    "NunitoRegular": require("@/assets/fonts/Nunito/NunitoRegular.ttf"),
-    "NunitoBold": require("@/assets/fonts/Nunito/NunitoBold.ttf"),
+  const [fontsLoaded] = useFonts({
+    NunitoRegular: require("@/assets/fonts/Nunito/NunitoRegular.ttf"),
+    NunitoBold: require("@/assets/fonts/Nunito/NunitoBold.ttf"),
   });
 
   if (!fontsLoaded) {
-      return <View />;
-    }
+    return <View />;
+  }
 
   const router = useRouter();
   const [userId, setUserId] = useState<string | null>(null);
@@ -49,7 +49,6 @@ const [fontsLoaded] = useFonts({
         .single();
 
       if (data) {
-        console.log("✅ Profiel geladen:", data);
         setAnswers({
           activity: data.activity_level || "",
           personality: data.personality || "",
@@ -68,7 +67,6 @@ const [fontsLoaded] = useFonts({
   ) => {
     const newAnswers = { ...answers, [question]: value };
     setAnswers(newAnswers);
-    console.log("🔄 Antwoord bijgewerkt:", newAnswers);
 
     if (!userId) return;
 
@@ -84,8 +82,6 @@ const [fontsLoaded] = useFonts({
         onConflict: "user_id",
       });
 
-    if (error) console.error("❌ Fout bij opslaan in DB:", error.message);
-    else console.log("✅ Antwoorden opgeslagen in DB:", payload);
   };
 
   const canNext = answers.activity !== "" && answers.personality !== "";

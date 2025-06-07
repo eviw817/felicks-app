@@ -12,6 +12,7 @@ import {
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import { supabase } from "@/lib/supabase";
+import { useFonts } from "expo-font";
 import BaseText from "@/components/BaseText";
 
 const RadioButton = ({ selected }: { selected: boolean }) => (
@@ -21,6 +22,17 @@ const RadioButton = ({ selected }: { selected: boolean }) => (
 );
 
 export default function DogAge() {
+  const [fontsLoaded] = useFonts({
+    NunitoRegular: require("@/assets/fonts/Nunito/NunitoRegular.ttf"),
+    NunitoSemiBold: require("@/assets/fonts/Nunito/NunitoSemiBold.ttf"),
+    NunitoBold: require("@/assets/fonts/Nunito/NunitoBold.ttf"),
+    SireniaMedium: require("@/assets/fonts/Sirenia/SireniaMedium.ttf"),
+  });
+
+  if (!fontsLoaded) {
+    return <View />;
+  }
+
   const router = useRouter();
   const [userId, setUserId] = useState<string | null>(null);
   const [preferredAge, setPreferredAge] = useState<string>("");
@@ -66,11 +78,11 @@ export default function DogAge() {
   };
 
   const options = [
-    { label: "Geen voorkeur", value: "geen_voorkeur" },
     { label: "Puppy", value: "puppy" },
     { label: "Jonge hond", value: "jong_volwassen" },
     { label: "Volwassen hond", value: "volwassen" },
     { label: "Senior", value: "senior" },
+    { label: "Geen voorkeur", value: "geen_voorkeur" },
   ];
 
   return (
@@ -132,8 +144,8 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   title: {
-    fontFamily: "Sirenia-Regular",
-    fontSize: 20,
+    fontFamily: "SireniaRegular",
+    fontSize: 24,
     color: "#183A36",
     textAlign: "center",
   },
@@ -153,7 +165,7 @@ const styles = StyleSheet.create({
   },
   question: {
     fontSize: 18,
-    fontWeight: "bold",
+    fontFamily: "NunitoBold",
     color: "#183A36",
     marginBottom: 16,
   },
@@ -195,6 +207,6 @@ const styles = StyleSheet.create({
   buttonText: {
     fontSize: 16,
     color: "#183A36",
-    fontWeight: "bold",
+    fontFamily: "NunitoBold",
   },
 });

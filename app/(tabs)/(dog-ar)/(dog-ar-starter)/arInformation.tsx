@@ -13,7 +13,8 @@ import { Link } from "expo-router";
 import { supabase } from "@/lib/supabase"; // adjust if your path is different
 import NavBar from "@/components/NavigationBar";
 import { useNavigation } from "@react-navigation/native";
-import { Ionicons } from "@expo/vector-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
+import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import { useFonts } from "expo-font";
 
 export default function DogInformation() {
@@ -39,7 +40,6 @@ export default function DogInformation() {
   }
 
   React.useEffect(() => {
-    console.log("DogInformation petId:", petId); // Debug
 
     if (petId && typeof petId === "string" && petId.length > 0) {
       const fetchDogData = async () => {
@@ -52,10 +52,8 @@ export default function DogInformation() {
           .eq("id", petId)
           .single();
 
-        console.log("Supabase fetch result:", { data, error }); // Debug
 
         if (error) {
-          console.log("Error fetching dog data:", error.message);
           setFetchError(error.message);
           setDogName("");
           setDogBreed("");
@@ -98,16 +96,6 @@ export default function DogInformation() {
           paddingBottom: 100,
         }}
       >
-        <TouchableOpacity
-          onPress={() => router.push(`/arInformation?petId=${petId}`)}
-          style={{
-            position: "absolute",
-            top: 68,
-            left: 40,
-          }}
-        >
-          <Ionicons name="arrow-back" size={24} color="#183A36" />
-        </TouchableOpacity>
         <View
           style={{
             top: 1,
@@ -118,8 +106,8 @@ export default function DogInformation() {
         >
           <Text
             style={{
-              fontFamily: "NunitoBold",
-              fontSize: 20,
+              fontFamily: "SireniaRegular",
+              fontSize: 24,
               padding: 20,
               textAlign: "center",
             }}
@@ -180,9 +168,9 @@ export default function DogInformation() {
             <Text
               style={{
                 fontFamily: "NunitoRegular",
-                fontSize: 36,
+                fontSize: 24,
                 paddingRight: 8,
-                lineHeight: 36,
+                lineHeight: 30,
               }}
             >
               •
@@ -207,9 +195,9 @@ export default function DogInformation() {
             <Text
               style={{
                 fontFamily: "NunitoRegular",
-                fontSize: 36,
+                fontSize: 24,
                 paddingRight: 8,
-                lineHeight: 36,
+                lineHeight: 30,
               }}
             >
               •
@@ -234,9 +222,9 @@ export default function DogInformation() {
             <Text
               style={{
                 fontFamily: "NunitoRegular",
-                fontSize: 36,
+                fontSize: 24,
                 paddingRight: 8,
-                lineHeight: 36,
+                lineHeight: 30,
               }}
             >
               •

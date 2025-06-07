@@ -1,7 +1,15 @@
 import React from "react";
-import { View, Text, TouchableOpacity, StyleSheet, ScrollView, Image, SafeAreaView } from "react-native";
-import { useFonts } from 'expo-font';
-import { useRouter } from "expo-router"; 
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  StyleSheet,
+  ScrollView,
+  Image,
+  SafeAreaView,
+} from "react-native";
+import { useFonts } from "expo-font";
+import { useRouter } from "expo-router";
 import NavBar from "@/components/NavigationBar";
 import BaseText from "@/components/BaseText";
 
@@ -9,10 +17,10 @@ export default function BewustzijnScreen() {
   const router = useRouter();
 
   const [fontsLoaded] = useFonts({
-    "NunitoRegular": require("@/assets/fonts/Nunito/NunitoRegular.ttf"),
-    "NunitoSemiBold": require("@/assets/fonts/Nunito/NunitoSemiBold.ttf"),
-    "NunitoBold": require("@/assets/fonts/Nunito/NunitoBold.ttf"),
-    'SireniaMedium': require("@/assets/fonts/Sirenia/SireniaMedium.ttf"),
+    NunitoRegular: require("@/assets/fonts/Nunito/NunitoRegular.ttf"),
+    NunitoSemiBold: require("@/assets/fonts/Nunito/NunitoSemiBold.ttf"),
+    NunitoBold: require("@/assets/fonts/Nunito/NunitoBold.ttf"),
+    SireniaMedium: require("@/assets/fonts/Sirenia/SireniaMedium.ttf"),
   });
 
   if (!fontsLoaded) {
@@ -20,11 +28,31 @@ export default function BewustzijnScreen() {
   }
 
   const topics = [
-    { title: "VOEDING", image: require("@/assets/images/voeding.png"), categorie: "voeding" },
-    { title: "VEILIGHEID", image: require("@/assets/images/veiligheid.png"), categorie: "veiligheid" },
-    { title: "TRAINING", image: require("@/assets/images/training.png"), categorie: "training" },
-    { title: "VERZORGING", image: require("@/assets/images/verzorging.png"), categorie: "verzorging" },
-    { title: "ACTIVITEIT", image: require("@/assets/images/activiteit.png"), categorie: "activiteit" },
+    {
+      title: "VOEDING",
+      image: require("@/assets/images/voeding.png"),
+      categorie: "voeding",
+    },
+    {
+      title: "VEILIGHEID",
+      image: require("@/assets/images/veiligheid.png"),
+      categorie: "veiligheid",
+    },
+    {
+      title: "TRAINING",
+      image: require("@/assets/images/training.png"),
+      categorie: "training",
+    },
+    {
+      title: "VERZORGING",
+      image: require("@/assets/images/verzorging.png"),
+      categorie: "verzorging",
+    },
+    {
+      title: "ACTIVITEIT",
+      image: require("@/assets/images/activiteit.png"),
+      categorie: "activiteit",
+    },
   ];
 
   return (
@@ -40,15 +68,22 @@ export default function BewustzijnScreen() {
           }}
           showsVerticalScrollIndicator={false}
         >
-          <BaseText style={{
-             fontSize: 28,
-              fontFamily: 'SireniaMedium',
+          <BaseText
+            style={{
+              fontSize: 28,
+              fontFamily: "SireniaMedium",
               textAlign: "center",
               marginBottom: 20,
-          }}>Bewustzijn</BaseText>
+            }}
+          >
+            Bewustzijn
+          </BaseText>
           <Text style={styles.subtitle}>Doe de quiz van de week</Text>
 
-          <TouchableOpacity style={styles.quizButton} onPress={() => router.push("/quizIndex")}>
+          <TouchableOpacity
+            style={styles.quizButton}
+            onPress={() => router.push("/quizIndex")}
+          >
             <Text style={styles.quizButtonText}>QUIZ VAN DE WEEK</Text>
           </TouchableOpacity>
 
@@ -98,21 +133,18 @@ const styles = StyleSheet.create({
     gap: 25,
     color: "#183A36",
     paddingBottom: 80,
-    
-    
   },
 
   title: {
-     fontSize: 28,
-    fontFamily: 'SireniaMedium',
+    fontSize: 28,
+    fontFamily: "SireniaMedium",
     textAlign: "center",
     marginBottom: 20,
-    
   },
 
   subtitle: {
     fontSize: 18,
-    fontFamily: 'NunitoSemiBold',
+    fontFamily: "NunitoSemiBold",
     textAlign: "left",
   },
 
@@ -125,11 +157,10 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
-    
   },
 
   quizButtonText: {
-    fontFamily: 'NunitoBold',
+    fontFamily: "NunitoBold",
     fontSize: 14,
     color: "#FFFDF9",
   },
@@ -137,7 +168,7 @@ const styles = StyleSheet.create({
   learnMore: {
     marginBottom: -13,
     fontSize: 18,
-    fontFamily: 'NunitoSemiBold',
+    fontFamily: "NunitoSemiBold",
   },
 
   buttonContainer: {
@@ -167,15 +198,15 @@ const styles = StyleSheet.create({
   },
 
   infoImage: {
-    width: 25, 
-    height: 25, 
-    marginRight: 16, 
+    width: 25,
+    height: 25,
+    marginRight: 16,
     marginLeft: 12,
   },
 
   infoButtonText: {
-    fontFamily: 'NunitoBold',
+    fontFamily: "NunitoBold",
     fontSize: 14,
-     color: "#183A36",
+    color: "#183A36",
   },
 });

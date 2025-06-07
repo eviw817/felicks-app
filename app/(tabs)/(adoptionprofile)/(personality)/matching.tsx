@@ -250,7 +250,7 @@ const styles = StyleSheet.create({
     color: "#183A36",
   },
   card: {
-    backgroundColor: "#E2F0E7",
+    backgroundColor: "#FDE4D2",
     borderRadius: 12,
     padding: 12,
     marginBottom: 12,
@@ -276,7 +276,7 @@ const styles = StyleSheet.create({
   },
   score: {
     fontSize: 16,
-    color: "#97B8A5",
+    color: "#8b9c9a",
   },
   homeButtonWrapper: {
     marginTop: 20,

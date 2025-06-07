@@ -17,6 +17,7 @@ import { useRouter, Link } from "expo-router";
 import { Picker } from "@react-native-picker/picker";
 import { AppStateStatus } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
+import { useFonts } from "expo-font";
 import BaseText from "@/components/BaseText";
 
 // Tells Supabase Auth to continuously refresh the session automatically if
@@ -32,6 +33,13 @@ AppState.addEventListener("change", (state) => {
 });
 
 export default function Registeren() {
+  const [fontsLoaded] = useFonts({
+    NunitoRegular: require("@/assets/fonts/Nunito/NunitoRegular.ttf"),
+    NunitoSemiBold: require("@/assets/fonts/Nunito/NunitoSemiBold.ttf"),
+    NunitoBold: require("@/assets/fonts/Nunito/NunitoBold.ttf"),
+    SireniaMedium: require("@/assets/fonts/Sirenia/SireniaMedium.ttf"),
+  });
+
   const [session, setSession] = useState<Session | null>(null);
   const router = useRouter();
   const [firstnameFocus, setFirstnameFocus] = useState(false);
@@ -149,7 +157,6 @@ export default function Registeren() {
       password: password,
     });
     if (error) {
-      console.log("Error signing up:", error);
       Alert.alert(
         "Fout",
         "Er is een fout opgetreden bij het registreren. Probeer het opnieuw."
@@ -157,7 +164,6 @@ export default function Registeren() {
       setLoading(false);
       return;
     }
-    console.log("Sign-up successful, session:", session);
 
     if (!session) {
       Alert.alert("Check uw email voor verificatie");
@@ -210,12 +216,14 @@ export default function Registeren() {
       setMonth("01");
       setYear("2000");
 
-      // Redirect to adoptionProfileStart page
-      console.log("Router naar adoptionIntro");
       router.push("/adoptionBreed");
     }
 
     setLoading(false);
+  }
+
+  if (!fontsLoaded) {
+    return <View />;
   }
 
   return (
@@ -319,38 +327,6 @@ export default function Registeren() {
                 })}
               </Picker>
             </View>
-          {/* Wachtwoord input */}
-         {/* Wachtwoord input */}
-        <Text style={styles.label}>Wachtwoord</Text>
-        <View style={styles.passwordContainer}>
-          <TextInput
-            style={[
-              styles.input,
-              { flex: 1 },
-              passwordFocus || isPasswordFilled
-                ? styles.focusedInput
-                : styles.unfocusedInput,
-            ]}
-            placeholder="Wachtwoord"
-            placeholderTextColor="rgba(151, 184, 165, 0.5)"
-            secureTextEntry={!showPassword}
-            onFocus={() => setPasswordFocus(true)}
-            onBlur={() => setPasswordFocus(false)}
-            onChangeText={setPassword}
-            value={password}
-          />
-            <TouchableOpacity
-                    style={styles.eyeIcon}
-                    onPress={() => setShowPassword((prev) => !prev)}
-                  >
-            <Ionicons
-              name={showPassword ? "eye-outline" : "eye-off-outline"}
-              size={28}
-              color="#183A36"
-              style={{ marginLeft: 10 }}
-            />
-          </TouchableOpacity>
-        </View>
 
             {/* E-mail input */}
             <Text style={styles.label}>E-mail</Text>
@@ -372,21 +348,35 @@ export default function Registeren() {
 
             {/* Wachtwoord input */}
             <Text style={styles.label}>Wachtwoord</Text>
-            <TextInput
-              style={[
-                styles.input,
-                passwordFocus || isPasswordFilled
-                  ? styles.focusedInput
-                  : styles.unfocusedInput,
-              ]}
-              placeholder="Wachtwoord"
-              placeholderTextColor="rgba(151, 184, 165, 0.5)"
-              secureTextEntry
-              onFocus={() => setPasswordFocus(true)}
-              onBlur={() => setPasswordFocus(false)}
-              onChangeText={setPassword}
-              value={password}
-            />
+            <View style={styles.passwordContainer}>
+              <TextInput
+                style={[
+                  styles.input,
+                  { flex: 1 },
+                  passwordFocus || isPasswordFilled
+                    ? styles.focusedInput
+                    : styles.unfocusedInput,
+                ]}
+                placeholder="Wachtwoord"
+                placeholderTextColor="rgba(151, 184, 165, 0.5)"
+                secureTextEntry={!showPassword}
+                onFocus={() => setPasswordFocus(true)}
+                onBlur={() => setPasswordFocus(false)}
+                onChangeText={setPassword}
+                value={password}
+              />
+              <TouchableOpacity
+                style={styles.eyeIcon}
+                onPress={() => setShowPassword((prev) => !prev)}
+              >
+                <Ionicons
+                  name={showPassword ? "eye-outline" : "eye-off-outline"}
+                  size={28}
+                  color="#183A36"
+                  style={{ marginLeft: 10 }}
+                />
+              </TouchableOpacity>
+            </View>
 
             <TouchableOpacity
               style={styles.button}
@@ -422,10 +412,11 @@ const styles = StyleSheet.create({
     fontFamily: "SireniaMedium",
     marginBottom: 60,
     textAlign: "center",
+    color: "#183A36",
   },
   text: {
     fontSize: 20,
-    fontWeight: "bold",
+    fontFamily: "NunitoBold",
   },
   datePickerContainer: {
     flexDirection: "row",
@@ -455,7 +446,7 @@ const styles = StyleSheet.create({
   buttonText: {
     color: "#183A36",
     fontSize: 16,
-    fontWeight: "bold",
+    fontFamily: "NunitoBold",
   },
   label: {
     alignSelf: "flex-start",
@@ -463,6 +454,7 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     color: "#183A36",
     marginBottom: 5,
+    fontFamily: "NunitoBold",
   },
   input: {
     width: "100%",
@@ -497,21 +489,21 @@ const styles = StyleSheet.create({
     color: "#183A36",
     alignSelf: "center",
     textAlign: "center",
+    fontFamily: "NunitoRegular",
   },
   registerLink: {
-    fontWeight: "bold",
+    fontFamily: "NunitoBold",
     alignSelf: "center",
     textAlign: "center",
   },
-    passwordContainer: {
-      width: "100%",
-      marginBottom: 25,
-      position: "relative",
-},
-eyeIcon: {
-  position: "absolute",
-  right: 10,
-  top: 12,
-},
-
+  passwordContainer: {
+    width: "100%",
+    marginBottom: 25,
+    position: "relative",
+  },
+  eyeIcon: {
+    position: "absolute",
+    right: 10,
+    top: 12,
+  },
 });

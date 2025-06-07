@@ -11,30 +11,23 @@ import { BeagleObject } from "../objects/BeagleObject";
 type BeagleSceneProps = PropsWithChildren<ViroARScene["props"]>;
 export const BeagleScene = ({ children, ...rest }: BeagleSceneProps) => {
   const onInitialized = (state: any, reason: ViroTrackingReason) => {
-    console.log("Viro Initialized", state, reason);
-
     if (
       state === ViroTrackingStateConstants.TRACKING_NORMAL ||
       state === ViroTrackingStateConstants.TRACKING_UNAVAILABLE
-    ) {
-      console.log(
-        "We can't seem to track the location of where we need to place the object :(",
-      );
-    }
+    ) {}
   };
   return (
     <ViroARScene onTrackingUpdated={onInitialized} {...rest}>
       <ViroAmbientLight color="#FFFFFF" />
-      <ViroARPlaneSelector maxPlanes={1}>
+      <ViroARPlaneSelector
+        maxPlanes={1}
+        pauseUpdates={false}
+        alignment="Horizontal"
+      >
         <BeagleObject
           scale={[0.2, 0.2, 0.2]}
           position={[0, -5, -20]}
-          rotation={[0, 0, 10]}
-          onLoadStart={() => console.log("Loading ShibaInu model...")}
-          onLoadEnd={() => console.log("Finished loading ShibaInu model")}
-          onError={({ nativeEvent }) =>
-        console.log("Error loading ShibaInu model: ", nativeEvent)
-          }
+          rotation={[0, 0, 0]}
           dragType="FixedDistance"
           animation={{
         name: "idle",

@@ -1,4 +1,4 @@
-import { Stack } from 'expo-router';
+import { Stack } from "expo-router";
 
 export default function ProfileLayout() {
   return (
@@ -6,15 +6,19 @@ export default function ProfileLayout() {
       screenOptions={{
         headerShown: false,
         headerStyle: {
-          backgroundColor: '#f4511e',
+          backgroundColor: "#f4511e",
         },
-        headerTintColor: '#fff',
+        headerTintColor: "#fff",
         headerTitleStyle: {
-          fontWeight: 'bold',
+          fontWeight: "bold",
         },
-      }}>
+      }}
+    >
       <Stack.Screen name="artikel" options={{ title: "Artikels" }} />
-      <Stack.Screen name="artikelsIndex" options={{ title: "Artikels Index" }} />
+      <Stack.Screen
+        name="artikelsIndex"
+        options={{ title: "Artikels Index" }}
+      />
     </Stack>
   );
 }

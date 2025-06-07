@@ -50,11 +50,8 @@ export default function Auth({ session }: { session: Session }) {
   const isPasswordFilled = password.trim() !== "";
 
   useEffect(() => {
-    if (session) {
-      console.log("User session:", session);
+    if (session) {;
       getProfile(); // Haal profiel op als gebruiker is ingelogd
-    } else {
-      console.log("Geen sessie beschikbaar.");
     }
   }, [session]);
 
@@ -108,7 +105,6 @@ const getFirstname = async () => {
 
 // Fetch the firstname when the session is available
 useEffect(() => {
-  console.log("Session:", session); // Log session to see if it's populated
   if (session) {
     getFirstname();
   }
@@ -138,7 +134,6 @@ useEffect(() => {
       password: password,
     });
     if (error) {
-      console.log("Error signing up:", error);
       Alert.alert("Error", error.message);
     }
 

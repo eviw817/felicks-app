@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "felicks-app",
+    "name": "Felicks",
     "slug": "felicks-app",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -21,7 +21,7 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/images/adaptive-icon.png",
+        "foregroundImage": "./assets/images/felicks-favicon.png",
         "backgroundColor": "#ffffff"
       },
       "package": "com.anonymous.felicksapp"
@@ -36,9 +36,8 @@
       [
         "expo-splash-screen",
         {
-          "image": "./assets/images/splash-icon.png",
-          "imageWidth": 200,
-          "resizeMode": "contain",
+          "image": "./assets/images/felicks-favicon.png",
+          "resizeMode": "cover",
           "backgroundColor": "#ffffff"
         }
       ],

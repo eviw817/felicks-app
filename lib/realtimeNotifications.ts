@@ -8,14 +8,12 @@ export async function initRealtimeNotifications(
   onBadgeUpdate: () => void
 ) {
   if (hasSubscribed) {
-    console.log("[realtimeNotifications] Already initialized, skipping.");
     return;
   }
   hasSubscribed = true;
 
   const { data: { session } } = await supabase.auth.getSession();
   if (!session?.user?.id) {
-    console.warn("[realtimeNotifications] No user session—no realtime.");
     return;
   }
   const userId = session.user.id;
@@ -27,12 +25,10 @@ export async function initRealtimeNotifications(
     .single();
 
   if (dogError || !dog) {
-    console.warn("[realtimeNotifications] No AR_dog for user—no realtime.", dogError);
     return;
   }
 
   const dogId = dog.id;
-  console.log("[realtimeNotifications] Realtime gestart voor userId:", userId, "dogId:", dogId);
 
   const channel: RealtimeChannel = supabase
     .channel("global_notifications_channel")
@@ -50,12 +46,9 @@ export async function initRealtimeNotifications(
           newNotif.category === "adoption_status" && newNotif.user_id === userId;
 
         if ((forThisDog || isAdoptieForUser) && !newNotif.is_read) {
-          console.log("[realtimeNotifications] INSERT matched:", newNotif.id);
           onBannerNotify(newNotif.title || "Nieuwe melding", newNotif.description || "");
           onBadgeUpdate();
-        } else {
-          console.log("[realtimeNotifications] INSERT genegeerd");
-        }
+        } 
       }
     )
     .on(
@@ -73,19 +66,9 @@ export async function initRealtimeNotifications(
 
         if ((forThisDog || isAdoptieForUser) && !updatedNotif.is_read) {
 
-          console.log("[realtimeNotifications] UPDATE matched:", updatedNotif.id);
           onBannerNotify(updatedNotif.title || "Melding bijgewerkt", updatedNotif.description || "");
           onBadgeUpdate();
-        } else {
-          console.log("[realtimeNotifications] UPDATE genegeerd");
         }
       }
     );
-
-  channel.subscribe((status) => {
-    console.log("[realtimeNotifications][subscribe callback] status:", status);
-    if (status === "SUBSCRIBED") {
-      console.log("[realtimeNotifications] Succesvol gesubscribed op notifications");
-    }
-  });
 }
