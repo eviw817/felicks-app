@@ -1,6 +1,12 @@
-'use client';
+"use client";
 import React from "react";
-import { SafeAreaView, View, Text, TouchableOpacity, StyleSheet } from "react-native";
+import {
+  SafeAreaView,
+  View,
+  Text,
+  TouchableOpacity,
+  StyleSheet,
+} from "react-native";
 import { useRouter, Link } from "expo-router";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
@@ -14,20 +20,23 @@ export default function QuizIndex() {
     <SafeAreaView style={styles.container}>
       {/* Header (terwijl SafeAreaView zorgt voor de juiste top-inset) */}
       <View style={styles.header}>
-        <TouchableOpacity onPress={() => router.push("/bewustzijnIndex")} style={styles.backButton}>
+        <TouchableOpacity
+          onPress={() => router.push("/bewustzijnIndex")}
+          style={styles.backButton}
+        >
           <FontAwesomeIcon icon={faArrowLeft} size={30} color="#183A36" />
         </TouchableOpacity>
         <BaseText style={styles.title}>Bewustzijn quiz</BaseText>
       </View>
 
       {/* Vraagtekst en beschrijving */}
-      <Text style={styles.question}>
-        Wat is het doel van deze quiz?
-      </Text>
+      <Text style={styles.question}>Wat is het doel van deze quiz?</Text>
 
       <Text style={styles.description}>
-        Deze pagina is bedoeld om elke week een quiz te doen om jouw kennis te testen.{"\n"}
-        Zodat je kan zien hoe goed jij voorbereid bent op een viervoeter.{"\n\n"}
+        Deze pagina is bedoeld om elke week een quiz te doen om jouw kennis te
+        testen.{"\n"}
+        Zodat je kan zien hoe goed jij voorbereid bent op een viervoeter.
+        {"\n\n"}
         Bij een fout antwoord krijg je altijd de juiste oplossing.{"\n\n"}
         Ga ervoor en verbreed je kennis!
       </Text>
@@ -51,7 +60,6 @@ const styles = StyleSheet.create({
     backgroundColor: "#FFFDF9",
     paddingHorizontal: 16,
     paddingTop: 60,
-    
   },
   header: {
     flexDirection: "row",
@@ -64,7 +72,7 @@ const styles = StyleSheet.create({
   backButton: {
     position: "absolute",
     left: 5,
-    top: 12, 
+    top: 12,
   },
   title: {
     fontSize: 28,

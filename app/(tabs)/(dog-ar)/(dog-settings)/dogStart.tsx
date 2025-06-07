@@ -28,7 +28,8 @@ export default function DogStart() {
         </Text>
         <Text style={styles.description}>
           Maar ben jij er klaar voor? {"\n"}
-          Dan is deze ervaring precies wat je nodig hebt om daar achter te komen!
+          Dan is deze ervaring precies wat je nodig hebt om daar achter te
+          komen!
         </Text>
 
         <View style={styles.stepContainer}>

@@ -18,8 +18,14 @@ export default function BreedLayout() {
       <Stack.Screen name="energy" options={{ title: "Energy" }} />
       <Stack.Screen name="interaction" options={{ title: "Interaction" }} />
       <Stack.Screen name="matching" options={{ title: "Matching" }} />
-      <Stack.Screen name="personalityTraits" options={{ title: "Personality Traits" }} />
-      <Stack.Screen name="trainingLevel" options={{ title: "Training Level" }} />
+      <Stack.Screen
+        name="personalityTraits"
+        options={{ title: "Personality Traits" }}
+      />
+      <Stack.Screen
+        name="trainingLevel"
+        options={{ title: "Training Level" }}
+      />
     </Stack>
   );
 }

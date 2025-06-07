@@ -41,10 +41,10 @@ export default function LivingSituation() {
   });
 
   const [fontsLoaded] = useFonts({
-    "NunitoRegular": require("@/assets/fonts/Nunito/NunitoRegular.ttf"),
-    "NunitoMedium": require("@/assets/fonts/Nunito/NunitoMedium.ttf"),
-    "NunitoBold": require("@/assets/fonts/Nunito/NunitoBold.ttf"),
-    "SireniaRegular": require("@/assets/fonts/Sirenia/SireniaRegular.ttf"),
+    NunitoRegular: require("@/assets/fonts/Nunito/NunitoRegular.ttf"),
+    NunitoMedium: require("@/assets/fonts/Nunito/NunitoMedium.ttf"),
+    NunitoBold: require("@/assets/fonts/Nunito/NunitoBold.ttf"),
+    SireniaRegular: require("@/assets/fonts/Sirenia/SireniaRegular.ttf"),
   });
 
   useEffect(() => {
@@ -96,16 +96,31 @@ export default function LivingSituation() {
     answers.livingSituation !== "" && answers.homeFrequency !== "";
 
   const livingOptions = [
-    { label: "In een gezellig appartement – knus en compact", value: "apartment" },
-    { label: "Een huis zonder tuin, maar met wandelopties", value: "house_no_garden" },
+    {
+      label: "In een gezellig appartement – knus en compact",
+      value: "apartment",
+    },
+    {
+      label: "Een huis zonder tuin, maar met wandelopties",
+      value: "house_no_garden",
+    },
     { label: "We hebben een tuin waar de hond kan snuffelen", value: "garden" },
-    { label: "Veel ruimte, veel natuur – buiten zijn vanzelfsprekend", value: "nature" },
+    {
+      label: "Veel ruimte, veel natuur – buiten zijn vanzelfsprekend",
+      value: "nature",
+    },
   ];
 
   const homeOptions = [
-    { label: "Bijna altijd, ik werk thuis of ben vaak thuis", value: "mostly_home" },
+    {
+      label: "Bijna altijd, ik werk thuis of ben vaak thuis",
+      value: "mostly_home",
+    },
     { label: "Gedeeld – soms thuis, soms weg", value: "mixed" },
-    { label: "Vaak van huis – hond moet alleen kunnen zijn", value: "often_away" },
+    {
+      label: "Vaak van huis – hond moet alleen kunnen zijn",
+      value: "often_away",
+    },
   ];
 
   return (

@@ -54,14 +54,14 @@ interface Breed {
 }
 
 export default function AdoptieprofielResults() {
-const [fontsLoaded] = useFonts({
-      NunitoBold: require("@/assets/fonts/Nunito/NunitoBold.ttf"),
-      SireniaRegular: require("@/assets/fonts/Sirenia/SireniaRegular.ttf"),
-    });
+  const [fontsLoaded] = useFonts({
+    NunitoBold: require("@/assets/fonts/Nunito/NunitoBold.ttf"),
+    SireniaRegular: require("@/assets/fonts/Sirenia/SireniaRegular.ttf"),
+  });
 
-      if (!fontsLoaded) {
-        return <View />;
-      }
+  if (!fontsLoaded) {
+    return <View />;
+  }
 
   const router = useRouter();
   const [prefs, setPrefs] = useState<Prefs | null>(null);

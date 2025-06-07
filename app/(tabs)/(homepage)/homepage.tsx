@@ -245,8 +245,8 @@ export default function HomepageScreen() {
       <View
         style={{
           flexDirection: "row",
-          justifyContent: 'center',
-          alignItems: 'center',
+          justifyContent: "center",
+          alignItems: "center",
           paddingHorizontal: 20,
           marginTop: 50,
           marginLeft: 20,
@@ -254,46 +254,44 @@ export default function HomepageScreen() {
         }}
       >
         <BaseText
-            style={{
-              fontFamily: "SireniaMedium",
-              fontSize: 28,
-              paddingVertical: 20,
-              textAlign: "center",
-            }}
-          >
-            Welkom {firstname || "guest"}!
-          </BaseText>
-
-        <Link
-          href="/notificationsIndex"
+          style={{
+            fontFamily: "SireniaMedium",
+            fontSize: 28,
+            paddingVertical: 20,
+            textAlign: "center",
+          }}
         >
-         <FontAwesomeIcon icon={faEnvelopeOpen} size={30} color="#183A36" />
-            {unreadCount > 0 && (
-              <View
+          Welkom {firstname || "guest"}!
+        </BaseText>
+
+        <Link href="/notificationsIndex">
+          <FontAwesomeIcon icon={faEnvelopeOpen} size={30} color="#183A36" />
+          {unreadCount > 0 && (
+            <View
+              style={{
+                position: "absolute",
+                top: -6,
+                right: -6,
+                backgroundColor: "#F18B7E",
+                borderRadius: 10,
+                paddingHorizontal: 5,
+                minWidth: 20,
+                height: 20,
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <Text
                 style={{
-                  position: "absolute",
-                  top: -6,
-                  right: -6,
-                  backgroundColor: "#F18B7E",
-                  borderRadius: 10,
-                  paddingHorizontal: 5,
-                  minWidth: 20,
-                  height: 20,
-                  alignItems: "center",
-                  justifyContent: "center",
+                  color: "#183A36",
+                  fontSize: 12,
+                  fontFamily: "NunitoBold",
                 }}
               >
-                <Text
-                  style={{
-                    color: "#183A36",
-                    fontSize: 12,
-                    fontFamily: "NunitoBold",
-                  }}
-                >
-                  {unreadCount}
-                </Text>
-              </View>
-            )}
+                {unreadCount}
+              </Text>
+            </View>
+          )}
         </Link>
       </View>
 

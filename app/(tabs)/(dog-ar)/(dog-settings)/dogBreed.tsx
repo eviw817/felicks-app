@@ -110,11 +110,10 @@ export default function DogBreed() {
           <BaseText style={styles.title}>Virtuele hond</BaseText>
         </View>
 
+        <Text style={styles.subtext}>Denk aan jouw favoriete hond...</Text>
         <Text style={styles.subtext}>
-          Denk aan jouw favoriete hond...
-        </Text>
-        <Text style={styles.subtext}>
-          Welk ras schiet er als eerste te binnen? Dat wordt jouw virtuele maatje!
+          Welk ras schiet er als eerste te binnen? Dat wordt jouw virtuele
+          maatje!
         </Text>
 
         <View style={styles.pickerWrapper}>
@@ -132,10 +131,7 @@ export default function DogBreed() {
           <TouchableOpacity
             onPress={handleBreedSubmit}
             disabled={!dogBreed}
-            style={[
-              styles.button,
-              !dogBreed && styles.buttonDisabled,
-            ]}
+            style={[styles.button, !dogBreed && styles.buttonDisabled]}
           >
             <Text style={styles.buttonText}>DOORGAAN</Text>
           </TouchableOpacity>

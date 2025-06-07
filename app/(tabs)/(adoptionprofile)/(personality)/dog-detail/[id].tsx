@@ -164,8 +164,6 @@ export default function DogDetail() {
   );
 }
 
-
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,

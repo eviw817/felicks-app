@@ -94,7 +94,8 @@ export default function DogName() {
 
       <Text style={styles.congrats}>Gefeliciteerd!</Text>
       <Text style={styles.intro}>
-        Je hebt net een {dogBreed || "hond"} toegevoegd aan je gezin. Tijd voor een naam!
+        Je hebt net een {dogBreed || "hond"} toegevoegd aan je gezin. Tijd voor
+        een naam!
       </Text>
       <Text style={styles.label}>Naam</Text>
       <View style={styles.inputWrapper}>

@@ -15,14 +15,14 @@ import BaseText from "@/components/BaseText";
 import { useFonts } from "expo-font";
 
 export default function ActivityPersonality() {
-const [fontsLoaded] = useFonts({
-    "NunitoRegular": require("@/assets/fonts/Nunito/NunitoRegular.ttf"),
-    "NunitoBold": require("@/assets/fonts/Nunito/NunitoBold.ttf"),
+  const [fontsLoaded] = useFonts({
+    NunitoRegular: require("@/assets/fonts/Nunito/NunitoRegular.ttf"),
+    NunitoBold: require("@/assets/fonts/Nunito/NunitoBold.ttf"),
   });
 
   if (!fontsLoaded) {
-      return <View />;
-    }
+    return <View />;
+  }
 
   const router = useRouter();
   const [userId, setUserId] = useState<string | null>(null);
