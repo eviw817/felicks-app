@@ -262,35 +262,42 @@ export default function HomepageScreen() {
           Welkom {firstname || "guest"}!
         </BaseText>
 
-        <Link href="/notificationsIndex" style={{ marginLeft: 40, position: "relative", padding: 4 }}>
-          <FontAwesomeIcon icon={faEnvelopeOpen} size={30} color="#183A36"  />
-          {unreadCount > 0 && (
-            <View
-              style={{
-                position: "absolute",
-                top: -5,
-                 right: -5,
-                backgroundColor: "#F18B7E",
-                borderRadius: 10,
-                paddingHorizontal: 5,
-                minWidth: 18,
-                height: 18,
-                alignItems: "center",
-                justifyContent: "center",
-                marginLeft: 10, 
-              }}
-            >
-              <Text
+        <Link
+          href="/notificationsIndex"
+          style={{
+            marginLeft: 40,
+            marginRight: 20,
+          }}
+        >
+          <View style={{ position: "relative", width: 30, height: 30 }}>
+            <FontAwesomeIcon icon={faEnvelopeOpen} size={30} color="#183A36" />
+            {unreadCount > 0 && (
+              <View
                 style={{
-                  color: "#183A36",
-                  fontSize: 12,
-                  fontFamily: "NunitoBold",
+                  position: "absolute",
+                  top: -4,
+                  right: -4,
+                  backgroundColor: "#F18B7E",
+                  borderRadius: 9,
+                  paddingHorizontal: 4,
+                  minWidth: 18,
+                  height: 18,
+                  alignItems: "center",
+                  justifyContent: "center",
                 }}
               >
-                {unreadCount}
-              </Text>
-            </View>
-          )}
+                <Text
+                  style={{
+                    color: "#183A36",
+                    fontSize: 12,
+                    fontFamily: "NunitoBold",
+                  }}
+                >
+                  {unreadCount}
+                </Text>
+              </View>
+            )}
+          </View>
         </Link>
       </View>
 
@@ -509,7 +516,7 @@ export default function HomepageScreen() {
               <Text
                 style={{
                   fontFamily: "NunitoRegular",
-              fontSize: 16,
+                  fontSize: 16,
                   paddingHorizontal: 20, // Added horizontal padding
                   color: "#183A36",
                   textAlign: "left", // Center this text

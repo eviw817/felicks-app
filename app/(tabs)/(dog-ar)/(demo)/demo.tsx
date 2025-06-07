@@ -8,8 +8,8 @@ import {
   Pressable,
   Alert,
 } from "react-native";
-//import { BeagleScene } from "@/components/augumented-dog/scenes/BeagleScene";
-//import { ViroARSceneNavigator } from "@reactvision/react-viro";
+import { BeagleScene } from "@/components/augumented-dog/scenes/BeagleScene";
+import { ViroARSceneNavigator } from "@reactvision/react-viro";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import { supabase } from "@/lib/supabase";
 import { useLocalSearchParams } from "expo-router";
@@ -121,6 +121,7 @@ const AugmentedDog: React.FC = () => {
     }
 
     if (cameFromArInfo) {
+      console.log("User came from arInformation screen");
       setShowOverlay(true); // show the alert overlay
     }
 
@@ -309,7 +310,7 @@ const AugmentedDog: React.FC = () => {
         </Pressable>
       )}
 
-      {/*<ViroARSceneNavigator
+      <ViroARSceneNavigator
         autofocus={true}
         initialScene={{
           scene: () => <BeagleScene />,
@@ -317,14 +318,14 @@ const AugmentedDog: React.FC = () => {
         style={{ flex: 1 }}
       >
         <BeagleScene style={{ width: "100%", height: 1000 }} />
-      </ViroARSceneNavigator>*/}
+      </ViroARSceneNavigator>
       <TouchableOpacity
         onPress={() => navigation.goBack()}
         style={{
           position: "absolute",
           top: 68,
           left: 20,
-          zIndex: 10,
+          zIndex: 1000,
         }}
       >
         <FontAwesomeIcon icon={faArrowLeft} size={30} color="#ffffff" />

@@ -3,9 +3,9 @@ import { View, Image, StyleSheet } from "react-native";
 import { useRouter } from "expo-router";
 import { supabase } from "@/lib/supabase";
 
-if (__DEV__) {
-  require("../reactotronConfig");
-}
+// if (__DEV__) {
+//   require("../reactotronConfig");
+// }
 
 export default function Index() {
   const router = useRouter();

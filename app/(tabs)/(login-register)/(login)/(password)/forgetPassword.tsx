@@ -161,7 +161,7 @@ const styles = StyleSheet.create({
   backButton: {
     position: "absolute",
     left: 5,
-    top: 7,
+    top: 4,
   },
   header: {
     flexDirection: "row",
