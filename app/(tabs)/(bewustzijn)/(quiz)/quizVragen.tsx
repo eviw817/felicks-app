@@ -175,7 +175,7 @@ export default function AwarenessQuiz() {
           onPress={() => router.replace('../bewustzijnIndex')}
         >
           <BaseText style={styles.continueText}>
-            TERUG NAAR HET OVERZICHT
+            QUIZ AFRONDEN
           </BaseText>
         </TouchableOpacity>
       </ScrollView>
@@ -240,7 +240,7 @@ export default function AwarenessQuiz() {
             </BaseText>
           )}
           <BaseText style={styles.description2}>
-            <BaseText style={{ fontWeight: 'bold', fontSize: 18 }}>Uitleg:{'\n'}</BaseText>
+            <BaseText style={{ fontWeight: 'bold', fontSize: 18, fontFamily: 'NunitoRegular', }}>Uitleg:{'\n'}</BaseText>
            {current.explanation}
           </BaseText>
           <TouchableOpacity style={styles.continueButton} onPress={next}>
@@ -259,14 +259,15 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#FFFDF9',
     padding: 16,
-    paddingTop: 100,
+    paddingTop: 60,
+    
   },
   center: {
     justifyContent: 'center',
     alignItems: 'center',
   },
   loadingText: {
-    marginTop: 12,
+    
   },
    title: {
         fontSize: 28,
@@ -284,19 +285,21 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     fontSize: 24,
     color: "#183A36",
+   
   },
   description: {
     marginBottom: 20,
     color: "#183A36",
     fontSize: 18,
     fontWeight: 'regular',
-    textAlign: 'center',
+    textAlign: 'left',
   },
    description2: {
     marginBottom: 20,
     color: "#183A36",
-    fontSize: 18,
-    fontWeight: 'regular',
+    fontSize: 16,
+    
+    fontFamily: 'NunitoRegular',
 
   },
   optionRow: {
